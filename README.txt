@@ -32,7 +32,12 @@ React.js
 -Connect to QuickBooks API (ensure folder permissions are correct)
 -Create a local .env file with the credentials listed in lines 10-16
 -if uploading to git: create a .gitignore file with the text '.env' inside 
-
+Developer Scripts: 
+-npm start: Runs the app in the development mode (open http://localhost:3000 to view it in your browser)
+-npm test: Launches the test runner in the interactive watch mode (see the section about running tests for more information)
+-npm run build: Builds the app for production to the build folder
+-npm run eject: This is a one-way operation - once you eject, you can't go back
+-Learn more in the 'Create React App' documentation.
 
 ----------
 4. Resources: 
