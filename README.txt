@@ -16,7 +16,7 @@ Table of Contents:
 ----------
 1. Project Description
 
-This JavaScript/React web app displays order data from the QuickBooks accounting software (using their API), and allows users to input the weights/dimensions for each order, allowing for a smoother production/shipping workflow. The data will displayed on a web page using JavaScript/React, and the data will be stored using the Django framework.
+This JavaScript/React web app displays order data from the QuickBooks accounting software (using their API), and allows users to input the weights/dimensions for each order, allowing for a smoother production/shipping workflow. The data will displayed on a web page using JavaScript/React, and the data will be stored using SQLite within the Django framework.
 
 
 ----------
