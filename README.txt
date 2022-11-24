@@ -11,6 +11,3 @@ Table of Contents:
 6. Troubleshooting
 7. FAQ
 8. Credits
-
-
-----------
