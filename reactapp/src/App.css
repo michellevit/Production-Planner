@@ -1,0 +1,88 @@
+body {
+  background-color: lightskyblue;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+h1 {
+  color: violet;
+}
+
+h2 {
+  color: plum;
+}
+
+p {
+  display: inline;
+}
+
+.order-component {
+  margin: 15px 0px;
+  width: 100%;
+}
+
+
+.order-date {
+  width: 100px;
+  margin-right: 20px;
+  font-weight: bold;
+  color: seagreen;
+}
+
+.order-number {
+  width: 100px;
+  margin-right: 20px;
+  font-weight: bold;
+  color: lightseagreen;
+}
+
+input {
+  margin: 0 10px;
+}
+
+button {
+  display: inline;
+  margin: 0 10px;
+}
+
+form {
+  display: flex;
+  width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.column1 {
+  width: 33.3%;
+  margin: auto;
+}
+
+.column2 {
+  width: 33.3%;
+  margin: auto;
+}
+
+.column3 {
+  width: 33.3%;
+  margin: auto;
+}
+
+.box-size {
+  flex-wrap: wrap;
+  flex-direction: column;
+  flex: 30%;
+}
+
+.dimensions {
+  width: 150px;
+}
+
+.weight {
+  width: 50px;
+  margin-left: 5px;
+}
+
+.add {
+  margin-left: -5px;
+}
