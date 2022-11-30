@@ -7,82 +7,145 @@ body {
 
 h1 {
   color: violet;
+  text-shadow: 0 0 3px red, 0 0 1px #000000;
 }
 
 h2 {
   color: plum;
+  text-shadow: 0 0 3px red, 0 0 1px #000000;
 }
 
 p {
   display: inline;
+  margin: 0;
 }
 
-.order-component {
-  margin: 15px 0px;
+.main-area {
   width: 100%;
+  margin: 75px 0;
 }
 
-
-.order-date {
-  width: 100px;
-  margin-right: 20px;
-  font-weight: bold;
-  color: seagreen;
-}
-
-.order-number {
-  width: 100px;
-  margin-right: 20px;
-  font-weight: bold;
-  color: lightseagreen;
-}
-
-input {
-  margin: 0 10px;
-}
-
-button {
-  display: inline;
-  margin: 0 10px;
-}
-
-form {
+.orders-container {
+  margin: 20px auto;
   display: flex;
-  width: 700px;
-  margin-left: auto;
-  margin-right: auto;
+  justify-content: center;
 }
 
 .column1 {
-  width: 33.3%;
-  margin: auto;
+  display: flex;
+  width: 300px;
+  align-items: flex-start;
+  justify-content: flex-end;
 }
 
 .column2 {
-  width: 33.3%;
-  margin: auto;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .column3 {
-  width: 33.3%;
-  margin: auto;
+  display: flex;
+  width: 300px;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.box-size {
-  flex-wrap: wrap;
-  flex-direction: column;
-  flex: 30%;
+.order-date {
+  font-weight: bold;
+  color: seagreen;
+  margin: 0 10px;
 }
+
+.order-number {
+  font-weight: bold;
+  color: lightseagreen;
+  margin: 0 10px;
+}
+
 
 .dimensions {
-  width: 150px;
+  width: 190px;
+  display: inline;
 }
+
+.box-form input, .box-form select, .box-form button, .column3 button {
+  padding: 5px 10px; 
+  border: none;
+}
+
 
 .weight {
   width: 50px;
   margin-left: 5px;
 }
 
-.add {
-  margin-left: -5px;
+.add-button {
+  margin-left: 5px;
+  margin-right: 0px;
+}
+
+.box-form {
+  margin: auto;
+  width: 100%;
+}
+
+.boxlist-container {
+  width: 100%;
+}
+
+.box {
+  background: white;
+  font-size: 12px;
+  width: 250px;
+  color: black;
+  transition: all 1s ease;
+  display: flex;
+  margin: 5px auto;
+}
+
+.box li {
+  flex: 1;
+  list-style: none;
+  text-align: left;
+  margin-left: 10px;
+}
+
+.boxlist-container, ul { 
+  padding: 0;
+}
+
+.box-item {
+  background: white;
+  padding: 2px 0;
+}
+
+.box button {
+  border: none;
+  width: 25px;
+  color: white;
+  margin: 0;
+}
+
+button:hover {
+  opacity: 50%;
+}
+
+.up-btn {
+  background: steelblue;
+}
+
+.down-btn {
+  background: blue;
+}
+
+.xmark-btn {
+  background: red;
+  align-items: flex-end;
+}
+
+.column3 button {
+  margin: 0px 5px;
 }
