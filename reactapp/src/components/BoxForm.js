@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
 
 const BoxForm = (props) => {
   const inputDimensionsHandler = (e) => {
@@ -19,7 +21,6 @@ const BoxForm = (props) => {
       {
         dimensions: props.dimensions,
         weight: props.weight,
-        deleted: false,
         id: uniqueId(),
       },
     ]);
@@ -50,7 +51,7 @@ const BoxForm = (props) => {
           value={props.weight}
         ></input>
         <button className="add-button" onClick={submitBoxHandler}>
-          +
+          <FontAwesomeIcon icon={faAdd} />
         </button>
       </form>
     </div>
