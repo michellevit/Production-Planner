@@ -1,7 +1,10 @@
 import React from "react";
 
-const Box = ({ boxes, box }) => {
+const Box = ({ boxes, box, setBoxes }) => {
   var counter = boxes.indexOf(box) + 1;
+  const deleteHandler = () => {
+    setBoxes(boxes.filter((el) => el.id !== box.id));
+  };
   return (
     <div className="box">
       <li className="box-item">
@@ -14,7 +17,7 @@ const Box = ({ boxes, box }) => {
       <button className="down-btn">
         <i className="fas fa-arrow-down"></i>
       </button>
-      <button className="xmark-btn">
+      <button className="xmark-btn" onClick={deleteHandler}>
         <i className="fas fa-times"></i>
       </button>
     </div>
