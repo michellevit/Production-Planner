@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose, faTruck } from "@fortawesome/free-solid-svg-icons";
 // Import Components
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
@@ -27,10 +29,10 @@ const Order = () => {
         </div>
         <div className="column3">
           <button type="button" id="picked-up">
-            Collected
+            <FontAwesomeIcon icon={faTruck} />
           </button>
           <button type="button" id="delete">
-            <i className="fas fa-trash"></i>
+            <FontAwesomeIcon icon={faClose} />
           </button>
         </div>
       </div>
