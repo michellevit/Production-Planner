@@ -55,13 +55,13 @@ p {
 
 .order-date {
   font-weight: bold;
-  color: seagreen;
+  color: darkblue;
   margin: 0 10px;
 }
 
 .order-number {
   font-weight: bold;
-  color: lightseagreen;
+  color: white;
   margin: 0 10px;
 }
 
@@ -85,6 +85,7 @@ p {
 .add-button {
   margin-left: 5px;
   margin-right: 0px;
+  background-color: white;
 }
 
 .box-form {
@@ -148,4 +149,5 @@ button:hover {
 
 .column3 button {
   margin: 0px 5px;
+  background-color: white;
 }

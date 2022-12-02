@@ -20,7 +20,6 @@ const BoxForm = (props) => {
         dimensions: props.dimensions,
         weight: props.weight,
         deleted: false,
-        boxNumber: 1,
         id: uniqueId(),
       },
     ]);

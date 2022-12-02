@@ -7,6 +7,9 @@ const Order = () => {
   const [dimensions, setDimensions] = useState("");
   const [weight, setWeight] = useState("");
   const [boxes, setBoxes] = useState([]);
+  console.log("Dimensions: ", dimensions);
+  console.log("Weight: ", weight);
+  console.log("Boxes: ", boxes);
   return (
     <div className="main-area">
       <div className="orders-container">
@@ -23,7 +26,7 @@ const Order = () => {
             setBoxes={setBoxes}
             boxes={boxes}
           />
-          <BoxList boxes={boxes} />
+          <BoxList boxes={boxes} setBoxes={setBoxes} />
         </div>
         <div className="column3">
           <button type="button" id="picked-up">
