@@ -30,7 +30,7 @@ const Box = ({ boxes, box, setBoxes }) => {
   const deleteHandler = () => {
     setBoxes(boxes.filter((el) => el.id !== box.id));
   };
-  const addHandler = (e) => {
+  const addNoteHandler = (e) => {
     if (box.note == false) {
       box.note = true;
       e.currentTarget.style.opacity = "0.5";
@@ -62,7 +62,7 @@ const Box = ({ boxes, box, setBoxes }) => {
       <button className="xmark-btn" onClick={deleteHandler}>
         <FontAwesomeIcon icon={faClose} />
       </button>
-      <button className="add-note-btn" onClick={addHandler}>
+      <button className="add-note-btn" onClick={addNoteHandler}>
         <FontAwesomeIcon icon={faAdd} />
       </button>
     </div>

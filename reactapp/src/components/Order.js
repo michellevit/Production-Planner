@@ -26,7 +26,7 @@ const Order = () => {
             setBoxes={setBoxes}
             boxes={boxes}
           />
-          <BoxList boxes={boxes} setBoxes={setBoxes} Box={Box} />
+          <BoxList boxes={boxes} setBoxes={setBoxes} />
         </div>
         <div className="column3">
           <button type="button" id="picked-up">
