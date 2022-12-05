@@ -41,7 +41,7 @@ p {
 .column2 {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 700px;
   align-items: flex-start;
   justify-content: center;
 }
@@ -72,17 +72,17 @@ p {
 }
 
 .box-form input, .box-form select, .box-form button, .column3 button {
-  padding: 5px 10px; 
+  padding: 4px 8px; 
   border: none;
 }
 
 
 .weight {
-  width: 50px;
+  width: 60px;
   margin-left: 5px;
 }
 
-.add-button {
+.add-btn {
   margin-left: 5px;
   margin-right: 0px;
   background-color: white;
@@ -97,30 +97,29 @@ p {
   width: 100%;
 }
 
-.box {
-  background: white;
-  font-size: 12px;
-  width: 250px;
-  color: black;
+.box-container {
   transition: all 1s ease;
-  display: flex;
-  margin: 5px auto;
+  width: 100%;
 }
 
-.box li {
-  flex: 1;
-  list-style: none;
+.box {
+  display: flex;
+  margin: 10px auto;
+  justify-content: center;
+  font-size: 12px;
+  color: black;
   text-align: left;
-  margin-left: 10px;
 }
+
+
+.box-info {
+    width: 150px;
+    background: white;
+    padding: 4px 5px;
+  }
 
 .boxlist-container, ul { 
   padding: 0;
-}
-
-.box-item {
-  background: white;
-  padding: 2px 0;
 }
 
 .box button {
@@ -131,7 +130,7 @@ p {
 }
 
 button:hover {
-  opacity: 50%;
+  opacity: 50% !important;
 }
 
 .up-btn {
@@ -150,4 +149,15 @@ button:hover {
 .column3 button {
   margin: 0px 5px;
   background-color: white;
+}
+
+.add-note-btn {
+  background-color: orange;
+}
+
+.noteBox {
+  border: none;
+  width: 150px;
+  padding: 4px 5px;
+  margin-left: 10px;
 }

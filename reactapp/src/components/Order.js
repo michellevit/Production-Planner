@@ -4,6 +4,7 @@ import { faClose, faTruck } from "@fortawesome/free-solid-svg-icons";
 // Import Components
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
+import Box from "./Box";
 
 const Order = () => {
   const [dimensions, setDimensions] = useState("");
