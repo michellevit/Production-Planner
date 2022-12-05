@@ -22,6 +22,7 @@ const BoxForm = (props) => {
         dimensions: props.dimensions,
         weight: props.weight,
         id: uniqueId(),
+        note: false,
       },
     ]);
     props.setDimensions("");
@@ -44,13 +45,13 @@ const BoxForm = (props) => {
           <option value="Hello">Hello</option>
         </select>
         <input
-          type="text"
+          type="number"
           className="weight"
-          placeholder="Weight"
+          placeholder="lb"
           onChange={inputWeightHandler}
           value={props.weight}
         ></input>
-        <button className="add-button" onClick={submitBoxHandler}>
+        <button className="add-btn" onClick={submitBoxHandler}>
           <FontAwesomeIcon icon={faAdd} />
         </button>
       </form>

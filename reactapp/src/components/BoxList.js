@@ -7,7 +7,9 @@ const BoxList = ({ boxes, setBoxes }) => {
     <div className="boxlist-container">
       <ul className="boxlist">
         {boxes.map((box) => (
-          <Box box={box} boxes={boxes} setBoxes={setBoxes} />
+          <div key={box.id} className="box-container">
+            <Box box={box} boxes={boxes} setBoxes={setBoxes} />
+          </div>
         ))}
       </ul>
     </div>

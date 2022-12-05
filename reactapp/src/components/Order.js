@@ -4,6 +4,7 @@ import { faClose, faTruck } from "@fortawesome/free-solid-svg-icons";
 // Import Components
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
+import Box from "./Box";
 
 const Order = () => {
   const [dimensions, setDimensions] = useState("");
@@ -25,7 +26,7 @@ const Order = () => {
             setBoxes={setBoxes}
             boxes={boxes}
           />
-          <BoxList boxes={boxes} setBoxes={setBoxes} />
+          <BoxList boxes={boxes} setBoxes={setBoxes} Box={Box} />
         </div>
         <div className="column3">
           <button type="button" id="picked-up">
