@@ -22,7 +22,7 @@ const BoxForm = (props) => {
         dimensions: props.dimensions,
         weight: props.weight,
         id: uniqueId(),
-        note: false,
+        hasNote: false,
       },
     ]);
     props.setDimensions("");
