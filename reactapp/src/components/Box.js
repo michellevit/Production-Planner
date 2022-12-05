@@ -34,21 +34,40 @@ const Box = ({ boxes, box, setBoxes }) => {
     setBoxes(boxes.filter((el) => el.id !== box.id));
   };
   const addNoteHandler = (e) => {
-    if (box.note == false) {
-      box.note = true;
-      e.currentTarget.style.opacity = "0.5";
+    if (box.hasNote == false) {
+      box.hasNote = true;
+      e.currentTarget.style.backgroundColor = "peachpuff";
       const noteBox = document.createElement("input");
       noteBox.setAttribute("type", "text");
       noteBox.setAttribute("id", box.id + 1);
       noteBox.classList.add("noteBox");
       e.currentTarget.parentNode.appendChild(noteBox);
       setIcon(faMinus);
+      checkHasNote();
     } else {
-      box.note = false;
-      e.currentTarget.style.opacity = "1";
+      box.hasNote = false;
+      e.currentTarget.style.backgroundColor = "orange";
       const noteBox = document.getElementById(box.id + 1);
       noteBox.remove();
       setIcon(faAdd);
+      checkHasNote();
+    }
+  };
+  const checkHasNote = () => {
+    var checker = 0;
+    const boxItems = document.querySelectorAll(".box");
+    for (let x = 0; x < boxes.length; x++) {
+      if (boxes[x].hasNote == true) {
+        for (let i = 0; i < boxItems.length; i++) {
+          boxItems[i].style.justifyContent = "flex-start";
+        }
+        checker = 1;
+      }
+      if (checker == 0) {
+        for (let i = 0; i < boxItems.length; i++) {
+          boxItems[i].style.justifyContent = "center";
+        }
+      }
     }
   };
   return (
