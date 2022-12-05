@@ -1,13 +1,16 @@
 import React from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUp,
   faArrowDown,
   faClose,
   faAdd,
+  faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Box = ({ boxes, box, setBoxes }) => {
+  const [noteIcon, setIcon] = useState(faAdd);
   var counter = boxes.indexOf(box) + 1;
   const upHandler = () => {
     const index = boxes.indexOf(box);
@@ -39,12 +42,13 @@ const Box = ({ boxes, box, setBoxes }) => {
       noteBox.setAttribute("id", box.id + 1);
       noteBox.classList.add("noteBox");
       e.currentTarget.parentNode.appendChild(noteBox);
-      console.log(this.props);
+      setIcon(faMinus);
     } else {
       box.note = false;
       e.currentTarget.style.opacity = "1";
       const noteBox = document.getElementById(box.id + 1);
       noteBox.remove();
+      setIcon(faAdd);
     }
   };
   return (
@@ -63,7 +67,7 @@ const Box = ({ boxes, box, setBoxes }) => {
         <FontAwesomeIcon icon={faClose} />
       </button>
       <button className="add-note-btn" onClick={addNoteHandler}>
-        <FontAwesomeIcon icon={faAdd} />
+        <FontAwesomeIcon icon={noteIcon} setIcon={setIcon} />
       </button>
     </div>
   );
