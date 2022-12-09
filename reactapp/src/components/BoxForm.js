@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 
 const BoxForm = (props) => {
+  if (props.formDisplay == "hideForm") {
+    return null;
+  }
   const inputDimensionsHandler = (e) => {
     props.setDimensions(e.target.value);
   };

@@ -86,7 +86,7 @@ const Box = ({ boxes, box, setBoxes }) => {
         <FontAwesomeIcon icon={faClose} />
       </button>
       <button className="add-note-btn" onClick={addNoteHandler}>
-        <FontAwesomeIcon icon={noteIcon} setIcon={setIcon} />
+        <FontAwesomeIcon icon={noteIcon} />
       </button>
     </div>
   );

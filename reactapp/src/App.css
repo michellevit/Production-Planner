@@ -23,6 +23,8 @@ p {
 .main-area {
   width: 100%;
   margin: 75px 0;
+  font-size: 12px;
+
 }
 
 .orders-container {
@@ -75,6 +77,7 @@ p {
 .box-form input, .box-form select, .box-form button, .column3 button {
   padding: 4px 8px; 
   border: none;
+  font-size: 12px;
 }
 
 
@@ -92,11 +95,20 @@ p {
 .box-form {
   margin: auto;
   width: 100%;
+  margin-bottom: 15px;
 }
+
 
 .boxlist-container {
   width: 100%;
+  margin-top: 0;
 }
+
+
+.boxlist-container, ul { 
+  padding: 0;
+  margin-top: 0;
+  }
 
 .box-container {
   transition: all 1s ease;
@@ -105,9 +117,9 @@ p {
 
 .box {
   display: flex;
-  margin: 10px auto;
+  margin-top: 0px;
+  margin-bottom: 10px;
   justify-content: center;
-  font-size: 12px;
   color: black;
   text-align: left;
 }
@@ -119,9 +131,6 @@ p {
     padding: 4px 5px;
   }
 
-.boxlist-container, ul { 
-  padding: 0;
-}
 
 .box button {
   border: none;
@@ -157,4 +166,14 @@ p {
   width: 150px;
   padding: 4px 5px;
   margin-left: 10px;
+}
+
+.confirmButtonContainer {
+  width: 100%;
+}
+
+.confirmButton {
+  margin: 0px 5px;
+  background-color: white;
+  border: none;
 }
