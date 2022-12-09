@@ -19,6 +19,12 @@ const BoxForm = (props) => {
   };
   const submitBoxHandler = (e) => {
     e.preventDefault();
+    if (props.dimensions === "") {
+      return false;
+    }
+    if (props.weight === "") {
+      return false;
+    }
     props.setBoxes([
       ...props.boxes,
       {
@@ -40,9 +46,7 @@ const BoxForm = (props) => {
           onChange={inputDimensionsHandler}
           value={props.dimensions}
         >
-          <option value="Dimensions" hidden>
-            Dimensions
-          </option>
+          <option hidden>Dimensions</option>
           <option value="TBD">TBD</option>
           <option value="Hi">Hi</option>
           <option value="Hello">Hello</option>
@@ -51,6 +55,7 @@ const BoxForm = (props) => {
           type="number"
           className="weight"
           placeholder="lb"
+          min="0"
           onChange={inputWeightHandler}
           value={props.weight}
         ></input>
