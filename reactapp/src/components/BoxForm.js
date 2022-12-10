@@ -2,15 +2,29 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 
-const BoxForm = (props) => {
-  if (props.formDisplay == "hideForm") {
+const BoxForm = ({
+  formDisplay,
+  setDimensions,
+  dimensions,
+  setWeight,
+  weight,
+  setBoxes,
+  boxes,
+  note,
+  setNote,
+  handleNoteStatus,
+}) => {
+  if (formDisplay == "hideForm") {
     return null;
   }
   const inputDimensionsHandler = (e) => {
-    props.setDimensions(e.target.value);
+    setDimensions(e.target.value);
   };
   const inputWeightHandler = (e) => {
-    props.setWeight(e.target.value);
+    setWeight(e.target.value);
+  };
+  const inputNoteHandler = (e) => {
+    setNote(e.target.value);
   };
   const uniqueId = () => {
     const dateString = Date.now().toString(36);
@@ -19,23 +33,28 @@ const BoxForm = (props) => {
   };
   const submitBoxHandler = (e) => {
     e.preventDefault();
-    if (props.dimensions === "") {
+    if (dimensions === "") {
       return false;
     }
-    if (props.weight === "") {
-      return false;
+    if (weight === "") {
+      return true;
     }
-    props.setBoxes([
-      ...props.boxes,
+
+    setBoxes([
+      ...boxes,
       {
-        dimensions: props.dimensions,
-        weight: props.weight,
+        dimensions: dimensions,
+        weight: weight,
         id: uniqueId(),
-        hasNote: false,
+        note: note,
       },
     ]);
-    props.setDimensions("");
-    props.setWeight("");
+    setDimensions("");
+    setWeight("");
+    setNote("");
+    if (note !== "") {
+      handleNoteStatus(false);
+    }
   };
   return (
     <div className="box-form">
@@ -44,12 +63,13 @@ const BoxForm = (props) => {
           name="dimensions"
           className="dimensions"
           onChange={inputDimensionsHandler}
-          value={props.dimensions}
+          value={dimensions}
+          id="mySelect"
         >
           <option hidden>Dimensions</option>
           <option value="TBD">TBD</option>
-          <option value="Hi">Hi</option>
-          <option value="Hello">Hello</option>
+          <option value="10 x 8 x 3">10" x 8" x 3"</option>
+          <option value="9.125 x 9.125 x 9.125">9.125" 9.125" x 9.125"</option>
         </select>
         <input
           type="number"
@@ -57,7 +77,14 @@ const BoxForm = (props) => {
           placeholder="lb"
           min="0"
           onChange={inputWeightHandler}
-          value={props.weight}
+          value={weight}
+        ></input>
+        <input
+          type="text"
+          className="note"
+          placeholder="Note"
+          onChange={inputNoteHandler}
+          value={note}
         ></input>
         <button className="add-btn" onClick={submitBoxHandler}>
           <FontAwesomeIcon icon={faAdd} />

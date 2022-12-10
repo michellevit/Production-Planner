@@ -36,7 +36,7 @@ p {
 
 .column1 {
   display: flex;
-  width: 20%;
+  width: 15%;
   align-items: flex-start;
   justify-content: flex-end;
 }
@@ -44,14 +44,14 @@ p {
 .column2 {
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 70%;
   align-items: flex-start;
   justify-content: center;
 }
 
 .column3 {
   display: flex;
-  width: 20%;
+  width: 15%;
   align-items: flex-start;
   justify-content: flex-start;
 }
@@ -70,7 +70,7 @@ p {
 
 
 .dimensions {
-  width: 190px;
+  width: 160px;
   display: inline;
 }
 
@@ -85,6 +85,12 @@ p {
   width: 60px;
   margin-left: 5px;
 }
+
+.note {
+  width: 160px;
+  margin-left: 5px;
+}
+
 
 .add-btn {
   margin-left: 5px;
@@ -102,6 +108,10 @@ p {
 .boxlist-container {
   width: 100%;
   margin-top: 0;
+}
+
+.button-container {
+  margin-left: 5px;
 }
 
 
@@ -129,10 +139,20 @@ p {
 
 
 .box-info {
-    width: 150px;
+    max-height: 15px;
+    width: 190px;
     background: white;
     padding: 4px 5px;
   }
+
+.box-note {
+    margin: 0 5px ;
+    word-wrap: break-word;
+    width: 150px;
+    background: white;
+    padding: 4px 5px;
+}
+  
 
 
 .box button {
