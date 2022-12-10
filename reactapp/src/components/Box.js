@@ -9,7 +9,7 @@ import {
   faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Box = ({ boxes, box, setBoxes }) => {
+const Box = ({ boxes, box, setBoxes, hideButtons }) => {
   const [noteIcon, setIcon] = useState(faAdd);
   var counter = boxes.indexOf(box) + 1;
   const upHandler = () => {
@@ -55,7 +55,7 @@ const Box = ({ boxes, box, setBoxes }) => {
   };
   const checkHasNote = () => {
     var checker = 0;
-    const boxItems = document.querySelectorAll(".box");
+    const boxItems = document.querySelectorAll(".box-container");
     for (let x = 0; x < boxes.length; x++) {
       if (boxes[x].hasNote == true) {
         for (let i = 0; i < boxItems.length; i++) {
@@ -76,18 +76,22 @@ const Box = ({ boxes, box, setBoxes }) => {
         <b>Box {counter}: </b>
         {box.dimensions} - {box.weight} lb
       </div>
-      <button className="up-btn" onClick={upHandler}>
-        <FontAwesomeIcon icon={faArrowUp} />
-      </button>
-      <button className="down-btn" onClick={downHandler}>
-        <FontAwesomeIcon icon={faArrowDown} />
-      </button>
-      <button className="xmark-btn" onClick={deleteHandler}>
-        <FontAwesomeIcon icon={faClose} />
-      </button>
-      <button className="add-note-btn" onClick={addNoteHandler}>
-        <FontAwesomeIcon icon={noteIcon} />
-      </button>
+      {!hideButtons && (
+        <div>
+          <button className="up-btn" onClick={upHandler}>
+            <FontAwesomeIcon icon={faArrowUp} />
+          </button>
+          <button className="down-btn" onClick={downHandler}>
+            <FontAwesomeIcon icon={faArrowDown} />
+          </button>
+          <button className="xmark-btn" onClick={deleteHandler}>
+            <FontAwesomeIcon icon={faClose} />
+          </button>
+          <button className="add-note-btn" onClick={addNoteHandler}>
+            <FontAwesomeIcon icon={noteIcon} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

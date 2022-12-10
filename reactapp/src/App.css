@@ -74,7 +74,7 @@ p {
   display: inline;
 }
 
-.box-form input, .box-form select, .box-form button, .column3 button {
+.box-form input, .box-form select, .box-form button, .column3 button, .box-container button {
   padding: 4px 8px; 
   border: none;
   font-size: 12px;
