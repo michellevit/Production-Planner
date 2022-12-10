@@ -1,19 +1,20 @@
 import React from "react";
-import { useState } from "react";
 // Import Components
 
-const ConfirmOrder = ({ boxes, handleFormChange }) => {
-  if (boxes.length == 0) {
+const ConfirmOrder = ({ boxes, handleFormChange, handleButtonStatus }) => {
+  if (boxes.length === 0) {
     return null;
   }
   const changeText = (e) => {
     const btn = e.target;
-    if (btn.textContent == "Confirm") {
+    if (btn.textContent === "Confirm") {
       btn.textContent = "Edit";
       handleFormChange("hideForm");
+      handleButtonStatus(true);
     } else {
       btn.textContent = "Confirm";
       handleFormChange("displayForm");
+      handleButtonStatus(false);
     }
   };
   return (

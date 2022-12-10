@@ -11,15 +11,19 @@ const Order = () => {
   const [weight, setWeight] = useState("");
   const [boxes, setBoxes] = useState([]);
   const [formDisplay, setFormDisplay] = useState("showForm");
+  const [hideButtons, setButtonStatus] = useState(false);
   function handleFormChange(formStatus) {
     setFormDisplay(formStatus);
+  }
+  function handleButtonStatus(buttonStatus) {
+    setButtonStatus(buttonStatus);
   }
   return (
     <div className="main-area">
       <div className="orders-container">
         <div className="column1">
           <p className="order-date">Date</p>
-          <p className="order-number">Order Number</p>
+          <p className="order-number">Order#</p>
         </div>
         <div className="column2">
           <BoxForm
@@ -31,8 +35,16 @@ const Order = () => {
             boxes={boxes}
             formDisplay={formDisplay}
           />
-          <BoxList boxes={boxes} setBoxes={setBoxes} />
-          <ConfirmOrder boxes={boxes} handleFormChange={handleFormChange} />
+          <BoxList
+            boxes={boxes}
+            setBoxes={setBoxes}
+            hideButtons={hideButtons}
+          />
+          <ConfirmOrder
+            boxes={boxes}
+            handleFormChange={handleFormChange}
+            handleButtonStatus={handleButtonStatus}
+          />
         </div>
         <div className="column3">
           <button type="button" id="picked-up">
