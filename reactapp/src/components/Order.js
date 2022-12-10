@@ -10,13 +10,18 @@ const Order = () => {
   const [dimensions, setDimensions] = useState("");
   const [weight, setWeight] = useState("");
   const [boxes, setBoxes] = useState([]);
+  const [note, setNote] = useState("");
   const [formDisplay, setFormDisplay] = useState("showForm");
   const [hideButtons, setButtonStatus] = useState(false);
+  const [hideNote, setNoteStatus] = useState(true);
   function handleFormChange(formStatus) {
     setFormDisplay(formStatus);
   }
   function handleButtonStatus(buttonStatus) {
     setButtonStatus(buttonStatus);
+  }
+  function handleNoteStatus(noteStatus) {
+    setNoteStatus(noteStatus);
   }
   return (
     <div className="main-area">
@@ -34,11 +39,16 @@ const Order = () => {
             setBoxes={setBoxes}
             boxes={boxes}
             formDisplay={formDisplay}
+            note={note}
+            setNote={setNote}
+            handleNoteStatus={handleNoteStatus}
           />
           <BoxList
             boxes={boxes}
             setBoxes={setBoxes}
             hideButtons={hideButtons}
+            hideNote={hideNote}
+            handleNoteStatus={handleNoteStatus}
           />
           <ConfirmOrder
             boxes={boxes}
