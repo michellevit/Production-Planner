@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./Order.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faTruck } from "@fortawesome/free-solid-svg-icons";
 // Import Components

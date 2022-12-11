@@ -1,0 +1,36 @@
+
+.dimensions {
+    width: 160px;
+    display: inline;
+  }
+  
+  .box-form input, .box-form select, .box-form button, .column3 button, .box-container button {
+    padding: 4px 8px; 
+    border: none;
+    font-size: 12px;
+  }
+  
+  
+  .weight {
+    width: 60px;
+    margin-left: 5px;
+  }
+  
+  .note {
+    width: 160px;
+    margin-left: 5px;
+  }
+  
+
+  .add-btn {
+    margin-left: 5px;
+    margin-right: 0px;
+    background-color: white;
+  }
+  
+  .box-form {
+    margin: auto;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  

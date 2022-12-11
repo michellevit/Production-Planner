@@ -1,4 +1,5 @@
 import React from "react";
+import "./BoxList.css";
 // Import Components
 import Box from "./Box";
 

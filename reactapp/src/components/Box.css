@@ -1,0 +1,55 @@
+
+.box-container {
+    display: flex;
+    transition: all 1s ease;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .box {
+    display: flex;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    justify-content: center;
+    color: black;
+    text-align: left;
+  }
+  
+  
+  .box-info {
+      max-height: 15px;
+      width: 190px;
+      background: white;
+      padding: 4px 5px;
+    }
+  
+  .box-note {
+      margin: 0 5px ;
+      word-wrap: break-word;
+      width: 150px;
+      background: white;
+      padding: 4px 5px;
+  }
+    
+  
+  .box button {
+    border: none;
+    width: 25px;
+    color: white;
+    margin: 0;
+  }
+  
+  .up-btn {
+    background: steelblue;
+  }
+  
+  .down-btn {
+    background: blue;
+  }
+  
+  .xmark-btn {
+    background: red;
+    align-items: flex-end;
+  }
+
+  

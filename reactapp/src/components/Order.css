@@ -1,0 +1,54 @@
+.main-area {
+    width: 100%;
+    margin: 75px 0;
+    font-size: 12px;
+  }
+  
+
+.orders-container {
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    margin: 0 20px;
+  }
+  
+  .column1 {
+    display: flex;
+    width: 15%;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+  
+  .column2 {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  
+  .column3 {
+    display: flex;
+    width: 15%;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .column3 button {
+    margin: 0px 5px;
+    background-color: white;
+  }
+
+  
+.order-date {
+    font-weight: bold;
+    color: darkblue;
+    margin: 0 10px;
+  }
+  
+  .order-number {
+    font-weight: bold;
+    color: white;
+    margin: 0 10px;
+  }
+  

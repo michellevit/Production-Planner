@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import "./Box.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUp,
