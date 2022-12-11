@@ -6,7 +6,6 @@ import {
   faArrowDown,
   faClose,
 } from "@fortawesome/free-solid-svg-icons";
-import { checkboxClasses } from "@mui/material";
 
 const Box = ({
   boxes,
@@ -36,7 +35,17 @@ const Box = ({
     }
   };
   const deleteHandler = (e) => {
-    setBoxes(boxes.filter((el) => el.id !== box.id));
+    let newBoxes = boxes.filter((el) => el.id !== box.id);
+    setBoxes(newBoxes);
+    let counter = 0;
+    for (let x = 0; x < newBoxes.length; x++) {
+      if (newBoxes[x].note !== "") {
+        counter = 1;
+      }
+    }
+    if (counter === 0) {
+      handleNoteStatus(true);
+    }
   };
   return (
     <div className="box">

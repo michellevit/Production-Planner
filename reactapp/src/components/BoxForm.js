@@ -39,7 +39,6 @@ const BoxForm = ({
     if (weight === "") {
       return true;
     }
-
     setBoxes([
       ...boxes,
       {
