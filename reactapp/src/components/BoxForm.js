@@ -15,7 +15,7 @@ const BoxForm = ({
   setNote,
   handleNoteStatus,
 }) => {
-  if (formDisplay == "hideForm") {
+  if (formDisplay === "hideForm") {
     return null;
   }
   const inputDimensionsHandler = (e) => {
