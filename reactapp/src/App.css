@@ -1,22 +1,36 @@
 body {
-  background-color: lightskyblue;
+  background-color: #D3D3D3;
   text-align: center;
   width: 100%;
   height: 100%;
 }
 
 h1 {
-  color: violet;
-  text-shadow: 0 0 3px red, 0 0 1px #000000;
+  color: #004d99;
 }
 
 h2 {
-  color: plum;
-  text-shadow: 0 0 3px red, 0 0 1px #000000;
+  color: #0066cc;
 }
 
 p {
   display: inline;
   margin: 0;
+  color: #555555;
 }
 
+a {
+  color: #0077cc;
+}
+
+
+.accent-color {
+  color: #FF6600;
+}
+
+
+@media (max-width: 580px) {
+  .App {
+    min-width: 575px;
+  }
+}
