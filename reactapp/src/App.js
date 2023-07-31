@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
 //Importing Components
-import Order from "./components/Order";
-import NotesListPage from "./pages/NotesListPage";
+import Order from "./components/pages/openOrdersPage/Order";
+import NotesListSection from "./components/pages/openOrdersPage/NotesListSection";
 
 function App() {
   return (
@@ -10,9 +10,9 @@ function App() {
       <header>
         <h1>Open Orders</h1>
       </header>
-      <h2>Date</h2>
+      <h2>Date: </h2>
       <Order />
-      <NotesListPage />
+      <NotesListSection />
     </div>
   );
 }

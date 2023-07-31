@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const NotesListPage = () => {
+const NotesListSection = () => {
   let [notes, setNotes] = useState();
 
   useEffect(() => {
@@ -14,7 +14,11 @@ const NotesListPage = () => {
     setNotes(data);
   };
 
-  return <div>notes</div>;
+  return (
+    <div>
+      <h2>Notes</h2>
+    </div>
+  );
 };
 
-export default NotesListPage;
+export default NotesListSection;
