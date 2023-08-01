@@ -19,7 +19,6 @@
   .note {
     width: 160px;
     margin-left: 5px;
-    margin-top: 10px;
   }
   
 
@@ -33,5 +32,15 @@
     margin: auto;
     width: 100%;
     margin-bottom: 15px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  form {
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
   }
   
