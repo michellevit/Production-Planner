@@ -17,6 +17,7 @@ const NotesListSection = () => {
   return (
     <div>
       <h2>Notes</h2>
+      {notes}
     </div>
   );
 };
