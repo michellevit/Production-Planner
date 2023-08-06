@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+
 //Importing Components
 import Order from "./components/pages/openOrdersPage/Order";
 import NotesListSection from "./components/pages/openOrdersPage/NotesListSection";
