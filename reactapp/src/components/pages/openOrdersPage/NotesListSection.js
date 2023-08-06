@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const NotesListSection = () => {
   let [notes, setNotes] = useState();
@@ -17,7 +18,7 @@ const NotesListSection = () => {
   return (
     <div>
       <h2>Notes</h2>
-      {notes}
+      display notes here!
     </div>
   );
 };
