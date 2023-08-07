@@ -2,17 +2,16 @@ import os
 import openpyxl
 
 
-order_dict = {}
-
-
 class Order:
+    orders_dict = {}
+
     def __init__(
         self,
         order_number,
         ship_date,
+        customer_name,
         item_type_dict,
         item_subtype_dict,
-        customer_name,
         dimensions,
         weight,
         confirmed=False,
@@ -20,13 +19,25 @@ class Order:
     ):
         self.order_number = order_number
         self.ship_date = ship_date
-        self.item_type_dict = {}
-        self.item_subtype_dict = {}
         self.customer_name = customer_name
+        self.item_type_dict = item_type_dict
+        self.item_subtype_dict = item_subtype_dict
         self.dimensions = dimensions
         self.weight = weight
         self.confirmed = confirmed
         self.archived = archived
+
+    @classmethod
+    def update_orders_dict(cls, new_order):
+        if new_order.order_number in cls.orders_dict:
+            cls.orders_dict[new_order.order_number].item_type_dict.update(
+                new_order.item_type_dict
+            )
+            cls.orders_dict[new_order.order_number].item_subtype_dict.update(
+                new_order.item_subtype_dict
+            )
+        else:
+            cls.orders_dict[new_order.order_number] = new_order
 
 
 def find_workbooks():
@@ -59,6 +70,18 @@ def check_if_correct_workbook(file):
 
 
 def sort_workbook(sheet):
+    # Initial loop through row[0] until you find a new item (must not include 'Total' in row[0])
+    ## Item found: create a secondary loop for the next rows
+    ### Check if next_row[0] includes word 'Total
+    ##### If yes: break out of the next_row loop, and return to the intial
+    ##### If no: check if next_row[1] is an item
+    ####### If yes: check if includes word 'Total' in it:
+    ########## If yes: continue next_row fn
+    ########## If no: update subtype, and continue next_row fn
+    ####### If no: create a new item next_row[2, 4, 6, 8] + add it to dict + continue next_row loop
+    ########################################################
+    ########################################################
+    # Initial loop through row[0] until you find a new item (must not include 'Total' in row[0])
     for index, row in enumerate(sheet.iter_rows(min_row=0, min_col=3, max_col=12)):
         item_type = row[0].value
         item_subtype = None
@@ -68,69 +91,52 @@ def sort_workbook(sheet):
             continue
         elif "Ship" in item_type:
             continue
-        elif "Return" in item_type:
-            continue
         else:
+            ## Item found: create a secondary loop for the next rows
             next_row_number = index + 2
             for next_row in sheet.iter_rows(
                 min_row=next_row_number, min_col=3, max_col=12
             ):
-                if next_row[1].value != None and "Total" not in next_row[1].value:
-                    item_subtype = next_row[1].value
-                if item_subtype == item_type + " - Other":
-                    item_subtype = item_type
-                if next_row[2].value == None:
-                    continue
+                ### Check if next_row[0] includes word 'Total
+                if next_row[0].value is not None:
+                    if "Total" in next_row[0].value:
+                        ##### If yes: break out of the secondary loop, and return to the intial loop
+                        break
                 else:
-                    item_type_dict = {item_type: next_row[8].value}
-                    if item_subtype != None:
-                        item_subtype_dict = {item_subtype: next_row[8].value}
+                    ##### If no: check if next_row[1] is an item
+                    if next_row[1].value is not None:
+                        ####### If yes: check if includes word 'Total' in it:
+                        if "Total" in next_row[1].value:
+                            ########## If yes: continue next_row fn
+                            continue
+                        else:
+                            ########## If no: update subtype, and continue next_row fn
+                            if "- Other" in next_row[1].value:
+                                item_subtype = next_row[1].value.replace("- Other", "")
+                            else:
+                                item_subtype = next_row[1].value
+                                continue
                     else:
-                        item_subtype_dict = {item_type: next_row[8].value}
-                    new_object = {
-                        "order_number": next_row[4].value,
-                        "ship_date": next_row[2].value,
-                        "item_type_dict": item_type_dict,
-                        "item_subtype_dict": item_subtype_dict,
-                        "customer_name": next_row[6].value,
-                        "dimensions": None,
-                        "weight": None,
-                        "confirmed": False,
-                        "archived": False,
-                    }
-                    order_dict[next_row[4].value] = new_object
-
-    for key, value in order_dict.items():
-        print(
-            "Order Number: ",
-            value["order_number"],
-            "\n",
-            "Ship Date: ",
-            value["ship_date"],
-            "\n",
-            "Customer Name: ",
-            value["customer_name"],
-            "\n",
-            "Item Type: ",
-            value["item_type_dict"],
-            "\n",
-            "Item Subtype: ",
-            value["item_subtype_dict"],
-            "\n",
-            "Dimensions: ",
-            value["dimensions"],
-            "\n",
-            "Weight: ",
-            value["weight"],
-            "\n",
-            "Confirmed: ",
-            value["confirmed"],
-            "\n",
-            "Archived: ",
-            value["archived"],
-            "\n",
-            "\n\n",
-        )
+                        ####### If no: create a new item next_row[2, 4, 6, 8] + add it to dict + continue next_row loop
+                        item_type_dict = {}
+                        item_type_dict[item_type] = next_row[8].value
+                        item_subtype_dict = {}
+                        if item_subtype is None:
+                            item_subtype_dict[item_type] = next_row[8].value
+                        else:
+                            item_subtype_dict[item_subtype] = next_row[8].value
+                        new_order = Order(
+                            order_number=next_row[4].value,
+                            ship_date=next_row[2].value,
+                            customer_name=next_row[6].value,
+                            item_type_dict=item_type_dict,
+                            item_subtype_dict=item_subtype_dict,
+                            dimensions=None,
+                            weight=None,
+                            confirmed=False,
+                            archived=False,
+                        )
+                        Order.update_orders_dict(new_order)
 
 
 find_workbooks()
