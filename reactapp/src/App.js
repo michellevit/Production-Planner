@@ -3,7 +3,6 @@ import "./App.css";
 
 //Importing Components
 import Order from "./components/pages/openOrdersPage/Order";
-import NotesListSection from "./components/pages/openOrdersPage/NotesListSection";
 
 function App() {
   return (
@@ -13,7 +12,6 @@ function App() {
       </header>
       <h2>Date: </h2>
       <Order />
-      <NotesListSection />
     </div>
   );
 }

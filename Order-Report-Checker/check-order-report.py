@@ -12,8 +12,7 @@ class Order:
         customer_name,
         item_type_dict,
         item_subtype_dict,
-        dimensions,
-        weight,
+        packages,
         confirmed=False,
         archived=False,
     ):
@@ -22,8 +21,7 @@ class Order:
         self.customer_name = customer_name
         self.item_type_dict = item_type_dict
         self.item_subtype_dict = item_subtype_dict
-        self.dimensions = dimensions
-        self.weight = weight
+        self.packages = packages
         self.confirmed = confirmed
         self.archived = archived
 
@@ -131,8 +129,7 @@ def sort_workbook(sheet):
                             customer_name=next_row[6].value,
                             item_type_dict=item_type_dict,
                             item_subtype_dict=item_subtype_dict,
-                            dimensions=None,
-                            weight=None,
+                            packages=None,
                             confirmed=False,
                             archived=False,
                         )

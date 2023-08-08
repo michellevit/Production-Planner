@@ -28,8 +28,10 @@ const Order = () => {
     <div className="main-area">
       <div className="orders-container">
         <div className="column1">
-          <p className="order-date">Date</p>
+          <p className="ship-date">Ship Date</p>
           <p className="order-number">Order#</p>
+          <p className="order-number">Customer</p>
+          <p className="order-number">Items</p>
         </div>
         <div className="column2">
           <BoxForm
@@ -58,6 +60,7 @@ const Order = () => {
           />
         </div>
         <div className="column3">
+          <button>Delayed</button>
           <button type="button" id="picked-up">
             <FontAwesomeIcon icon={faTruck} />
           </button>
