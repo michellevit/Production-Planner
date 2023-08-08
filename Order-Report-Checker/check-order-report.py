@@ -1,41 +1,22 @@
 import os
 import openpyxl
+from api.models import Order
 
 
-class Order:
-    orders_dict = {}
+orders_dict = {}
 
-    def __init__(
-        self,
-        order_number,
-        ship_date,
-        customer_name,
-        item_type_dict,
-        item_subtype_dict,
-        packages,
-        confirmed=False,
-        archived=False,
-    ):
-        self.order_number = order_number
-        self.ship_date = ship_date
-        self.customer_name = customer_name
-        self.item_type_dict = item_type_dict
-        self.item_subtype_dict = item_subtype_dict
-        self.packages = packages
-        self.confirmed = confirmed
-        self.archived = archived
 
-    @classmethod
-    def update_orders_dict(cls, new_order):
-        if new_order.order_number in cls.orders_dict:
-            cls.orders_dict[new_order.order_number].item_type_dict.update(
-                new_order.item_type_dict
-            )
-            cls.orders_dict[new_order.order_number].item_subtype_dict.update(
-                new_order.item_subtype_dict
-            )
-        else:
-            cls.orders_dict[new_order.order_number] = new_order
+def update_orders_dict(new_order):
+    if new_order.order_number in orders_dict:
+        orders_dict[new_order.order_number].item_type_dict.update(
+            new_order.item_type_dict
+        )
+        orders_dict[new_order.order_number].item_subtype_dict.update(
+            new_order.item_subtype_dict
+        )
+    else:
+        orders_dict[new_order.order_number] = new_order
+    print(orders_dict)
 
 
 def find_workbooks():
