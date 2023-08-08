@@ -9,4 +9,21 @@ class Note(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.body[0:50]
+        return self.id + " " + self.body
+
+
+class Order(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    order_number = models.CharField(max_length=100)
+    ship_date = models.CharField(max_length=100)
+    customer_name = models.CharField(max_length=100)
+    item_type_dict = models.JSONField()
+    item_subtype_dict = models.JSONField()
+    packages = models.JSONField()
+    weight = models.CharField(max_length=10)
+    confirmed = models.BooleanField(default=False)
+    archived = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.order_number[0:50]
