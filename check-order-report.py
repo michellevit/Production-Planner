@@ -1,7 +1,10 @@
 import os
 import openpyxl
-from api.models import Order
+import django
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Production_Project.settings")
+django.setup()
+from api.models import Order
 
 orders_dict = {}
 
@@ -14,9 +17,14 @@ def update_orders_dict(new_order):
         orders_dict[new_order.order_number].item_subtype_dict.update(
             new_order.item_subtype_dict
         )
+        existing_order = Order.objects.filter(
+            order_number=new_order.order_number
+        ).first()
+        existing_order.item_type_dict = new_order.item_type_dict
+        existing_order.item_subtype_dict = new_order.item_subtype_dict
     else:
         orders_dict[new_order.order_number] = new_order
-    print(orders_dict)
+        new_order.save()
 
 
 def find_workbooks():
@@ -110,11 +118,11 @@ def sort_workbook(sheet):
                             customer_name=next_row[6].value,
                             item_type_dict=item_type_dict,
                             item_subtype_dict=item_subtype_dict,
-                            packages=None,
+                            packages="",
                             confirmed=False,
                             archived=False,
                         )
-                        Order.update_orders_dict(new_order)
+                        update_orders_dict(new_order)
 
 
 find_workbooks()
