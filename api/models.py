@@ -16,6 +16,8 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     order_number = models.CharField(max_length=100)
+    backorder = models.BooleanField(default=False)
+    backorder_number = models.CharField(max_length=10, default="0")
     ship_date = models.DateField()
     customer_name = models.CharField(max_length=100)
     item_type_dict = models.JSONField(default=dict)
