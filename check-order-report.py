@@ -1,6 +1,9 @@
 import os
 import openpyxl
 import django
+from django.db.models import Q
+from django.db import models
+from django.core.management.base import BaseCommand
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Production_Project.settings")
 django.setup()
@@ -17,14 +20,33 @@ def update_orders_dict(new_order):
         orders_dict[new_order.order_number].item_subtype_dict.update(
             new_order.item_subtype_dict
         )
-        existing_order = Order.objects.filter(
-            order_number=new_order.order_number
-        ).first()
-        existing_order.item_type_dict = new_order.item_type_dict
-        existing_order.item_subtype_dict = new_order.item_subtype_dict
+        print(new_order.order_number, "already in order_dict, items updated (1)")
+    else:
+        orders_dict[new_order.order_number] = new_order
+        print(new_order.order_number, " (new order) added to order_dict (2)")
+    if Order.objects.filter(order_number=new_order.order_number).exists():
+        existing_order = Order.objects.get(order_number=new_order.order_number)
+        print(existing_order.order_number, " already in Order db (3)")
+        if existing_order.archived:
+            new_order.backorder = True
+            new_order.save()
+            print(new_order.order_number, " is backorder (2.EXCEPTION)")
+        else:
+            existing_order.ship_date = new_order.ship_date
+            existing_order.item_type_dict = orders_dict[
+                new_order.order_number
+            ].item_type_dict
+            existing_order.item_subtype_dict = orders_dict[
+                new_order.order_number
+            ].item_subtype_dict
+            existing_order.save()
+            print("Updated item_type_dict: ", existing_order.item_type_dict, "(3)")
     else:
         orders_dict[new_order.order_number] = new_order
         new_order.save()
+        print(new_order.order_number, " saved to Order db (4)")
+        print("Added item_type_dict: ", new_order.item_type_dict, "(4)")
+    print("\n")
 
 
 def find_workbooks():
@@ -126,3 +148,10 @@ def sort_workbook(sheet):
 
 
 find_workbooks()
+
+
+# def delete_unnecessary_entries():
+#     Order.objects.all().delete()
+
+
+# delete_unnecessary_entries()
