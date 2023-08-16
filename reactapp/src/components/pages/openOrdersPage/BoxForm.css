@@ -29,9 +29,8 @@
   }
   
   .box-form {
-    margin: auto;
+    margin: 20px auto 0 auto;
     width: 100%;
-    margin-bottom: 15px;
     align-items: center;
     display: flex;
     flex-direction: column;
