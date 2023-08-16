@@ -27,13 +27,24 @@ const Order = () => {
   return (
     <div className="main-area">
       <div className="orders-container">
-        <div className="column1">
-          <p className="ship-date">Ship Date</p>
-          <p className="order-number">Order#</p>
-          <p className="order-number">Customer</p>
-          <p className="order-number">Items</p>
+        <div className="columns">
+          <div className="column1">
+            <p className="ship-date">Ship Date</p>
+            <p className="order-number">Order#</p>
+            <p className="customer">Customer</p>
+            <p className="items">Items</p>
+          </div>
+          <div className="column2">
+            <button>Delayed</button>
+            <button type="button" id="picked-up">
+              <FontAwesomeIcon icon={faTruck} />
+            </button>
+            <button type="button" id="delete">
+              <FontAwesomeIcon icon={faClose} />
+            </button>
+          </div>
         </div>
-        <div className="column2">
+        <div className="column3">
           <BoxForm
             setDimensions={setDimensions}
             dimensions={dimensions}
@@ -58,15 +69,6 @@ const Order = () => {
             handleFormChange={handleFormChange}
             handleButtonStatus={handleButtonStatus}
           />
-        </div>
-        <div className="column3">
-          <button>Delayed</button>
-          <button type="button" id="picked-up">
-            <FontAwesomeIcon icon={faTruck} />
-          </button>
-          <button type="button" id="delete">
-            <FontAwesomeIcon icon={faClose} />
-          </button>
         </div>
       </div>
     </div>
