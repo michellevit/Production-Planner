@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Order.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faTruck } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +8,7 @@ import BoxList from "./BoxList";
 import ConfirmOrder from "./ConfirmOrder";
 
 const Order = () => {
+  const [orders, setOrders] = useState([]);
   const [dimensions, setDimensions] = useState("");
   const [weight, setWeight] = useState("");
   const [boxes, setBoxes] = useState([]);
@@ -24,53 +25,63 @@ const Order = () => {
   function handleNoteStatus(noteStatus) {
     setNoteStatus(noteStatus);
   }
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/orders/")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setOrders(data);
+      });
+  }, []);
   return (
     <div className="main-area">
-      <div className="orders-container">
-        <div className="columns">
-          <div className="column1">
-            <p className="ship-date">Ship Date</p>
-            <p className="order-number">Order#</p>
-            <p className="customer">Customer</p>
-            <p className="items">Items</p>
+      {orders.map((order) => (
+        <div className="order-container" key={order.id}>
+          <div className="columns">
+            <div className="column1">
+              <p className="ship-date">{order.ship_date}</p>
+              <p className="order-number">{order.order_number}</p>
+              <p className="customer">{order.customer_name}</p>
+              <p className="items">Items</p>
+            </div>
+            <div className="column2">
+              <button>Delayed</button>
+              <button type="button" id="picked-up">
+                <FontAwesomeIcon icon={faTruck} />
+              </button>
+              <button type="button" id="delete">
+                <FontAwesomeIcon icon={faClose} />
+              </button>
+            </div>
           </div>
-          <div className="column2">
-            <button>Delayed</button>
-            <button type="button" id="picked-up">
-              <FontAwesomeIcon icon={faTruck} />
-            </button>
-            <button type="button" id="delete">
-              <FontAwesomeIcon icon={faClose} />
-            </button>
+          <div className="column3">
+            <BoxForm
+              setDimensions={setDimensions}
+              dimensions={dimensions}
+              setWeight={setWeight}
+              weight={weight}
+              setBoxes={setBoxes}
+              boxes={boxes}
+              formDisplay={formDisplay}
+              note={note}
+              setNote={setNote}
+              handleNoteStatus={handleNoteStatus}
+            />
+            <BoxList
+              boxes={boxes}
+              setBoxes={setBoxes}
+              hideButtons={hideButtons}
+              hideNote={hideNote}
+              handleNoteStatus={handleNoteStatus}
+            />
+            <ConfirmOrder
+              boxes={boxes}
+              handleFormChange={handleFormChange}
+              handleButtonStatus={handleButtonStatus}
+            />
           </div>
         </div>
-        <div className="column3">
-          <BoxForm
-            setDimensions={setDimensions}
-            dimensions={dimensions}
-            setWeight={setWeight}
-            weight={weight}
-            setBoxes={setBoxes}
-            boxes={boxes}
-            formDisplay={formDisplay}
-            note={note}
-            setNote={setNote}
-            handleNoteStatus={handleNoteStatus}
-          />
-          <BoxList
-            boxes={boxes}
-            setBoxes={setBoxes}
-            hideButtons={hideButtons}
-            hideNote={hideNote}
-            handleNoteStatus={handleNoteStatus}
-          />
-          <ConfirmOrder
-            boxes={boxes}
-            handleFormChange={handleFormChange}
-            handleButtonStatus={handleButtonStatus}
-          />
-        </div>
-      </div>
+      ))}
     </div>
   );
 };
