@@ -8,7 +8,7 @@ import BoxList from "./BoxList";
 import ConfirmOrder from "./ConfirmOrder";
 
 const Order = () => {
-  const [orders, setOrders] = useState([]);
+  // const [orders, setOrders] = useState([]);
   const [dimensions, setDimensions] = useState("");
   const [weight, setWeight] = useState("");
   const [boxes, setBoxes] = useState([]);
@@ -25,23 +25,23 @@ const Order = () => {
   function handleNoteStatus(noteStatus) {
     setNoteStatus(noteStatus);
   }
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/orders/")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setOrders(data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch("http://127.0.0.1:8000/api/orders/")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       // setOrders(data);
+  //     });
+  // }, []);
   return (
     <div className="main-area">
-      {orders.map((order) => (
-        <div className="order-container" key={order.id}>
+      {/* {orders.map((order) => ( */}
+        <div className="order-container">
           <div className="columns">
             <div className="column1">
-              <p className="ship-date">{order.ship_date}</p>
-              <p className="order-number">{order.order_number}</p>
-              <p className="customer">{order.customer_name}</p>
+              <p className="ship-date"></p>
+              <p className="order-number"></p>
+              <p className="customer"></p>
               <p className="items">Items</p>
             </div>
             <div className="column2">
@@ -81,7 +81,7 @@ const Order = () => {
             />
           </div>
         </div>
-      ))}
+      {/* ))} */}
     </div>
   );
 };
