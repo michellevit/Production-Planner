@@ -1,7 +1,8 @@
 from django.urls import path
-from . import views
+from .views import OrderView
 
 urlpatterns = [
-    path("orders/", views.getRoutes, name="orders-list"),
-    path("", views.getRoutes, name="routes"),
+    # path("", views.getRoutes, name="routes"),
+    path('open-orders/', OrderView.as_view(), name='open-orders')
 ]
+

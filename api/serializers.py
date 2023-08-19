@@ -1,8 +1,22 @@
-from rest_framework.serializers import ModelSerializer
-from .models import Note
+from rest_framework import serializers
+from .models import *
 
-
-class NoteSerializer(ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Note
-        fields = "__all__"
+        model = Order
+        fields = [
+            'id',
+            'created',
+            'updated',
+            'order_number',
+            'backorder',
+            'backorder_number',
+            'ship_date',
+            'customer_name',
+            'item_type_dict',
+            'item_subtype_dict',
+            'packages_dict',
+            'weight',
+            'confirmed',
+            'archived'
+            ]
