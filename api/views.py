@@ -1,43 +1,33 @@
+from django.shortcuts import render
+from rest_framework.views import APIView
+from . models import *
+from . serializers import *
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 
 # Create your views here.
 
-
-@api_view(["GET"])
-def getRoutes(request):
-
-    routes = [
-        {
-            "Endpoint": "/notes/",
-            "method": "GET",
-            "body": None,
-            "description": "Returns an array of notes",
-        },
-        {
-            "Endpoint": "/notes/id",
-            "method": "GET",
-            "body": None,
-            "description": "Returns a single note object",
-        },
-        {
-            "Endpoint": "/notes/create/",
-            "method": "Post",
-            "body": {"body": ""},
-            "description": "Creates new note with data sent in post request",
-        },
-        {
-            "Endpoint": "/notes/id/update/",
-            "method": "PUT",
-            "body": {"body": ""},
-            "description": "Creates an existing note with data sent in position",
-        },
-        {
-            "Endpoint": "/notes/id/delete/",
-            "method": "DELETE",
-            "body": None,
-            "description": "Deletes and exiting note",
-        },
-    ]
-    return Response(routes)
-
+class OrderView(APIView):
+    def get(self, request):
+        output = [{ "ID": output.id,
+                    "created": output.created,
+                    "updated": output.updated,
+                    "order_number": output.order_number,
+                    "customer_name": output.customer_name,
+                    "backorder": output.backorder,
+                    "backorder_number": output.backorder_number,
+                    "ship_date": output.ship_date,
+                    "item_type_dict": output.item_type_dict,
+                    "item_subtype_dict": output.item_subtype_dict,
+                    "packages": output.packages_dict,
+                    "weight": output.weight,
+                    "confirmed": output.confirmed,
+                    "archived": output.archived,
+                   }
+                   for output in Order.objects.all()]
+        return Response(output)
+    def post(self, request):
+        serializer = OrderSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+        
