@@ -18,6 +18,10 @@ const Order = () => {
   const [formDisplay, setFormDisplay] = useState("showForm");
   const [hideButtons, setButtonStatus] = useState(false);
   const [hideNote, setNoteStatus] = useState(true);
+  function formatDate(dateString) {
+    const options = { weekday: "short", month: "short", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("en-US", options);
+  }
   function handleFormChange(formStatus) {
     setFormDisplay(formStatus);
   }
@@ -37,20 +41,22 @@ const Order = () => {
       <div className="main-area">
         {orders.map(order => (
           <div className="order-container">
-            <div className="columns">
+            <div className="order-card">
               <div className="column1">
-                <p className="ship-date">{order.ship_date}</p>
-                <p className="order-number">{order.order_number}</p>
-                <p className="customer">{order.customer_name}</p>
-                <p className="items">Items</p>
+                <div className="order-data">
+                  <div className="columns">
+                    <div className="column1a">
+                      <p className="ship-date">{formatDate(order.ship_date)}</p>
+                      <p className="order-number">{order.order_number}</p>
+                      <p className="customer">{order.customer_name}</p>
+                    </div>
+                    <div className="column1b">
+                      <p className="items">Items</p>
+                    </div>
+                </div>
               </div>
+          </div>
               <div className="column2">
-                <button>Delayed</button>
-                <button type="button" id="picked-up"><FontAwesomeIcon icon={faTruck} /></button>
-                <button type="button" id="delete"><FontAwesomeIcon icon={faClose} /></button>
-              </div>
-              </div>
-              <div className="column3">
                 <BoxForm
                   setDimensions={setDimensions}
                   dimensions={dimensions}
@@ -76,6 +82,12 @@ const Order = () => {
                   handleButtonStatus={handleButtonStatus}
                 />
            </div>
+           <div className="column3">
+                <button>Delayed</button>
+                <button type="button" id="picked-up"><FontAwesomeIcon icon={faTruck} /></button>
+                <button type="button" id="delete"><FontAwesomeIcon icon={faClose} /></button>
+              </div>
+          </div>
           </div>
         ))}
       </div>
@@ -84,6 +96,3 @@ const Order = () => {
   
   export default Order;
 
-
-  //     </div>
-  //     
