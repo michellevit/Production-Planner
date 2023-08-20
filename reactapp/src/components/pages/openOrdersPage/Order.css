@@ -6,66 +6,94 @@
   
 
 .order-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    margin: 40px 0;
-    background: lightblue;
-  }
+  display: flex;
+  flex-direction: row;
+  background: #1ca2b3;
+  width: 95%; 
+  margin: 40px auto; 
+  border-radius: 10px; 
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  justify-content: center;
+}
 
-  .columns {
-    display: flex;
-    width: 100%;
-    
-  }
+.order-card {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
 
-  .column1 {
-    display: flex;
-    width: 75%;
-    text-align: center;
-    margin: 10px 0;
-  }
 
-  .column2 {
-    display: flex;
-    width:25%;
-    text-align: center;
-    margin: 10px 0;
-    justify-content: center;
-  }
+.column1 {
+  display: flex;
+  width: 25%;
+  text-align: center;
+  align-items: center;
+  margin: 10px 25px;
+}
+
+.column2 {
+  display: flex;
+  width:50%;
+  text-align: center;
+  margin: 10px 0;
+  justify-content: center;
+  flex-direction: column;
+}
   
-  .column3 {
-    display: block;
-    width: 100%;
-    justify-content: center;
-  }
+.column3 {
+  display: flex;
+  width: 25%;
+  align-items: center;
+  justify-content: center;
+}
 
+.column3 button {
+  margin: 0px 5px;
+  background-color: white;
+  border: none;
+  padding: 4px 5px;
+  font-size: 12px;
+}
 
-  .column2 button {
-    margin: 0px 5px;
-    background-color: white;
-    border: none;
-    padding: 4px 5px;
-    font-size: 12px;
-  }
+.columns {
+  display: flex;
+  flex-direction: row;
+}
 
+.order-data {
+  display:flex;
+  flex-direction: column;
+  width: 100%;
+}
   
 .ship-date {
-    font-weight: bold;
-    color: darkblue;
-    margin: 0px 20px;
-  }
+  color: #1b4965;
+  margin-bottom: 5px; 
+  font-weight: bold;
+}
   
-  .order-number, .customer {
-    font-weight: normal;
-    color: #555555;
-    margin: 0 20px;
-  }
+.order-number, .customer {
+  font-weight: normal;
+  color: #1b4965;
+  margin-top: 5px;
+}
   
-  .items {
-    font-weight: normal;
-    color: #555555;
-    margin: 0 20px;
-  }
+.items {
+  font-weight: normal;
+  color: #1b4965;
+}
   
+
+.column1a {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  text-align: left;
+}
+
+.column1b {
+  display: flex;
+  width: 40%;
+  text-align: left;
+  align-items: top;
+}

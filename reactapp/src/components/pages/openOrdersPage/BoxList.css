@@ -1,17 +1,18 @@
 
 .boxlist-container {
   display: flex;
-    width: 100%;
-    justify-content:center;
-  }
+  width: 100%;
+  justify-content:center;
+}
   
-  .button-container {
-    margin-left: 5px;
-  }
+.button-container {
+  margin-left: 5px;
+}
   
   
-  .boxlist-container, ul { 
-    padding: 0;
-    margin: 10px 0 5px 0;
-    }
+.boxlist-container, ul { 
+  padding: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
   
