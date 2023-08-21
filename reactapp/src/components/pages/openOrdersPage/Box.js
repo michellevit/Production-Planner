@@ -1,20 +1,26 @@
 import React from "react";
+import { useState } from "react";
 import "./Box.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUp,
   faArrowDown,
   faClose,
+  faCheck,
+  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
+
+
 const Box = ({
-  boxes,
   box,
+  boxes,
   setBoxes,
   hideButtons,
-  hideNote,
-  handleNoteStatus,
+  handleFormChange,
+  handleButtonStatus,
 }) => {
+  const [isConfirmIcon, setIsConfirmIcon] = useState(true);
   var counter = boxes.indexOf(box) + 1;
   const upHandler = () => {
     const index = boxes.indexOf(box);
@@ -37,23 +43,24 @@ const Box = ({
   const deleteHandler = (e) => {
     let newBoxes = boxes.filter((el) => el.id !== box.id);
     setBoxes(newBoxes);
-    let counter = 0;
-    for (let x = 0; x < newBoxes.length; x++) {
-      if (newBoxes[x].note !== "") {
-        counter = 1;
-      }
     }
-    if (counter === 0) {
-      handleNoteStatus(true);
+  const confirmEditHandler = () => {
+    setIsConfirmIcon(prevState => !prevState);
+    if (isConfirmIcon) {
+      handleFormChange("hideForm");
+      handleButtonStatus(true);
+    } else {
+      handleFormChange("displayForm");
+      handleButtonStatus(false);
     }
   };
+
   return (
     <div className="box">
       <div className="box-info">
         <b>Box {counter}: </b>
         {box.dimensions} - {box.weight} lb
       </div>
-      {!hideNote && <div className="box-note">{box.note}</div>}
       {!hideButtons && (
         <div className="button-container">
           <button className="up-btn" onClick={upHandler}>
@@ -64,6 +71,9 @@ const Box = ({
           </button>
           <button className="xmark-btn" onClick={deleteHandler}>
             <FontAwesomeIcon icon={faClose} />
+          </button>
+          <button className="check-btn" onClick={confirmEditHandler}>
+            <FontAwesomeIcon icon={isConfirmIcon ? faCheck : faEdit} />
           </button>
         </div>
       )}

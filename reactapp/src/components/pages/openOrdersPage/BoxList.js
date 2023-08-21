@@ -7,8 +7,8 @@ const BoxList = ({
   boxes,
   setBoxes,
   hideButtons,
-  hideNote,
-  handleNoteStatus,
+  handleFormChange,
+  handleButtonStatus
 }) => {
   return (
     <div className="boxlist-container">
@@ -20,8 +20,8 @@ const BoxList = ({
               boxes={boxes}
               setBoxes={setBoxes}
               hideButtons={hideButtons}
-              hideNote={hideNote}
-              handleNoteStatus={handleNoteStatus}
+              handleFormChange={handleFormChange}
+              handleButtonStatus={handleButtonStatus}
             />
           </div>
         ))}
@@ -30,3 +30,7 @@ const BoxList = ({
   );
 };
 export default BoxList;
+
+
+
+

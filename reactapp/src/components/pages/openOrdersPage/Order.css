@@ -1,53 +1,72 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .main-area {
     width: 100%;
     margin: 75px 0;
     font-size: 12px;
+    display: flex;
+    flex-direction: column;
   }
   
 
-.order-container {
+.cards-container {
   display: flex;
-  flex-direction: row;
   background: #1ca2b3;
-  width: 95%; 
-  margin: 40px auto; 
+  width: 400px; 
+  margin: 40px auto;
+  padding: 25px; 
   border-radius: 10px; 
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-  justify-content: center;
 }
 
-.order-card {
+.single-card-container {
   display: flex;
   width: 100%;
-  justify-content: center;
-}
-
-
-.column1 {
-  display: flex;
-  width: 25%;
-  text-align: center;
   align-items: center;
-  margin: 10px 25px;
+  justify-content: center;
 }
 
-.column2 {
+
+.single-card-data {
   display: flex;
-  width:50%;
-  text-align: center;
-  margin: 10px 0;
-  justify-content: center;
   flex-direction: column;
 }
-  
-.column3 {
+
+
+.row1 {
   display: flex;
-  width: 25%;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  background: #edf5f8;
+  border-radius: 10px; 
+}
+
+.row3 {
+  display: flex;
+  width:100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+  
+.row4 {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
   align-items: center;
   justify-content: center;
 }
 
-.column3 button {
+.row4 button {
   margin: 0px 5px;
   background-color: white;
   border: none;
@@ -55,45 +74,47 @@
   font-size: 12px;
 }
 
-.columns {
-  display: flex;
-  flex-direction: row;
-}
-
 .order-data {
   display:flex;
   flex-direction: column;
   width: 100%;
+  background: white;
+  border-radius: 10px; 
 }
   
 .ship-date {
   color: #1b4965;
-  margin-bottom: 5px; 
   font-weight: bold;
 }
   
 .order-number, .customer {
   font-weight: normal;
   color: #1b4965;
-  margin-top: 5px;
 }
   
-.items {
+.items-table {
   font-weight: normal;
   color: #1b4965;
+  background: #cfe0e6;
+  text-align: left;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 10px; 
+  border-collapse: collapse;
+  width: 100%;
 }
   
 
-.column1a {
-  display: flex;
-  flex-direction: column;
-  width: 60%;
-  text-align: left;
+.qty {
+  text-align: center;
 }
 
-.column1b {
-  display: flex;
-  width: 40%;
-  text-align: left;
-  align-items: top;
+.items-table th,
+.items-table td {
+  padding: 8px;
+  border-bottom: 1px solid black;
+}
+
+.items-table tbody tr:last-child td {
+  border-bottom: none; /* Remove the border from the last row */
 }

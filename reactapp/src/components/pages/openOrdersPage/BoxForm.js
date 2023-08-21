@@ -11,9 +11,6 @@ const BoxForm = ({
   weight,
   setBoxes,
   boxes,
-  note,
-  setNote,
-  handleNoteStatus,
 }) => {
   if (formDisplay === "hideForm") {
     return null;
@@ -23,9 +20,6 @@ const BoxForm = ({
   };
   const inputWeightHandler = (e) => {
     setWeight(e.target.value);
-  };
-  const inputNoteHandler = (e) => {
-    setNote(e.target.value);
   };
   const uniqueId = () => {
     const dateString = Date.now().toString(36);
@@ -46,19 +40,15 @@ const BoxForm = ({
         dimensions: dimensions,
         weight: weight,
         id: uniqueId(),
-        note: note,
       },
     ]);
     setDimensions("");
     setWeight("");
-    setNote("");
-    if (note !== "") {
-      handleNoteStatus(false);
-    }
   };
   return (
     <div className="box-form">
       <form>
+        <div>
         <select
           name="dimensions"
           className="dimensions"
@@ -71,6 +61,8 @@ const BoxForm = ({
           <option value="10 x 8 x 3">10" x 8" x 3"</option>
           <option value="9.125 x 9.125 x 9.125">9.125" 9.125" x 9.125"</option>
         </select>
+        </div>
+        <div>
         <input
           type="number"
           className="weight"
@@ -79,17 +71,14 @@ const BoxForm = ({
           onChange={inputWeightHandler}
           value={weight}
         ></input>
-        <input
-          type="text"
-          className="note"
-          placeholder="Note"
-          onChange={inputNoteHandler}
-          value={note}
-        ></input>
-        <button className="add-btn" onClick={submitBoxHandler}>
+        </div>
+        <div>
+          <button className="add-btn" onClick={submitBoxHandler}>
           <FontAwesomeIcon icon={faAdd} />
         </button>
+        </div>
       </form>
+      
     </div>
   );
 };

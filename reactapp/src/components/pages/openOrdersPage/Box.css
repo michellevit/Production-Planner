@@ -8,10 +8,10 @@
   
   .box {
     display: flex;
-    margin-top: 0px;
     justify-content: center;
     color: black;
     text-align: left;
+    margin: 5px 0 0 0;
   }
   
   
@@ -22,20 +22,13 @@
       padding: 4px 5px;
     }
   
-  .box-note {
-      margin: 0 5px ;
-      word-wrap: break-word;
-      width: 210px;
-      background: white;
-      padding: 4px 5px;
-  }
-    
+
   
   .box button {
     border: none;
     width: 25px;
     color: white;
-    margin: 0;
+    align-items: center;
   }
   
   .up-btn {
@@ -51,14 +44,16 @@
     align-items: flex-end;
   }
 
+  .check-btn {
+    background: #AFE1AF;
+    align-items: flex-end;
+  }
+
+
   
 /* Media query for screen size less than 815px */
 @media (max-width: 815px) {
-  .box-note {
-    width: 150px; /* Set the different width for smaller screens */
-    /* Additional styles for .box-note at smaller screen sizes */
-  }
   .box-info {
-    width: 150px;
+    width: 210px;
   }
 }

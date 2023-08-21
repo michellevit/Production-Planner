@@ -6,13 +6,13 @@
 }
   
 .button-container {
-  margin-left: 5px;
+  display: flex;
+  flex-direction: row;
 }
   
   
 .boxlist-container, ul { 
   padding: 0;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin: 5px 0;
 }
   
