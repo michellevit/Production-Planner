@@ -37,58 +37,52 @@ const Order = () => {
         setOrders(response.data);})
       .catch(error => {console.error('Error getting data', error);});
   }, []);
-    return (
-      <div className="main-area">
-        {orders.map(order => (
-          <div className="order-container">
-            <div className="order-card">
-              <div className="column1">
-                <div className="order-data">
-                  <div className="columns">
-                    <div className="column1a">
-                      <p className="ship-date">{formatDate(order.ship_date)}</p>
-                      <p className="order-number">{order.order_number}</p>
-                      <p className="customer">{order.customer_name}</p>
-                    </div>
-                    <div className="column1b">
-                      <p className="items">Items</p>
-                    </div>
-                </div>
-              </div>
+  return (
+    <div className="main-area">
+      {orders.map(order => (
+        <div className="cards-container">
+          <div className="single-card-container">
+            <div className="single-card-data">
+            <div className="row1">
+                <p className="ship-date">{formatDate(order.ship_date)}</p>
+                <p className="order-number">{order.order_number}</p>
+                <p className="customer">{order.customer_name}</p>
+                <p className="items">Items</p>                
+            </div>
+            <div className="row2">
+              <BoxForm
+                setDimensions={setDimensions}
+                dimensions={dimensions}
+                setWeight={setWeight}
+                weight={weight}
+                setBoxes={setBoxes}
+                boxes={boxes}
+                formDisplay={formDisplay}
+                note={note}
+                setNote={setNote}
+                handleNoteStatus={handleNoteStatus}
+              />
+              <BoxList
+                boxes={boxes}
+                setBoxes={setBoxes}
+                hideButtons={hideButtons}
+                hideNote={hideNote}
+                handleNoteStatus={handleNoteStatus}
+              />
+              <ConfirmOrder
+                boxes={boxes}
+                handleFormChange={handleFormChange}
+                handleButtonStatus={handleButtonStatus}
+              />
+            </div>
+            <div className="row3">
+              <button>Delayed</button>
+              <button type="button" id="picked-up"><FontAwesomeIcon icon={faTruck} /></button>
+              <button type="button" id="delete"><FontAwesomeIcon icon={faClose} /></button>
+            </div>
           </div>
-              <div className="column2">
-                <BoxForm
-                  setDimensions={setDimensions}
-                  dimensions={dimensions}
-                  setWeight={setWeight}
-                  weight={weight}
-                  setBoxes={setBoxes}
-                  boxes={boxes}
-                  formDisplay={formDisplay}
-                  note={note}
-                  setNote={setNote}
-                  handleNoteStatus={handleNoteStatus}
-                />
-                <BoxList
-                  boxes={boxes}
-                  setBoxes={setBoxes}
-                  hideButtons={hideButtons}
-                  hideNote={hideNote}
-                  handleNoteStatus={handleNoteStatus}
-                />
-                <ConfirmOrder
-                  boxes={boxes}
-                  handleFormChange={handleFormChange}
-                  handleButtonStatus={handleButtonStatus}
-                />
-           </div>
-           <div className="column3">
-                <button>Delayed</button>
-                <button type="button" id="picked-up"><FontAwesomeIcon icon={faTruck} /></button>
-                <button type="button" id="delete"><FontAwesomeIcon icon={faClose} /></button>
-              </div>
-          </div>
-          </div>
+        </div> 
+        </div>
         ))}
       </div>
     );

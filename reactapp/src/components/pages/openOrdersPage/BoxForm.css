@@ -8,6 +8,8 @@
     padding: 4px 8px; 
     border: none;
     font-size: 12px;
+    display: flex;
+    flex-direction: row;
   }
   
   
@@ -30,7 +32,6 @@
   
   .box-form {
     width: 100%;
-    margin-top: 10px;
     align-items: center;
     display: flex;
     flex-direction: column;

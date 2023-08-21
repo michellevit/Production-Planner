@@ -24,9 +24,6 @@ const BoxForm = ({
   const inputWeightHandler = (e) => {
     setWeight(e.target.value);
   };
-  const inputNoteHandler = (e) => {
-    setNote(e.target.value);
-  };
   const uniqueId = () => {
     const dateString = Date.now().toString(36);
     const randomness = Math.random().toString(36).substring(2);
@@ -46,19 +43,15 @@ const BoxForm = ({
         dimensions: dimensions,
         weight: weight,
         id: uniqueId(),
-        note: note,
       },
     ]);
     setDimensions("");
     setWeight("");
-    setNote("");
-    if (note !== "") {
-      handleNoteStatus(false);
-    }
   };
   return (
     <div className="box-form">
       <form>
+        <div className="row1">
         <select
           name="dimensions"
           className="dimensions"
@@ -71,6 +64,8 @@ const BoxForm = ({
           <option value="10 x 8 x 3">10" x 8" x 3"</option>
           <option value="9.125 x 9.125 x 9.125">9.125" 9.125" x 9.125"</option>
         </select>
+        </div>
+        <div className="row2">
         <input
           type="number"
           className="weight"
@@ -79,17 +74,14 @@ const BoxForm = ({
           onChange={inputWeightHandler}
           value={weight}
         ></input>
-        <input
-          type="text"
-          className="note"
-          placeholder="Note"
-          onChange={inputNoteHandler}
-          value={note}
-        ></input>
-        <button className="add-btn" onClick={submitBoxHandler}>
+        </div>
+        <div className="row3">
+          <button className="add-btn" onClick={submitBoxHandler}>
           <FontAwesomeIcon icon={faAdd} />
         </button>
+        </div>
       </form>
+      
     </div>
   );
 };
