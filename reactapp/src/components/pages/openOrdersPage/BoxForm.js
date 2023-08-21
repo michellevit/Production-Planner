@@ -11,9 +11,6 @@ const BoxForm = ({
   weight,
   setBoxes,
   boxes,
-  note,
-  setNote,
-  handleNoteStatus,
 }) => {
   if (formDisplay === "hideForm") {
     return null;
@@ -51,7 +48,7 @@ const BoxForm = ({
   return (
     <div className="box-form">
       <form>
-        <div className="row1">
+        <div>
         <select
           name="dimensions"
           className="dimensions"
@@ -65,7 +62,7 @@ const BoxForm = ({
           <option value="9.125 x 9.125 x 9.125">9.125" 9.125" x 9.125"</option>
         </select>
         </div>
-        <div className="row2">
+        <div>
         <input
           type="number"
           className="weight"
@@ -75,7 +72,7 @@ const BoxForm = ({
           value={weight}
         ></input>
         </div>
-        <div className="row3">
+        <div>
           <button className="add-btn" onClick={submitBoxHandler}>
           <FontAwesomeIcon icon={faAdd} />
         </button>

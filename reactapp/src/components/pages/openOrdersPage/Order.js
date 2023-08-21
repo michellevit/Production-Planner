@@ -14,10 +14,8 @@ const Order = () => {
   const [dimensions, setDimensions] = useState("");
   const [weight, setWeight] = useState("");
   const [boxes, setBoxes] = useState([]);
-  const [note, setNote] = useState("");
   const [formDisplay, setFormDisplay] = useState("showForm");
   const [hideButtons, setButtonStatus] = useState(false);
-  const [hideNote, setNoteStatus] = useState(true);
   function formatDate(dateString) {
     const options = { weekday: "short", month: "short", day: "numeric" };
     return new Date(dateString).toLocaleDateString("en-US", options);
@@ -27,9 +25,6 @@ const Order = () => {
   }
   function handleButtonStatus(buttonStatus) {
     setButtonStatus(buttonStatus);
-  }
-  function handleNoteStatus(noteStatus) {
-    setNoteStatus(noteStatus);
   }
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/open-orders/')
@@ -47,9 +42,28 @@ const Order = () => {
                 <p className="ship-date">{formatDate(order.ship_date)}</p>
                 <p className="order-number">{order.order_number}</p>
                 <p className="customer">{order.customer_name}</p>
-                <p className="items">Items</p>                
             </div>
             <div className="row2">
+              <div className="items-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Qty</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.keys(order.item_subtype_dict).map((itemType, index) => (
+                      <tr key={index}>
+                        <td>{itemType}</td>
+                        <td className="qty">{order.item_subtype_dict[itemType]}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>              
+            </div>
+            <div className="row3">
               <BoxForm
                 setDimensions={setDimensions}
                 dimensions={dimensions}
@@ -58,24 +72,16 @@ const Order = () => {
                 setBoxes={setBoxes}
                 boxes={boxes}
                 formDisplay={formDisplay}
-                note={note}
-                setNote={setNote}
-                handleNoteStatus={handleNoteStatus}
               />
               <BoxList
                 boxes={boxes}
                 setBoxes={setBoxes}
                 hideButtons={hideButtons}
-                hideNote={hideNote}
-                handleNoteStatus={handleNoteStatus}
-              />
-              <ConfirmOrder
-                boxes={boxes}
                 handleFormChange={handleFormChange}
                 handleButtonStatus={handleButtonStatus}
               />
             </div>
-            <div className="row3">
+            <div className="row4">
               <button>Delayed</button>
               <button type="button" id="picked-up"><FontAwesomeIcon icon={faTruck} /></button>
               <button type="button" id="delete"><FontAwesomeIcon icon={faClose} /></button>

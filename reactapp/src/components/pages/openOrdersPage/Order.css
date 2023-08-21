@@ -39,25 +39,29 @@ body {
 .row1 {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   text-align: center;
   align-items: center;
   justify-content: center;
+  margin-bottom: 10px;
+  background: #edf5f8;
+  border-radius: 10px; 
 }
 
-.row2 {
+.row3 {
   display: flex;
-  width:90%;
+  width:100%;
   text-align: center;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-bottom: 10px;
 }
   
-.row3 {
+.row4 {
   display: flex;
   flex-direction: row;
-  width: 90%;
+  width: 100%;
   align-items: center;
   justify-content: center;
 }
@@ -74,6 +78,8 @@ body {
   display:flex;
   flex-direction: column;
   width: 100%;
+  background: white;
+  border-radius: 10px; 
 }
   
 .ship-date {
@@ -86,9 +92,29 @@ body {
   color: #1b4965;
 }
   
-.items {
+.items-table {
   font-weight: normal;
   color: #1b4965;
+  background: #cfe0e6;
+  text-align: left;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 10px; 
+  border-collapse: collapse;
+  width: 100%;
 }
   
 
+.qty {
+  text-align: center;
+}
+
+.items-table th,
+.items-table td {
+  padding: 8px;
+  border-bottom: 1px solid black;
+}
+
+.items-table tbody tr:last-child td {
+  border-bottom: none; /* Remove the border from the last row */
+}
