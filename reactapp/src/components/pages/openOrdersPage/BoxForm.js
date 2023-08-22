@@ -46,9 +46,8 @@ const BoxForm = ({
     setWeight("");
   };
   return (
-    <div className="box-form">
+    <div className="boxform-container">
       <form>
-        <div className="formInput">
         <select
           name="dimensions"
           className="dimensions"
@@ -61,8 +60,6 @@ const BoxForm = ({
           <option value="10 x 8 x 3">10" x 8" x 3"</option>
           <option value="9.125 x 9.125 x 9.125">9.125" 9.125" x 9.125"</option>
         </select>
-        </div>
-        <div>
         <input
           type="number"
           className="weight"
@@ -71,12 +68,9 @@ const BoxForm = ({
           onChange={inputWeightHandler}
           value={weight}
         ></input>
-        </div>
-        <div>
-          <button className="add-btn" onClick={submitBoxHandler}>
+          <button onClick={submitBoxHandler}>
           <FontAwesomeIcon icon={faAdd} />
         </button>
-        </div>
       </form>
       
     </div>

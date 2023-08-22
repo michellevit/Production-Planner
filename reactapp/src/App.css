@@ -8,24 +8,18 @@ body {
 }
 
 h1 {
-  color: #0e8595;
+  color: #004596;
 }
 
 h2 {
-  color: #1fa8b8;
+  color: #3399CC;
 }
 
-.order-cards-area {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin: 50px auto;
-  }
-  
 
+/* 
 
-@media (max-width: 580px) {
-  .App {
-    min-width: 575px;
-  }
-}
+GTC Blue: 004596
+GTC Light Blue: 3399CC
+GTC Orange: #ff8f00
+
+*/

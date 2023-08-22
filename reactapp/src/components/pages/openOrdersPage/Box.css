@@ -20,6 +20,7 @@
       width: 100%;
       background: white;
       padding: 4px 8px;
+      border-radius: 5px 0 0 5px;
     }
   
   
@@ -29,6 +30,7 @@
     color: white;
     align-items: center;
     justify-content: center;
+
   }
 
   .box button:hover {
@@ -51,13 +53,7 @@
   .check-btn {
     background: #AFE1AF;
     align-items: flex-end;
+    border-radius: 0 5px 5px 0;
   }
 
 
-  
-/* Media query for screen size less than 815px */
-@media (max-width: 815px) {
-  .box-info {
-    width: 210px;
-  }
-}

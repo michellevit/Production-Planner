@@ -1,22 +1,20 @@
-
 .boxlist-container {
   display: flex;
   width: 100%;
-  justify-content:center;
+  justify-content: center;
 }
-  
+
 .button-container {
   display: flex;
   flex-direction: row;
 }
-  
-  
-.boxlist-container, ul { 
+
+.boxlist-container,
+ul {
   padding: 0;
-  margin: 5px 0 0 0;
   width: 100%;
 }
-  
+
 .formInput {
   width: 100%;
 }
