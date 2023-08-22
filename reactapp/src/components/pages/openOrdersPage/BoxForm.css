@@ -1,13 +1,12 @@
 
 .dimensions {
-    width: 160px;
+    width: 100%;
     display: inline;
   }
   
   .box-form input, .box-form select, .box-form button, .column3 button, .box-container button {
     padding: 4px 8px; 
     border: none;
-    font-size: 12px;
     display: flex;
     flex-direction: row;
   }
@@ -26,7 +25,7 @@
 
   .add-btn {
     margin-left: 5px;
-    margin-right: 0px;
+    padding: 5px;
     background-color: white;
   }
   
@@ -37,9 +36,10 @@
     flex-direction: column;
   }
 
-  form {
-    align-items: center;
+  .box-form form {
+    width: 100%;
     display: flex;
+    flex-direction: row;
     justify-content: flex-start;
   }
   
