@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 //Importing Components
-import Order from "./components/pages/openOrdersPage/Order";
+import OpenOrders from "./components/pages/openOrdersPage/OpenOrders";
 
 function App() {
   const [currentDate, setCurrentDate] = useState("");
@@ -19,7 +19,7 @@ function App() {
       </header>
       <h2>{currentDate}</h2>
       <div className="order-cards-area">
-        <Order />
+        <OpenOrders />
       </div>
     </div>
   );
