@@ -18,7 +18,7 @@ function App() {
         <h1>Open Orders</h1>
       </header>
       <h2>{currentDate}</h2>
-      <div ClassName="main-area">
+      <div className="order-cards-area">
         <Order />
       </div>
     </div>
