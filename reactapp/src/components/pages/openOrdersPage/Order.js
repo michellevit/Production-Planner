@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import "./Order.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faTruck } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faTruck, faClock } from "@fortawesome/free-solid-svg-icons";
 // Import Components
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
-import ConfirmOrder from "./ConfirmOrder";
 
 
 const Order = () => {
@@ -35,24 +34,30 @@ const Order = () => {
   return (
     <div className="main-area">
       {orders.map(order => (
-        <div className="cards-container">
-          <div className="single-card-container">
-            <div className="single-card-data">
-            <div className="row1">
-                <p className="ship-date">{formatDate(order.ship_date)}</p>
-                <p className="order-number">{order.order_number}</p>
-                <p className="customer">{order.customer_name}</p>
+        <div className="card-container" id={order.id}>
+            <div className="row" id="row1">
+              <table className="card-data-table">
+                <tr className="order-data" id="order-number">
+                  <td className="col1">Order#:</td>
+                  <td className="col2">{order.order_number}</td>
+                </tr>
+                <tr className="order-data" id="customer-name">
+                  <td className="col1">Customer:</td>
+                  <td className="col2">{order.customer_name}</td>
+                </tr>
+                <tr className="order-data" id="ship-date">
+                  <td className="col1">Ship Date:</td>
+                  <td className="col2">{formatDate(order.ship_date)}</td>
+                </tr>
+              </table>
             </div>
-            <div className="row2">
-              <div className="items-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Item</th>
-                      <th>Qty</th>
-                    </tr>
-                  </thead>
+            <div className="row" id="row2">
+                <table className="items-table">
                   <tbody>
+                    <tr>
+                        <td>Item</td>
+                        <td>Qty.</td>
+                      </tr>
                     {Object.keys(order.item_subtype_dict).map((itemType, index) => (
                       <tr key={index}>
                         <td>{itemType}</td>
@@ -61,9 +66,9 @@ const Order = () => {
                     ))}
                   </tbody>
                 </table>
-              </div>              
             </div>
-            <div className="row3">
+            <div className="row" id="row3">
+              <div className="dimensions-data">
               <BoxForm
                 setDimensions={setDimensions}
                 dimensions={dimensions}
@@ -73,6 +78,7 @@ const Order = () => {
                 boxes={boxes}
                 formDisplay={formDisplay}
               />
+              {boxes.length > 0 && ( // Only render BoxList if there are boxes
               <BoxList
                 boxes={boxes}
                 setBoxes={setBoxes}
@@ -80,14 +86,16 @@ const Order = () => {
                 handleFormChange={handleFormChange}
                 handleButtonStatus={handleButtonStatus}
               />
-            </div>
-            <div className="row4">
-              <button>Delayed</button>
-              <button type="button" id="picked-up"><FontAwesomeIcon icon={faTruck} /></button>
-              <button type="button" id="delete"><FontAwesomeIcon icon={faClose} /></button>
+            )}
             </div>
           </div>
-        </div> 
+          <div className="row" id="row4">
+            <div className="row4-buttons-container">
+              <button type="button" id="delay">Delay&nbsp;<FontAwesomeIcon icon={faClock} /></button>
+              <button type="button" id="picked-up">Picked Up&nbsp;<FontAwesomeIcon icon={faTruck} /></button>
+              <button type="button" id="delete">Delete&nbsp;<FontAwesomeIcon icon={faClose} /></button>
+            </div>
+          </div>
         </div>
         ))}
       </div>

@@ -48,7 +48,7 @@ const BoxForm = ({
   return (
     <div className="box-form">
       <form>
-        <div>
+        <div className="formInput">
         <select
           name="dimensions"
           className="dimensions"
