@@ -18,9 +18,7 @@ function App() {
         <h1>Open Orders</h1>
       </header>
       <h2>{currentDate}</h2>
-      <div className="order-cards-area">
         <OpenOrders />
-      </div>
     </div>
   );
 }

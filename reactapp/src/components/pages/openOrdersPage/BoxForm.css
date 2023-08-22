@@ -1,45 +1,47 @@
 
-.dimensions {
-    width: 100%;
-    display: inline;
-  }
-  
-  .box-form input, .box-form select, .box-form button, .column3 button, .box-container button {
-    padding: 4px 8px; 
-    border: none;
-    display: flex;
-    flex-direction: row;
-  }
+.boxform-container {
+  display: flex;
+  width: 100%;
+  justify-content:center;
+}
   
   
-  .weight {
-    width: 60px;
-    margin-left: 5px;
-  }
-  
-  .note {
-    width: 160px;
-    margin-left: 5px;
-  }
-  
+.boxform-container form {
+  width: 100%;
+  display: flex;
+  flex-direction: row;  
+  padding: 4px 0;
+  border: none;
+}
 
-  .add-btn {
-    margin-left: 5px;
-    padding: 5px;
-    background-color: white;
-  }
-  
-  .box-form {
-    width: 100%;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-  }
+.boxform-container select, .boxform-container input, .boxform-container button {
+  padding: 4px 8px;
+  border: none;
+}
 
-  .box-form form {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-  }
+.boxform-container select {
+  width: 100%;
+  border-radius: 5px 0 0 5px;
+}
+
+.boxform-container input {
+  width: 75px;
+  margin: 0 5px;
+  border-radius: 0;
+}
+
+.boxform-container button {
+  width: 27px;
+  background-color: white;
+  border-radius: 0 5px 5px 0;
+}
+  
+.boxform-container button:hover {
+  opacity: 0.75;
+}
+
+.boxform-container input:focus,
+.boxform-container select:focus {
+  outline: none;
+}
   
