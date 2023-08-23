@@ -5,8 +5,10 @@ import React, { useState } from "react";
 
 const BoxForm = ({
   formDisplay,
+  setFormDisplay,
   setBoxes,
   boxes,
+  readyStatus
 }) => {
   const [dimensions, setDimensions] = useState("");
   const [weight, setWeight] = useState("");
@@ -40,6 +42,12 @@ const BoxForm = ({
     setDimensions("");
     setWeight("");
   };
+  if (readyStatus) {
+    setFormDisplay(false);
+  }
+  if (!readyStatus && boxes.length === 0) {
+    setFormDisplay(true);
+  }
   return (
     <div className="boxform-container">
       {formDisplay && (

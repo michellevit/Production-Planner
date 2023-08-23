@@ -1,3 +1,4 @@
+
 body {
   background-color: #f0f3f5;
   text-align: center;
@@ -5,6 +6,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: 'Tahoma', sans-serif;
 }
 
 h1 {
@@ -18,8 +20,8 @@ h2 {
 
 /* 
 
-GTC Blue: 004596
-GTC Light Blue: 3399CC
+GTC Blue: #004596
+GTC Light Blue: #3399CC
 GTC Orange: #ff8f00
-
+Green: #19c37d
 */

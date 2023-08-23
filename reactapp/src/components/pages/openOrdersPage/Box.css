@@ -45,20 +45,21 @@
 }
 
 .up-btn {
-  background: steelblue;
+  background: #3399CC;
 }
 
 .down-btn {
-  background: blue;
+  background: #004596;
 }
 
 .xmark-btn {
-  background: #ff8f00;
+  background: red;
   align-items: flex-end;
 }
 
 .check-btn {
-  background: #afe1af;
+  background: #19c37d;
   align-items: flex-end;
   border-radius: 0 5px 5px 0;
 }
+
