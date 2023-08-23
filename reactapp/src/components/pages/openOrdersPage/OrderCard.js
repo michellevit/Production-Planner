@@ -8,8 +8,8 @@ import "./OrderCard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
-  faCheck,
-  faTruck,
+  faBox,
+  faTruckFast,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -142,12 +142,12 @@ const OrderCard = ({ order }) => {
       <div className="row" id="row4">
         <div className="row4-buttons-container">
           <button type="button" id="ready" onClick={readyHandler}>
-            <FontAwesomeIcon icon={readyStatus ? faEdit : faCheck} />
+            <FontAwesomeIcon icon={readyStatus ? faEdit : faBox} />
             &nbsp;{readyStatus ? "Edit" : "Ready"}
           </button>
           {readyStatus && (
             <button type="button" id="shipped">
-              <FontAwesomeIcon icon={faTruck} />
+              <FontAwesomeIcon icon={faTruckFast} />
               &nbsp;Shipped
             </button>
           )}
