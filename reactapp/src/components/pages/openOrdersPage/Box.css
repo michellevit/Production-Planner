@@ -1,59 +1,64 @@
-
 .box-container {
-    display: flex;
-    transition: all 1s ease;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .box {
-    display: flex;
-    justify-content: center;
-    color: black;
-    text-align: left;
-    margin: 5px 0;
-    width: 100%
-  }
-    
-  .box-info {
-      word-wrap: break-word;
-      width: 100%;
-      background: white;
-      padding: 4px 8px;
-      border-radius: 5px 0 0 5px;
-    }
-  
-  
-  .box button {
-    border: none;
-    width: 27px;
-    color: white;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: row;
+  transition: all 1s ease;
+  width: 100%;
+  justify-content: center;
+}
 
-  }
+.box {
+  display: flex;
+  justify-content: center;
+  color: black;
+  text-align: left;
+  margin: 5px 0;
+  width: 100%;
+}
 
-  .box button:hover {
-    opacity: 0.5;
-  }
-  
-  .up-btn {
-    background: steelblue;
-  }
-  
-  .down-btn {
-    background: blue;
-  }
-  
-  .xmark-btn {
-    background: #ff8f00;
-    align-items: flex-end;
-  }
+.box-info {
+  word-wrap: break-word;
+  width: 100%;
+  background: white;
+  padding: 4px 8px;
+  border-radius: 5px 0 0 5px;
+}
 
-  .check-btn {
-    background: #AFE1AF;
-    align-items: flex-end;
-    border-radius: 0 5px 5px 0;
-  }
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
 
+.edit-buttons {
+  display: flex;
+}
 
+.box button {
+  border: none;
+  width: 27px;
+  color: white;
+  align-items: center;
+  justify-content: center;
+}
+
+.box button:hover {
+  opacity: 0.5;
+}
+
+.up-btn {
+  background: steelblue;
+}
+
+.down-btn {
+  background: blue;
+}
+
+.xmark-btn {
+  background: #ff8f00;
+  align-items: flex-end;
+}
+
+.check-btn {
+  background: #afe1af;
+  align-items: flex-end;
+  border-radius: 0 5px 5px 0;
+}

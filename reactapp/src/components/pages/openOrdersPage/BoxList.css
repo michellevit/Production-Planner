@@ -4,15 +4,13 @@
   justify-content: center;
 }
 
-.button-container {
-  display: flex;
-  flex-direction: row;
-}
+
 
 .boxlist-container,
 ul {
   padding: 0;
   width: 100%;
+  margin: 0;
 }
 
 .formInput {

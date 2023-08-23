@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./BoxList.css";
 // Import Components
 import Box from "./Box";
@@ -6,10 +6,19 @@ import Box from "./Box";
 const BoxList = ({
   boxes,
   setBoxes,
-  hideButtons,
-  handleFormChange,
-  handleButtonStatus
+  setFormDisplay,
+  buttonDisplay,
+  setButtonDisplay,
 }) => {
+  const [confirmStatus, setConfirmStatus] = useState(false);
+  const handleConfirmButtonStatus = () => {
+    if (confirmStatus) {
+      boxes.map(box => ({ ...box, setConfirmStatus: true }));
+    }
+    else {
+      boxes.map(box => ({ ...box, setConfirmStatus: false }));
+    } 
+    };
   return (
     <div className="boxlist-container">
       <ul className="boxlist">
@@ -19,9 +28,12 @@ const BoxList = ({
               box={box}
               boxes={boxes}
               setBoxes={setBoxes}
-              hideButtons={hideButtons}
-              handleFormChange={handleFormChange}
-              handleButtonStatus={handleButtonStatus}
+              setFormDisplay={setFormDisplay}
+              buttonDisplay={buttonDisplay}
+              setButtonDisplay={setButtonDisplay}
+              setConfirmStatus={setConfirmStatus}
+              confirmStatus={confirmStatus}
+              handleConfirmButtonStatus={handleConfirmButtonStatus}
             />
           </div>
         ))}
