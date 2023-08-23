@@ -10,17 +10,17 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
-
-
 const Box = ({
   box,
   boxes,
   setBoxes,
-  hideButtons,
-  handleFormChange,
-  handleButtonStatus,
+  setFormDisplay,
+  buttonDisplay,
+  setButtonDisplay,
+  confirmStatus,
+  setConfirmStatus,
+  handleConfirmButtonStatus,
 }) => {
-  const [isConfirmIcon, setIsConfirmIcon] = useState(true);
   var counter = boxes.indexOf(box) + 1;
   const upHandler = () => {
     const index = boxes.indexOf(box);
@@ -43,15 +43,17 @@ const Box = ({
   const deleteHandler = (e) => {
     let newBoxes = boxes.filter((el) => el.id !== box.id);
     setBoxes(newBoxes);
-    }
-  const confirmEditHandler = () => {
-    setIsConfirmIcon(prevState => !prevState);
-    if (isConfirmIcon) {
-      handleFormChange("hideForm");
-      handleButtonStatus(true);
+  };
+  const confirmHandler = () => {
+    setConfirmStatus(!confirmStatus)
+    if (confirmStatus) {
+      setFormDisplay(true);
+      setButtonDisplay(true);
+      handleConfirmButtonStatus(false);
     } else {
-      handleFormChange("displayForm");
-      handleButtonStatus(false);
+      setFormDisplay(false);
+      setButtonDisplay(false);
+      handleConfirmButtonStatus(true);
     }
   };
 
@@ -61,8 +63,9 @@ const Box = ({
         <b>Box {counter}: </b>
         {box.dimensions} - {box.weight} lb
       </div>
-      {!hideButtons && (
-        <div className="button-container">
+      <div className="button-container">
+      {buttonDisplay && (
+        <div className="edit-buttons">
           <button className="up-btn" onClick={upHandler}>
             <FontAwesomeIcon icon={faArrowUp} />
           </button>
@@ -72,11 +75,12 @@ const Box = ({
           <button className="xmark-btn" onClick={deleteHandler}>
             <FontAwesomeIcon icon={faClose} />
           </button>
-          <button className="check-btn" onClick={confirmEditHandler}>
-            <FontAwesomeIcon icon={isConfirmIcon ? faCheck : faEdit} />
-          </button>
         </div>
       )}
+      <button className="check-btn" onClick={confirmHandler}>
+        <FontAwesomeIcon icon={confirmStatus ? faEdit : faCheck} />
+      </button>
+    </div>
     </div>
   );
 };

@@ -1,20 +1,15 @@
-import React from "react";
 import "./BoxForm.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from "react";
 
 const BoxForm = ({
   formDisplay,
-  setDimensions,
-  dimensions,
-  setWeight,
-  weight,
   setBoxes,
   boxes,
 }) => {
-  if (formDisplay === "hideForm") {
-    return null;
-  }
+  const [dimensions, setDimensions] = useState("");
+  const [weight, setWeight] = useState("");
   const inputDimensionsHandler = (e) => {
     setDimensions(e.target.value);
   };
@@ -47,6 +42,7 @@ const BoxForm = ({
   };
   return (
     <div className="boxform-container">
+      {formDisplay && (
       <form>
         <select
           name="dimensions"
@@ -72,7 +68,7 @@ const BoxForm = ({
           <FontAwesomeIcon icon={faAdd} />
         </button>
       </form>
-      
+      )} 
     </div>
   );
 };
