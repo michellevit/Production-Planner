@@ -11,11 +11,19 @@
   font-weight: 400;
 }
 
+.ready-order-card {
+  background: #50c696;
+}
+
+.ready-order-card #row4 #ready {
+  background: rgba(255, 255, 255, 0.5);
+  color: black;
+}
+
 .order-number {
   color: white;
   font-size: 2em;
   font-weight: 700;
-  margin-bottom: 10px;
 }
 
 .row {
@@ -46,22 +54,8 @@
 }
 
 #row4 {
-  flex-direction: row;
   box-shadow: none;
-}
-
-#row4 button {
-  background-color: white;
-  border: none;
   padding: 10px 10px;
-  margin: 0 10px;
-  border-radius: 50px;
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-}
-
-#row4 button:hover {
-  opacity: 0.75;
-  box-shadow: none;
 }
 
 .card-data-table {
@@ -87,9 +81,27 @@
   font-weight: 700;
 }
 
-.dimensions-data {
-  width: 90%;
+.delay-input {
+  border: 1px solid rgba(136, 135, 135, 0.75);
+  outline: none; 
+  margin-left: 0;
+  border-radius: 5px;
 }
+
+input.delay-input {
+  width: 85px;
+  color: red;
+  font-weight: 700;
+}
+
+
+.react-datepicker__close-icon::after {
+  background-color: transparent;
+  color: rgba(136, 135, 135, 0.75);
+  font-weight: 900;
+  font-size: 1.4em;
+}
+
 
 .items-table {
   color: #1b4965;
@@ -109,20 +121,63 @@
   font-weight: 700;
 }
 
-.items-table #qty {
-  text-align: center;
-}
-
 .items-table tbody tr:last-child td {
   border-bottom: none; /* Remove the border from the last row */
 }
 
 .qty {
-  text-align: right;
+  text-align: center;
   width: auto;
   font-weight: 700;
 }
 
-.row4-buttons-container {
+.dimensions-data {
   width: 90%;
+}
+
+.no-box-message {
+  color: red;
+  font-weight: 700;
+}
+
+
+
+.row4-buttons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  width: 90%;
+}
+
+#row4 button {
+  background-color: white;
+  border: none;
+  padding: 12px 12px;
+  width: 100px;
+  border-radius: 11px;
+  margin: 0 5px;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+#row4 button:hover {
+  opacity: 0.75;
+  box-shadow: none;
+}
+
+#row4 #ready {
+  background-color: #19c37d;
+  color: white;
+}
+
+#row4 #shipped {
+  background-color: #004596;
+  color: white;
+}
+
+
+#row4 #delete {
+  background-color: red;
+  color: white;
 }

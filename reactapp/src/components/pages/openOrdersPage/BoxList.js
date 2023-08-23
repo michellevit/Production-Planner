@@ -9,16 +9,12 @@ const BoxList = ({
   setFormDisplay,
   buttonDisplay,
   setButtonDisplay,
+  confirmStatus,
+  handleConfirmButtonStatus,
+  setConfirmStatus,
+  confirmHandler,
+  readyStatus
 }) => {
-  const [confirmStatus, setConfirmStatus] = useState(false);
-  const handleConfirmButtonStatus = () => {
-    if (confirmStatus) {
-      boxes.map(box => ({ ...box, setConfirmStatus: true }));
-    }
-    else {
-      boxes.map(box => ({ ...box, setConfirmStatus: false }));
-    } 
-    };
   return (
     <div className="boxlist-container">
       <ul className="boxlist">
@@ -31,9 +27,11 @@ const BoxList = ({
               setFormDisplay={setFormDisplay}
               buttonDisplay={buttonDisplay}
               setButtonDisplay={setButtonDisplay}
-              setConfirmStatus={setConfirmStatus}
               confirmStatus={confirmStatus}
+              setConfirmStatus={setConfirmStatus}
               handleConfirmButtonStatus={handleConfirmButtonStatus}
+              confirmHandler={confirmHandler}
+              readyStatus={readyStatus}
             />
           </div>
         ))}
@@ -42,7 +40,6 @@ const BoxList = ({
   );
 };
 export default BoxList;
-
 
 
 
