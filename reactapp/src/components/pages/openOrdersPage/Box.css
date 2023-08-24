@@ -23,7 +23,7 @@
   border-radius: 5px 0 0 5px;
 }
 
-.button-container {
+.dims-button-container {
   display: flex;
   flex-direction: row;
 }
