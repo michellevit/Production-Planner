@@ -1,11 +1,9 @@
-
 .boxform-container {
   display: flex;
   width: 100%;
   justify-content:center;
 }
-  
-  
+    
 .boxform-container form {
   width: 100%;
   display: flex;

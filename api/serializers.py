@@ -17,6 +17,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'item_subtype_dict',
             'packages_dict',
             'weight',
+            'notes',
             'confirmed',
             'archived'
             ]

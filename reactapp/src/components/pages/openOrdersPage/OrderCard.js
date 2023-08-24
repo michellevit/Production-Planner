@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
+import Note from "./Note";
 import "./OrderCard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -64,7 +65,7 @@ const OrderCard = ({ order }) => {
       className={`card-container ${readyStatus ? "ready-order-card" : ""}`}
       id={order.id}
     >
-      <div className="row" id="row4">
+      <div className="row" id="row0">
         <div className="order-number">SO# {order.order_number}</div>
       </div>
       <div className="row" id="row1">
@@ -113,14 +114,17 @@ const OrderCard = ({ order }) => {
         </table>
       </div>
       <div className="row" id="row3">
-        <div className="dimensions-data">
+        <div className="dimensions-container">
           {boxes.length === 0 && readyStatus ? (
           <p className="no-box-message">No dimensions/weight info. added.</p>) : ""}
           <BoxForm
             formDisplay={formDisplay}
             setFormDisplay={setFormDisplay}
+            setButtonDisplay={setButtonDisplay}
             setBoxes={setBoxes}
             boxes={boxes}
+            setConfirmStatus={setConfirmStatus}
+            confirmStatus={confirmStatus}
             readyStatus={readyStatus}
           />
           {boxes.length > 0 && (
@@ -140,16 +144,19 @@ const OrderCard = ({ order }) => {
         </div>
       </div>
       <div className="row" id="row4">
-        <div className="row4-buttons-container">
+        <div className="note-container">
+          <Note 
+          readyStatus={readyStatus}
+          />
+        </div>
+      </div>
+      <div className="row" id="row5">
+        <div className="row5-buttons-container">
+          {!readyStatus && (
           <button type="button" id="ready" onClick={readyHandler}>
-            <FontAwesomeIcon icon={readyStatus ? faEdit : faBox} />
-            &nbsp;{readyStatus ? "Edit" : "Ready"}
+            <FontAwesomeIcon icon={faBox} />
+            &nbsp;Ready
           </button>
-          {readyStatus && (
-            <button type="button" id="shipped">
-              <FontAwesomeIcon icon={faTruckFast} />
-              &nbsp;Shipped
-            </button>
           )}
           {!readyStatus && (
           <button type="button" id="delete">
@@ -157,6 +164,19 @@ const OrderCard = ({ order }) => {
             &nbsp;Delete
           </button>
           )}
+          {readyStatus && (
+          <button type="button" id="edit" onClick={readyHandler}>
+            <FontAwesomeIcon icon={faEdit} />
+            &nbsp;Edit
+          </button>
+          )}
+          {readyStatus && (
+            <button type="button" id="shipped">
+              <FontAwesomeIcon icon={faTruckFast} />
+              &nbsp;Shipped
+            </button>
+          )}
+
         </div>
       </div>
     </div>

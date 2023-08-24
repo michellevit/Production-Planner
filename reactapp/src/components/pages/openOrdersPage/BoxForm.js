@@ -1,13 +1,16 @@
 import "./BoxForm.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const BoxForm = ({
   formDisplay,
   setFormDisplay,
+  setButtonDisplay,
   setBoxes,
   boxes,
+  confirmStatus,
+  setConfirmStatus,
   readyStatus
 }) => {
   const [dimensions, setDimensions] = useState("");
@@ -24,6 +27,9 @@ const BoxForm = ({
     return dateString + randomness;
   };
   const submitBoxHandler = (e) => {
+    setConfirmStatus(false);
+    setFormDisplay(true);
+    setButtonDisplay(true);
     e.preventDefault();
     if (dimensions === "") {
       return false;
@@ -48,6 +54,12 @@ const BoxForm = ({
   if (!readyStatus && boxes.length === 0) {
     setFormDisplay(true);
   }
+  useEffect(() => {
+    if (confirmStatus) {
+      setDimensions("");
+      setWeight("");
+    }
+  }, [confirmStatus]);
   return (
     <div className="boxform-container">
       {formDisplay && (

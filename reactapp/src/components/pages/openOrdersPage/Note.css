@@ -1,0 +1,42 @@
+.noteform-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.noteform-container form {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 4px 0;
+  border: none;
+}
+
+.noteform-container input, .noteform-container button {
+  padding: 5px 8px;
+  border: none;
+}
+
+.noteform-container input {
+    width: 100%;
+    border-radius: 5px 0 0 5px;
+  }
+
+
+  .noteform-container button {
+    width: 27px;
+    background-color: white;
+    border-radius: 0 5px 5px 0;
+    margin: 0  0 0 5px;
+  }
+
+  .noteform-container button:hover {
+    opacity: 0.75;
+  }
+
+  
+.noteform-container input:focus,
+.noteform-container select:focus {
+  outline: none;
+}
+  
