@@ -81,8 +81,10 @@ const BoxForm = ({
           className="weight"
           placeholder="lb"
           min="0"
+          step="0.01" 
           onChange={inputWeightHandler}
           value={weight}
+          maxLength={5}
         ></input>
           <button onClick={submitBoxHandler}>
           <FontAwesomeIcon icon={faAdd} />

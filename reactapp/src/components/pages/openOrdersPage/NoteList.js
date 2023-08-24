@@ -32,13 +32,13 @@ const NoteList = ({ readyStatus, notes, setNotes }) => {
             value={note}
             onChange={inputNoteHandler}
             placeholder="Add note"
+            maxLength={38}
           ></input>
           <button onClick={submitNoteHandler}>
             <FontAwesomeIcon icon={faAdd} />
           </button>
         </form>
       )}
-      {notes.length > 0 && (
         <div className="notelist-container">
             <ul className="notelist">
             {notes.map((note) => (
@@ -46,12 +46,13 @@ const NoteList = ({ readyStatus, notes, setNotes }) => {
                 <NoteItem
                     note={note}
                     notes={notes}
+                    setNotes={setNotes}
+                    readyStatus={readyStatus}
                 />
                 </div>
             ))}
             </ul>
         </div>
-      )}
     </div>
   );
 };

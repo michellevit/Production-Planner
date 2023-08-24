@@ -54,7 +54,6 @@
 
 .xmark-btn {
   background: red;
-  align-items: flex-end;
 }
 
 .check-btn {
@@ -63,3 +62,8 @@
   border-radius: 0 5px 5px 0;
 }
 
+.edit-btn {
+  background: #ff8f00;
+  align-items: flex-end;
+  border-radius: 0 5px 5px 0;
+}

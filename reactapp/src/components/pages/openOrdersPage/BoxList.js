@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import "./BoxList.css";
 // Import Components
 import Box from "./Box";
