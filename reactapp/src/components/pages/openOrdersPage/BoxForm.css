@@ -1,18 +1,20 @@
 .boxform-container {
   display: flex;
   width: 100%;
-  justify-content:center;
+  justify-content: center;
 }
-    
+
 .boxform-container form {
   width: 100%;
   display: flex;
-  flex-direction: row;  
+  flex-direction: row;
   padding: 4px 0;
   border: none;
 }
 
-.boxform-container select, .boxform-container input, .boxform-container button {
+.boxform-container select,
+.boxform-container input,
+.boxform-container button {
   padding: 4px 8px;
   border: none;
 }
@@ -28,12 +30,12 @@
   border-radius: 0;
 }
 
-.boxform-container button {
+.boxform-container form button {
   width: 27px;
   background-color: white;
   border-radius: 0 5px 5px 0;
 }
-  
+
 .boxform-container button:hover {
   opacity: 0.75;
 }
@@ -42,4 +44,3 @@
 .boxform-container select:focus {
   outline: none;
 }
-  

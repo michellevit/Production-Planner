@@ -51,7 +51,13 @@
 #row3 {
   flex-direction: column;
   background-color: rgba(255, 255, 255, 0.5); 
-  
+  border-radius: 0;
+}
+
+#row3-ready-nonotes {
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.5); 
+  border-radius: 0 0 25px 25px;
 }
 
 #row4 {
@@ -59,6 +65,7 @@
   background-color: rgba(255, 255, 255, 0.5); 
   border-radius: 0 0 25px 25px;
 }
+
 
 #row5 {
   flex-direction: column;
@@ -188,7 +195,7 @@ input.delay-input {
 }
 
 #row5 #edit {
-  background-color: rgba(255, 255, 255, 0.5); 
+  background-color: #ff8f00; 
 }
 
 #row5 #shipped {

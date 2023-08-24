@@ -22,3 +22,19 @@
   padding: 4px 8px;
   border-radius: 5px 0 0 5px;
 }
+
+.noteitem button {
+    border: none;
+    width: 27px;
+    color: white;
+    align-items: center;
+    justify-content: center;
+}
+
+.noteitem .xmark-btn {
+  background: red;
+  border: none;
+  width: 28.5px;
+  color: white;
+  border-radius: 0 5px 5px 0;
+}

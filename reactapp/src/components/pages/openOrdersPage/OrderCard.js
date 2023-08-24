@@ -60,7 +60,6 @@ const OrderCard = ({ order }) => {
       handleConfirmButtonStatus(true);
     }
   };
-
   return (
     <div
       className={`card-container ${readyStatus ? "ready-order-card" : ""}`}
@@ -114,7 +113,7 @@ const OrderCard = ({ order }) => {
           </tbody>
         </table>
       </div>
-      <div className="row" id="row3">
+      <div className="row" id={readyStatus && notes.length === 0 ? 'row3-ready-nonotes' : 'row3'}>
         <div className="dimensions-container">
           {boxes.length === 0 && readyStatus ? (
           <p className="no-box-message">No dimensions/weight info. added.</p>) : ""}
@@ -144,6 +143,7 @@ const OrderCard = ({ order }) => {
           )}
         </div>
       </div>
+      {!(readyStatus && notes.length === 0) && (
       <div className="row" id="row4">
         <div className="note-container">
           <NoteList 
@@ -153,6 +153,7 @@ const OrderCard = ({ order }) => {
           />
         </div>
       </div>
+      )}
       <div className="row" id="row5">
         <div className="row5-buttons-container">
           {!readyStatus && (

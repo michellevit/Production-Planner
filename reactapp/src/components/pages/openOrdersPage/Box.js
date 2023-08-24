@@ -68,7 +68,7 @@ const Box = ({
             </button>
           </div>
         )}
-        <button className="check-btn" onClick={handleConfirmClick}>
+        <button className={confirmStatus ? "edit-btn" : "check-btn"} onClick={handleConfirmClick}>
           <FontAwesomeIcon icon={confirmStatus ? faEdit : faCheck} />
         </button>
       </div>
