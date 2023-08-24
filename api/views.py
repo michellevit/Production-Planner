@@ -23,6 +23,7 @@ class OrderView(APIView):
                 "item_subtype_dict": order.item_subtype_dict,
                 "packages": order.packages_dict,
                 "weight": order.weight,
+                "notes": order.notes,
                 "confirmed": order.confirmed,
                 "archived": order.archived,
             }

@@ -14,6 +14,7 @@ class Order(models.Model):
     item_subtype_dict = models.JSONField(default=dict)
     packages_dict = models.JSONField(default=dict)
     weight = models.CharField(max_length=10)
+    notes = models.CharField(max_length=500)
     confirmed = models.BooleanField(default=False)
     archived = models.BooleanField(default=False)
 

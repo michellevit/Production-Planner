@@ -15,11 +15,6 @@
   background: #50c696;
 }
 
-.ready-order-card #row4 #ready {
-  background: rgba(255, 255, 255, 0.5);
-  color: black;
-}
-
 .order-number {
   color: white;
   font-size: 2em;
@@ -34,27 +29,41 @@
   text-align: center;
   margin: 10px 10px;
   padding: 20px 10px;
-  border-radius: 25px;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+#row0 {
+  background-color: transparent; 
+  box-shadow: none;
 }
 
 #row1 {
   flex-direction: column;
   background: white;
+  border-radius: 25px 25px 0 0;
 }
 
 #row2 {
   flex-direction: column;
   background: white;
-}
+  }
 
 #row3 {
   flex-direction: column;
   background-color: rgba(255, 255, 255, 0.5); 
+  
 }
 
 #row4 {
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.5); 
+  border-radius: 0 0 25px 25px;
+}
+
+#row5 {
+  flex-direction: column;
   box-shadow: none;
+  background-color: transparent; 
   padding: 10px 10px;
 }
 
@@ -73,12 +82,12 @@
 .col1 {
   text-align: left;
   width: 25%;
+  font-weight: 700;
 }
 
 .col2 {
   text-align: left;
   width: 75%;
-  font-weight: 700;
 }
 
 .delay-input {
@@ -91,7 +100,6 @@
 input.delay-input {
   width: 85px;
   color: red;
-  font-weight: 700;
 }
 
 
@@ -104,12 +112,13 @@ input.delay-input {
 
 
 .items-table {
-  color: #1b4965;
   text-align: left;
   padding: 5px 2px;
   border-collapse: collapse;
   width: 90%;
 }
+
+
 
 .items-table td, .items-table th {
   border-bottom: 1px solid rgba(136, 135, 135, 0.75);
@@ -131,7 +140,7 @@ input.delay-input {
   font-weight: 700;
 }
 
-.dimensions-data {
+.dimensions-container {
   width: 90%;
 }
 
@@ -140,9 +149,13 @@ input.delay-input {
   font-weight: 700;
 }
 
+  
+.note-container {
+  width: 90%;
+}
 
 
-.row4-buttons-container {
+.row5-buttons-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -151,8 +164,8 @@ input.delay-input {
   width: 90%;
 }
 
-#row4 button {
-  background-color: white;
+#row5 button {
+  color: white;
   border: none;
   padding: 12px 12px;
   width: 100px;
@@ -161,23 +174,28 @@ input.delay-input {
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 }
 
-#row4 button:hover {
+#row5 button:hover {
   opacity: 0.75;
   box-shadow: none;
 }
 
-#row4 #ready {
+#row5 #ready {
   background-color: #19c37d;
-  color: white;
 }
 
-#row4 #shipped {
-  background-color: #004596;
-  color: white;
-}
-
-
-#row4 #delete {
+#row5 #delete {
   background-color: red;
-  color: white;
 }
+
+#row5 #edit {
+  background-color: rgba(255, 255, 255, 0.5); 
+}
+
+#row5 #shipped {
+  background-color: #004596;
+}
+
+
+
+
+
