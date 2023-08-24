@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import "./Box.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -55,7 +54,7 @@ const Box = ({
         {box.dimensions} - {box.weight} lb
       </div>
       {!readyStatus && (
-      <div className="button-container">
+      <div className="dims-button-container">
         {buttonDisplay && (
           <div className="edit-buttons">
             <button className="up-btn" onClick={upHandler}>

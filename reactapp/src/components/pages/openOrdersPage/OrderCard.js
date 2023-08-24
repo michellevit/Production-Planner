@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
-import Note from "./Note";
+import NoteList from "./NoteList";
 import "./OrderCard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,6 +20,7 @@ const OrderCard = ({ order }) => {
   const [boxes, setBoxes] = useState([]);
   const [formDisplay, setFormDisplay] = useState(true);
   const [buttonDisplay, setButtonDisplay] = useState(true);
+  const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
   const [confirmStatus, setConfirmStatus] = useState(false);
   useEffect(() => {
@@ -145,8 +146,10 @@ const OrderCard = ({ order }) => {
       </div>
       <div className="row" id="row4">
         <div className="note-container">
-          <Note 
+          <NoteList 
           readyStatus={readyStatus}
+          notes={notes}
+          setNotes={setNotes}
           />
         </div>
       </div>

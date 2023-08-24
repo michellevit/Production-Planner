@@ -1,10 +1,11 @@
 import React from "react";
-import "./Note.css";
+import "./NoteList.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import NoteItem from "./NoteItem";
 
-const Note = ({ readyStatus }) => {
+const NoteList = ({ readyStatus, notes, setNotes }) => {
   const [note, setNote] = useState("");
   const inputNoteHandler = (e) => {
     setNote(e.target.value);
@@ -14,6 +15,13 @@ const Note = ({ readyStatus }) => {
     if (note === "") {
       return false;
     }
+    setNotes([
+      ...notes,
+      {
+        noteText: note,
+      },
+    ]);
+    setNote("");
   };
   return (
     <div className="noteform-container">
@@ -24,15 +32,29 @@ const Note = ({ readyStatus }) => {
             value={note}
             onChange={inputNoteHandler}
             placeholder="Add note"
-          >
-          </input>
+          ></input>
           <button onClick={submitNoteHandler}>
             <FontAwesomeIcon icon={faAdd} />
           </button>
         </form>
       )}
+      {notes.length > 0 && (
+        <div className="notelist-container">
+            <ul className="notelist">
+            {notes.map((note) => (
+                <div className="noteitem-container">
+                <NoteItem
+                    note={note}
+                    notes={notes}
+                />
+                </div>
+            ))}
+            </ul>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Note;
+export default NoteList;
+
