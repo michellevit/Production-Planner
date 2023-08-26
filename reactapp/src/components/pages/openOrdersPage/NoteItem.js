@@ -10,7 +10,7 @@ const NoteItem = ({ note, notes, setNotes, readyStatus }) => {
   };
   return (
     <div className="noteitem">
-      <div className="noteitem-info">
+      <div className={readyStatus ? "noteitem-info-ready" : "noteitem-info-notready"}>
         <b>Note {notes.indexOf(note) + 1}: </b>
         {note.noteText}
       </div>

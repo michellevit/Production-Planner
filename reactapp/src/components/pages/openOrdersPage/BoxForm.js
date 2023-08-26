@@ -15,7 +15,7 @@ const BoxForm = ({
 }) => {
   const [dimensions, setDimensions] = useState("");
   const [weight, setWeight] = useState("");
-  const inputDimensionsHandler = (e) => {
+  const inputDimensionsHandler = (e) => { 
     setDimensions(e.target.value);
   };
   const inputWeightHandler = (e) => {
@@ -27,10 +27,10 @@ const BoxForm = ({
     return dateString + randomness;
   };
   const submitBoxHandler = (e) => {
+    e.preventDefault();
     setConfirmStatus(false);
     setFormDisplay(true);
     setButtonDisplay(true);
-    e.preventDefault();
     if (dimensions === "") {
       return false;
     }
@@ -41,7 +41,7 @@ const BoxForm = ({
       ...boxes,
       {
         dimensions: dimensions,
-        weight: weight,
+        weight: parseFloat(weight).toFixed(2),
         id: uniqueId(),
       },
     ]);
@@ -81,11 +81,10 @@ const BoxForm = ({
           className="weight"
           placeholder="lb"
           min="0"
-          step="0.01" 
+          step="1" 
           onChange={inputWeightHandler}
           value={weight}
-          maxLength={5}
-        ></input>
+          ></input>
           <button onClick={submitBoxHandler}>
           <FontAwesomeIcon icon={faAdd} />
         </button>
