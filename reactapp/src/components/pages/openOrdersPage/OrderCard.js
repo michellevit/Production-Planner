@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import DeleteButton from "./DeleteButton";
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
 import NoteList from "./NoteList";
 import "./OrderCard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faClose,
   faBox,
   faTruckFast,
   faEdit,
@@ -64,11 +64,20 @@ const OrderCard = ({ order }) => {
     <div
       className={`card-container ${readyStatus ? "ready-order-card" : ""}`}
       id={order.id}
-    >
-      <div className="row" id="row0">
-        <div className="order-number">SO# {order.order_number}</div>
-      </div>
+    > {!readyStatus && (
       <div className="row" id="row1">
+        <DeleteButton 
+          readyStatus={readyStatus}
+          order={order}
+        />
+      </div>
+    )}
+      <div className="row" id="row2">
+        <div className="order-number-container">
+        <div className="order-number-text">SO# {order.order_number}</div>
+        </div>
+      </div>
+      <div className="row" id="row3">
         <table className="card-data-table">
           <tbody>
             <tr className="order-data" id="customer-name">
@@ -97,7 +106,7 @@ const OrderCard = ({ order }) => {
           </tbody>
         </table>
       </div>
-      <div className="row" id="row2">
+      <div className="row" id="row4">
         <table className="items-table">
           <tbody>
             <tr>
@@ -113,7 +122,7 @@ const OrderCard = ({ order }) => {
           </tbody>
         </table>
       </div>
-      <div className="row" id={readyStatus && notes.length === 0 ? 'row3-ready-nonotes' : 'row3'}>
+      <div className="row" id={readyStatus && notes.length === 0 ? 'row5-ready-nonotes' : 'row5'}>
         <div className="dimensions-container">
           {boxes.length === 0 && readyStatus ? (
           <p className="no-box-message">No dimensions/weight info. added.</p>) : ""}
@@ -144,7 +153,7 @@ const OrderCard = ({ order }) => {
         </div>
       </div>
       {!(readyStatus && notes.length === 0) && (
-      <div className="row" id="row4">
+      <div className="row" id="row6">
         <div className="note-container">
           <NoteList 
           readyStatus={readyStatus}
@@ -154,18 +163,12 @@ const OrderCard = ({ order }) => {
         </div>
       </div>
       )}
-      <div className="row" id="row5">
-        <div className="row5-buttons-container">
+      <div className="row" id="row7">
+        <div className="row7-buttons-container">
           {!readyStatus && (
           <button type="button" id="ready" onClick={readyHandler}>
             <FontAwesomeIcon icon={faBox} />
             &nbsp;Ready
-          </button>
-          )}
-          {!readyStatus && (
-          <button type="button" id="delete">
-            <FontAwesomeIcon icon={faClose} />
-            &nbsp;Delete
           </button>
           )}
           {readyStatus && (

@@ -8,6 +8,7 @@ import {
   faCheck,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
+import classnames from "classnames";
 
 const Box = ({
   box,
@@ -49,7 +50,7 @@ const Box = ({
 
   return (
     <div className="box">
-      <div className="box-info">
+      <div className={readyStatus ? "box-info-ready" : "box-info-notready"}>
         <b>Box {counter}: </b>
         {box.dimensions} - {box.weight} lb
       </div>

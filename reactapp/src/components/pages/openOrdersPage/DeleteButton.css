@@ -1,0 +1,14 @@
+
+ 
+  .delete-order-container button {
+    color: white;
+    background-color: transparent; 
+    width: auto;
+    justify-content: center;
+    align-items: center;
+    border: none;
+  }
+
+  .delete-order-container button:hover {
+    color: rgb(255, 255, 255, 0.5);
+  }
