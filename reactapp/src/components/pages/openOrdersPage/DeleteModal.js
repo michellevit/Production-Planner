@@ -10,7 +10,7 @@ const DeleteModal = ({ show, onConfirm, onCancel, order }) => {
     <div className="delete-modal-overlay">
       <div className="delete-modal-container">
         <div className="delete-modal">
-          <p>Are you sure you want to delete {order.order_number} order?</p>
+          <p>Are you sure you want to delete SO#{order.order_number}?</p>
           <div className="modal-buttons">
             <button className="confirm-button" onClick={onConfirm}>
               Yes
