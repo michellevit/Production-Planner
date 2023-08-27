@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "./DeleteModal";
 
-const DeleteButton = ({ readyStatus, onDelete }) => {
+const DeleteButton = ({ readyStatus, order, onDelete }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const handleDeleteOrder = () => {
@@ -24,13 +24,14 @@ const DeleteButton = ({ readyStatus, onDelete }) => {
     <div className="delete-order-container">
       {!readyStatus && (
         <>
-          <button onClick={handleDeleteOrder}>
+          <button id="delete-order-button" onClick={handleDeleteOrder}>
             <FontAwesomeIcon icon={faClose} />
           </button>
           <DeleteModal
             show={showConfirmModal}
             onConfirm={handleConfirmDelete}
             onCancel={handleCancelDelete}
+            order={order}
           />
         </>
       )}
