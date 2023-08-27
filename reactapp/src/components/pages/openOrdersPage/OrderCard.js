@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import DeleteButton from "./DeleteButton";
+import DeleteModal from "./DeleteModal";
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
 import NoteList from "./NoteList";
@@ -20,6 +21,7 @@ const OrderCard = ({ order }) => {
   const [boxes, setBoxes] = useState([]);
   const [formDisplay, setFormDisplay] = useState(true);
   const [buttonDisplay, setButtonDisplay] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
   const [confirmStatus, setConfirmStatus] = useState(false);
@@ -33,6 +35,18 @@ const OrderCard = ({ order }) => {
         console.error("Error getting data", error);
       });
   }, []);
+  const handleDeleteButtonClick = () => {
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    alert("ok deleted-ish")
+    setShowDeleteModal(false);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+  };
   const handleConfirmButtonStatus = () => {
     if (confirmStatus) {
       boxes.map((box) => ({ ...box, setConfirmStatus: true }));
@@ -61,17 +75,16 @@ const OrderCard = ({ order }) => {
     }
   };
   return (
-    <div
-      className={`card-container ${readyStatus ? "ready-order-card" : ""}`}
-      id={order.id}
-    > {!readyStatus && (
-      <div className="row" id="row1">
-        <DeleteButton 
-          readyStatus={readyStatus}
-          order={order}
-        />
-      </div>
-    )}
+    <div className={`card-container ${readyStatus ? "ready-order-card" : ""}`}>
+      {!readyStatus && (
+        <div className="row" id="row1">
+          <DeleteButton
+            readyStatus={readyStatus}
+            order={order}
+            onDelete={handleDeleteButtonClick}
+          />
+        </div>
+      )}
       <div className="row" id="row2">
         <div className="order-number-container">
         <div className="order-number-text">SO# {order.order_number}</div>
@@ -186,6 +199,11 @@ const OrderCard = ({ order }) => {
 
         </div>
       </div>
+      <DeleteModal
+        show={showDeleteModal}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };
