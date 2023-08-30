@@ -3,23 +3,31 @@ import "./DeleteButton.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "./DeleteModal";
+import axios from "axios";
 
-const DeleteButton = ({ readyStatus, order, onDelete }) => {
+const DeleteButton = ({ readyStatus, order, handleOrderDelete }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
   const handleDeleteOrder = () => {
     setShowConfirmModal(true);
   };
-
   const handleConfirmDelete = () => {
     setShowConfirmModal(false);
-    onDelete(); // Call the onDelete prop to actually delete the order
+    handleOrderDelete(order.ID); 
+    axios
+      .delete(`http://127.0.0.1:8000/open-orders/${order.ID}/`)
+      .then((response) => {
+        console.log("Order deleted successfully.");
+      })
+      .catch((error) => {
+        console.error(
+          "Error deleting the order. Server responded with:",
+          error.response.status
+        );
+      });
   };
-
   const handleCancelDelete = () => {
     setShowConfirmModal(false);
   };
-
   return (
     <div className="delete-order-container">
       {!readyStatus && (
@@ -29,8 +37,8 @@ const DeleteButton = ({ readyStatus, order, onDelete }) => {
           </button>
           <DeleteModal
             show={showConfirmModal}
-            onConfirm={handleConfirmDelete}
-            onCancel={handleCancelDelete}
+            handleConfirmDelete={handleConfirmDelete}
+            handleCancelDelete={handleCancelDelete}
             order={order}
           />
         </>

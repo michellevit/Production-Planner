@@ -11,11 +11,11 @@ const BoxForm = ({
   boxes,
   confirmStatus,
   setConfirmStatus,
-  readyStatus
+  readyStatus,
 }) => {
   const [dimensions, setDimensions] = useState("");
   const [weight, setWeight] = useState("");
-  const inputDimensionsHandler = (e) => { 
+  const inputDimensionsHandler = (e) => {
     setDimensions(e.target.value);
   };
   const inputWeightHandler = (e) => {
@@ -60,36 +60,48 @@ const BoxForm = ({
       setWeight("");
     }
   }, [confirmStatus]);
+
+  useEffect(() => {
+    if (readyStatus) {
+      setFormDisplay(false);
+    }
+    if (!readyStatus && boxes.length === 0) {
+      setFormDisplay(true);
+    }
+  }, [readyStatus, boxes.length]);
+
   return (
     <div className="boxform-container">
       {formDisplay && (
-      <form>
-        <select
-          name="dimensions"
-          className="dimensions"
-          onChange={inputDimensionsHandler}
-          value={dimensions}
-          id="mySelect"
-        >
-          <option hidden>Dimensions</option>
-          <option value="TBD">TBD</option>
-          <option value="10 x 8 x 3">10" x 8" x 3"</option>
-          <option value="9.125 x 9.125 x 9.125">9.125" 9.125" x 9.125"</option>
-        </select>
-        <input
-          type="number"
-          className="weight"
-          placeholder="lb"
-          min="0"
-          step="1" 
-          onChange={inputWeightHandler}
-          value={weight}
+        <form>
+          <select
+            name="dimensions"
+            className="dimensions"
+            onChange={inputDimensionsHandler}
+            value={dimensions}
+            id="mySelect"
+          >
+            <option hidden>Dimensions</option>
+            <option value="TBD">TBD</option>
+            <option value="10 x 8 x 3">10" x 8" x 3"</option>
+            <option value="9.125 x 9.125 x 9.125">
+              9.125" 9.125" x 9.125"
+            </option>
+          </select>
+          <input
+            type="number"
+            className="weight"
+            placeholder="lb"
+            min="0"
+            step="1"
+            onChange={inputWeightHandler}
+            value={weight}
           ></input>
           <button onClick={submitBoxHandler}>
-          <FontAwesomeIcon icon={faAdd} />
-        </button>
-      </form>
-      )} 
+            <FontAwesomeIcon icon={faAdd} />
+          </button>
+        </form>
+      )}
     </div>
   );
 };

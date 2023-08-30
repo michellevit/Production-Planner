@@ -3,7 +3,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import DeleteButton from "./DeleteButton";
-import DeleteModal from "./DeleteModal";
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
 import NoteList from "./NoteList";
@@ -15,37 +14,16 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
-const OrderCard = ({ order }) => {
-  const [orders, setOrders] = useState([]);
+const OrderCard = ({ order, orders, setOrders }) => {
   const [startDate, setStartDate] = useState(null);
   const [boxes, setBoxes] = useState([]);
   const [formDisplay, setFormDisplay] = useState(true);
   const [buttonDisplay, setButtonDisplay] = useState(true);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
   const [confirmStatus, setConfirmStatus] = useState(false);
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/open-orders/")
-      .then((response) => {
-        setOrders(response.data);
-      })
-      .catch((error) => {
-        console.error("Error getting data", error);
-      });
-  }, []);
-  const handleDeleteButtonClick = () => {
-    setShowDeleteModal(true);
-  };
-
-  const handleConfirmDelete = () => {
-    alert("ok deleted-ish")
-    setShowDeleteModal(false);
-  };
-
-  const handleCancelDelete = () => {
-    setShowDeleteModal(false);
+  const handleOrderDelete = (deletedOrderId) => {
+    setOrders(orders.filter(order => order.id !== deletedOrderId));
   };
   const handleConfirmButtonStatus = () => {
     if (confirmStatus) {
@@ -81,7 +59,7 @@ const OrderCard = ({ order }) => {
           <DeleteButton
             readyStatus={readyStatus}
             order={order}
-            onDelete={handleDeleteButtonClick}
+            handleOrderDelete={handleOrderDelete}
           />
         </div>
       )}
@@ -199,12 +177,7 @@ const OrderCard = ({ order }) => {
 
         </div>
       </div>
-      <DeleteModal
-        show={showDeleteModal}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-      />
-    </div>
+      </div>
   );
 };
 export default OrderCard;
