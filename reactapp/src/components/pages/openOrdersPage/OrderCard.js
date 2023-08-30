@@ -1,56 +1,61 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
 import DeleteButton from "./DeleteButton";
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
 import NoteList from "./NoteList";
+import ReadyButton from "./ReadyButton";
+import EditButton from "./EditButton";
+import ShippedButton from "./ShippedButton"
 import "./OrderCard.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBox,
-  faTruckFast,
-  faEdit,
-} from "@fortawesome/free-solid-svg-icons";
 
 const OrderCard = ({ order, orders, setOrders }) => {
+  const [isRemoving, setIsRemoving] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [boxes, setBoxes] = useState([]);
   const [formDisplay, setFormDisplay] = useState(true);
   const [buttonDisplay, setButtonDisplay] = useState(true);
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
-  const [confirmStatus, setConfirmStatus] = useState(false);
-  const handleConfirmButtonStatus = () => {
-    if (confirmStatus) {
-      boxes.map((box) => ({ ...box, setConfirmStatus: true }));
-    } else {
-      boxes.map((box) => ({ ...box, setConfirmStatus: false }));
-    }
-  };
+  const [boxFormConfirmStatus, setBoxFormConfirmStatus] = useState(false);
   const readyHandler = () => {
     setReadyStatus((prevState) => !prevState);
     if (readyStatus) {
-      if (!confirmStatus) {
-        setConfirmStatus(true);
-        confirmHandler(true);
+      console.log("Ready? FALSE")
+      if (!boxFormConfirmStatus) {
+        setBoxFormConfirmStatus(true);
+        boxFormConfirmHandler(true);
       }
     }
+    else {
+      console.log("Ready? TRUE")
+    } 
   };
-  const confirmHandler = () => {
-    if (confirmStatus) {
+  const boxFormConfirmHandler = () => {
+    if (boxFormConfirmStatus) {
       setFormDisplay(true);
       setButtonDisplay(true);
-      handleConfirmButtonStatus(false);
+      handleBoxFormConfirmStatus(false);
     } else {
       setFormDisplay(false);
       setButtonDisplay(false);
-      handleConfirmButtonStatus(true);
+      handleBoxFormConfirmStatus(true);
+    }
+  };
+  const handleBoxFormConfirmStatus = () => {
+    if (boxFormConfirmStatus) {
+      boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: true }));
+    } else {
+      boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: false }));
     }
   };
   return (
-    <div className={`card-container ${readyStatus ? "ready-order-card" : ""}`}>
+    <div
+      className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
+        isRemoving ? "card-container-fade-out" : ""
+      }`}
+    >
       {!readyStatus && (
         <div className="row" id="row1">
           <DeleteButton
@@ -58,12 +63,13 @@ const OrderCard = ({ order, orders, setOrders }) => {
             order={order}
             orders={orders}
             setOrders={setOrders}
+            setIsRemoving={setIsRemoving}
           />
         </div>
       )}
       <div className="row" id="row2">
         <div className="order-number-container">
-        <div className="order-number-text">SO# {order.order_number}</div>
+          <div className="order-number-text">SO# {order.order_number}</div>
         </div>
       </div>
       <div className="row" id="row3">
@@ -111,18 +117,24 @@ const OrderCard = ({ order, orders, setOrders }) => {
           </tbody>
         </table>
       </div>
-      <div className="row" id={readyStatus && notes.length === 0 ? 'row5-ready-nonotes' : 'row5'}>
+      <div
+        className="row"
+        id={readyStatus && notes.length === 0 ? "row5-ready-nonotes" : "row5"}
+      >
         <div className="dimensions-container">
           {boxes.length === 0 && readyStatus ? (
-          <p className="no-box-message">No dimensions/weight info. added.</p>) : ""}
+            <p className="no-box-message">No dimensions/weight info. added.</p>
+          ) : (
+            ""
+          )}
           <BoxForm
             formDisplay={formDisplay}
             setFormDisplay={setFormDisplay}
             setButtonDisplay={setButtonDisplay}
             setBoxes={setBoxes}
             boxes={boxes}
-            setConfirmStatus={setConfirmStatus}
-            confirmStatus={confirmStatus}
+            setBoxFormConfirmStatus={setBoxFormConfirmStatus}
+            boxFormConfirmStatus={boxFormConfirmStatus}
             readyStatus={readyStatus}
           />
           {boxes.length > 0 && (
@@ -130,52 +142,45 @@ const OrderCard = ({ order, orders, setOrders }) => {
               boxes={boxes}
               setBoxes={setBoxes}
               setFormDisplay={setFormDisplay}
-              buttonDisplay={buttonDisplay}            
+              buttonDisplay={buttonDisplay}
               setButtonDisplay={setButtonDisplay}
-              confirmStatus={confirmStatus}
-              handleConfirmButtonStatus={handleConfirmButtonStatus}
-              setConfirmStatus={setConfirmStatus}
-              confirmHandler={confirmHandler}
+              boxFormConfirmStatus={boxFormConfirmStatus}
+              setBoxFormConfirmStatus={setBoxFormConfirmStatus}
+              boxFormConfirmHandler={boxFormConfirmHandler}
               readyStatus={readyStatus}
             />
           )}
         </div>
       </div>
       {!(readyStatus && notes.length === 0) && (
-      <div className="row" id="row6">
-        <div className="note-container">
-          <NoteList 
-          readyStatus={readyStatus}
-          notes={notes}
-          setNotes={setNotes}
-          />
+        <div className="row" id="row6">
+          <div className="note-container">
+            <NoteList
+              readyStatus={readyStatus}
+              notes={notes}
+              setNotes={setNotes}
+            />
+          </div>
         </div>
-      </div>
       )}
       <div className="row" id="row7">
         <div className="row7-buttons-container">
-          {!readyStatus && (
-          <button type="button" id="ready" onClick={readyHandler}>
-            <FontAwesomeIcon icon={faBox} />
-            &nbsp;Ready
-          </button>
-          )}
+        {!readyStatus && (
+          <ReadyButton
+            readyHandler={readyHandler}
+          />
+        )}
+        {readyStatus && (
+          <EditButton
+            readyHandler={readyHandler}
+          />
+        )}
           {readyStatus && (
-          <button type="button" id="edit" onClick={readyHandler}>
-            <FontAwesomeIcon icon={faEdit} />
-            &nbsp;Edit
-          </button>
+            <ShippedButton />
           )}
-          {readyStatus && (
-            <button type="button" id="shipped">
-              <FontAwesomeIcon icon={faTruckFast} />
-              &nbsp;Shipped
-            </button>
-          )}
-
         </div>
       </div>
-      </div>
+    </div>
   );
 };
 export default OrderCard;

@@ -13,10 +13,15 @@
   align-items: center;
 }
 
+
+.card-container-fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
 .ready-order-card {
   background: #50c696;
 }
-
 
 .row {
   width: 400px;
@@ -187,6 +192,12 @@ input.delay-input {
   align-items: center;
   width: 90%;
 }
+
+.row7-buttons {
+  display: contents;
+}
+
+
 
 #row7 button {
   color: white;

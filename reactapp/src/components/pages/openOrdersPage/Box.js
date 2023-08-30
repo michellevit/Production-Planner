@@ -15,9 +15,9 @@ const Box = ({
   boxes,
   setBoxes,
   buttonDisplay,
-  confirmStatus,
-  setConfirmStatus,
-  confirmHandler,
+  boxFormConfirmStatus,
+  setBoxFormConfirmStatus,
+  boxFormConfirmHandler,
   readyStatus
 }) => {
   var counter = boxes.indexOf(box) + 1;
@@ -44,8 +44,8 @@ const Box = ({
     setBoxes(newBoxes);
   };
   const handleConfirmClick = () => {
-    setConfirmStatus(!confirmStatus);
-    confirmHandler();
+    setBoxFormConfirmStatus(!boxFormConfirmStatus);
+    boxFormConfirmHandler();
   };
 
   return (
@@ -69,8 +69,8 @@ const Box = ({
             </button>
           </div>
         )}
-        <button className={confirmStatus ? "edit-btn" : "check-btn"} onClick={handleConfirmClick}>
-          <FontAwesomeIcon icon={confirmStatus ? faEdit : faCheck} />
+        <button className={boxFormConfirmStatus ? "edit-btn" : "check-btn"} onClick={handleConfirmClick}>
+          <FontAwesomeIcon icon={boxFormConfirmStatus ? faEdit : faCheck} />
         </button>
       </div>
       )}

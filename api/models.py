@@ -13,10 +13,9 @@ class Order(models.Model):
     item_type_dict = models.JSONField(default=dict)
     item_subtype_dict = models.JSONField(default=dict)
     packages_dict = models.JSONField(default=dict)
-    weight = models.CharField(max_length=10)
-    notes = models.CharField(max_length=500)
-    confirmed = models.BooleanField(default=False)
-    archived = models.BooleanField(default=False)
+    notes_dict = models.JSONField(default=dict)
+    ready = models.BooleanField(default=False)
+    shipped = models.BooleanField(default=False)
 
     def __str__(self):
         return self.order_number[0:50]

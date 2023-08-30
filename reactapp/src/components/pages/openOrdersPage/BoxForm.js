@@ -9,8 +9,8 @@ const BoxForm = ({
   setButtonDisplay,
   setBoxes,
   boxes,
-  confirmStatus,
-  setConfirmStatus,
+  boxFormConfirmStatus,
+  setBoxFormConfirmStatus,
   readyStatus,
 }) => {
   const [dimensions, setDimensions] = useState("");
@@ -28,7 +28,7 @@ const BoxForm = ({
   };
   const submitBoxHandler = (e) => {
     e.preventDefault();
-    setConfirmStatus(false);
+    setBoxFormConfirmStatus(false);
     setFormDisplay(true);
     setButtonDisplay(true);
     if (dimensions === "") {
@@ -55,11 +55,11 @@ const BoxForm = ({
     setFormDisplay(true);
   }
   useEffect(() => {
-    if (confirmStatus) {
+    if (boxFormConfirmStatus) {
       setDimensions("");
       setWeight("");
     }
-  }, [confirmStatus]);
+  }, [boxFormConfirmStatus]);
 
   useEffect(() => {
     if (readyStatus) {
