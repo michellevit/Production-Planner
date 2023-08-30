@@ -15,6 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const OrderCard = ({ order, orders, setOrders }) => {
+  const [isRemoving, setIsRemoving] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [boxes, setBoxes] = useState([]);
   const [formDisplay, setFormDisplay] = useState(true);
@@ -50,7 +51,11 @@ const OrderCard = ({ order, orders, setOrders }) => {
     }
   };
   return (
-    <div className={`card-container ${readyStatus ? "ready-order-card" : ""}`}>
+    <div
+      className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
+        isRemoving ? "card-container-fade-out" : ""
+      }`}
+    >
       {!readyStatus && (
         <div className="row" id="row1">
           <DeleteButton
@@ -58,6 +63,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
             order={order}
             orders={orders}
             setOrders={setOrders}
+            setIsRemoving={setIsRemoving}
           />
         </div>
       )}

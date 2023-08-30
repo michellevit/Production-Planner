@@ -5,7 +5,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "./DeleteModal";
 import axios from "axios";
 
-const DeleteButton = ({ readyStatus, order, orders, setOrders }) => {
+const DeleteButton = ({ readyStatus, order, orders, setOrders, setIsRemoving }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const handleClickDeleteButton = () => {
     setShowConfirmModal(true);
@@ -21,7 +21,12 @@ const DeleteButton = ({ readyStatus, order, orders, setOrders }) => {
           error.response.status
         );
       });
-      setOrders(orders.filter(orderItem => orderItem.ID !== deletedOrderID));
+      setIsRemoving(true);
+      setTimeout(() => {
+        setOrders(orders.filter((orderItem) => orderItem.ID !== deletedOrderID));
+        console.log(deletedOrderID, " has been removed")
+        setIsRemoving(false);
+      }, 300);
   };
   const handleCancelDelete = () => {
     setShowConfirmModal(false);
