@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from . models import *
 from . serializers import *
@@ -13,7 +12,7 @@ class OrderView(APIView):
         orders = Order.objects.all()
         output = [
             {
-                "ID": order.id,
+                "id": order.id,
                 "created": order.created,
                 "updated": order.updated,
                 "order_number": order.order_number,
@@ -24,10 +23,9 @@ class OrderView(APIView):
                 "item_type_dict": order.item_type_dict,
                 "item_subtype_dict": order.item_subtype_dict,
                 "packages": order.packages_dict,
-                "weight": order.weight,
-                "notes": order.notes,
-                "confirmed": order.confirmed,
-                "archived": order.archived,
+                "notes_dict": order.notes_dict,
+                "ready": order.ready,
+                "shipped": order.shipped,
             }
             for order in orders
         ]

@@ -132,13 +132,16 @@ def sort_workbook(sheet):
                             item_subtype_dict[item_subtype] = next_row[8].value
                         new_order = Order(
                             order_number=next_row[4].value,
+                            backorder="",
+                            backorder_number="",
                             ship_date=next_row[2].value,
                             customer_name=next_row[6].value,
                             item_type_dict=item_type_dict,
                             item_subtype_dict=item_subtype_dict,
-                            packages="",
-                            confirmed=False,
-                            archived=False,
+                            packages_dict="",
+                            notes_dict="",
+                            ready=False,
+                            shipped=False,
                         )
                         update_orders_dict(new_order)
 

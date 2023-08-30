@@ -8,10 +8,10 @@ const BoxList = ({
   setFormDisplay,
   buttonDisplay,
   setButtonDisplay,
-  confirmStatus,
-  handleConfirmButtonStatus,
-  setConfirmStatus,
-  confirmHandler,
+  boxFormConfirmStatus,
+  handleBoxFormConfirmButtonStatus,
+  setBoxFormConfirmStatus,
+  boxFormConfirmHandler,
   readyStatus
 }) => {
   return (
@@ -26,10 +26,9 @@ const BoxList = ({
               setFormDisplay={setFormDisplay}
               buttonDisplay={buttonDisplay}
               setButtonDisplay={setButtonDisplay}
-              confirmStatus={confirmStatus}
-              setConfirmStatus={setConfirmStatus}
-              handleConfirmButtonStatus={handleConfirmButtonStatus}
-              confirmHandler={confirmHandler}
+              boxFormConfirmStatus={boxFormConfirmStatus}
+              setBoxFormConfirmStatus={setBoxFormConfirmStatus}
+              boxFormConfirmHandler={boxFormConfirmHandler}
               readyStatus={readyStatus}
             />
           </div>
@@ -39,6 +38,5 @@ const BoxList = ({
   );
 };
 export default BoxList;
-
 
 

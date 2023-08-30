@@ -193,6 +193,12 @@ input.delay-input {
   width: 90%;
 }
 
+.row7-buttons {
+  display: contents;
+}
+
+
+
 #row7 button {
   color: white;
   border: none;
