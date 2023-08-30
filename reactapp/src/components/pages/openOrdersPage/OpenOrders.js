@@ -19,7 +19,11 @@ const Order = () => {
   return (
     <div className="order-cards-area">
       {orders.map(order => (
-        <OrderCard key={order.id} order={order} />
+        <OrderCard 
+        key={order.id} 
+        order={order}
+        orders={orders}
+        setOrders={setOrders} />
       ))}
     </div>
   );

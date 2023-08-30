@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from . models import *
 from . serializers import *
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.exceptions import NotFound
 
 # Create your views here.
 
@@ -36,3 +38,13 @@ class OrderView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+           
+
+class DeleteOrderView(APIView):
+    def delete(self, request, pk):
+        try:
+            order = Order.objects.get(pk=pk)
+            order.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Order.DoesNotExist:
+            raise NotFound(detail="Order not found")

@@ -1,21 +1,24 @@
 import React from "react";
 import "./DeleteModal.css";
 
-const DeleteModal = ({ show, onConfirm, onCancel, order }) => {
+const DeleteModal = ({ show, handleConfirmDelete, handleCancelDelete, order }) => {
   if (!show) {
     return null;
   }
-
   return (
     <div className="delete-modal-overlay">
       <div className="delete-modal-container">
         <div className="delete-modal">
-          <p>Are you sure you want to delete {order.order_number} order?</p>
+        <p>
+            {order?.order_number
+              ? `Are you sure you want to delete SO#${order.order_number}?`
+              : "Are you sure you want to delete this order?"}
+          </p>
           <div className="modal-buttons">
-            <button className="confirm-button" onClick={onConfirm}>
+            <button className="confirm-button" onClick={handleConfirmDelete}>
               Yes
             </button>
-            <button className="cancel-button" onClick={onCancel}>
+            <button className="cancel-button" onClick={handleCancelDelete}>
               No
             </button>
           </div>
