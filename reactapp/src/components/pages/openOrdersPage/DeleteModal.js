@@ -5,10 +5,6 @@ const DeleteModal = ({ show, handleConfirmDelete, handleCancelDelete, order }) =
   if (!show) {
     return null;
   }
-  const doThis = () => {
-    console.log(order.id)
-  }
-  
   return (
     <div className="delete-modal-overlay">
       <div className="delete-modal-container">

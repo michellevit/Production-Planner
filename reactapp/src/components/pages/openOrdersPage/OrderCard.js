@@ -22,9 +22,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
   const [confirmStatus, setConfirmStatus] = useState(false);
-  const handleOrderDelete = (deletedOrderId) => {
-    setOrders(orders.filter(order => order.id !== deletedOrderId));
-  };
   const handleConfirmButtonStatus = () => {
     if (confirmStatus) {
       boxes.map((box) => ({ ...box, setConfirmStatus: true }));
@@ -59,7 +56,8 @@ const OrderCard = ({ order, orders, setOrders }) => {
           <DeleteButton
             readyStatus={readyStatus}
             order={order}
-            handleOrderDelete={handleOrderDelete}
+            orders={orders}
+            setOrders={setOrders}
           />
         </div>
       )}
