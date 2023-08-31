@@ -1,11 +1,12 @@
 .card-container {
   display: flex;
+  flex-basis: calc(33.33% - 20px);
   flex-direction: column;
   background: #3399CC;
   width: 450px;
-  margin: 40px auto;
+  margin: 20px;
   padding: 30px;
-  border-radius: 50px;
+  border-radius: 75px;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
   font-size: 0.8em;
   font-weight: 400;
@@ -142,6 +143,12 @@ input.delay-input {
   font-size: 1.4em;
 }
 
+.react-datepicker__close-icon::after {
+  background-color: transparent !important;
+  color: grey !important;
+  font-weight: 700 !important;
+  font-size: 1em !important;
+}
 
 .items-table {
   text-align: left;
@@ -196,7 +203,6 @@ input.delay-input {
 .row7-buttons {
   display: contents;
 }
-
 
 
 #row7 button {
