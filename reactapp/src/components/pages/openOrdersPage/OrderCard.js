@@ -25,6 +25,8 @@ const OrderCard = ({ order, orders, setOrders }) => {
       try {
         const response = await axios.get(`http://127.0.0.1:8000/open-orders/${order.id}/`);
         setReadyStatus(response.data.ready); 
+        setBoxes(response.data.packages_array)
+        setNotes(response.data.notes_array)
       } catch (error) {
         console.error("Error fetching order details:", error);
       }
@@ -34,7 +36,12 @@ const OrderCard = ({ order, orders, setOrders }) => {
   const readyHandler = async () => {
     setReadyStatus((prevState) => !prevState);
     try {
-      const updatedOrder = { ...order, ready: readyStatus };
+      const updatedOrder = {
+        ...order,
+        ready: !readyStatus,
+        packages_array: boxes,
+        notes_array: notes,
+        }
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder

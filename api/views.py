@@ -19,10 +19,11 @@ class OrderListView(APIView):
                 "backorder": order.backorder,
                 "backorder_number": order.backorder_number,
                 "ship_date": order.ship_date,
+                "delay": order.delay,
                 "item_type_dict": order.item_type_dict,
                 "item_subtype_dict": order.item_subtype_dict,
-                "packages": order.packages_dict,
-                "notes_dict": order.notes_dict,
+                "packages_array": order.packages_array,
+                "notes_array": order.notes_array,
                 "ready": order.ready,
                 "shipped": order.shipped,
             }
@@ -49,12 +50,15 @@ class OrderDetailView(APIView):
     def put(self, request, pk):
         try:
             order = Order.objects.get(pk=pk)
-            order.ready = not order.ready  # Toggle the ready status
+            order.ready = not order.ready
+            if 'packages_array' in request.data:
+                order.packages_array = request.data['packages_array']
+            if 'notes_array' in request.data:
+                order.notes_array = request.data['notes_array']
             order.save()
             return Response({"message": "Ready status updated successfully."})
         except Order.DoesNotExist:
             raise NotFound(detail="Order not found")
-
     def delete(self, request, pk):
         try:
             order = Order.objects.get(pk=pk)

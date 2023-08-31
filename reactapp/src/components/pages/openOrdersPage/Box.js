@@ -8,7 +8,6 @@ import {
   faCheck,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
-import classnames from "classnames";
 
 const Box = ({
   box,
@@ -20,7 +19,6 @@ const Box = ({
   boxFormConfirmHandler,
   readyStatus
 }) => {
-  var counter = boxes.indexOf(box) + 1;
   const upHandler = () => {
     const index = boxes.indexOf(box);
     if (index !== 0) {
@@ -51,7 +49,7 @@ const Box = ({
   return (
     <div className="box">
       <div className={readyStatus ? "box-info-ready" : "box-info-notready"}>
-        <b>Box {counter}: </b>
+        <b>Box {boxes.indexOf(box) + 1}: </b>
         {box.dimensions} - {box.weight} lb
       </div>
       {!readyStatus && (

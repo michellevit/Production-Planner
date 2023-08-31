@@ -1,8 +1,11 @@
 .order-cards-area {
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  margin: 50px auto;
+  margin: 50px 0;
 }
 
 

@@ -9,7 +9,6 @@ const BoxList = ({
   buttonDisplay,
   setButtonDisplay,
   boxFormConfirmStatus,
-  handleBoxFormConfirmButtonStatus,
   setBoxFormConfirmStatus,
   boxFormConfirmHandler,
   readyStatus
