@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import DeleteButton from "./DeleteButton";
@@ -11,7 +11,6 @@ import ShippedButton from "./ShippedButton";
 import "./OrderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
 
-
 const OrderCard = ({ order, orders, setOrders }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [startDate, setStartDate] = useState(null);
@@ -19,29 +18,37 @@ const OrderCard = ({ order, orders, setOrders }) => {
   const [formDisplay, setFormDisplay] = useState(true);
   const [buttonDisplay, setButtonDisplay] = useState(true);
   const [notes, setNotes] = useState([]);
-  const [readyStatus, setReadyStatus] = useState(false);
+  const [readyStatus, setReadyStatus] = useState(order.ready);
   const [boxFormConfirmStatus, setBoxFormConfirmStatus] = useState(false);
-
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/open-orders/${order.id}/`);
+        setReadyStatus(response.data.ready); 
+      } catch (error) {
+        console.error("Error fetching order details:", error);
+      }
+    };
+    fetchOrderDetails();
+  }, [order.id]);
   const readyHandler = async () => {
     setReadyStatus((prevState) => !prevState);
     try {
       const updatedOrder = { ...order, ready: readyStatus };
-      await axios.put(`http://127.0.0.1:8000/open-orders/${order.id}/`, updatedOrder);
+      await axios.put(
+        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        updatedOrder
+      );
       setReadyStatus(!readyStatus);
-    } catch (error) {
+      if (readyStatus) {
+        if (!boxFormConfirmStatus) {
+          setBoxFormConfirmStatus(true);
+          boxFormConfirmHandler(true);
+        }
+      }
+     } catch (error) {
       console.error("Error updating ready status:", error);
     }
-    
-    if (readyStatus) {
-      console.log("Ready? FALSE");
-      if (!boxFormConfirmStatus) {
-        setBoxFormConfirmStatus(true);
-        boxFormConfirmHandler(true);
-      }
-    } 
-    else {
-      console.log("Ready? TRUE");
-    } 
   };
   const boxFormConfirmHandler = () => {
     if (boxFormConfirmStatus) {
@@ -49,16 +56,22 @@ const OrderCard = ({ order, orders, setOrders }) => {
       setButtonDisplay(true);
       handleBoxFormConfirmStatus(false);
     } else {
-      setFormDisplay(false);
-      setButtonDisplay(false);
-      handleBoxFormConfirmStatus(true);
+      if (boxes.length === 0) {
+        setFormDisplay(true);
+      } else {
+        setFormDisplay(false);
+        setButtonDisplay(false);
+        handleBoxFormConfirmStatus(true);
+      }
     }
   };
   const handleBoxFormConfirmStatus = () => {
     if (boxFormConfirmStatus) {
       setBoxes(boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: true })));
     } else {
-      setBoxes(boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: false })));
+      setBoxes(
+        boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: false }))
+      );
     }
   };
 
@@ -177,19 +190,9 @@ const OrderCard = ({ order, orders, setOrders }) => {
       )}
       <div className="row" id="row7">
         <div className="row7-buttons-container">
-        {!readyStatus && (
-          <ReadyButton
-            readyHandler={readyHandler}
-          />
-        )}
-        {readyStatus && (
-          <EditButton
-            readyHandler={readyHandler}
-          />
-        )}
-          {readyStatus && (
-            <ShippedButton />
-          )}
+          {!readyStatus && <ReadyButton readyHandler={readyHandler} />}
+          {readyStatus && <EditButton readyHandler={readyHandler} />}
+          {readyStatus && <ShippedButton />}
         </div>
       </div>
     </div>

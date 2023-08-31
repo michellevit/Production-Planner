@@ -39,6 +39,13 @@ class OrderListView(APIView):
 
 
 class OrderDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            order = Order.objects.get(pk=pk)
+            serializer = OrderSerializer(order)
+            return Response(serializer.data)
+        except Order.DoesNotExist:
+            raise NotFound(detail="Order not found")
     def put(self, request, pk):
         try:
             order = Order.objects.get(pk=pk)
