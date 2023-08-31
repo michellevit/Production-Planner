@@ -15,28 +15,35 @@ const BoxForm = ({
 }) => {
   const [dimensions, setDimensions] = useState("");
   const [weight, setWeight] = useState("");
+
   const inputDimensionsHandler = (e) => {
     setDimensions(e.target.value);
   };
+
   const inputWeightHandler = (e) => {
     setWeight(e.target.value);
   };
+
   const uniqueId = () => {
     const dateString = Date.now().toString(36);
     const randomness = Math.random().toString(36).substring(2);
     return dateString + randomness;
   };
+
   const submitBoxHandler = (e) => {
     e.preventDefault();
     setBoxFormConfirmStatus(false);
     setFormDisplay(true);
     setButtonDisplay(true);
+
     if (dimensions === "") {
       return false;
     }
+
     if (weight === "") {
       return true;
     }
+
     setBoxes([
       ...boxes,
       {
@@ -45,15 +52,11 @@ const BoxForm = ({
         id: uniqueId(),
       },
     ]);
+
     setDimensions("");
     setWeight("");
   };
-  if (readyStatus) {
-    setFormDisplay(false);
-  }
-  if (!readyStatus && boxes.length === 0) {
-    setFormDisplay(true);
-  }
+
   useEffect(() => {
     if (boxFormConfirmStatus) {
       setDimensions("");
@@ -64,8 +67,7 @@ const BoxForm = ({
   useEffect(() => {
     if (readyStatus) {
       setFormDisplay(false);
-    }
-    if (!readyStatus && boxes.length === 0) {
+    } else if (boxes.length === 0) {
       setFormDisplay(true);
     }
   }, [readyStatus, boxes.length]);
