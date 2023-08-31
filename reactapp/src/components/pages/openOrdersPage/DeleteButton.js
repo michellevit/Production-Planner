@@ -12,7 +12,7 @@ const DeleteButton = ({ readyStatus, order, orders, setOrders, setIsRemoving }) 
   };
   const handleConfirmDelete = () => {
     setShowConfirmModal(false);
-    const deletedOrderID = order.ID
+    const deletedOrderID = order.id
     axios
       .delete(`http://127.0.0.1:8000/open-orders/${deletedOrderID}/`)
       .catch((error) => {
@@ -23,8 +23,7 @@ const DeleteButton = ({ readyStatus, order, orders, setOrders, setIsRemoving }) 
       });
       setIsRemoving(true);
       setTimeout(() => {
-        setOrders(orders.filter((orderItem) => orderItem.ID !== deletedOrderID));
-        console.log(deletedOrderID, " has been removed")
+        setOrders(orders.filter((orderItem) => orderItem.id !== deletedOrderID));
         setIsRemoving(false);
       }, 300);
   };

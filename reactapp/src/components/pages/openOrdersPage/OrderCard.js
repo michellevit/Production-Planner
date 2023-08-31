@@ -1,14 +1,16 @@
 import React, { useState } from "react";
+import axios from "axios";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import DeleteButton from "./DeleteButton";
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
 import NoteList from "./NoteList";
 import ReadyButton from "./ReadyButton";
 import EditButton from "./EditButton";
-import ShippedButton from "./ShippedButton"
+import ShippedButton from "./ShippedButton";
 import "./OrderCard.css";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const OrderCard = ({ order, orders, setOrders }) => {
   const [isRemoving, setIsRemoving] = useState(false);
@@ -19,17 +21,26 @@ const OrderCard = ({ order, orders, setOrders }) => {
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
   const [boxFormConfirmStatus, setBoxFormConfirmStatus] = useState(false);
-  const readyHandler = () => {
+
+  const readyHandler = async () => {
     setReadyStatus((prevState) => !prevState);
+    try {
+      const updatedOrder = { ...order, ready: readyStatus };
+      await axios.put(`http://127.0.0.1:8000/open-orders/${order.id}/`, updatedOrder);
+      setReadyStatus(!readyStatus);
+    } catch (error) {
+      console.error("Error updating ready status:", error);
+    }
+    
     if (readyStatus) {
-      console.log("Ready? FALSE")
+      console.log("Ready? FALSE");
       if (!boxFormConfirmStatus) {
         setBoxFormConfirmStatus(true);
         boxFormConfirmHandler(true);
       }
-    }
+    } 
     else {
-      console.log("Ready? TRUE")
+      console.log("Ready? TRUE");
     } 
   };
   const boxFormConfirmHandler = () => {
@@ -45,11 +56,12 @@ const OrderCard = ({ order, orders, setOrders }) => {
   };
   const handleBoxFormConfirmStatus = () => {
     if (boxFormConfirmStatus) {
-      boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: true }));
+      setBoxes(boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: true })));
     } else {
-      boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: false }));
+      setBoxes(boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: false })));
     }
   };
+
   return (
     <div
       className={`card-container ${readyStatus ? "ready-order-card" : ""} ${

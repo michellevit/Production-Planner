@@ -5,9 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import NotFound
 
-# Create your views here.
 
-class OrderView(APIView):
+class OrderListView(APIView):
     def get(self, request):
         orders = Order.objects.all()
         output = [
@@ -30,15 +29,25 @@ class OrderView(APIView):
             for order in orders
         ]
         return Response(output)
-    
+
     def post(self, request):
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
-           
+        
 
-class DeleteOrderView(APIView):
+
+class OrderDetailView(APIView):
+    def put(self, request, pk):
+        try:
+            order = Order.objects.get(pk=pk)
+            order.ready = not order.ready  # Toggle the ready status
+            order.save()
+            return Response({"message": "Ready status updated successfully."})
+        except Order.DoesNotExist:
+            raise NotFound(detail="Order not found")
+
     def delete(self, request, pk):
         try:
             order = Order.objects.get(pk=pk)
