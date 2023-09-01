@@ -137,13 +137,13 @@ const OrderCard = ({ order, orders, setOrders }) => {
         <table className="items-table">
           <tbody>
             <tr>
-              <th>Item</th>
+              <th id="item">Item</th>
               <th id="qty">Qty.</th>
             </tr>
             {Object.keys(order.item_subtype_dict).map((itemType, index) => (
               <tr key={index}>
-                <td>{itemType}</td>
-                <td className="qty">{order.item_subtype_dict[itemType]}</td>
+                <td id="item">{itemType}</td>
+                <td id="qty">{order.item_subtype_dict[itemType]}</td>
               </tr>
             ))}
           </tbody>

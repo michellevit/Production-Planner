@@ -173,10 +173,15 @@ input.delay-input {
   border-bottom: none; /* Remove the border from the last row */
 }
 
-.qty {
+#item {
+  text-align: left;
+  width: 90%;
+}
+
+#qty {
   text-align: center;
-  width: auto;
   font-weight: 700;
+  margin: auto;
 }
 
 .dimensions-container {
