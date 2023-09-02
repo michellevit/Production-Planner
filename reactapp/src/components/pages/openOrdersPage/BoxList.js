@@ -11,7 +11,8 @@ const BoxList = ({
   boxFormConfirmStatus,
   setBoxFormConfirmStatus,
   boxFormConfirmHandler,
-  readyStatus
+  readyStatus,
+  updatePackages,
 }) => {
   return (
     <div className="boxlist-container">
@@ -29,6 +30,7 @@ const BoxList = ({
               setBoxFormConfirmStatus={setBoxFormConfirmStatus}
               boxFormConfirmHandler={boxFormConfirmHandler}
               readyStatus={readyStatus}
+              updatePackages={updatePackages}
             />
           </div>
         ))}

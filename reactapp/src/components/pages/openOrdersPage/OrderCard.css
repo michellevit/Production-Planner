@@ -24,6 +24,10 @@
   background: #50c696;
 }
 
+.delayed-order-card {
+  background: #ff8f00;
+}
+
 .row {
   width: 400px;
   display: flex;

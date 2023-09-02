@@ -23,16 +23,21 @@ const OrderCard = ({ order, orders, setOrders }) => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/open-orders/${order.id}/`);
-        setReadyStatus(response.data.ready); 
-        setBoxes(response.data.packages_array)
-        setNotes(response.data.notes_array)
+        const response = await axios.get(
+          `http://127.0.0.1:8000/open-orders/${order.id}/`
+        );
+        if (response.data) {
+          setReadyStatus(response.data.ready);
+          setBoxes(response.data.packages_array);
+          setNotes(response.data.notes_array);
+        }
       } catch (error) {
         console.error("Error fetching order details:", error);
       }
     };
     fetchOrderDetails();
   }, [order.id]);
+
   const readyHandler = async () => {
     setReadyStatus((prevState) => !prevState);
     try {
@@ -41,7 +46,8 @@ const OrderCard = ({ order, orders, setOrders }) => {
         ready: !readyStatus,
         packages_array: boxes,
         notes_array: notes,
-        }
+      };
+      console.log("Ready?: ", !readyStatus);
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
@@ -53,7 +59,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
           boxFormConfirmHandler(true);
         }
       }
-     } catch (error) {
+    } catch (error) {
       console.error("Error updating ready status:", error);
     }
   };
@@ -81,12 +87,26 @@ const OrderCard = ({ order, orders, setOrders }) => {
       );
     }
   };
+  const updatePackages = async (boxes) => {
+    try {
+      const updatedOrder = {
+        ...order,
+        packages_array: boxes,
+      };
+      await axios.put(
+        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        updatedOrder
+      );
+    } catch (error) {
+      console.error("Error updating packages_array:", error);
+    }
+  };
 
   return (
     <div
-      className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
-        isRemoving ? "card-container-fade-out" : ""
-      }`}
+    className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
+      isRemoving ? "card-container-fade-out" : ""
+    } ${startDate ? "delayed-order-card" : ""}`}
     >
       {!readyStatus && (
         <div className="row" id="row1">
@@ -168,6 +188,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
             setBoxFormConfirmStatus={setBoxFormConfirmStatus}
             boxFormConfirmStatus={boxFormConfirmStatus}
             readyStatus={readyStatus}
+            updatePackages={updatePackages}
           />
           {boxes.length > 0 && (
             <BoxList
@@ -180,6 +201,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
               setBoxFormConfirmStatus={setBoxFormConfirmStatus}
               boxFormConfirmHandler={boxFormConfirmHandler}
               readyStatus={readyStatus}
+              updatePackages={updatePackages}
             />
           )}
         </div>
