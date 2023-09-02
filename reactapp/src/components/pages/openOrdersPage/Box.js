@@ -17,7 +17,8 @@ const Box = ({
   boxFormConfirmStatus,
   setBoxFormConfirmStatus,
   boxFormConfirmHandler,
-  readyStatus
+  readyStatus,
+  updatePackages,
 }) => {
   const upHandler = () => {
     const index = boxes.indexOf(box);
@@ -27,6 +28,7 @@ const Box = ({
       boxes[index] = temp;
       setBoxes(boxes.map((box) => box));
     }
+    updatePackages(boxes);
   };
   const downHandler = () => {
     const index = boxes.indexOf(box);
@@ -36,14 +38,17 @@ const Box = ({
       boxes[index] = temp;
       setBoxes(boxes.map((box) => box));
     }
+    updatePackages(boxes);
   };
   const deleteHandler = (e) => {
     let newBoxes = boxes.filter((el) => el.id !== box.id);
     setBoxes(newBoxes);
+    updatePackages(boxes);
   };
   const handleConfirmClick = () => {
     setBoxFormConfirmStatus(!boxFormConfirmStatus);
     boxFormConfirmHandler();
+    updatePackages(boxes);
   };
 
   return (
