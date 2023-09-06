@@ -14,9 +14,9 @@ const Box = ({
   boxes,
   setBoxes,
   buttonDisplay,
-  boxFormConfirmStatus,
-  setBoxFormConfirmStatus,
-  boxFormConfirmHandler,
+  boxConfirmStatus,
+  setBoxConfirmStatus,
+  boxConfirmHandler,
   readyStatus,
   updatePackages,
 }) => {
@@ -40,15 +40,19 @@ const Box = ({
     }
     updatePackages(boxes);
   };
-  const deleteHandler = (e) => {
-    let newBoxes = boxes.filter((el) => el.id !== box.id);
-    setBoxes(newBoxes);
-    updatePackages(boxes);
+  const deleteHandler = () => {
+    setBoxes((prevBoxes) => {
+      const newBoxes = prevBoxes.filter((el) => el.id !== box.id);
+      updatePackages(newBoxes);
+      return newBoxes;
+    });
   };
-  const handleConfirmClick = () => {
-    setBoxFormConfirmStatus(!boxFormConfirmStatus);
-    boxFormConfirmHandler();
-    updatePackages(boxes);
+  const confirmHandler = () => {
+    setBoxConfirmStatus((prevConfirmStatus) => {
+      const newConfirmStatus = !prevConfirmStatus;
+      boxConfirmHandler(newConfirmStatus);
+      return newConfirmStatus;
+    });
   };
 
   return (
@@ -58,24 +62,27 @@ const Box = ({
         {box.dimensions} - {box.weight} lb
       </div>
       {!readyStatus && (
-      <div className="dims-button-container">
-        {buttonDisplay && (
-          <div className="edit-buttons">
-            <button className="up-btn" onClick={upHandler}>
-              <FontAwesomeIcon icon={faArrowUp} />
-            </button>
-            <button className="down-btn" onClick={downHandler}>
-              <FontAwesomeIcon icon={faArrowDown} />
-            </button>
-            <button className="xmark-btn" onClick={deleteHandler}>
-              <FontAwesomeIcon icon={faClose} />
-            </button>
-          </div>
-        )}
-        <button className={boxFormConfirmStatus ? "edit-btn" : "check-btn"} onClick={handleConfirmClick}>
-          <FontAwesomeIcon icon={boxFormConfirmStatus ? faEdit : faCheck} />
-        </button>
-      </div>
+        <div className="dims-button-container">
+          {buttonDisplay && (
+            <div className="edit-buttons">
+              <button className="up-btn" onClick={upHandler}>
+                <FontAwesomeIcon icon={faArrowUp} />
+              </button>
+              <button className="down-btn" onClick={downHandler}>
+                <FontAwesomeIcon icon={faArrowDown} />
+              </button>
+              <button className="xmark-btn" onClick={deleteHandler}>
+                <FontAwesomeIcon icon={faClose} />
+              </button>
+            </div>
+          )}
+          <button
+            className={boxConfirmStatus ? "edit-btn" : "check-btn"}
+            onClick={confirmHandler}
+          >
+            <FontAwesomeIcon icon={boxConfirmStatus ? faEdit : faCheck} />
+          </button>
+        </div>
       )}
     </div>
   );

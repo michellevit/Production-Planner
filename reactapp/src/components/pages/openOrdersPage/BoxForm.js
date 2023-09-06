@@ -9,8 +9,7 @@ const BoxForm = ({
   setButtonDisplay,
   setBoxes,
   boxes,
-  boxFormConfirmStatus,
-  setBoxFormConfirmStatus,
+  setBoxConfirmStatus,
   readyStatus,
   updatePackages,
 }) => {
@@ -33,7 +32,7 @@ const BoxForm = ({
 
   const submitBoxHandler = (e) => {
     e.preventDefault();
-    setBoxFormConfirmStatus(false);
+    setBoxConfirmStatus(false);
     setFormDisplay(true);
     setButtonDisplay(true);
 
@@ -59,11 +58,11 @@ const BoxForm = ({
     updatePackages([...boxes, { dimensions, weight, id: uniqueId() }]);
   };
   useEffect(() => {
-    if (boxFormConfirmStatus) {
+    if (setBoxConfirmStatus) {
       setDimensions("");
       setWeight("");
     }
-  }, [boxFormConfirmStatus]);
+  }, [setBoxConfirmStatus]);
 
   useEffect(() => {
     if (readyStatus) {
