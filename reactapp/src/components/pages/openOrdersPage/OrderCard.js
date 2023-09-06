@@ -15,11 +15,11 @@ const OrderCard = ({ order, orders, setOrders }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [boxes, setBoxes] = useState([]);
-  const [formDisplay, setFormDisplay] = useState(true);
-  const [buttonDisplay, setButtonDisplay] = useState(true);
+  const [formDisplay, setFormDisplay] = useState([]);
+  const [buttonDisplay, setButtonDisplay] = useState([]);
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(order.ready);
-  const [boxFormConfirmStatus, setBoxFormConfirmStatus] = useState(false);
+  const [boxConfirmStatus, setBoxConfirmStatus] = useState([]);
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -27,9 +27,25 @@ const OrderCard = ({ order, orders, setOrders }) => {
           `http://127.0.0.1:8000/open-orders/${order.id}/`
         );
         if (response.data) {
-          setReadyStatus(response.data.ready);
-          setBoxes(response.data.packages_array);
-          setNotes(response.data.notes_array);
+          const { ready, packages_array, notes_array } = response.data;
+          const updatedBoxes = packages_array.map((box) => {
+            if (typeof box.boxConfirmStatus === "undefined") {
+              box.boxConfirmStatus = false;
+              setFormDisplay(true);
+            } else if (box.boxConfirmStatus) {
+              setFormDisplay(false);
+              setButtonDisplay(false);
+              setBoxConfirmStatus(true);
+            } else if (box.boxConfirmStatus === false) {
+              setFormDisplay(true);
+              setButtonDisplay(true);
+              setBoxConfirmStatus(false);
+            }
+            return box;
+          });
+          setReadyStatus(ready);
+          setBoxes(updatedBoxes);
+          setNotes(notes_array);
         }
       } catch (error) {
         console.error("Error fetching order details:", error);
@@ -37,54 +53,49 @@ const OrderCard = ({ order, orders, setOrders }) => {
     };
     fetchOrderDetails();
   }, [order.id]);
-
-  const readyHandler = async () => {
-    setReadyStatus((prevState) => !prevState);
-    try {
-      const updatedOrder = {
-        ...order,
-        ready: !readyStatus,
-        packages_array: boxes,
-        notes_array: notes,
-      };
-      console.log("Ready?: ", !readyStatus);
-      await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
-        updatedOrder
-      );
-      setReadyStatus(!readyStatus);
-      if (readyStatus) {
-        if (!boxFormConfirmStatus) {
-          setBoxFormConfirmStatus(true);
-          boxFormConfirmHandler(true);
-        }
-      }
-    } catch (error) {
-      console.error("Error updating ready status:", error);
+  const readyHandler = () => {
+    setReadyStatus((prevReadyStatus) => {
+      const newReadyStatus = !prevReadyStatus;
+      updateReadyStatus(newReadyStatus);
+      console.log(newReadyStatus);
+      return newReadyStatus;     
+    });
+    if (!boxConfirmStatus) {
+      setBoxConfirmStatus(true);
+      boxConfirmHandler(true);
     }
   };
-  const boxFormConfirmHandler = () => {
-    if (boxFormConfirmStatus) {
+  const boxConfirmHandler = (boxConfirmStatus) => {
+    if (boxConfirmStatus) {
+      setFormDisplay(false);
+      setButtonDisplay(false);
+      handleBoxConfirmStatus(true);
+    } else {
+      setFormDisplay(true);
       setFormDisplay(true);
       setButtonDisplay(true);
-      handleBoxFormConfirmStatus(false);
-    } else {
-      if (boxes.length === 0) {
-        setFormDisplay(true);
-      } else {
-        setFormDisplay(false);
-        setButtonDisplay(false);
-        handleBoxFormConfirmStatus(true);
-      }
+      handleBoxConfirmStatus(false);
     }
   };
-  const handleBoxFormConfirmStatus = () => {
-    if (boxFormConfirmStatus) {
-      setBoxes(boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: true })));
+  const handleBoxConfirmStatus = (boxConfirmStatus) => {
+    if (boxConfirmStatus) {
+      setBoxes((prevBoxes) => {
+        const newBoxes = prevBoxes.map((box) => ({
+          ...box,
+          boxConfirmStatus: true,
+        }));
+        updatePackages(newBoxes);
+        return newBoxes;
+      });
     } else {
-      setBoxes(
-        boxes.map((box) => ({ ...box, setBoxFormConfirmStatus: false }))
-      );
+      setBoxes((prevBoxes) => {
+        const newBoxes = prevBoxes.map((box) => ({
+          ...box,
+          boxConfirmStatus: false,
+        }));
+        updatePackages(newBoxes);
+        return newBoxes;
+      });
     }
   };
   const updatePackages = async (boxes) => {
@@ -98,15 +109,28 @@ const OrderCard = ({ order, orders, setOrders }) => {
         updatedOrder
       );
     } catch (error) {
-      console.error("Error updating packages_array:", error);
+      console.error("Error updating order:", error);
     }
   };
-
+  const updateReadyStatus = async (readyStatus) => {
+    try {
+      const updatedOrder = {
+        ...order,
+        ready: readyStatus,
+      };
+      await axios.put(
+        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        updatedOrder
+      );
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
   return (
     <div
-    className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
-      isRemoving ? "card-container-fade-out" : ""
-    } ${startDate ? "delayed-order-card" : ""}`}
+      className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
+        isRemoving ? "card-container-fade-out" : ""
+      } ${startDate ? "delayed-order-card" : ""}`}
     >
       {!readyStatus && (
         <div className="row" id="row1">
@@ -185,8 +209,8 @@ const OrderCard = ({ order, orders, setOrders }) => {
             setButtonDisplay={setButtonDisplay}
             setBoxes={setBoxes}
             boxes={boxes}
-            setBoxFormConfirmStatus={setBoxFormConfirmStatus}
-            boxFormConfirmStatus={boxFormConfirmStatus}
+            boxConfirmStatus={boxConfirmStatus}
+            setBoxConfirmStatus={setBoxConfirmStatus}
             readyStatus={readyStatus}
             updatePackages={updatePackages}
           />
@@ -197,9 +221,9 @@ const OrderCard = ({ order, orders, setOrders }) => {
               setFormDisplay={setFormDisplay}
               buttonDisplay={buttonDisplay}
               setButtonDisplay={setButtonDisplay}
-              boxFormConfirmStatus={boxFormConfirmStatus}
-              setBoxFormConfirmStatus={setBoxFormConfirmStatus}
-              boxFormConfirmHandler={boxFormConfirmHandler}
+              boxConfirmStatus={boxConfirmStatus}
+              setBoxConfirmStatus={setBoxConfirmStatus}
+              boxConfirmHandler={boxConfirmHandler}
               readyStatus={readyStatus}
               updatePackages={updatePackages}
             />
