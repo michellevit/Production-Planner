@@ -9,6 +9,7 @@ const BoxForm = ({
   setButtonDisplay,
   setBoxes,
   boxes,
+  boxConfirmStatus,
   setBoxConfirmStatus,
   readyStatus,
   updatePackages,
@@ -58,11 +59,11 @@ const BoxForm = ({
     updatePackages([...boxes, { dimensions, weight, id: uniqueId() }]);
   };
   useEffect(() => {
-    if (setBoxConfirmStatus) {
+    if (boxConfirmStatus) {
       setDimensions("");
       setWeight("");
     }
-  }, [setBoxConfirmStatus]);
+  }, [boxConfirmStatus]);
 
   useEffect(() => {
     if (readyStatus) {

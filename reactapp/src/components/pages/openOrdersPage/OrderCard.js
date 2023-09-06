@@ -57,7 +57,8 @@ const OrderCard = ({ order, orders, setOrders }) => {
     setReadyStatus((prevReadyStatus) => {
       const newReadyStatus = !prevReadyStatus;
       updateReadyStatus(newReadyStatus);
-      return newReadyStatus;
+      console.log(newReadyStatus);
+      return newReadyStatus;     
     });
     if (!boxConfirmStatus) {
       setBoxConfirmStatus(true);
@@ -208,8 +209,8 @@ const OrderCard = ({ order, orders, setOrders }) => {
             setButtonDisplay={setButtonDisplay}
             setBoxes={setBoxes}
             boxes={boxes}
-            setBoxConfirmStatus={setBoxConfirmStatus}
             boxConfirmStatus={boxConfirmStatus}
+            setBoxConfirmStatus={setBoxConfirmStatus}
             readyStatus={readyStatus}
             updatePackages={updatePackages}
           />
