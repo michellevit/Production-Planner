@@ -12,7 +12,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'backorder',
             'backorder_number',
             'ship_date',
-            "delay",
+            "delay_date",
             'customer_name',
             'item_type_dict',
             'item_subtype_dict',
