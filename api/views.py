@@ -19,7 +19,7 @@ class OrderListView(APIView):
                 "backorder": order.backorder,
                 "backorder_number": order.backorder_number,
                 "ship_date": order.ship_date,
-                "delay": order.delay,
+                "delay_date": order.delay_date,
                 "item_type_dict": order.item_type_dict,
                 "item_subtype_dict": order.item_subtype_dict,
                 "packages_array": order.packages_array,
@@ -51,6 +51,8 @@ class OrderDetailView(APIView):
         try:
             order = Order.objects.get(pk=pk)
             order.ready = not order.ready
+            if 'delay_date' in request.data and request.data['delay_date'] is not None:
+                order.delay_date = request.data['delay_date']
             if 'packages_array' in request.data:
                 order.packages_array = request.data['packages_array']
             if 'notes_array' in request.data:

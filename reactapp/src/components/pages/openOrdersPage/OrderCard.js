@@ -13,12 +13,12 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const OrderCard = ({ order, orders, setOrders }) => {
   const [isRemoving, setIsRemoving] = useState(false);
-  const [startDate, setStartDate] = useState(null);
+  const [delayDate, setDelayDate] = useState(null);
   const [boxes, setBoxes] = useState([]);
   const [formDisplay, setFormDisplay] = useState([]);
   const [buttonDisplay, setButtonDisplay] = useState([]);
   const [notes, setNotes] = useState([]);
-  const [readyStatus, setReadyStatus] = useState(order.ready);
+  const [readyStatus, setReadyStatus] = useState();
   const [boxConfirmStatus, setBoxConfirmStatus] = useState([]);
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -27,7 +27,8 @@ const OrderCard = ({ order, orders, setOrders }) => {
           `http://127.0.0.1:8000/open-orders/${order.id}/`
         );
         if (response.data) {
-          const { ready, packages_array, notes_array } = response.data;
+          const { ready, delay_date, packages_array, notes_array } =
+            response.data;
           const updatedBoxes = packages_array.map((box) => {
             if (typeof box.boxConfirmStatus === "undefined") {
               box.boxConfirmStatus = false;
@@ -44,6 +45,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
             return box;
           });
           setReadyStatus(ready);
+          setDelayDate(delay_date);
           setBoxes(updatedBoxes);
           setNotes(notes_array);
         }
@@ -53,16 +55,17 @@ const OrderCard = ({ order, orders, setOrders }) => {
     };
     fetchOrderDetails();
   }, [order.id]);
-  const readyHandler = () => {
-    setReadyStatus((prevReadyStatus) => {
-      const newReadyStatus = !prevReadyStatus;
-      updateReadyStatus(newReadyStatus);
-      console.log(newReadyStatus);
-      return newReadyStatus;     
-    });
-    if (!boxConfirmStatus) {
-      setBoxConfirmStatus(true);
-      boxConfirmHandler(true);
+  const readyHandler = async () => {
+    try {
+      const newReadyStatus = !readyStatus;
+        await updateReadyStatus(newReadyStatus);
+        setReadyStatus(newReadyStatus);
+      if (!boxConfirmStatus) {
+        setBoxConfirmStatus(true);
+        boxConfirmHandler(true);
+      }
+    } catch (error) {
+      console.error("Error updating ready status:", error);
     }
   };
   const boxConfirmHandler = (boxConfirmStatus) => {
@@ -113,6 +116,10 @@ const OrderCard = ({ order, orders, setOrders }) => {
     }
   };
   const updateReadyStatus = async (readyStatus) => {
+    if (readyStatus) {
+      updateDelayDate(null);
+      console.log('hi');
+    }
     try {
       const updatedOrder = {
         ...order,
@@ -126,12 +133,28 @@ const OrderCard = ({ order, orders, setOrders }) => {
       console.error("Error updating order:", error);
     }
   };
+  const updateDelayDate = async (date) => {
+    try {
+      const formattedDate = date ? date.toISOString() : null;
+      const updatedOrder = {
+        ...order,
+        delay_date: formattedDate,
+      };
+      await axios.put(
+        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        updatedOrder
+      );
+      setDelayDate(date);
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
   return (
-    <div
-      className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
-        isRemoving ? "card-container-fade-out" : ""
-      } ${startDate ? "delayed-order-card" : ""}`}
-    >
+  <div
+  className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
+    isRemoving ? "card-container-fade-out" : ""
+  } ${delayDate !== null && !readyStatus ? "delayed-order-card" : ""}`}
+  >
       {!readyStatus && (
         <div className="row" id="row1">
           <DeleteButton
@@ -166,8 +189,8 @@ const OrderCard = ({ order, orders, setOrders }) => {
                   <DatePicker
                     showIcon
                     placeholderText="n/a"
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
+                    selected={null}
+                    onChange={(date) => { setDelayDate(date); updateDelayDate(date);}}
                     isClearable
                     className="delay-input"
                   />
