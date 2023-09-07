@@ -29,6 +29,10 @@ const OrderCard = ({ order, orders, setOrders }) => {
         if (response.data) {
           const { ready, delay_date, packages_array, notes_array } =
             response.data;
+          const formattedDelayDate = delay_date
+            ? new Date(`${delay_date}T00:00:00-07:00`)
+            : null;
+          setDelayDate(formattedDelayDate);
           const updatedBoxes = packages_array.map((box) => {
             if (typeof box.boxConfirmStatus === "undefined") {
               box.boxConfirmStatus = false;
@@ -45,7 +49,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
             return box;
           });
           setReadyStatus(ready);
-          setDelayDate(delay_date);
           setBoxes(updatedBoxes);
           setNotes(notes_array);
         }
@@ -116,9 +119,10 @@ const OrderCard = ({ order, orders, setOrders }) => {
     }
   };
   const updateReadyStatus = async (readyStatus) => {
+    console.log("updateReadyStatus - Ready? ", readyStatus);
     if (readyStatus) {
       updateDelayDate(null);
-      console.log('hi');
+      setDelayDate(null);
     }
     try {
       const updatedOrder = {
@@ -135,7 +139,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
   };
   const updateDelayDate = async (date) => {
     try {
-      const formattedDate = date ? date.toISOString() : null;
+      const formattedDate = date ? date.toISOString().split('T')[0] : null;
       const updatedOrder = {
         ...order,
         delay_date: formattedDate,
@@ -144,11 +148,11 @@ const OrderCard = ({ order, orders, setOrders }) => {
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
       );
-      setDelayDate(date);
     } catch (error) {
       console.error("Error updating order:", error);
     }
   };
+
   return (
   <div
   className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
@@ -189,7 +193,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
                   <DatePicker
                     showIcon
                     placeholderText="n/a"
-                    selected={null}
+                    selected={delayDate}
                     onChange={(date) => { setDelayDate(date); updateDelayDate(date);}}
                     isClearable
                     className="delay-input"

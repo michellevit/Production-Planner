@@ -51,8 +51,12 @@ class OrderDetailView(APIView):
         try:
             order = Order.objects.get(pk=pk)
             order.ready = not order.ready
-            if 'delay_date' in request.data and request.data['delay_date'] is not None:
-                order.delay_date = request.data['delay_date']
+            if 'delay_date' in request.data:
+                delay_date = request.data['delay_date']
+            if delay_date is None:
+                order.delay_date = None
+            else:
+                order.delay_date = delay_date
             if 'packages_array' in request.data:
                 order.packages_array = request.data['packages_array']
             if 'notes_array' in request.data:
