@@ -61,11 +61,14 @@ const OrderCard = ({ order, orders, setOrders }) => {
   const readyHandler = async () => {
     try {
       const newReadyStatus = !readyStatus;
-        await updateReadyStatus(newReadyStatus);
-        setReadyStatus(newReadyStatus);
+      await updateReadyStatus(newReadyStatus);
+      await setReadyStatus(newReadyStatus);
       if (!boxConfirmStatus) {
         setBoxConfirmStatus(true);
-        boxConfirmHandler(true);
+        await boxConfirmHandler(true);
+      }
+      if (newReadyStatus) {
+        await updateDelayDate(null);
       }
     } catch (error) {
       console.error("Error updating ready status:", error);
@@ -77,7 +80,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
       setButtonDisplay(false);
       handleBoxConfirmStatus(true);
     } else {
-      setFormDisplay(true);
       setFormDisplay(true);
       setButtonDisplay(true);
       handleBoxConfirmStatus(false);
@@ -123,7 +125,9 @@ const OrderCard = ({ order, orders, setOrders }) => {
     if (readyStatus) {
       updateDelayDate(null);
       setDelayDate(null);
+      console.log("OK");
     }
+    console.log(delayDate)
     try {
       const updatedOrder = {
         ...order,
