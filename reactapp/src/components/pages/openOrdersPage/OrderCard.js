@@ -13,26 +13,23 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const OrderCard = ({ order, orders, setOrders }) => {
   const [isRemoving, setIsRemoving] = useState(false);
-  const [delayDate, setDelayDate] = useState(null);
+  const [delayDate, setDelayDate] = useState();
   const [boxes, setBoxes] = useState([]);
+  const [boxConfirmStatus, setBoxConfirmStatus] = useState([]);
   const [formDisplay, setFormDisplay] = useState([]);
   const [buttonDisplay, setButtonDisplay] = useState([]);
   const [notes, setNotes] = useState([]);
-  const [readyStatus, setReadyStatus] = useState();
-  const [boxConfirmStatus, setBoxConfirmStatus] = useState([]);
+  const [readyStatus, setReadyStatus] = useState(false);
   useEffect(() => {
     const fetchOrderDetails = async () => {
+      console.log("Fetch Order Details 1");
       try {
         const response = await axios.get(
           `http://127.0.0.1:8000/open-orders/${order.id}/`
         );
         if (response.data) {
-          const { ready, delay_date, packages_array, notes_array } =
+          const { order_number, ready, delay_date, packages_array, notes_array } =
             response.data;
-          const formattedDelayDate = delay_date
-            ? new Date(`${delay_date}T00:00:00-07:00`)
-            : null;
-          setDelayDate(formattedDelayDate);
           const updatedBoxes = packages_array.map((box) => {
             if (typeof box.boxConfirmStatus === "undefined") {
               box.boxConfirmStatus = false;
@@ -46,11 +43,18 @@ const OrderCard = ({ order, orders, setOrders }) => {
               setButtonDisplay(true);
               setBoxConfirmStatus(false);
             }
-            return box;
+            return box;                        
           });
-          setReadyStatus(ready);
           setBoxes(updatedBoxes);
           setNotes(notes_array);
+          console.log("Fetch Order Details 2");
+          console.log("order.order_number: ", order_number);
+          console.log("order.ready: ", ready);
+          setReadyStatus(ready);
+          const formattedDelayDate = delay_date
+            ? new Date(`${delay_date}T00:00:00-07:00`)
+            : null;
+          setDelayDate(formattedDelayDate);
         }
       } catch (error) {
         console.error("Error fetching order details:", error);
@@ -58,10 +62,27 @@ const OrderCard = ({ order, orders, setOrders }) => {
     };
     fetchOrderDetails();
   }, [order.id]);
+
+  useEffect(() => {
+    if (typeof readyStatus !== "undefined") {
+      console.log("useEffect()");
+      console.log("order.order_number", order.order_number);
+      console.log("readyStatus: ", readyStatus);
+      console.log("order.ready: ", order.ready);
+      if (readyStatus !== order.ready) {
+        console.log("updated");
+        updateReadyStatus(readyStatus);
+      }
+      else {
+        console.log("not updated");
+      }
+    }
+  }, [readyStatus]);
+
   const readyHandler = async () => {
+    console.log("readyHandler()");
     try {
       const newReadyStatus = !readyStatus;
-      await updateReadyStatus(newReadyStatus);
       await setReadyStatus(newReadyStatus);
       if (!boxConfirmStatus) {
         setBoxConfirmStatus(true);
@@ -72,9 +93,11 @@ const OrderCard = ({ order, orders, setOrders }) => {
       }
     } catch (error) {
       console.error("Error updating ready status:", error);
+
     }
   };
   const boxConfirmHandler = (boxConfirmStatus) => {
+    console.log("boxConfirmHandler()");
     if (boxConfirmStatus) {
       setFormDisplay(false);
       setButtonDisplay(false);
@@ -86,6 +109,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
     }
   };
   const handleBoxConfirmStatus = (boxConfirmStatus) => {
+    console.log("handleBoxConfirmHandler()");
     if (boxConfirmStatus) {
       setBoxes((prevBoxes) => {
         const newBoxes = prevBoxes.map((box) => ({
@@ -107,6 +131,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
     }
   };
   const updatePackages = async (boxes) => {
+    console.log("updatePackages()");
     try {
       const updatedOrder = {
         ...order,
@@ -121,13 +146,9 @@ const OrderCard = ({ order, orders, setOrders }) => {
     }
   };
   const updateReadyStatus = async (readyStatus) => {
-    console.log("updateReadyStatus - Ready? ", readyStatus);
-    if (readyStatus) {
-      updateDelayDate(null);
-      setDelayDate(null);
-      console.log("OK");
-    }
-    console.log(delayDate)
+    console.log("updateReadyStatus()");
+    console.log("OLD order.ready", order.ready);
+      console.log("OLD readyStatus: ", readyStatus);
     try {
       const updatedOrder = {
         ...order,
@@ -137,11 +158,16 @@ const OrderCard = ({ order, orders, setOrders }) => {
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
       );
+      console.log("NEW: order.ready", order.ready);
+      console.log("NEW: readyStatus: ", readyStatus);
     } catch (error) {
       console.error("Error updating order:", error);
     }
   };
+
+
   const updateDelayDate = async (date) => {
+    console.log("updateDelayDate()");
     try {
       const formattedDate = date ? date.toISOString().split('T')[0] : null;
       const updatedOrder = {
