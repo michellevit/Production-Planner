@@ -50,13 +50,10 @@ class OrderDetailView(APIView):
     def put(self, request, pk):
         try:
             order = Order.objects.get(pk=pk)
-            order.ready = not order.ready
+            if 'ready' in request.data:
+                order.ready = request.data['ready']
             if 'delay_date' in request.data:
-                delay_date = request.data['delay_date']
-            if delay_date is None:
-                order.delay_date = None
-            else:
-                order.delay_date = delay_date
+                order.delay_date = request.data['delay_date']
             if 'packages_array' in request.data:
                 order.packages_array = request.data['packages_array']
             if 'notes_array' in request.data:
@@ -72,3 +69,4 @@ class OrderDetailView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Order.DoesNotExist:
             raise NotFound(detail="Order not found")
+        
