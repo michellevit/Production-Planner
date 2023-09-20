@@ -34,21 +34,23 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
             packages_array,
             notes_array,
           } = response.data;
-          const updatedBoxes = packages_array.map((box) => {
-            if (typeof box.boxConfirmStatus === "undefined") {
-              box.boxConfirmStatus = false;
-              setFormDisplay(true);
-            } else if (box.boxConfirmStatus) {
-              setFormDisplay(false);
-              setButtonDisplay(false);
-              setBoxConfirmStatus(true);
-            } else if (box.boxConfirmStatus === false) {
-              setFormDisplay(true);
-              setButtonDisplay(true);
-              setBoxConfirmStatus(false);
-            }
-            return box;
-          });
+          const updatedBoxes = Array.isArray(packages_array)
+          ? packages_array.map((box) => {
+              if (typeof box.boxConfirmStatus === "undefined") {
+                box.boxConfirmStatus = false;
+                setFormDisplay(true);
+              } else if (box.boxConfirmStatus) {
+                setFormDisplay(false);
+                setButtonDisplay(false);
+                setBoxConfirmStatus(true);
+              } else if (box.boxConfirmStatus === false) {
+                setFormDisplay(true);
+                setButtonDisplay(true);
+                setBoxConfirmStatus(false);
+              }
+              return box;
+            })
+          : [];
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);

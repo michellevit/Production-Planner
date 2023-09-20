@@ -4,33 +4,36 @@ import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import NoteItem from "./NoteItem";
 import "./NoteList.css";
 
-
 const NoteList = ({ readyStatus, notes, setNotes, updateNotes }) => {
   const [note, setNote] = useState("");
+
   useEffect(() => {
     if (readyStatus) {
       setNote("");
     }
   }, [readyStatus]);
+
   const inputNoteHandler = (e) => {
     setNote(e.target.value);
   };
+
   const submitNoteHandler = (e) => {
     e.preventDefault();
     if (note === "") {
       return false;
     }
     const updatedNotes = [
-      ...notes,
+      ...(Array.isArray(notes) ? notes : []),
       {
         id: Date.now(),
         noteText: note,
       },
     ];
-    setNotes(updatedNotes)
+    setNotes(updatedNotes);
     updateNotes(updatedNotes);
     setNote("");
   };
+
   return (
     <div className="noteform-container">
       {!readyStatus && (
@@ -47,24 +50,24 @@ const NoteList = ({ readyStatus, notes, setNotes, updateNotes }) => {
           </button>
         </form>
       )}
-        <div className="notelist-container">
-            <ul className="notelist">
-            {notes.map((note, index) => (
-                <div key={index} className="noteitem-container">
+      <div className="notelist-container">
+        <ul className="notelist">
+          {Array.isArray(notes) &&
+            notes.map((note, index) => (
+              <div key={index} className="noteitem-container">
                 <NoteItem
-                    note={note}
-                    notes={notes}
-                    setNotes={setNotes}
-                    readyStatus={readyStatus}
-                    updateNotes={updateNotes}
+                  note={note}
+                  notes={notes}
+                  setNotes={setNotes}
+                  readyStatus={readyStatus}
+                  updateNotes={updateNotes}
                 />
-                </div>
+              </div>
             ))}
-            </ul>
-        </div>
+        </ul>
+      </div>
     </div>
   );
 };
 
 export default NoteList;
-
