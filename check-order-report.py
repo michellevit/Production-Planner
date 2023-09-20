@@ -26,7 +26,7 @@ def update_orders_dict(new_order):
         existing_orders = Order.objects.filter(order_number=new_order.order_number)
         for existing_order in existing_orders:
             if (
-                existing_order.archived
+                existing_order.shipped
                 and existing_order.item_type_dict == new_order.item_type_dict
             ):
                 new_order.backorder = True
@@ -132,10 +132,10 @@ def sort_workbook(sheet):
                             item_subtype_dict[item_subtype] = next_row[8].value
                         new_order = Order(
                             order_number=next_row[4].value,
-                            backorder="",
+                            backorder=False,
                             backorder_number="",
                             ship_date=next_row[2].value,
-                            delay="",
+                            delay_date=None,
                             customer_name=next_row[6].value,
                             item_type_dict=item_type_dict,
                             item_subtype_dict=item_subtype_dict,
@@ -149,6 +149,9 @@ def sort_workbook(sheet):
 
 find_workbooks()
 
+####################################
+
+## Delete data in Order table
 
 # def delete_unnecessary_entries():
 #     Order.objects.all().delete()
