@@ -2,7 +2,12 @@ from django.db import models
 from django.utils import timezone
 
 
-# Create your models here.
+class OrderManager(models.Manager):
+    def open_orders(self):
+        return self.filter(shipped=False)
+    def closed_orders(self):
+        return self.filter(shipped=True)
+
 class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -18,6 +23,8 @@ class Order(models.Model):
     notes_array = models.JSONField(default=list, null=True, blank=True)
     ready = models.BooleanField(default=False)
     shipped = models.BooleanField(default=False)
+
+    objects = OrderManager()
 
     def __str__(self):
         return self.order_number[0:50]

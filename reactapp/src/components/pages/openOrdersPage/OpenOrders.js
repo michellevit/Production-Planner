@@ -3,13 +3,19 @@ import axios from 'axios';
 import "./OpenOrders.css";
 import OrderCard from "./OrderCard";
 
-const Order = () => {
-  const [orders, setOrders] = useState([]);
-
+const OpenOrders = () => {
+  const [openOrders, setOpenOrders] = useState([]);
+  const [currentDate, setCurrentDate] = useState("");
+  useEffect(() => {
+    const options = { weekday: "long", month: "long", day: "numeric" };
+    const formattedDate = new Date().toLocaleDateString(undefined, options);
+    setCurrentDate(formattedDate);
+  }, []);
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/open-orders/')
       .then(response => {
-        setOrders(response.data);
+        const filteredOpenOrders = response.data.filter(order => !order.shipped);
+        setOpenOrders(filteredOpenOrders);
       })
       .catch(error => {
         console.error('Error getting data', error);
@@ -18,15 +24,19 @@ const Order = () => {
 
   return (
     <div className="order-cards-area">
-      {orders.map(order => (
+      <header>
+        <h1>Open Orders</h1>
+      </header>
+      <h2>{currentDate}</h2>
+      {openOrders.map(order => (
         <OrderCard 
         key={order.id} 
         order={order}
-        orders={orders}
-        setOrders={setOrders} />
+        openOrders={openOrders}
+        setOrders={setOpenOrders} />
       ))}
     </div>
   );
 };
 
-export default Order;
+export default OpenOrders;

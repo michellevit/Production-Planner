@@ -12,7 +12,7 @@ import ShippedButton from "./ShippedButton";
 import "./OrderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
 
-const OrderCard = ({ order, orders, setOrders }) => {
+const OrderCard = ({ order, openOrders, setOrders }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [delayDate, setDelayDate] = useState();
   const [boxes, setBoxes] = useState([]);
@@ -23,7 +23,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
   const [readyStatus, setReadyStatus] = useState(false);
   useEffect(() => {
     const fetchOrderDetails = async () => {
-      console.log("useEffect()");
       try {
         const response = await axios.get(
           `http://127.0.0.1:8000/open-orders/${order.id}/`
@@ -64,8 +63,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
   }, [order.id]);
 
   const readyHandler = async () => {  
-    console.log('readyHandler()')
-    console.log('Notes: ', notes);
     setReadyStatus(true);
     setBoxConfirmStatus(true);
     boxConfirmHandler(true);
@@ -73,7 +70,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
     const updatedOrder = order;
     updatedOrder.ready = true;
     updatedOrder.delay_date = null;
-    console.log("updatedOrder: ", updatedOrder);
     try {
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
@@ -85,7 +81,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
   };
 
   const editHandler = async () => {
-    console.log("editHandler()");
     setReadyStatus(false);
     const updatedOrder = order;
     updatedOrder.ready = false;
@@ -98,6 +93,34 @@ const OrderCard = ({ order, orders, setOrders }) => {
       console.error("Error updating order:", error);
     }
   };
+
+  const shippedHandler = async () => {  
+    console.log("shippedHandler()")
+    const shippedOrderID = order.id;
+    const updatedOrder = order;
+    updatedOrder.shipped = true;
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedCurrentDate = `${year}-${month}-${day}`;
+    updatedOrder.ship_date = formattedCurrentDate;
+    try {
+      await axios.put(
+        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        updatedOrder
+      );
+      setIsRemoving(true);
+      console.log("orders: ", openOrders)
+      setTimeout(() => {
+        setOrders(openOrders.filter((orderItem) => orderItem.id !== shippedOrderID));
+        setIsRemoving(false);
+      }, 300);
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
+
   const updateDelayDate = async (date) => {
     console.log("updateDelayDate()");
     try {
@@ -113,8 +136,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
     }
   };
   const boxConfirmHandler = (boxConfirmStatus) => {
-    console.log("boxConfirmHandler()");
-    console.log('Notes: ', notes);
     if (boxConfirmStatus) {
       setFormDisplay(false);
       setButtonDisplay(false);
@@ -128,8 +149,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
   };
 
   const handleBoxConfirmStatus = (boxConfirmStatus) => {
-    console.log("handleBoxConfirmHandler()");
-    console.log('Notes: ', notes);
     if (boxConfirmStatus) {
       setBoxes((prevBoxes) => {
         const newBoxes = prevBoxes.map((box) => ({
@@ -151,8 +170,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
     }
   };
   const updatePackages = async (boxes) => {
-    console.log("updatePackages()");
-    console.log('Notes: ', notes);
     try {
       const updatedOrder = order;
       updatedOrder.packages_array = boxes;
@@ -165,7 +182,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
     }
   };
   const updateNotes = async (newNotes) => {
-    console.log("updateNotes()");
     try {
       const updatedOrder = order;
       updatedOrder.notes_array = newNotes;
@@ -189,7 +205,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
           <DeleteButton
             readyStatus={readyStatus}
             order={order}
-            orders={orders}
+            openOrders={openOrders}
             setOrders={setOrders}
             setIsRemoving={setIsRemoving}
           />
@@ -301,7 +317,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
         <div className="row7-buttons-container">
           {!readyStatus && <ReadyButton readyHandler={readyHandler} />}
           {readyStatus && <EditButton editHandler={editHandler} />}
-          {readyStatus && <ShippedButton />}
+          {readyStatus && <ShippedButton shippedHandler={shippedHandler} setIsRemoving={setIsRemoving} />}
         </div>
       </div>
     </div>

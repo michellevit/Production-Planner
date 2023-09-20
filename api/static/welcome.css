@@ -20,7 +20,6 @@ a:hover {
 
 button {
     color: white;
-    background: lightblue;
     padding: 20px;
     font-weight: bold;
     font-size: 1.5em;
@@ -28,7 +27,7 @@ button {
 
 button:hover {
     background: white;
-    color: lightblue !important;
+    opacity: 50%;
 }
 
 #main {
@@ -38,4 +37,29 @@ button:hover {
     min-height: 100vh;
     flex-direction: column;
     margin-top: 100px;
+}
+
+
+.open {
+    background: lightblue;
+}
+
+.closed {
+    background: pink;
+}
+
+.all {
+    background: grey;
+}
+
+.all:hover {
+    color: grey;
+}
+
+.open:hover {
+    color: lightblue;
+}
+
+.closed:hover {
+    color: pink;
 }

@@ -7,18 +7,8 @@ import "./App.css";
 import OpenOrders from "./components/pages/openOrdersPage/OpenOrders";
 
 function App() {
-  const [currentDate, setCurrentDate] = useState("");
-  useEffect(() => {
-    const options = { weekday: "long", month: "long", day: "numeric" };
-    const formattedDate = new Date().toLocaleDateString(undefined, options);
-    setCurrentDate(formattedDate);
-  }, []);
   return (
     <div className="App">
-      <header>
-        <h1>Open Orders</h1>
-      </header>
-      <h2>{currentDate}</h2>
         <OpenOrders />
     </div>
   );
