@@ -30,7 +30,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
         );
         if (response.data) {
           const {
-            order_number,
             ready,
             delay_date,
             packages_array,
@@ -53,10 +52,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
           });
           setBoxes(updatedBoxes);
           setNotes(notes_array);
-          console.log("fetchOrderDetails: order.order_number: ", order_number);
-          console.log("fetchOrderDetails: order.ready: ", ready);
           setReadyStatus(ready);
-          console.log("fetchOrderDetails: readyStatus: ", readyStatus);
           const formattedDelayDate = delay_date ? parseISO(delay_date) : null;
           setDelayDate(formattedDelayDate);
         }
@@ -67,8 +63,9 @@ const OrderCard = ({ order, orders, setOrders }) => {
     fetchOrderDetails();
   }, [order.id]);
 
-  const readyHandler = async () => {
-    console.log("readyHandler()");
+  const readyHandler = async () => {  
+    console.log('readyHandler()')
+    console.log('Notes: ', notes);
     setReadyStatus(true);
     setBoxConfirmStatus(true);
     boxConfirmHandler(true);
@@ -76,6 +73,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
     const updatedOrder = order;
     updatedOrder.ready = true;
     updatedOrder.delay_date = null;
+    console.log("updatedOrder: ", updatedOrder);
     try {
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
@@ -89,7 +87,6 @@ const OrderCard = ({ order, orders, setOrders }) => {
   const editHandler = async () => {
     console.log("editHandler()");
     setReadyStatus(false);
-    setDelayDate(null);
     const updatedOrder = order;
     updatedOrder.ready = false;
     try {
@@ -101,9 +98,23 @@ const OrderCard = ({ order, orders, setOrders }) => {
       console.error("Error updating order:", error);
     }
   };
-
+  const updateDelayDate = async (date) => {
+    console.log("updateDelayDate()");
+    try {
+      const formattedDate = date ? date.toISOString().split("T")[0] : null;
+      const updatedOrder = order;
+      updatedOrder.delay_date = formattedDate;
+      await axios.put(
+        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        updatedOrder
+      );
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
   const boxConfirmHandler = (boxConfirmStatus) => {
     console.log("boxConfirmHandler()");
+    console.log('Notes: ', notes);
     if (boxConfirmStatus) {
       setFormDisplay(false);
       setButtonDisplay(false);
@@ -118,6 +129,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
 
   const handleBoxConfirmStatus = (boxConfirmStatus) => {
     console.log("handleBoxConfirmHandler()");
+    console.log('Notes: ', notes);
     if (boxConfirmStatus) {
       setBoxes((prevBoxes) => {
         const newBoxes = prevBoxes.map((box) => ({
@@ -140,11 +152,10 @@ const OrderCard = ({ order, orders, setOrders }) => {
   };
   const updatePackages = async (boxes) => {
     console.log("updatePackages()");
+    console.log('Notes: ', notes);
     try {
-      const updatedOrder = {
-        ...order,
-        packages_array: boxes,
-      };
+      const updatedOrder = order;
+      updatedOrder.packages_array = boxes;
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
@@ -153,15 +164,12 @@ const OrderCard = ({ order, orders, setOrders }) => {
       console.error("Error updating order:", error);
     }
   };
-  const updateDelayDate = async (date) => {
-    console.log("updateDelayDate()");
-    console.log("updateDelayDate(): date: ", date);
+  const updateNotes = async (newNotes) => {
+    console.log("updateNotes()");
     try {
-      const formattedDate = date ? date.toISOString().split("T")[0] : null;
-      const updatedOrder = {
-        ...order,
-        delay_date: formattedDate,
-      };
+      const updatedOrder = order;
+      updatedOrder.notes_array = newNotes;
+      console.log("Sending updatedOrder:", updatedOrder);
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
@@ -169,10 +177,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
     } catch (error) {
       console.error("Error updating order:", error);
     }
-    console.log("updateDelayDate() - delayDate: ", delayDate);
-    console.log("updateDelayDate() - order.delay_date: ", order.delay_date);
   };
-
   return (
     <div
       className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
@@ -287,6 +292,7 @@ const OrderCard = ({ order, orders, setOrders }) => {
               readyStatus={readyStatus}
               notes={notes}
               setNotes={setNotes}
+              updateNotes={updateNotes}
             />
           </div>
         </div>

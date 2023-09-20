@@ -5,7 +5,7 @@ import NoteItem from "./NoteItem";
 import "./NoteList.css";
 
 
-const NoteList = ({ readyStatus, notes, setNotes }) => {
+const NoteList = ({ readyStatus, notes, setNotes, updateNotes }) => {
   const [note, setNote] = useState("");
   useEffect(() => {
     if (readyStatus) {
@@ -20,13 +20,15 @@ const NoteList = ({ readyStatus, notes, setNotes }) => {
     if (note === "") {
       return false;
     }
-    setNotes([
+    const updatedNotes = [
       ...notes,
       {
-        id: Date.now(), // Use a timestamp as a unique identifier
+        id: Date.now(),
         noteText: note,
       },
-    ]);
+    ];
+    setNotes(updatedNotes)
+    updateNotes(updatedNotes);
     setNote("");
   };
   return (
@@ -54,6 +56,7 @@ const NoteList = ({ readyStatus, notes, setNotes }) => {
                     notes={notes}
                     setNotes={setNotes}
                     readyStatus={readyStatus}
+                    updateNotes={updateNotes}
                 />
                 </div>
             ))}

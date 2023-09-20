@@ -3,10 +3,12 @@ import "./NoteItem.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-const NoteItem = ({ note, notes, setNotes, readyStatus }) => {
+const NoteItem = ({ note, notes, setNotes, updateNotes, readyStatus }) => {
   const deleteHandler = (e) => {
     let newNotes = notes.filter((el) => el.id !== note.id);
     setNotes(newNotes);
+    updateNotes(newNotes);
+    console.log("set notes: ", newNotes)
   };
   return (
     <div className="noteitem">
