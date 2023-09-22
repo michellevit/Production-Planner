@@ -1,10 +1,10 @@
-from rest_framework.views import APIView
-from .models import Order
 from .serializers import OrderSerializer
+from .models import * 
+from rest_framework.views import APIView
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import NotFound
-from .models import * 
+
 
 class OrderListView(APIView):
     def get(self, request):
@@ -23,7 +23,7 @@ class OpenOrdersListView(APIView):
         open_orders = Order.objects.all().filter(shipped=False)
         serializer = OrderSerializer(open_orders, many=True)
         return Response(serializer.data)
-    
+   
 class ClosedOrdersListView(APIView):
     def get(self, request):
         closed_orders = Order.objects.all().filter(shipped=True)

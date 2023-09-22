@@ -1,0 +1,122 @@
+.main-div {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 50px 0;
+  }
+
+.closed-orders-table {
+  margin: 30px 0;
+  border-collapse: collapse;
+  width: 90%;
+  border: 2px solid black; 
+}
+
+.closed-orders-table th {
+  background-color: #333; 
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 8px;
+}
+
+.closed-orders-table td {
+  border: 1px solid black; 
+  padding: 8px;
+  text-align: center;
+}
+
+.closed-orders-table > tbody > tr:nth-child(even) {
+  background-color: #e4e4e4; 
+}
+
+.closed-orders-table > tbody > tr:nth-child(odd) {
+  background-color: white; 
+}
+
+.item-table, .package-table, .notes-table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+}
+
+.item-table th, .item-table td, .package-table th, .package-table td, .notes-table th, .notes-table td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+#item {
+  text-align: left;
+  width: 70%;
+}
+
+#qty {
+  text-align: center;
+  width: 30%; 
+}
+
+#box-number {
+  text-align: center;
+  width: 10%;
+}
+
+#dimensions {
+  text-align: left;
+  width: 65%;
+}
+
+#weight {
+  text-align: center;
+  width: 25%; 
+}
+
+.closed-orders-table svg {
+  color: rgb(152, 196, 152);
+}
+
+.closed-orders-table .svg-inline--fa:hover {
+  opacity: 20%;
+  color: green;
+}
+
+.closed-orders-table tbody tr {
+  transition: opacity 0.5s ease;
+}
+
+.closed-orders-table tbody tr.fade-out {
+  opacity: 0;
+  margin: 0; 
+  padding: 0;
+  border: none;
+}
+
+.closed-orders-table #ship-date {
+  width: 10%;
+}
+.closed-orders-table #order-number {
+  width: 10%;
+}
+.closed-orders-table #customer {
+  width: 10%;
+}
+.closed-orders-table #items {
+  width: 20%;
+}
+.closed-orders-table #packages {
+  width: 20%;
+}
+.closed-orders-table #notes {
+  width: 10%;
+}
+.closed-orders-table #shipped {
+  width: 10%;
+}
+
+.row-fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}

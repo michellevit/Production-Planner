@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import { parseISO } from "date-fns";
+import MinimizeCardButton from "./MinimizeCardButton";
 import DeleteButton from "./DeleteButton";
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
@@ -14,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const OrderCard = ({ order, openOrders, setOrders }) => {
   const [isRemoving, setIsRemoving] = useState(false);
+  const [minimized, setMinimized] = useState(true);
   const [delayDate, setDelayDate] = useState();
   const [boxes, setBoxes] = useState([]);
   const [boxConfirmStatus, setBoxConfirmStatus] = useState([]);
@@ -202,126 +204,136 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
         isRemoving ? "card-container-fade-out" : ""
       } ${delayDate !== null && !readyStatus ? "delayed-order-card" : ""}`}
     >
-      {!readyStatus && (
-        <div className="row" id="row1">
-          <DeleteButton
-            readyStatus={readyStatus}
-            order={order}
-            openOrders={openOrders}
-            setOrders={setOrders}
-            setIsRemoving={setIsRemoving}
-          />
-        </div>
-      )}
-      <div className="row" id="row2">
-        <div className="order-number-container">
+      <div className="row" id="row1">
+        <div id="row1col1"></div>
+        <div className="order-number-container" id="row1col2">
           <div className="order-number-text">SO# {order.order_number}</div>
         </div>
+        <div id="row1col3">
+          <MinimizeCardButton 
+              minimized={minimized}
+              setMinimized={setMinimized} 
+            />
+            <DeleteButton
+              order={order}
+              openOrders={openOrders}
+              setOrders={setOrders}
+              setIsRemoving={setIsRemoving}
+            />
+          </div>
       </div>
-      <div className="row" id="row3">
-        <table className="card-data-table">
-          <tbody>
-            <tr className="order-data" id="customer-name">
-              <td className="col1">Customer:</td>
-              <td className="col2">{order.customer_name}</td>
-            </tr>
-            <tr className="order-data" id="ship-date">
-              <td className="col1">Ship Date:</td>
-              <td className="col2">{order.ship_date}</td>
-            </tr>
-            {!readyStatus && (
-              <tr className="order-data" id="delay-date">
-                <td className="col1">Delay:</td>
-                <td className="col2">
-                  <DatePicker
-                    showIcon
-                    placeholderText="n/a"
-                    selected={delayDate}
-                    onChange={(date) => {
-                      updateDelayDate(date);
-                      setDelayDate(date);
-                    }}
-                    isClearable
-                    className="delay-input"
-                  />
-                </td>
+      {!minimized && (
+        <div className="row" id="row2">
+          <table className="card-data-table">
+            <tbody>
+              <tr className="order-data" id="customer-name">
+                <td className="row2col1">Customer:</td>
+                <td className="row2col2">{order.customer_name}</td>
               </tr>
+              <tr className="order-data" id="ship-date">
+                <td className="row2col1">Ship Date:</td>
+                <td className="row2col2">{order.ship_date}</td>
+              </tr>
+              {!readyStatus && (
+                <tr className="order-data" id="delay-date">
+                  <td className="row2col1">Delay:</td>
+                  <td className="row2col2">
+                    <DatePicker
+                      suffixIcon={null} 
+                      placeholderText="n/a"
+                      selected={delayDate}
+                      onChange={(date) => {
+                        updateDelayDate(date);
+                        setDelayDate(date);
+                      }}
+                      isClearable
+                      className="delay-input"
+                    />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {!minimized && (
+        <div className="row" id="row3">
+          <table className="items-table">
+            <tbody>
+              <tr>
+                <th id="item">Item</th>
+                <th id="qty">Qty.</th>
+              </tr>
+              {Object.keys(order.item_subtype_dict).map((itemType, index) => (
+                <tr key={index}>
+                  <td id="item">{itemType}</td>
+                  <td id="qty">{order.item_subtype_dict[itemType]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {!minimized && (
+        <div
+          className="row"
+          id={readyStatus && notes.length === 0 ? "row4-ready-nonotes" : "row4"}
+        >
+          <div className="dimensions-container">
+            {boxes.length === 0 && readyStatus ? (
+              <p className="no-box-message">No dimensions/weight info. added.</p>
+            ) : (
+              ""
             )}
-          </tbody>
-        </table>
-      </div>
-      <div className="row" id="row4">
-        <table className="items-table">
-          <tbody>
-            <tr>
-              <th id="item">Item</th>
-              <th id="qty">Qty.</th>
-            </tr>
-            {Object.keys(order.item_subtype_dict).map((itemType, index) => (
-              <tr key={index}>
-                <td id="item">{itemType}</td>
-                <td id="qty">{order.item_subtype_dict[itemType]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div
-        className="row"
-        id={readyStatus && notes.length === 0 ? "row5-ready-nonotes" : "row5"}
-      >
-        <div className="dimensions-container">
-          {boxes.length === 0 && readyStatus ? (
-            <p className="no-box-message">No dimensions/weight info. added.</p>
-          ) : (
-            ""
-          )}
-          <BoxForm
-            formDisplay={formDisplay}
-            setFormDisplay={setFormDisplay}
-            setButtonDisplay={setButtonDisplay}
-            setBoxes={setBoxes}
-            boxes={boxes}
-            boxConfirmStatus={boxConfirmStatus}
-            setBoxConfirmStatus={setBoxConfirmStatus}
-            readyStatus={readyStatus}
-            updatePackages={updatePackages}
-          />
-          {boxes.length > 0 && (
-            <BoxList
-              boxes={boxes}
-              setBoxes={setBoxes}
+            <BoxForm
+              formDisplay={formDisplay}
               setFormDisplay={setFormDisplay}
-              buttonDisplay={buttonDisplay}
               setButtonDisplay={setButtonDisplay}
+              setBoxes={setBoxes}
+              boxes={boxes}
               boxConfirmStatus={boxConfirmStatus}
               setBoxConfirmStatus={setBoxConfirmStatus}
-              boxConfirmHandler={boxConfirmHandler}
               readyStatus={readyStatus}
               updatePackages={updatePackages}
             />
-          )}
-        </div>
-      </div>
-      {!(readyStatus && notes.length === 0) && (
-        <div className="row" id="row6">
-          <div className="note-container">
-            <NoteList
-              readyStatus={readyStatus}
-              notes={notes}
-              setNotes={setNotes}
-              updateNotes={updateNotes}
-            />
+            {boxes.length > 0 && (
+              <BoxList
+                boxes={boxes}
+                setBoxes={setBoxes}
+                setFormDisplay={setFormDisplay}
+                buttonDisplay={buttonDisplay}
+                setButtonDisplay={setButtonDisplay}
+                boxConfirmStatus={boxConfirmStatus}
+                setBoxConfirmStatus={setBoxConfirmStatus}
+                boxConfirmHandler={boxConfirmHandler}
+                readyStatus={readyStatus}
+                updatePackages={updatePackages}
+              />
+            )}
           </div>
         </div>
       )}
-      <div className="row" id="row7">
-        <div className="row7-buttons-container">
-          {!readyStatus && <ReadyButton readyHandler={readyHandler} />}
-          {readyStatus && <EditButton editHandler={editHandler} />}
-          {readyStatus && <ShippedButton shippedHandler={shippedHandler} setIsRemoving={setIsRemoving} />}
+        {!minimized && !(readyStatus && notes.length === 0) && (
+          <div className="row" id="row5">
+            <div className="note-container">
+              <NoteList
+                readyStatus={readyStatus}
+                notes={notes}
+                setNotes={setNotes}
+                updateNotes={updateNotes}
+              />
+            </div>
+          </div>
+        )}
+        {!minimized && (
+        <div className="row" id="row6">
+          <div className="row6-buttons-container">
+            {!readyStatus && <ReadyButton readyHandler={readyHandler} />}
+            {readyStatus && <EditButton editHandler={editHandler} />}
+            {readyStatus && <ShippedButton shippedHandler={shippedHandler} setIsRemoving={setIsRemoving} />}
+          </div>
         </div>
-      </div>
+        )}
     </div>
   );
 };
