@@ -45,18 +45,16 @@ const BoxForm = ({
       return true;
     }
     const formattedWeight = parseFloat(weight).toFixed(2);
-    const finalWeight = parseFloat(formattedWeight); 
-    setBoxes((prevBoxes) => [
-      ...prevBoxes,
-      {
-        dimensions: dimensions,
-        weight: finalWeight,
-        id: uniqueId(),
-      },
-    ]);
+    const finalWeight = parseFloat(formattedWeight);
+    const newBox = {
+      dimensions: dimensions,
+      weight: finalWeight,
+      id: uniqueId(),
+    };
+    setBoxes((prevBoxes) => [...prevBoxes, newBox]);
+    updatePackages([...boxes, newBox]); // Update packages including the new box
     setDimensions("");
     setWeight("");
-    updatePackages([...boxes, { dimensions, weight, id: uniqueId() }]);
   };
   useEffect(() => {
     if (boxConfirmStatus) {
@@ -64,15 +62,13 @@ const BoxForm = ({
       setWeight("");
     }
   }, [boxConfirmStatus]);
-
   useEffect(() => {
     if (readyStatus) {
       setFormDisplay(false);
     } else if (boxes.length === 0) {
       setFormDisplay(true);
     }
-  }, [readyStatus, boxes.length]);
-
+  }, [readyStatus, boxes.length, setFormDisplay]);
   return (
     <div className="boxform-container">
       {formDisplay && (

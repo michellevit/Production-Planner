@@ -9,9 +9,7 @@ const Pagination = ({
   onPageChange,
   itemsPerPage,
 }) => {
-  const pageRange = itemsPerPage;
-
-  const renderPageNumbers = () => {
+    const renderPageNumbers = () => {
     const pageNumbers = [];
     for (let i = 1; i <= totalPages; i++) {
       pageNumbers.push(i);
