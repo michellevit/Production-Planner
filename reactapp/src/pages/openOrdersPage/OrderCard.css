@@ -102,7 +102,7 @@
 #row1col3 {
   width: 20%;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 #row1col3 .svg-inline--fa {

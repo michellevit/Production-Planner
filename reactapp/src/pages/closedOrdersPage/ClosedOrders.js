@@ -30,17 +30,21 @@ const ClosedOrders = () => {
       });
   }, []);
   const handleUnship = (orderId) => {
-    setFadingRows((prevFadingRows) => [...prevFadingRows, orderId]);
+    setFadingRows([...fadingRows, orderId]);
     axios
       .put(`http://127.0.0.1:8000/closed-orders/${orderId}/`, {
         shipped: false,
       })
       .then((response) => {
-        const updatedOrders = closedOrders.filter((o) => o.id !== orderId);
-        setClosedOrders(updatedOrders);
-        setFadingRows((prevFadingRows) =>
-          prevFadingRows.filter((rowId) => rowId !== orderId)
+        
+        setTimeout(() => {
+          setFadingRows((prevFadingRows) =>
+            prevFadingRows.filter((rowId) => rowId !== orderId)
+          );
+          setClosedOrders((prevClosedOrders) =>
+          prevClosedOrders.filter((o) => o.id !== orderId)
         );
+        }, 500); 
       })
       .catch((error) => {
         console.error(
