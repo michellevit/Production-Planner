@@ -1,8 +1,4 @@
 from django.db import models
-from django.utils import timezone
-
-
-
 
 class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -18,7 +14,7 @@ class Order(models.Model):
     packages_array = models.JSONField(default=list, null=True, blank=True)
     notes_array = models.JSONField(default=list, null=True, blank=True)
     ready = models.BooleanField(default=False)
-    shipped = models.BooleanField(default=False)
+    shipped = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
         return self.order_number[0:50]

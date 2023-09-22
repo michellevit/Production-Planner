@@ -3,7 +3,7 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
 const EditButton = ({ editHandler }) => {
   return (
-    <div className="row7-buttons">
+    <div className="row6-buttons">
         <button type="button" id="edit" onClick={editHandler}>
           <FontAwesomeIcon icon={faEdit} />
           &nbsp;Edit

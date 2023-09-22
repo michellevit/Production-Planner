@@ -15,6 +15,9 @@ const OpenOrders = () => {
     axios.get('http://127.0.0.1:8000/open-orders/')
       .then(response => {
         const filteredOpenOrders = response.data.filter(order => !order.shipped);
+        filteredOpenOrders.sort((a, b) =>
+          a.ship_date < b.ship_date ? 1 : -1
+        );
         setOpenOrders(filteredOpenOrders);
       })
       .catch(error => {
@@ -23,7 +26,7 @@ const OpenOrders = () => {
   }, []);
 
   return (
-    <div className="order-cards-area">
+    <div className="main-div">
       <header>
         <h1>Open Orders</h1>
       </header>

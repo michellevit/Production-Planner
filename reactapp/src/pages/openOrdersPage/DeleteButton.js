@@ -5,7 +5,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "./DeleteModal";
 import axios from "axios";
 
-const DeleteButton = ({ readyStatus, order, openOrders, setOrders, setIsRemoving }) => {
+const DeleteButton = ({ order, openOrders, setOrders, setIsRemoving }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const handleClickDeleteButton = () => {
     setShowConfirmModal(true);
@@ -31,8 +31,7 @@ const DeleteButton = ({ readyStatus, order, openOrders, setOrders, setIsRemoving
     setShowConfirmModal(false);
   };
   return (
-    <div className="delete-order-container">
-      {!readyStatus && (
+    <div>
         <>
           <button id="delete-order-button" onClick={handleClickDeleteButton}>
             <FontAwesomeIcon icon={faClose} />
@@ -44,7 +43,6 @@ const DeleteButton = ({ readyStatus, order, openOrders, setOrders, setIsRemoving
             order={order}
           />
         </>
-      )}
     </div>
   );
 };
