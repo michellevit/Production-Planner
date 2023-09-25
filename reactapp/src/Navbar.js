@@ -6,9 +6,9 @@ import "./styles.css";
 function Navbar() {
     return (
         <nav className="nav">
-            <Link to="/" className="site-title">
+            <div className="site-title">
                 Production Planner
-            </Link>
+            </div>
             <ul>
                 <CustomLink to="/open-orders">Open Orders</CustomLink>
                 <CustomLink to="/closed-orders">Closed Orders</CustomLink>

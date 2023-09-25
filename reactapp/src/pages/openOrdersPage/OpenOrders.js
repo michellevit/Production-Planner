@@ -7,7 +7,7 @@ import OpenOrdersNav from "./OpenOrdersNav";
 const OpenOrders = () => {
   const [openOrders, setOpenOrders] = useState([]); 
   const [currentDate, setCurrentDate] = useState("");
- 
+
   useEffect(() => {
     const options = { weekday: "long", month: "long", day: "numeric" };
     const formattedDate = new Date().toLocaleDateString(undefined, options);
@@ -23,7 +23,7 @@ const OpenOrders = () => {
           (order) => !order.shipped
         );
         filteredOpenOrders.sort((a, b) => (a.ship_date < b.ship_date ? 1 : -1));
-        setOpenOrders(filteredOpenOrders);
+        setOpenOrders(filteredOpenOrders)
       })
       .catch((error) => {
         console.error("Error getting data", error);
@@ -49,14 +49,8 @@ const OpenOrders = () => {
   return (
     <div className="main-div">
       <OpenOrdersNav
-        openOrders={openOrders}
-        setOpenOrders={setOpenOrders}
         handleFilterOrders={handleFilterOrders} 
       />
-      <header>
-        <h1>Open Orders</h1>
-      </header>
-      <h2>{currentDate}</h2>
       {openOrders.length === 0 ? (
         <div>No results...</div>
       ) : (

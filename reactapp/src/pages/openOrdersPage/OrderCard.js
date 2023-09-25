@@ -107,13 +107,13 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
     const day = String(currentDate.getDate()).padStart(2, "0");
     const formattedCurrentDate = `${year}-${month}-${day}`;
     updatedOrder.ship_date = formattedCurrentDate;
+    updatedOrder.minimized = true;
     try {
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
       );
       setIsRemoving(true);
-      console.log("orders: ", openOrders);
       setTimeout(() => {
         setOpenOrders(
           openOrders.filter((orderItem) => orderItem.id !== shippedOrderID)
