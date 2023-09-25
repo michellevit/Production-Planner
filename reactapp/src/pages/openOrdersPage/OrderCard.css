@@ -6,7 +6,7 @@
   width: 500px;
   margin: 20px;
   padding: 30px;
-  border-radius: 75px;
+  border-radius: 25px;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
   font-size: 0.8em;
   font-weight: 400;
@@ -87,8 +87,17 @@
 .order-number-container {
   width: 90%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+#min-customer-name {
+  display: flex;
+  font-size: 1rem;
+  margin-top: 10px;
+  font-weight: 450;
+  color: white !important;
 }
 
 #row1col1 {

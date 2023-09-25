@@ -30,29 +30,25 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
           `http://127.0.0.1:8000/open-orders/${order.id}/`
         );
         if (response.data) {
-          const {
-            ready,
-            delay_date,
-            packages_array,
-            notes_array,
-          } = response.data;
+          const { ready, delay_date, packages_array, notes_array } =
+            response.data;
           const updatedBoxes = Array.isArray(packages_array)
-          ? packages_array.map((box) => {
-              if (typeof box.boxConfirmStatus === "undefined") {
-                box.boxConfirmStatus = false;
-                setFormDisplay(true);
-              } else if (box.boxConfirmStatus) {
-                setFormDisplay(false);
-                setButtonDisplay(false);
-                setBoxConfirmStatus(true);
-              } else if (box.boxConfirmStatus === false) {
-                setFormDisplay(true);
-                setButtonDisplay(true);
-                setBoxConfirmStatus(false);
-              }
-              return box;
-            })
-          : [];
+            ? packages_array.map((box) => {
+                if (typeof box.boxConfirmStatus === "undefined") {
+                  box.boxConfirmStatus = false;
+                  setFormDisplay(true);
+                } else if (box.boxConfirmStatus) {
+                  setFormDisplay(false);
+                  setButtonDisplay(false);
+                  setBoxConfirmStatus(true);
+                } else if (box.boxConfirmStatus === false) {
+                  setFormDisplay(true);
+                  setButtonDisplay(true);
+                  setBoxConfirmStatus(false);
+                }
+                return box;
+              })
+            : [];
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);
@@ -66,7 +62,7 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
     fetchOrderDetails();
   }, [order.id]);
 
-  const readyHandler = async () => {  
+  const readyHandler = async () => {
     setReadyStatus(true);
     setBoxConfirmStatus(true);
     boxConfirmHandler(true);
@@ -98,15 +94,15 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
     }
   };
 
-  const shippedHandler = async () => {  
-    console.log("shippedHandler()")
+  const shippedHandler = async () => {
+    console.log("shippedHandler()");
     const shippedOrderID = order.id;
     const updatedOrder = order;
     updatedOrder.shipped = true;
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
     const formattedCurrentDate = `${year}-${month}-${day}`;
     updatedOrder.ship_date = formattedCurrentDate;
     try {
@@ -115,9 +111,11 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
         updatedOrder
       );
       setIsRemoving(true);
-      console.log("orders: ", openOrders)
+      console.log("orders: ", openOrders);
       setTimeout(() => {
-        setOrders(openOrders.filter((orderItem) => orderItem.id !== shippedOrderID));
+        setOrders(
+          openOrders.filter((orderItem) => orderItem.id !== shippedOrderID)
+        );
         setIsRemoving(false);
       }, 300);
     } catch (error) {
@@ -208,19 +206,20 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
         <div id="row1col1"></div>
         <div className="order-number-container" id="row1col2">
           <div className="order-number-text">SO# {order.order_number}</div>
+          {minimized ? <div id="min-customer-name">{order.customer_name}</div> : null}
         </div>
         <div id="row1col3">
-          <MinimizeCardButton 
-              minimized={minimized}
-              setMinimized={setMinimized} 
-            />
-            <DeleteButton
-              order={order}
-              openOrders={openOrders}
-              setOrders={setOrders}
-              setIsRemoving={setIsRemoving}
-            />
-          </div>
+          <MinimizeCardButton
+            minimized={minimized}
+            setMinimized={setMinimized}
+          />
+          <DeleteButton
+            order={order}
+            openOrders={openOrders}
+            setOrders={setOrders}
+            setIsRemoving={setIsRemoving}
+          />
+        </div>
       </div>
       {!minimized && (
         <div className="row" id="row2">
@@ -239,7 +238,7 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
                   <td className="row2col1">Delay:</td>
                   <td className="row2col2">
                     <DatePicker
-                      suffixIcon={null} 
+                      suffixIcon={null}
                       placeholderText="n/a"
                       selected={delayDate}
                       onChange={(date) => {
@@ -281,7 +280,9 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
         >
           <div className="dimensions-container">
             {boxes.length === 0 && readyStatus ? (
-              <p className="no-box-message">No dimensions/weight info. added.</p>
+              <p className="no-box-message">
+                No dimensions/weight info. added.
+              </p>
             ) : (
               ""
             )}
@@ -313,27 +314,32 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
           </div>
         </div>
       )}
-        {!minimized && !(readyStatus && notes.length === 0) && (
-          <div className="row" id="row5">
-            <div className="note-container">
-              <NoteList
-                readyStatus={readyStatus}
-                notes={notes}
-                setNotes={setNotes}
-                updateNotes={updateNotes}
-              />
-            </div>
+      {!minimized && !(readyStatus && notes.length === 0) && (
+        <div className="row" id="row5">
+          <div className="note-container">
+            <NoteList
+              readyStatus={readyStatus}
+              notes={notes}
+              setNotes={setNotes}
+              updateNotes={updateNotes}
+            />
           </div>
-        )}
-        {!minimized && (
+        </div>
+      )}
+      {!minimized && (
         <div className="row" id="row6">
           <div className="row6-buttons-container">
             {!readyStatus && <ReadyButton readyHandler={readyHandler} />}
             {readyStatus && <EditButton editHandler={editHandler} />}
-            {readyStatus && <ShippedButton shippedHandler={shippedHandler} setIsRemoving={setIsRemoving} />}
+            {readyStatus && (
+              <ShippedButton
+                shippedHandler={shippedHandler}
+                setIsRemoving={setIsRemoving}
+              />
+            )}
           </div>
         </div>
-        )}
+      )}
     </div>
   );
 };
