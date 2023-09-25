@@ -13,7 +13,9 @@ import ShippedButton from "./ShippedButton";
 import "./OrderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
 
-const OrderCard = ({ order, openOrders, setOrders }) => {
+
+
+const OrderCard = ({ order, openOrders, setOpenOrders }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [minimized, setMinimized] = useState(true);
   const [delayDate, setDelayDate] = useState();
@@ -113,7 +115,7 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
       setIsRemoving(true);
       console.log("orders: ", openOrders);
       setTimeout(() => {
-        setOrders(
+        setOpenOrders(
           openOrders.filter((orderItem) => orderItem.id !== shippedOrderID)
         );
         setIsRemoving(false);
@@ -203,10 +205,10 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
       } ${delayDate !== null && !readyStatus ? "delayed-order-card" : ""}`}
     >
       <div className="row" id="row1">
+        <div id="row1-row1">
         <div id="row1col1"></div>
         <div className="order-number-container" id="row1col2">
           <div className="order-number-text">SO# {order.order_number}</div>
-          {minimized ? <div id="min-customer-name">{order.customer_name}</div> : null}
         </div>
         <div id="row1col3">
           <MinimizeCardButton
@@ -216,10 +218,12 @@ const OrderCard = ({ order, openOrders, setOrders }) => {
           <DeleteButton
             order={order}
             openOrders={openOrders}
-            setOrders={setOrders}
+            setOpenOrders={setOpenOrders}
             setIsRemoving={setIsRemoving}
           />
         </div>
+        </div>
+        {minimized ? <div id="min-customer-name">{order.customer_name}</div> : null}
       </div>
       {!minimized && (
         <div className="row" id="row2">

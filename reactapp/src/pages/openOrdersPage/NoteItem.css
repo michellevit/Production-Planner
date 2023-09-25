@@ -32,11 +32,11 @@
 }
 
 .noteitem button {
-    border: none;
-    width: 27px;
-    color: white;
-    align-items: center;
-    justify-content: center;
+  border: none;
+  width: 27px;
+  color: white;
+  align-items: center;
+  justify-content: center;
 }
 
 .noteitem .xmark-btn {
