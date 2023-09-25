@@ -31,8 +31,8 @@ body {
 }
 
 .container {
-  margin: 1rem;
   text-align: center;
+  margin: 0 0 4em 0;
 }
 
 /* NAVBAR */
@@ -46,10 +46,11 @@ body {
   justify-content: space-between;
   align-items: stretch;
   gap: 2rem;
-  padding: 0 3rem;
+  padding: 0 1rem;
 }
 
 .site-title {
+  padding: 1rem 3rem;
   font-size: 2rem;
   white-space: nowrap;
 }
@@ -69,7 +70,7 @@ body {
   height: 100%;
   display: flex;
   align-items: center;
-  padding: 0.5rem;
+  padding: 1rem 0.8rem;
 }
 
 .nav li {
@@ -83,3 +84,4 @@ body {
 .nav li:hover {
   background-color: #777;
 }
+

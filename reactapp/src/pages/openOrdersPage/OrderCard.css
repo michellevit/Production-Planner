@@ -3,10 +3,10 @@
   flex-basis: calc(33.33% - 20px);
   flex-direction: column;
   background: #3399CC;
-  width: 500px;
+  width: 550px;
   margin: 20px;
   padding: 30px;
-  border-radius: 25px;
+  border-radius: 50px;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
   font-size: 0.8em;
   font-weight: 400;
@@ -29,7 +29,7 @@
 }
 
 .row {
-  width: 440px;
+  width: 460px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,9 +40,12 @@
 }
 
 #row1 {
+  display: flex;
   background-color: transparent; 
   box-shadow: none;
+  flex-direction: column;
 }
+
 
 #row2 {
   flex-direction: column;
@@ -94,9 +97,10 @@
 
 #min-customer-name {
   display: flex;
-  font-size: 1rem;
+  flex-direction: column;
+  font-size: 1.5em;
   margin-top: 10px;
-  font-weight: 450;
+  font-weight: 500;
   color: white !important;
 }
 
@@ -112,7 +116,15 @@
   width: 20%;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
+
+#row1-row1 {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
 
 #row1col3 .svg-inline--fa {
   height: 1.3rem;

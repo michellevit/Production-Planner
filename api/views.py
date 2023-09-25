@@ -1,9 +1,11 @@
-from .serializers import OrderSerializer
 from .models import * 
+from .serializers import OrderSerializer
+from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
-from rest_framework import status
+from django.db.models import Q
 
 
 class OrderListView(APIView):
@@ -23,6 +25,19 @@ class OpenOrdersListView(APIView):
         open_orders = Order.objects.all().filter(shipped=False)
         serializer = OrderSerializer(open_orders, many=True)
         return Response(serializer.data)
+    
+class SearchOpenOrdersListView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        queryset = Order.objects.filter(shipped=False)
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            queryset = queryset.filter(
+                Q(order_number__icontains=search_query) |
+                Q(customer_name__icontains=search_query)
+            )
+        return queryset
    
 class ClosedOrdersListView(APIView):
     def get(self, request):

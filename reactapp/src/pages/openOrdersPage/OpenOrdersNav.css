@@ -1,0 +1,61 @@
+.open-orders-nav-container {
+    width: 100%;
+    background-color: rgb(182, 182, 182);
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5rem 0;
+    margin: 0 0 1em 0;
+}
+
+.col1 {
+    width: 33%;
+    margin: 0;
+    padding: 0;
+}
+
+.col2 {
+    width: 33%;
+}
+
+.col3 {
+    width: 33%;
+    justify-content: flex-end;
+}
+
+.open-orders-nav-container input,
+.open-orders-nav-container button {
+  padding: 4px 8px;
+  border: none;
+  margin: 0 2.5px;
+}
+
+.open-orders-nav-container input:focus {
+  outline: none;
+}
+
+.open-orders-nav-container form input {
+    width: 200px;
+    border-radius: 5px 0 0 5px;
+  }
+  
+  .open-orders-nav-container form button {
+    width: 27px;
+    background-color: white;
+    border-radius: 0 5px 5px 0;
+  }
+
+  .open-orders-nav-container button:hover {
+    opacity: 0.5;
+  }
+
+
+  .col1 button {
+    margin: 0 2.5px;
+    border-radius: 5px;
+  }
+
+  .open-orders-nav-container .svg-inline--fa {
+    color: rgb(92, 92, 92);
+  }
