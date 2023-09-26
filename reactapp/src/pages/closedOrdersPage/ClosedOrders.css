@@ -1,22 +1,22 @@
 .main-div {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin: 0;
-  }
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0;
+}
 
 .closed-orders-table {
   border-collapse: collapse;
   width: 97%;
-  border: 2px solid black; 
+  border: 2px solid black;
   margin: 20px 0;
 }
 
 .closed-orders-table th {
-  background-color: #333; 
+  background-color: #333;
   color: white;
   font-weight: bold;
   text-align: center;
@@ -24,54 +24,61 @@
 }
 
 .closed-orders-table td {
-  border: 1px solid black; 
+  border: 1px solid black;
   padding: 8px;
   text-align: center;
 }
 
 .closed-orders-table > tbody > tr:nth-child(even) {
-  background-color: #e4e4e4; 
+  background-color: #e4e4e4;
 }
 
 .closed-orders-table > tbody > tr:nth-child(odd) {
-  background-color: white; 
+  background-color: white;
 }
 
-.item-table, .package-table, .notes-table {
+.item-table,
+.package-table,
+.notes-table {
   border-collapse: collapse;
   width: 100%;
   background: white;
 }
 
-.item-table th, .item-table td, .package-table th, .package-table td, .notes-table th, .notes-table td {
+.closed-orders-table .item-table th,
+.closed-orders-table .item-table td,
+.closed-orders-table .package-table th,
+.closed-orders-table .package-table td,
+.closed-orders-table .notes-table th,
+.closed-orders-table .notes-table td {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
 }
 
-#item {
+.closed-orders-table #item {
   text-align: left;
   width: 70%;
 }
 
-#qty {
+.closed-orders-table #qty {
   text-align: center;
-  width: 30%; 
+  width: 30%;
 }
 
-#box-number {
+.closed-orders-table #box-number {
   text-align: center;
   width: 10%;
 }
 
-#dimensions {
+.closed-orders-table #dimensions {
   text-align: left;
   width: 65%;
 }
 
-#weight {
+.closed-orders-table #weight {
   text-align: center;
-  width: 25%; 
+  width: 25%;
 }
 
 .closed-orders-table svg {
@@ -89,7 +96,7 @@
 
 .closed-orders-table tbody tr.fade-out {
   opacity: 0;
-  margin: 0; 
+  margin: 0;
   padding: 0;
   border: none;
 }

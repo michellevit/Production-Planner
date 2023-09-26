@@ -18,6 +18,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'item_subtype_dict',
             'packages_array',
             'notes_array',
+            'minimized_status',
             'ready',
             'shipped'
             ]
