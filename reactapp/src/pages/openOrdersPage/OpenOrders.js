@@ -8,13 +8,16 @@ const OpenOrders = () => {
   const [openOrders, setOpenOrders] = useState([]);
   const [sortOption, setSortOption] = useState("All");
   const [currentDate, setCurrentDate] = useState("");
+  const [readyChecked, setReadyChecked] = useState(true);
+  const [notReadyChecked, setNotReadyChecked] = useState(true);
+  const [delayedChecked, setDelayedChecked] = useState(true);
+
   useEffect(() => {
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
-    console.log("Current Date: ", formattedDate);
     fetchOpenOrders();
-  }, [sortOption]);
+  }, [sortOption, readyChecked, notReadyChecked, delayedChecked]);
 
   const fetchOpenOrders = () => {
     let sortingCriteria = "ship_date";
@@ -59,7 +62,6 @@ const OpenOrders = () => {
         filterByLastMonth = true;
         break;
       default:
-        // For "All" and other options, use the default sorting criteria
         sortingCriteria = "ship_date";
     }
 
@@ -69,6 +71,47 @@ const OpenOrders = () => {
         let filteredOpenOrders = response.data.filter(
           (order) => !order.shipped
         );
+        if (readyChecked && notReadyChecked && delayedChecked) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) => order.ready != null
+          );
+        }
+        if (readyChecked && !notReadyChecked && !delayedChecked) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) => (order.ready === true)
+          );
+        }
+        if (readyChecked && notReadyChecked && !delayedChecked) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) =>
+              (order.ready) != null && (order.delay_date) === null
+          );
+        }
+        if (readyChecked && !notReadyChecked && delayedChecked) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) => order.ready === true
+          );
+        }
+        if (!readyChecked && notReadyChecked && delayedChecked) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) => order.ready === false
+          );
+        }
+        if (!readyChecked && notReadyChecked && !delayedChecked) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) => order.ready === false && order.delay_date === null
+          );
+        }
+        if (!readyChecked && !notReadyChecked && delayedChecked) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) => order.delay_date != null
+          );
+        }
+        if (!readyChecked && !notReadyChecked && !delayedChecked) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) => order.ready === null
+          );
+        }
         if (filterByUpcoming) {
           filteredOpenOrders = filteredOpenOrders.filter((order) => {
             const orderDate = new Date(order.ship_date);
@@ -222,8 +265,9 @@ const OpenOrders = () => {
     if (query === "") {
       fetchOpenOrders();
     } else {
+      const checkboxQuery = `readyChecked=${readyChecked}&notReadyChecked=${notReadyChecked}&delayedChecked=${delayedChecked}`;
       axios
-        .get(`http://127.0.0.1:8000/open-orders-search/?search=${query}`)
+        .get(`http://127.0.0.1:8000/open-orders-search/?search=${query}&${checkboxQuery}`)
         .then((response) => {
           const filteredOpenOrders = response.data;
           filteredOpenOrders.sort((a, b) =>
@@ -286,6 +330,12 @@ const OpenOrders = () => {
         handleMaximizeAll={handleMaximizeAll}
         handleMinimizeAll={handleMinimizeAll}
         handleSortChange={handleSortChange}
+        readyChecked={readyChecked}
+        setReadyChecked={setReadyChecked}
+        notReadyChecked={notReadyChecked}
+        setNotReadyChecked={setNotReadyChecked}
+        delayedChecked={delayedChecked}
+        setDelayedChecked={setDelayedChecked}
       />
       {openOrders.length === 0 ? (
         <div className="no-results">No results...</div>
