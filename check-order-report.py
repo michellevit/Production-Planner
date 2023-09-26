@@ -133,7 +133,7 @@ def sort_workbook(sheet):
                         new_order = Order(
                             order_number=next_row[4].value,
                             backorder=False,
-                            backorder_number="",
+                            backorder_number=0,
                             ship_date=next_row[2].value,
                             delay_date=None,
                             customer_name=next_row[6].value,

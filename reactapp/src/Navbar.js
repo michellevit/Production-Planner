@@ -11,7 +11,7 @@ function Navbar() {
             </div>
             <ul>
                 <CustomLink to="/open-orders">Open Orders</CustomLink>
-                <CustomLink to="/closed-orders">Closed Orders</CustomLink>
+                <CustomLink to="/all-orders">All Orders</CustomLink>
             </ul>
         </nav>
     );

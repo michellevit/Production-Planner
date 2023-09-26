@@ -1,50 +1,53 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./ClosedOrders.css";
+import AllOrdersNav from "./AllOrdersNav";
+import "./AllOrders.css";
 import UnshipButton from "./UnshipButton";
 import Pagination from "./Pagination"; // Import the Pagination component
 
-const ClosedOrders = () => {
-  const [closedOrders, setClosedOrders] = useState([]);
+const AllOrders = () => {
+  const [allOrders, setAllOrders] = useState([]);
+  const [sortOption, setSortOption] = useState("All");
   const [currentDate, setCurrentDate] = useState("");
   const [fadingRows, setFadingRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersPerPage] = useState(20);
+
   useEffect(() => {
     const options = { weekday: "long", month: "long", day: "numeric" };
     const formattedDate = new Date().toLocaleDateString(undefined, options);
     setCurrentDate(formattedDate);
+    fetchAllOrders();
+  }, [sortOption]);
+
+  const fetchAllOrders = () => {
     axios
-      .get("http://127.0.0.1:8000/closed-orders/")
+      .get("http://127.0.0.1:8000/all-orders/")
       .then((response) => {
-        const filteredClosedOrders = response.data.filter(
-          (order) => order.shipped
-        );
-        filteredClosedOrders.sort((a, b) =>
-          a.ship_date < b.ship_date ? 1 : -1
-        );
-        setClosedOrders(filteredClosedOrders);
+        const filteredAllOrders = response.data;
+        filteredAllOrders.sort((a, b) => (a.ship_date < b.ship_date ? 1 : -1));
+        setAllOrders(filteredAllOrders);
       })
       .catch((error) => {
         console.error("Error getting data", error);
       });
-  }, []);
+  };
+
   const handleUnship = (orderId) => {
     setFadingRows([...fadingRows, orderId]);
     axios
-      .put(`http://127.0.0.1:8000/closed-orders/${orderId}/`, {
+      .put(`http://127.0.0.1:8000/all-orders/${orderId}/`, {
         shipped: false,
       })
       .then((response) => {
-        
         setTimeout(() => {
           setFadingRows((prevFadingRows) =>
             prevFadingRows.filter((rowId) => rowId !== orderId)
           );
-          setClosedOrders((prevClosedOrders) =>
-          prevClosedOrders.filter((o) => o.id !== orderId)
-        );
-        }, 500); 
+          setAllOrders((prevAllOrders) =>
+            prevAllOrders.filter((o) => o.id !== orderId)
+          );
+        }, 500);
       })
       .catch((error) => {
         console.error(
@@ -60,7 +63,7 @@ const ClosedOrders = () => {
   const onPageChange = (pageNumber) => {
     if (
       pageNumber < 1 ||
-      pageNumber > Math.ceil(closedOrders.length / ordersPerPage)
+      pageNumber > Math.ceil(allOrders.length / ordersPerPage)
     ) {
       return;
     }
@@ -68,14 +71,32 @@ const ClosedOrders = () => {
   };
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = closedOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentOrders = allOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const handleFilterOrders = (query) => {
+    if (query === "") {
+      fetchAllOrders();
+    } else {
+      axios
+        .get(`http://127.0.0.1:8000/all-orders-search/?search=${query}`)
+        .then((response) => {
+          const filteredAllOrders = response.data;
+          filteredAllOrders.sort((a, b) =>
+            a.ship_date < b.ship_date ? 1 : -1
+          );
+          setAllOrders(filteredAllOrders);
+        })
+        .catch((error) => {
+          console.error("Error searching orders:", error);
+        });
+    }
+  };
+
   return (
-    <div className="main-div">
-      <header>
-        <h1>Closed Orders</h1>
-      </header>
-      <h2>{currentDate}</h2>
-      <table className="closed-orders-table">
+    <div className="all-main-div">
+      <AllOrdersNav handleFilterOrders={handleFilterOrders} />
+      <div className="all-orders-table-container">
+      <table className="all-orders-table">
         <thead>
           <tr>
             <th id="ship-date">Ship Date</th>
@@ -115,18 +136,19 @@ const ClosedOrders = () => {
               <td>
                 <table className="package-table">
                   <tbody>
-                    {order.packages_array.map((packageItem, index) => (
-                      <tr
-                        key={order.id}
-                        className={
-                          fadingRows.includes(order.id) ? "row-fade-out" : ""
-                        }
-                      >
-                        <td id="box-number">{index + 1}</td>
-                        <td id="dimensions">{packageItem.dimensions}</td>
-                        <td id="weight">{packageItem.weight} lb</td>
-                      </tr>
-                    ))}
+                    {Array.isArray(order.packages_array) &&
+                      order.packages_array.map((packageItem, index) => (
+                        <tr
+                          key={order.id}
+                          className={
+                            fadingRows.includes(order.id) ? "row-fade-out" : ""
+                          }
+                        >
+                          <td id="box-number">{index + 1}</td>
+                          <td id="dimensions">{packageItem.dimensions}</td>
+                          <td id="weight">{packageItem.weight} lb</td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </td>
@@ -146,7 +168,7 @@ const ClosedOrders = () => {
                 )}
               </td>
               <td id="shipped">
-                {order.shipped === 1 ? (
+                {order.shipped === false ? (
                   "No"
                 ) : (
                   <UnshipButton order={order} handleUnship={handleUnship} />
@@ -156,13 +178,14 @@ const ClosedOrders = () => {
           ))}
         </tbody>
       </table>
+      </div>
       <Pagination
         currentPage={currentPage}
-        totalPages={Math.ceil(closedOrders.length / ordersPerPage)}
+        totalPages={Math.ceil(allOrders.length / ordersPerPage)}
         onPageChange={onPageChange}
         itemsPerPage={ordersPerPage}
       />
     </div>
   );
 };
-export default ClosedOrders;
+export default AllOrders;
