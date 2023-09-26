@@ -14,12 +14,16 @@
   justify-content: center;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 .all-orders-table {
-  border-collapse: collapse;
-  width: 100%;
-  border: 8px solid #004596;
+  width: 95%;
+  border: 2px solid #004596;
+  border-radius: 5px;
+  border-spacing: 0;
+  border-collapse: separate;
 }
 
 .all-orders-table th {
@@ -28,6 +32,8 @@
   font-weight: bold;
   text-align: center;
   padding: 8px;
+  
+  
 }
 
 .all-orders-table td {
@@ -129,7 +135,8 @@
   width: 10%;
 }
 .all-orders-table #shipped {
-  width: 10%;
+  width: 1%;
+  text-align: left;
 }
 
 .row-fade-out {

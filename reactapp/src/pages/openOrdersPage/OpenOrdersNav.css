@@ -19,13 +19,47 @@
 }
 
 .open-orders-nav-container .row2 {
+  margin-bottom: 0.5rem;
+  flex-direction: row;
+}
+
+.open-orders-nav-container .row3 {
   width: 100%; 
   display: flex;
   flex-direction: row;
-  align-items:center; 
+  align-items: center; 
   justify-content: center;
-  margin-bottom: 0.5rem;
+  margin: 0.5rem;
 }
+
+
+.open-orders-nav-container .row3 input {
+  width: 15px;
+  
+}
+
+.open-orders-nav-container .row3 li {
+  list-style-type: none;
+  margin: 0 5px;
+
+}
+
+.open-orders-nav-container .row3 ul {
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+}
+
+.open-orders-nav-container .row4 {
+  width: 100%; 
+  display: flex;
+  flex-direction: row;
+  align-items: center; 
+  justify-content: center;
+  margin: 0.5rem;
+  margin: 0.5rem;
+}
+
 
 .open-orders-nav-container input,
 .open-orders-nav-container button {

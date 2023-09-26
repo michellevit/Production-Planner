@@ -16,7 +16,6 @@ const OpenOrders = () => {
     fetchOpenOrders();
   }, [sortOption]);
 
-
   const fetchOpenOrders = () => {
     let sortingCriteria = "ship_date";
     let filterByUpcoming = false;
@@ -26,9 +25,8 @@ const OpenOrders = () => {
     let filterByThisWeek = false;
     let filterByNextWeek = false;
     let filterByThisMonth = false;
-    let filterByReadyStatus = false;
-    let filterByNotReadyStatus = false;
-    let filterByDelayed = false;
+    let filterByLastWeek = false;
+    let filterByLastMonth = false;
     switch (sortOption) {
       case "All":
         sortingCriteria = "ship_date";
@@ -54,14 +52,11 @@ const OpenOrders = () => {
       case "This-Month":
         filterByThisMonth = true;
         break;
-      case "Ready":
-        filterByReadyStatus = true;
+      case "Last-Week":
+        filterByLastWeek = true;
         break;
-      case "Not-Ready":
-        filterByNotReadyStatus = true;
-        break;
-      case "Delayed":
-        filterByDelayed = true;
+      case "Last-Month":
+        filterByLastMonth = true;
         break;
       default:
         // For "All" and other options, use the default sorting criteria
@@ -133,7 +128,7 @@ const OpenOrders = () => {
             startOfWeek.setDate(today.getDate() - currentDayOfWeek);
             endOfWeek.setDate(today.getDate() + daysUntilSunday - 1);
           }
-          startOfWeek.setUTCHours(0, 0, 0, 0); 
+          startOfWeek.setUTCHours(0, 0, 0, 0);
           endOfWeek.setUTCHours(23, 59, 59, 999);
           filteredOpenOrders = filteredOpenOrders.filter((order) => {
             const orderDate = new Date(order.ship_date);
@@ -158,14 +153,14 @@ const OpenOrders = () => {
           endOfNextWeek.setUTCHours(23, 59, 59, 999);
           filteredOpenOrders = filteredOpenOrders.filter((order) => {
             const orderDate = new Date(order.ship_date);
-            orderDate.setUTCHours(0, 0, 0, 0); 
+            orderDate.setUTCHours(0, 0, 0, 0);
             return orderDate >= startOfNextWeek && orderDate <= endOfNextWeek;
           });
         }
         if (filterByThisMonth) {
           const startOfMonth = new Date(currentDate);
           startOfMonth.setDate(1);
-          startOfMonth.setUTCHours(0, 0, 0, 0); 
+          startOfMonth.setUTCHours(0, 0, 0, 0);
           const endOfMonth = new Date(currentDate);
           endOfMonth.setMonth(endOfMonth.getMonth() + 1);
           endOfMonth.setDate(0);
@@ -176,20 +171,39 @@ const OpenOrders = () => {
             return orderDate >= startOfMonth && orderDate <= endOfMonth;
           });
         }
-        if (filterByReadyStatus) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) => order.ready === true
-          );
+        if (filterByLastWeek) {
+          const today = new Date(currentDate);
+          const currentWeekStart = new Date(today);
+          currentWeekStart.setDate(today.getDate() - today.getDay());
+          currentWeekStart.setUTCHours(0, 0, 0, 0);
+          const lastWeekEnd = new Date(currentWeekStart);
+          lastWeekEnd.setDate(currentWeekStart.getDate() - 1);
+          lastWeekEnd.setUTCHours(23, 59, 59, 999);
+          const lastWeekStart = new Date(lastWeekEnd);
+          lastWeekStart.setDate(lastWeekEnd.getDate() - 6);
+          lastWeekStart.setUTCHours(0, 0, 0, 0);
+          filteredOpenOrders = filteredOpenOrders.filter((order) => {
+            const orderDate = new Date(order.ship_date);
+            orderDate.setUTCHours(0, 0, 0, 0);
+            return orderDate >= lastWeekStart && orderDate <= lastWeekEnd;
+          });
         }
-        if (filterByNotReadyStatus) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) => order.ready === false
-          );
-        }
-        if (filterByDelayed) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) => order.delay_date != null
-          );
+        if (filterByLastMonth) {
+          const today = new Date(currentDate);
+          const currentMonthStart = new Date(today);
+          currentMonthStart.setUTCHours(0, 0, 0, 0);
+          currentMonthStart.setDate(1);
+          const lastMonthEnd = new Date(currentMonthStart - 1);
+          lastMonthEnd.setUTCHours(23, 59, 59, 999);
+          lastMonthEnd.setDate(lastMonthEnd.getDate() - 1);
+          const lastMonthStart = new Date(lastMonthEnd);
+          lastMonthStart.setDate(1);
+          lastMonthStart.setUTCHours(0, 0, 0, 0);
+          filteredOpenOrders = filteredOpenOrders.filter((order) => {
+            const orderDate = new Date(order.ship_date);
+            orderDate.setUTCHours(0, 0, 0, 0);
+            return orderDate >= lastMonthStart && orderDate <= lastMonthEnd;
+          });
         }
         filteredOpenOrders.sort((a, b) => (a.ship_date > b.ship_date ? 1 : -1));
         setOpenOrders(filteredOpenOrders);
