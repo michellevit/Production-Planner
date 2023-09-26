@@ -57,8 +57,6 @@ class OrderDetailView(APIView):
     def put(self, request, pk):
         try:
             order = Order.objects.get(pk=pk)
-            if 'ready' in request.data:
-                order.ready = request.data['ready']
             if 'ship_date' in request.data:
                 order.ship_date = request.data['ship_date']    
             if 'delay_date' in request.data:
@@ -67,8 +65,12 @@ class OrderDetailView(APIView):
                 order.packages_array = request.data['packages_array']
             if 'notes_array' in request.data:
                 order.notes_array = request.data['notes_array']
+            if 'minimized_status' in request.data:
+                order.minimized_status = request.data['minimized_status']
             if 'shipped' in request.data:
                 order.shipped = request.data['shipped']
+            if 'ready_status' in request.data:
+                order.ready_status = request.data['ready_status']
             order.save()
             return Response({"message": "Ready status updated successfully."})
         except Order.DoesNotExist:

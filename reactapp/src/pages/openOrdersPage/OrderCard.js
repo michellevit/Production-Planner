@@ -13,13 +13,11 @@ import ShippedButton from "./ShippedButton";
 import "./OrderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
 
-
-
 const OrderCard = ({ order, openOrders, setOpenOrders }) => {
   const [isRemoving, setIsRemoving] = useState(false);
-  const [minimized, setMinimized] = useState(true);
   const [delayDate, setDelayDate] = useState();
   const [boxes, setBoxes] = useState([]);
+  const [minimized, setMinimized] = useState(order.minimized_status);
   const [boxConfirmStatus, setBoxConfirmStatus] = useState([]);
   const [formDisplay, setFormDisplay] = useState([]);
   const [buttonDisplay, setButtonDisplay] = useState([]);
@@ -51,18 +49,19 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
                 return box;
               })
             : [];
+          const formattedDelayDate = delay_date ? parseISO(delay_date) : null;
+          setDelayDate(formattedDelayDate);
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);
-          const formattedDelayDate = delay_date ? parseISO(delay_date) : null;
-          setDelayDate(formattedDelayDate);
+          setMinimized(order.minimized_status);
         }
       } catch (error) {
         console.error("Error fetching order details:", error);
       }
     };
     fetchOrderDetails();
-  }, [order.id]);
+  }, [order.id, order.minimized_status]);
 
   const readyHandler = async () => {
     setReadyStatus(true);
@@ -109,6 +108,7 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
     updatedOrder.ship_date = formattedCurrentDate;
     updatedOrder.minimized = true;
     try {
+      console.log("mapping!");
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
@@ -206,24 +206,27 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
     >
       <div className="row" id="row1">
         <div id="row1-row1">
-        <div id="row1col1"></div>
-        <div className="order-number-container" id="row1col2">
-          <div className="order-number-text">SO# {order.order_number}</div>
+          <div id="row1col1"></div>
+          <div className="order-number-container" id="row1col2">
+            <div className="order-number-text">SO# {order.order_number}</div>
+          </div>
+          <div id="row1col3">
+            <MinimizeCardButton
+              order={order}
+              minimized={minimized}
+              setMinimized={setMinimized}
+            />
+            <DeleteButton
+              order={order}
+              openOrders={openOrders}
+              setOpenOrders={setOpenOrders}
+              setIsRemoving={setIsRemoving}
+            />
+          </div>
         </div>
-        <div id="row1col3">
-          <MinimizeCardButton
-            minimized={minimized}
-            setMinimized={setMinimized}
-          />
-          <DeleteButton
-            order={order}
-            openOrders={openOrders}
-            setOpenOrders={setOpenOrders}
-            setIsRemoving={setIsRemoving}
-          />
-        </div>
-        </div>
-        {minimized ? <div id="min-customer-name">{order.customer_name}</div> : null}
+        {minimized ? (
+          <div id="min-customer-name">{order.customer_name}</div>
+        ) : null}
       </div>
       {!minimized && (
         <div className="row" id="row2">
