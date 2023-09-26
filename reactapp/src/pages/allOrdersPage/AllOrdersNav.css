@@ -1,15 +1,15 @@
-.open-orders-nav-container {
+.all-orders-nav-container {
     width: 100%;
     background-color: rgb(182, 182, 182);
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     justify-content: center;
     padding: 1rem 0.8rem;
 }
 
-.open-orders-nav-container .row1 {
+.all-orders-nav-container .row1 {
   width: 100%; 
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@
   margin-top: 0.5rem;
 }
 
-.open-orders-nav-container .row2 {
+.all-orders-nav-container .row2 {
   width: 100%; 
   display: flex;
   flex-direction: row;
@@ -27,45 +27,45 @@
   margin-bottom: 0.5rem;
 }
 
-.open-orders-nav-container input,
-.open-orders-nav-container button {
+.all-orders-nav-container input,
+.all-orders-nav-container button {
   padding: 4px 8px;
   border: none;
   border-radius: 5px;
 }
 
-.open-orders-nav-container input:focus {
+.all-orders-nav-container input:focus {
   outline: none;
 }
 
-.open-orders-nav-container input {
+.all-orders-nav-container input {
     width: 150px;
     border-radius: 5px;
     margin: 0 5px;
   }
   
-  .open-orders-nav-container form button {
+  .all-orders-nav-container form button {
     width: 27px;
     background-color: white;
     border-radius: 5px;
   }
 
-  .open-orders-nav-container button:hover {
+  .all-orders-nav-container button:hover {
     opacity: 0.5;
   }
 
 
-  .open-orders-nav-container button {
+  .all-orders-nav-container button {
     border-radius: 5px;
     margin: 0 5px;
   }
 
-  .open-orders-nav-container .svg-inline--fa {
+  .all-orders-nav-container .svg-inline--fa {
     color: rgb(92, 92, 92);
   }
 
   
-  .open-orders-nav-container select {
+  .all-orders-nav-container select {
     padding: 4px 8px;
     border: none;
     width: 150px;
@@ -73,7 +73,7 @@
     margin: 0 5px;
   }
 
-  .open-orders-nav-container select:focus {
+  .all-orders-nav-container select:focus {
     outline: none;
   }
 

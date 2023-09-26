@@ -6,41 +6,192 @@ import OpenOrdersNav from "./OpenOrdersNav";
 
 const OpenOrders = () => {
   const [openOrders, setOpenOrders] = useState([]);
-  const [sortOption, setSortOption] = useState("All"); 
-  // const [currentDate, setCurrentDate] = useState("");
-
+  const [sortOption, setSortOption] = useState("All");
+  const [currentDate, setCurrentDate] = useState("");
   useEffect(() => {
+    const formattedDate = new Date();
+    formattedDate.setHours(0, 0, 0, 1);
+    setCurrentDate(formattedDate);
+    console.log("Current Date: ", formattedDate);
     fetchOpenOrders();
   }, [sortOption]);
 
+
   const fetchOpenOrders = () => {
     let sortingCriteria = "ship_date";
+    let filterByUpcoming = false;
+    let filterByPast = false;
+    let filterByToday = false;
+    let filterByTomorrow = false;
+    let filterByThisWeek = false;
+    let filterByNextWeek = false;
+    let filterByThisMonth = false;
+    let filterByReadyStatus = false;
+    let filterByNotReadyStatus = false;
+    let filterByDelayed = false;
     switch (sortOption) {
+      case "All":
+        sortingCriteria = "ship_date";
+        break;
+      case "Upcoming":
+        filterByUpcoming = true;
+        break;
+      case "Past":
+        filterByPast = true;
+        break;
       case "Today":
-        sortingCriteria = "ship_date"; 
+        filterByToday = true;
         break;
       case "Tomorrow":
-        sortingCriteria = "ship_date"; 
+        filterByTomorrow = true;
         break;
-      case "This Week":
-        sortingCriteria = "ship_date"; 
+      case "This-Week":
+        filterByThisWeek = true;
         break;
-      case "This Month":
-        sortingCriteria = "ship_date"; 
+      case "Next-Week":
+        filterByNextWeek = true;
+        break;
+      case "This-Month":
+        filterByThisMonth = true;
+        break;
+      case "Ready":
+        filterByReadyStatus = true;
+        break;
+      case "Not-Ready":
+        filterByNotReadyStatus = true;
+        break;
+      case "Delayed":
+        filterByDelayed = true;
         break;
       default:
         // For "All" and other options, use the default sorting criteria
         sortingCriteria = "ship_date";
     }
+
     axios
       .get("http://127.0.0.1:8000/open-orders/")
       .then((response) => {
-        const filteredOpenOrders = response.data.filter(
+        let filteredOpenOrders = response.data.filter(
           (order) => !order.shipped
         );
-        filteredOpenOrders.sort((a, b) =>
-          a[sortingCriteria] < b[sortingCriteria] ? 1 : -1
-        );
+        if (filterByUpcoming) {
+          filteredOpenOrders = filteredOpenOrders.filter((order) => {
+            const orderDate = new Date(order.ship_date);
+            orderDate.setUTCHours(0, 0, 0, 0);
+            const orderDateTimestamp = orderDate.getTime();
+            const today = new Date(currentDate);
+            today.setUTCHours(0, 0, 0, 0);
+            const todayTimestamp = today.getTime();
+
+            return orderDateTimestamp >= todayTimestamp;
+          });
+        }
+        if (filterByPast) {
+          filteredOpenOrders = filteredOpenOrders.filter((order) => {
+            const orderDate = new Date(order.ship_date);
+            orderDate.setUTCHours(0, 0, 0, 0);
+            const orderDateTimestamp = orderDate.getTime();
+            const today = new Date(currentDate);
+            today.setUTCHours(0, 0, 0, 0);
+            const todayTimestamp = today.getTime();
+            return orderDateTimestamp < todayTimestamp;
+          });
+        }
+        if (filterByToday) {
+          const today = new Date(currentDate);
+          today.setUTCHours(0, 0, 0, 0);
+          const todayTimestamp = today.getTime();
+          filteredOpenOrders = filteredOpenOrders.filter((order) => {
+            const orderDate = new Date(order.ship_date);
+            orderDate.setUTCHours(0, 0, 0, 0);
+            const orderDateTimestamp = orderDate.getTime();
+            return orderDateTimestamp === todayTimestamp;
+          });
+        }
+        if (filterByTomorrow) {
+          const tomorrow = new Date(currentDate);
+          tomorrow.setDate(tomorrow.getDate() + 1);
+          tomorrow.setUTCHours(0, 0, 0, 0);
+          const tomorrowTimestamp = tomorrow.getTime();
+          filteredOpenOrders = filteredOpenOrders.filter((order) => {
+            const orderDate = new Date(order.ship_date);
+            orderDate.setUTCHours(0, 0, 0, 0);
+            const orderDateTimestamp = orderDate.getTime();
+            return orderDateTimestamp === tomorrowTimestamp;
+          });
+        }
+        if (filterByThisWeek) {
+          const today = new Date(currentDate);
+          const currentDayOfWeek = today.getDay();
+          const daysUntilSunday = 7 - currentDayOfWeek;
+          let startOfWeek = new Date(today);
+          let endOfWeek = new Date(today);
+          if (currentDayOfWeek === 0) {
+            startOfWeek.setDate(today.getDate());
+            endOfWeek.setDate(today.getDate() + 6);
+          } else {
+            startOfWeek.setDate(today.getDate() - currentDayOfWeek);
+            endOfWeek.setDate(today.getDate() + daysUntilSunday - 1);
+          }
+          startOfWeek.setUTCHours(0, 0, 0, 0); 
+          endOfWeek.setUTCHours(23, 59, 59, 999);
+          filteredOpenOrders = filteredOpenOrders.filter((order) => {
+            const orderDate = new Date(order.ship_date);
+            orderDate.setUTCHours(0, 0, 0, 0);
+            return orderDate >= startOfWeek && orderDate <= endOfWeek;
+          });
+        }
+        if (filterByNextWeek) {
+          const today = new Date(currentDate);
+          const currentDayOfWeek = today.getDay();
+          const daysUntilSunday = 7 - currentDayOfWeek;
+          let startOfNextWeek = new Date(today);
+          let endOfNextWeek = new Date(today);
+          if (currentDayOfWeek === 0) {
+            startOfNextWeek.setDate(today.getDate() + 7);
+            endOfNextWeek.setDate(today.getDate() + 13);
+          } else {
+            startOfNextWeek.setDate(today.getDate() + daysUntilSunday);
+            endOfNextWeek.setDate(today.getDate() + daysUntilSunday + 6);
+          }
+          startOfNextWeek.setUTCHours(0, 0, 0, 0);
+          endOfNextWeek.setUTCHours(23, 59, 59, 999);
+          filteredOpenOrders = filteredOpenOrders.filter((order) => {
+            const orderDate = new Date(order.ship_date);
+            orderDate.setUTCHours(0, 0, 0, 0); 
+            return orderDate >= startOfNextWeek && orderDate <= endOfNextWeek;
+          });
+        }
+        if (filterByThisMonth) {
+          const startOfMonth = new Date(currentDate);
+          startOfMonth.setDate(1);
+          startOfMonth.setUTCHours(0, 0, 0, 0); 
+          const endOfMonth = new Date(currentDate);
+          endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+          endOfMonth.setDate(0);
+          endOfMonth.setUTCHours(23, 59, 59, 999);
+          filteredOpenOrders = filteredOpenOrders.filter((order) => {
+            const orderDate = new Date(order.ship_date);
+            orderDate.setUTCHours(0, 0, 0, 0);
+            return orderDate >= startOfMonth && orderDate <= endOfMonth;
+          });
+        }
+        if (filterByReadyStatus) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) => order.ready === true
+          );
+        }
+        if (filterByNotReadyStatus) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) => order.ready === false
+          );
+        }
+        if (filterByDelayed) {
+          filteredOpenOrders = filteredOpenOrders.filter(
+            (order) => order.delay_date != null
+          );
+        }
+        filteredOpenOrders.sort((a, b) => (a.ship_date > b.ship_date ? 1 : -1));
         setOpenOrders(filteredOpenOrders);
       })
       .catch((error) => {
@@ -91,7 +242,7 @@ const OpenOrders = () => {
       console.error("Error updating orders:", error);
     }
   };
-  
+
   const handleMinimizeAll = async () => {
     try {
       const updatedOrders = openOrders.map((order) => ({
@@ -106,7 +257,7 @@ const OpenOrders = () => {
         );
         return updatedOrder;
       });
-  
+
       const updatedOrdersData = await Promise.all(updatePromises);
       setOpenOrders(updatedOrdersData);
     } catch (error) {
@@ -115,7 +266,7 @@ const OpenOrders = () => {
   };
 
   return (
-    <div className="main-div">
+    <div className="open-main-div">
       <OpenOrdersNav
         handleFilterOrders={handleFilterOrders}
         handleMaximizeAll={handleMaximizeAll}
@@ -123,7 +274,7 @@ const OpenOrders = () => {
         handleSortChange={handleSortChange}
       />
       {openOrders.length === 0 ? (
-        <div>No results...</div>
+        <div className="no-results">No results...</div>
       ) : (
         openOrders.map((order) => (
           <OrderCard

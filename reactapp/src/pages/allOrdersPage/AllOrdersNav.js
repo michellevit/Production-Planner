@@ -1,34 +1,32 @@
 import React, { useState } from "react";
-import "./OpenOrdersNav.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpRightAndDownLeftFromCenter, faDownLeftAndUpRightToCenter } from "@fortawesome/free-solid-svg-icons";
+import "./AllOrdersNav.css";
 
-const OpenOrdersNav = ({ handleFilterOrders, handleMaximizeAll, handleMinimizeAll, handleSortChange }) => {
+
+const AllOrdersNav = () => {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const handleAllSortChange = (e) => {
+    console.log('hi')
+  };
+
 
   const handleSearchInputChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    handleFilterOrders(query);
+    // handleFilterOrders(query);
   };
 
   return (
-    <div className="open-orders-nav-container">
+    <div className="all-orders-nav-container">
       <div className="row1">
       <header>
-        <h1>Open Orders</h1>
+        <h1>All Orders</h1>
       </header>
       </div>
       <div className="row2">
-        <button onClick={handleMaximizeAll}>
-          Max All <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter} />
-        </button>
-        <button onClick={handleMinimizeAll}>
-          Min All <FontAwesomeIcon icon={faDownLeftAndUpRightToCenter} />
-        </button>
         <select
             name="Sort by..."
-            onChange={handleSortChange}
+            onChange={handleAllSortChange}
             id="mySelect"
           >
             <option hidden>Sort by...</option>
@@ -41,9 +39,13 @@ const OpenOrdersNav = ({ handleFilterOrders, handleMaximizeAll, handleMinimizeAl
             <option value="This-Week">This Week</option>
             <option value="Next-Week">Next Week</option>
             <option value="This-Month">This Month</option>
+            <option value="Last-Week">Last Week</option>
+            <option value="Last-Month">Last Month</option>
             <option disabled={true}>--------</option>
             <option value="Ready">Ready</option>
             <option value="Not-Ready">Not Ready</option>
+            <option value="Delayed">Shipped</option>
+            <option value="Delayed">Not Shipped</option>
             <option value="Delayed">Delayed</option>
           </select>
         <input
@@ -57,4 +59,4 @@ const OpenOrdersNav = ({ handleFilterOrders, handleMaximizeAll, handleMinimizeAl
   );
 };
 
-export default OpenOrdersNav;
+export default AllOrdersNav;

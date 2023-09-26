@@ -38,12 +38,20 @@ class SearchOpenOrdersListView(generics.ListAPIView):
                 Q(customer_name__icontains=search_query)
             )
         return queryset
+    
+class SearchAllOrdersListView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        queryset = Order.objects
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            queryset = queryset.filter(
+                Q(order_number__icontains=search_query) |
+                Q(customer_name__icontains=search_query)
+            )
+        return queryset
    
-class ClosedOrdersListView(APIView):
-    def get(self, request):
-        closed_orders = Order.objects.all().filter(shipped=True)
-        serializer = OrderSerializer(closed_orders, many=True)
-        return Response(serializer.data)
 
 class OrderDetailView(APIView):
     def get(self, request, pk):

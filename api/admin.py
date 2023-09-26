@@ -11,6 +11,7 @@ class OrderAdmin(admin.ModelAdmin):
         "order_number",
         "ship_date",
         "customer_name",
+        "shipped",
     )  # Replace field1, field2, and field3 with your model's fields
 
     # Add filters to the right side of the admin page
@@ -18,6 +19,7 @@ class OrderAdmin(admin.ModelAdmin):
         "order_number",
         "ship_date",
         "customer_name",
+        "shipped",
     )  # Replace field1 and field2 with your model's fields
 
     # Add search functionality to the admin page
@@ -26,6 +28,7 @@ class OrderAdmin(admin.ModelAdmin):
         "order_number",
         "ship_date",
         "customer_name",
+        "shipped",
     )  # Replace field1 and field2 with your model's fields
 
 

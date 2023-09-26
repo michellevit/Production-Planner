@@ -225,7 +225,11 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
           </div>
         </div>
         {minimized ? (
-          <div id="min-customer-name">{order.customer_name}</div>
+          <div id="min-customer-info">
+            {order.customer_name}
+            <br></br>
+            {order.ship_date}
+          </div>
         ) : null}
       </div>
       {!minimized && (
