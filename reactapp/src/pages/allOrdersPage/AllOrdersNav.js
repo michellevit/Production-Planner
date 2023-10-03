@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import "./AllOrdersNav.css";
 
 
-const AllOrdersNav = () => {
+const AllOrdersNav = ( { 
+  handleAllSortChange,
+  delayedChecked,
+  setDelayedChecked,
+  oldestChecked,
+  setOldestChecked,
+} ) => {
   const [searchQuery, setSearchQuery] = useState("");
-
-  const handleAllSortChange = (e) => {
-    console.log('hi')
-  };
 
 
   const handleSearchInputChange = (e) => {
@@ -57,7 +59,26 @@ const AllOrdersNav = () => {
           <li><input type="checkbox" id="notReady" value="Not Ready" /><label htmlFor="notReady">Not Ready</label></li>
           <li><input type="checkbox" id="shipped" value="Shipped" /><label htmlFor="shipped">Shipped</label></li>
           <li><input type="checkbox" id="notShipped" value="Not Shipped" /><label htmlFor="notShipped">Not Shipped</label></li>
-          <li><input type="checkbox" id="delayed" value="Delayed" /><label htmlFor="delayed">Delayed</label></li>
+          <li>
+            <input
+              type="checkbox"
+              id="delayed"
+              value="Delayed"
+              checked={delayedChecked}
+              onChange={() => setDelayedChecked(!delayedChecked)}
+            />
+            <label htmlFor="delayed">Delayed</label>
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              id="oldest"
+              value="Oldest"
+              checked={oldestChecked}
+              onChange={() => setOldestChecked(!oldestChecked)}
+            />
+            <label htmlFor="oldest">Oldest</label>
+          </li>
         </ul>
       </div>
     </div>

@@ -259,7 +259,7 @@ const OpenOrders = () => {
   const handleSortChange = (event) => {
     const selectedOption = event.target.value;
     setSortOption(selectedOption);
-  };
+  }; 
 
   const handleFilterOrders = (query) => {
     if (query === "") {
