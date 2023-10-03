@@ -11,16 +11,36 @@ const OpenOrders = () => {
   const [readyChecked, setReadyChecked] = useState(true);
   const [notReadyChecked, setNotReadyChecked] = useState(true);
   const [delayedChecked, setDelayedChecked] = useState(true);
+  const [oldestChecked, setOldestChecked] = useState(false);
 
   useEffect(() => {
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
     fetchOpenOrders();
-  }, [sortOption, readyChecked, notReadyChecked, delayedChecked]);
+  }, [
+    sortOption,
+    readyChecked,
+    notReadyChecked,
+    delayedChecked,
+    oldestChecked,
+  ]);
 
   const fetchOpenOrders = () => {
-    let sortingCriteria = "ship_date";
+    axios
+      .get("http://127.0.0.1:8000/open-orders/")
+      .then((response) => {
+        let filteredOpenOrders = response.data;
+        filteredOpenOrders = applySorting(filteredOpenOrders);
+        setOpenOrders(filteredOpenOrders);
+      })
+      .catch((error) => {
+        console.error("Error getting data", error);
+      });
+  };
+
+  const applySorting = (filteredOpenOrders) => {
+    let filterByAll = false;
     let filterByUpcoming = false;
     let filterByPast = false;
     let filterByToday = false;
@@ -32,7 +52,7 @@ const OpenOrders = () => {
     let filterByLastMonth = false;
     switch (sortOption) {
       case "All":
-        sortingCriteria = "ship_date";
+        filterByAll = true;
         break;
       case "Upcoming":
         filterByUpcoming = true;
@@ -62,217 +82,206 @@ const OpenOrders = () => {
         filterByLastMonth = true;
         break;
       default:
-        sortingCriteria = "ship_date";
+        filterByAll = true;
     }
+    if (readyChecked && notReadyChecked && delayedChecked) {
+      filteredOpenOrders = filteredOpenOrders.filter(
+        (order) => order.ready != null
+      );
+    }
+    if (readyChecked && !notReadyChecked && !delayedChecked) {
+      filteredOpenOrders = filteredOpenOrders.filter(
+        (order) => order.ready === true
+      );
+    }
+    if (readyChecked && notReadyChecked && !delayedChecked) {
+      filteredOpenOrders = filteredOpenOrders.filter(
+        (order) => order.ready != null && order.delay_date === null
+      );
+    }
+    if (readyChecked && !notReadyChecked && delayedChecked) {
+      filteredOpenOrders = filteredOpenOrders.filter(
+        (order) => order.ready === true
+      );
+    }
+    if (!readyChecked && notReadyChecked && delayedChecked) {
+      filteredOpenOrders = filteredOpenOrders.filter(
+        (order) => order.ready === false
+      );
+    }
+    if (!readyChecked && notReadyChecked && !delayedChecked) {
+      filteredOpenOrders = filteredOpenOrders.filter(
+        (order) => order.ready === false && order.delay_date === null
+      );
+    }
+    if (!readyChecked && !notReadyChecked && delayedChecked) {
+      filteredOpenOrders = filteredOpenOrders.filter(
+        (order) => order.delay_date != null
+      );
+    }
+    if (!readyChecked && !notReadyChecked && !delayedChecked) {
+      filteredOpenOrders = filteredOpenOrders.filter(
+        (order) => order.ready === null
+      );
+    }
+    if (filterByUpcoming) {
+      filteredOpenOrders = filteredOpenOrders.filter((order) => {
+        const orderDate = new Date(order.ship_date);
+        orderDate.setUTCHours(0, 0, 0, 0);
+        const orderDateTimestamp = orderDate.getTime();
+        const today = new Date(currentDate);
+        today.setUTCHours(0, 0, 0, 0);
+        const todayTimestamp = today.getTime();
 
-    axios
-      .get("http://127.0.0.1:8000/open-orders/")
-      .then((response) => {
-        let filteredOpenOrders = response.data.filter(
-          (order) => !order.shipped
-        );
-        if (readyChecked && notReadyChecked && delayedChecked) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) => order.ready != null
-          );
-        }
-        if (readyChecked && !notReadyChecked && !delayedChecked) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) => (order.ready === true)
-          );
-        }
-        if (readyChecked && notReadyChecked && !delayedChecked) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) =>
-              (order.ready) != null && (order.delay_date) === null
-          );
-        }
-        if (readyChecked && !notReadyChecked && delayedChecked) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) => order.ready === true
-          );
-        }
-        if (!readyChecked && notReadyChecked && delayedChecked) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) => order.ready === false
-          );
-        }
-        if (!readyChecked && notReadyChecked && !delayedChecked) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) => order.ready === false && order.delay_date === null
-          );
-        }
-        if (!readyChecked && !notReadyChecked && delayedChecked) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) => order.delay_date != null
-          );
-        }
-        if (!readyChecked && !notReadyChecked && !delayedChecked) {
-          filteredOpenOrders = filteredOpenOrders.filter(
-            (order) => order.ready === null
-          );
-        }
-        if (filterByUpcoming) {
-          filteredOpenOrders = filteredOpenOrders.filter((order) => {
-            const orderDate = new Date(order.ship_date);
-            orderDate.setUTCHours(0, 0, 0, 0);
-            const orderDateTimestamp = orderDate.getTime();
-            const today = new Date(currentDate);
-            today.setUTCHours(0, 0, 0, 0);
-            const todayTimestamp = today.getTime();
-
-            return orderDateTimestamp >= todayTimestamp;
-          });
-        }
-        if (filterByPast) {
-          filteredOpenOrders = filteredOpenOrders.filter((order) => {
-            const orderDate = new Date(order.ship_date);
-            orderDate.setUTCHours(0, 0, 0, 0);
-            const orderDateTimestamp = orderDate.getTime();
-            const today = new Date(currentDate);
-            today.setUTCHours(0, 0, 0, 0);
-            const todayTimestamp = today.getTime();
-            return orderDateTimestamp < todayTimestamp;
-          });
-        }
-        if (filterByToday) {
-          const today = new Date(currentDate);
-          today.setUTCHours(0, 0, 0, 0);
-          const todayTimestamp = today.getTime();
-          filteredOpenOrders = filteredOpenOrders.filter((order) => {
-            const orderDate = new Date(order.ship_date);
-            orderDate.setUTCHours(0, 0, 0, 0);
-            const orderDateTimestamp = orderDate.getTime();
-            return orderDateTimestamp === todayTimestamp;
-          });
-        }
-        if (filterByTomorrow) {
-          const tomorrow = new Date(currentDate);
-          tomorrow.setDate(tomorrow.getDate() + 1);
-          tomorrow.setUTCHours(0, 0, 0, 0);
-          const tomorrowTimestamp = tomorrow.getTime();
-          filteredOpenOrders = filteredOpenOrders.filter((order) => {
-            const orderDate = new Date(order.ship_date);
-            orderDate.setUTCHours(0, 0, 0, 0);
-            const orderDateTimestamp = orderDate.getTime();
-            return orderDateTimestamp === tomorrowTimestamp;
-          });
-        }
-        if (filterByThisWeek) {
-          const today = new Date(currentDate);
-          const currentDayOfWeek = today.getDay();
-          const daysUntilSunday = 7 - currentDayOfWeek;
-          let startOfWeek = new Date(today);
-          let endOfWeek = new Date(today);
-          if (currentDayOfWeek === 0) {
-            startOfWeek.setDate(today.getDate());
-            endOfWeek.setDate(today.getDate() + 6);
-          } else {
-            startOfWeek.setDate(today.getDate() - currentDayOfWeek);
-            endOfWeek.setDate(today.getDate() + daysUntilSunday - 1);
-          }
-          startOfWeek.setUTCHours(0, 0, 0, 0);
-          endOfWeek.setUTCHours(23, 59, 59, 999);
-          filteredOpenOrders = filteredOpenOrders.filter((order) => {
-            const orderDate = new Date(order.ship_date);
-            orderDate.setUTCHours(0, 0, 0, 0);
-            return orderDate >= startOfWeek && orderDate <= endOfWeek;
-          });
-        }
-        if (filterByNextWeek) {
-          const today = new Date(currentDate);
-          const currentDayOfWeek = today.getDay();
-          const daysUntilSunday = 7 - currentDayOfWeek;
-          let startOfNextWeek = new Date(today);
-          let endOfNextWeek = new Date(today);
-          if (currentDayOfWeek === 0) {
-            startOfNextWeek.setDate(today.getDate() + 7);
-            endOfNextWeek.setDate(today.getDate() + 13);
-          } else {
-            startOfNextWeek.setDate(today.getDate() + daysUntilSunday);
-            endOfNextWeek.setDate(today.getDate() + daysUntilSunday + 6);
-          }
-          startOfNextWeek.setUTCHours(0, 0, 0, 0);
-          endOfNextWeek.setUTCHours(23, 59, 59, 999);
-          filteredOpenOrders = filteredOpenOrders.filter((order) => {
-            const orderDate = new Date(order.ship_date);
-            orderDate.setUTCHours(0, 0, 0, 0);
-            return orderDate >= startOfNextWeek && orderDate <= endOfNextWeek;
-          });
-        }
-        if (filterByThisMonth) {
-          const startOfMonth = new Date(currentDate);
-          startOfMonth.setDate(1);
-          startOfMonth.setUTCHours(0, 0, 0, 0);
-          const endOfMonth = new Date(currentDate);
-          endOfMonth.setMonth(endOfMonth.getMonth() + 1);
-          endOfMonth.setDate(0);
-          endOfMonth.setUTCHours(23, 59, 59, 999);
-          filteredOpenOrders = filteredOpenOrders.filter((order) => {
-            const orderDate = new Date(order.ship_date);
-            orderDate.setUTCHours(0, 0, 0, 0);
-            return orderDate >= startOfMonth && orderDate <= endOfMonth;
-          });
-        }
-        if (filterByLastWeek) {
-          const today = new Date(currentDate);
-          const currentWeekStart = new Date(today);
-          currentWeekStart.setDate(today.getDate() - today.getDay());
-          currentWeekStart.setUTCHours(0, 0, 0, 0);
-          const lastWeekEnd = new Date(currentWeekStart);
-          lastWeekEnd.setDate(currentWeekStart.getDate() - 1);
-          lastWeekEnd.setUTCHours(23, 59, 59, 999);
-          const lastWeekStart = new Date(lastWeekEnd);
-          lastWeekStart.setDate(lastWeekEnd.getDate() - 6);
-          lastWeekStart.setUTCHours(0, 0, 0, 0);
-          filteredOpenOrders = filteredOpenOrders.filter((order) => {
-            const orderDate = new Date(order.ship_date);
-            orderDate.setUTCHours(0, 0, 0, 0);
-            return orderDate >= lastWeekStart && orderDate <= lastWeekEnd;
-          });
-        }
-        if (filterByLastMonth) {
-          const today = new Date(currentDate);
-          const currentMonthStart = new Date(today);
-          currentMonthStart.setUTCHours(0, 0, 0, 0);
-          currentMonthStart.setDate(1);
-          const lastMonthEnd = new Date(currentMonthStart - 1);
-          lastMonthEnd.setUTCHours(23, 59, 59, 999);
-          lastMonthEnd.setDate(lastMonthEnd.getDate() - 1);
-          const lastMonthStart = new Date(lastMonthEnd);
-          lastMonthStart.setDate(1);
-          lastMonthStart.setUTCHours(0, 0, 0, 0);
-          filteredOpenOrders = filteredOpenOrders.filter((order) => {
-            const orderDate = new Date(order.ship_date);
-            orderDate.setUTCHours(0, 0, 0, 0);
-            return orderDate >= lastMonthStart && orderDate <= lastMonthEnd;
-          });
-        }
-        filteredOpenOrders.sort((a, b) => (a.ship_date > b.ship_date ? 1 : -1));
-        setOpenOrders(filteredOpenOrders);
-      })
-      .catch((error) => {
-        console.error("Error getting data", error);
+        return orderDateTimestamp >= todayTimestamp;
       });
+    }
+    if (filterByPast) {
+      filteredOpenOrders = filteredOpenOrders.filter((order) => {
+        const orderDate = new Date(order.ship_date);
+        orderDate.setUTCHours(0, 0, 0, 0);
+        const orderDateTimestamp = orderDate.getTime();
+        const today = new Date(currentDate);
+        today.setUTCHours(0, 0, 0, 0);
+        const todayTimestamp = today.getTime();
+        return orderDateTimestamp < todayTimestamp;
+      });
+    }
+    if (filterByToday) {
+      const today = new Date(currentDate);
+      today.setUTCHours(0, 0, 0, 0);
+      const todayTimestamp = today.getTime();
+      filteredOpenOrders = filteredOpenOrders.filter((order) => {
+        const orderDate = new Date(order.ship_date);
+        orderDate.setUTCHours(0, 0, 0, 0);
+        const orderDateTimestamp = orderDate.getTime();
+        return orderDateTimestamp === todayTimestamp;
+      });
+    }
+    if (filterByTomorrow) {
+      const tomorrow = new Date(currentDate);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setUTCHours(0, 0, 0, 0);
+      const tomorrowTimestamp = tomorrow.getTime();
+      filteredOpenOrders = filteredOpenOrders.filter((order) => {
+        const orderDate = new Date(order.ship_date);
+        orderDate.setUTCHours(0, 0, 0, 0);
+        const orderDateTimestamp = orderDate.getTime();
+        return orderDateTimestamp === tomorrowTimestamp;
+      });
+    }
+    if (filterByThisWeek) {
+      const today = new Date(currentDate);
+      const currentDayOfWeek = today.getDay();
+      const daysUntilSunday = 7 - currentDayOfWeek;
+      let startOfWeek = new Date(today);
+      let endOfWeek = new Date(today);
+      if (currentDayOfWeek === 0) {
+        startOfWeek.setDate(today.getDate());
+        endOfWeek.setDate(today.getDate() + 6);
+      } else {
+        startOfWeek.setDate(today.getDate() - currentDayOfWeek);
+        endOfWeek.setDate(today.getDate() + daysUntilSunday - 1);
+      }
+      startOfWeek.setUTCHours(0, 0, 0, 0);
+      endOfWeek.setUTCHours(23, 59, 59, 999);
+      filteredOpenOrders = filteredOpenOrders.filter((order) => {
+        const orderDate = new Date(order.ship_date);
+        orderDate.setUTCHours(0, 0, 0, 0);
+        return orderDate >= startOfWeek && orderDate <= endOfWeek;
+      });
+    }
+    if (filterByNextWeek) {
+      const today = new Date(currentDate);
+      const currentDayOfWeek = today.getDay();
+      const daysUntilSunday = 7 - currentDayOfWeek;
+      let startOfNextWeek = new Date(today);
+      let endOfNextWeek = new Date(today);
+      if (currentDayOfWeek === 0) {
+        startOfNextWeek.setDate(today.getDate() + 7);
+        endOfNextWeek.setDate(today.getDate() + 13);
+      } else {
+        startOfNextWeek.setDate(today.getDate() + daysUntilSunday);
+        endOfNextWeek.setDate(today.getDate() + daysUntilSunday + 6);
+      }
+      startOfNextWeek.setUTCHours(0, 0, 0, 0);
+      endOfNextWeek.setUTCHours(23, 59, 59, 999);
+      filteredOpenOrders = filteredOpenOrders.filter((order) => {
+        const orderDate = new Date(order.ship_date);
+        orderDate.setUTCHours(0, 0, 0, 0);
+        return orderDate >= startOfNextWeek && orderDate <= endOfNextWeek;
+      });
+    }
+    if (filterByThisMonth) {
+      const startOfMonth = new Date(currentDate);
+      startOfMonth.setDate(1);
+      startOfMonth.setUTCHours(0, 0, 0, 0);
+      const endOfMonth = new Date(currentDate);
+      endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+      endOfMonth.setDate(0);
+      endOfMonth.setUTCHours(23, 59, 59, 999);
+      filteredOpenOrders = filteredOpenOrders.filter((order) => {
+        const orderDate = new Date(order.ship_date);
+        orderDate.setUTCHours(0, 0, 0, 0);
+        return orderDate >= startOfMonth && orderDate <= endOfMonth;
+      });
+    }
+    if (filterByLastWeek) {
+      const today = new Date(currentDate);
+      const currentWeekStart = new Date(today);
+      currentWeekStart.setDate(today.getDate() - today.getDay());
+      currentWeekStart.setUTCHours(0, 0, 0, 0);
+      const lastWeekEnd = new Date(currentWeekStart);
+      lastWeekEnd.setDate(currentWeekStart.getDate() - 1);
+      lastWeekEnd.setUTCHours(23, 59, 59, 999);
+      const lastWeekStart = new Date(lastWeekEnd);
+      lastWeekStart.setDate(lastWeekEnd.getDate() - 6);
+      lastWeekStart.setUTCHours(0, 0, 0, 0);
+      filteredOpenOrders = filteredOpenOrders.filter((order) => {
+        const orderDate = new Date(order.ship_date);
+        orderDate.setUTCHours(0, 0, 0, 0);
+        return orderDate >= lastWeekStart && orderDate <= lastWeekEnd;
+      });
+    }
+    if (filterByLastMonth) {
+      const today = new Date(currentDate);
+      const currentMonthStart = new Date(today);
+      currentMonthStart.setUTCHours(0, 0, 0, 0);
+      currentMonthStart.setDate(1);
+      const lastMonthEnd = new Date(currentMonthStart - 1);
+      lastMonthEnd.setUTCHours(23, 59, 59, 999);
+      lastMonthEnd.setDate(lastMonthEnd.getDate() - 1);
+      const lastMonthStart = new Date(lastMonthEnd);
+      lastMonthStart.setDate(1);
+      lastMonthStart.setUTCHours(0, 0, 0, 0);
+      filteredOpenOrders = filteredOpenOrders.filter((order) => {
+        const orderDate = new Date(order.ship_date);
+        orderDate.setUTCHours(0, 0, 0, 0);
+        return orderDate >= lastMonthStart && orderDate <= lastMonthEnd;
+      });
+    }
+    if (oldestChecked) {
+      filteredOpenOrders.sort((a, b) => (a.ship_date > b.ship_date ? 1 : -1));
+    } else {
+      filteredOpenOrders.sort((a, b) => (a.ship_date < b.ship_date ? 1 : -1));
+    }
+    return filteredOpenOrders;
   };
 
   const handleSortChange = (event) => {
     const selectedOption = event.target.value;
     setSortOption(selectedOption);
-  }; 
+  };
 
   const handleSearchOrders = (query) => {
     if (query === "") {
       fetchOpenOrders();
     } else {
-      const checkboxQuery = `readyChecked=${readyChecked}&notReadyChecked=${notReadyChecked}&delayedChecked=${delayedChecked}`;
       axios
-        .get(`http://127.0.0.1:8000/open-orders-search/?search=${query}&${checkboxQuery}`)
+        .get(`http://127.0.0.1:8000/open-orders-search/?search=${query}`)
         .then((response) => {
-          const filteredOpenOrders = response.data;
-          filteredOpenOrders.sort((a, b) =>
-            a.ship_date < b.ship_date ? 1 : -1
-          );
+          let filteredOpenOrders = response.data;
+          filteredOpenOrders = applySorting(filteredOpenOrders);
           setOpenOrders(filteredOpenOrders);
         })
         .catch((error) => {
@@ -326,7 +335,7 @@ const OpenOrders = () => {
   return (
     <div className="open-main-div">
       <OpenOrdersNav
-        handlesearchOrders={handleSearchOrders}
+        handleSearchOrders={handleSearchOrders}
         handleMaximizeAll={handleMaximizeAll}
         handleMinimizeAll={handleMinimizeAll}
         handleSortChange={handleSortChange}
@@ -336,6 +345,8 @@ const OpenOrders = () => {
         setNotReadyChecked={setNotReadyChecked}
         delayedChecked={delayedChecked}
         setDelayedChecked={setDelayedChecked}
+        oldestChecked={oldestChecked}
+        setOldestChecked={setOldestChecked}
       />
       {openOrders.length === 0 ? (
         <div className="no-results">No results...</div>

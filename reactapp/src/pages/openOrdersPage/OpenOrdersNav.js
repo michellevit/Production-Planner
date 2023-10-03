@@ -17,6 +17,8 @@ const OpenOrdersNav = ({
   setNotReadyChecked,
   delayedChecked,
   setDelayedChecked,
+  oldestChecked,
+  setOldestChecked,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -88,6 +90,16 @@ const OpenOrdersNav = ({
               onChange={() => setDelayedChecked(!delayedChecked)}
             />
             <label htmlFor="delayed">Delayed</label>
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              id="oldest"
+              value="Oldest"
+              checked={oldestChecked}
+              onChange={() => setOldestChecked(!oldestChecked)}
+            />
+            <label htmlFor="oldest">Oldest</label>
           </li>
           <li>
             <button onClick={handleMaximizeAll}>
