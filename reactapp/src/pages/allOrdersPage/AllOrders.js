@@ -11,6 +11,8 @@ const AllOrders = () => {
   const [currentDate, setCurrentDate] = useState("");
   const [readyChecked, setReadyChecked] = useState(true);
   const [notReadyChecked, setNotReadyChecked] = useState(true);
+  const [shippedChecked, setShippedChecked] = useState(true);
+  const [notShippedChecked, setNotShippedChecked] = useState(true);
   const [delayedChecked, setDelayedChecked] = useState(true);
   const [oldestChecked, setOldestChecked] = useState(false);
   const [fadingRows, setFadingRows] = useState([]);
@@ -34,6 +36,10 @@ const AllOrders = () => {
             filteredAllOrders = applySorting(filteredAllOrders);
           }
           setAllOrders(filteredAllOrders);
+          const newTotalPages = Math.ceil((filteredAllOrders?.length || 0) / ordersPerPage);
+          if (currentPage > newTotalPages) {
+            setCurrentPage(1);
+          }
         })
         .catch((error) => {
           console.error("Error getting data", error);
@@ -44,9 +50,12 @@ const AllOrders = () => {
     sortOption,
     readyChecked,
     notReadyChecked,
+    shippedChecked, 
+    notShippedChecked, 
     delayedChecked,
     oldestChecked,
     searchQuery,
+    currentPage,
   ]);
 
   
@@ -135,6 +144,14 @@ const AllOrders = () => {
       filteredAllOrders = filteredAllOrders.filter(
         (order) => order.ready === null
       );
+    }
+    if (shippedChecked && notShippedChecked) {
+    } else if (shippedChecked && !notShippedChecked) {
+      filteredAllOrders = filteredAllOrders.filter((order) => order.shipped === true);
+    } else if (!shippedChecked && notShippedChecked) {
+      filteredAllOrders = filteredAllOrders.filter((order) => order.shipped === false);
+    } else {
+      filteredAllOrders = [];
     }
     if (filterByUpcoming) {
       filteredAllOrders = filteredAllOrders.filter((order) => {
@@ -331,13 +348,10 @@ const AllOrders = () => {
     return splitText[0];
   };
   const onPageChange = (pageNumber) => {
-    if (
-      pageNumber < 1 ||
-      pageNumber > Math.ceil(allOrders.length / ordersPerPage)
-    ) {
+    if (pageNumber < 1 || pageNumber > Math.ceil(allOrders.length / ordersPerPage)) {
       return;
     }
-    setCurrentPage(pageNumber);
+    setCurrentPage(() => pageNumber);
   };
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
@@ -357,6 +371,10 @@ const AllOrders = () => {
         readyChecked={readyChecked}
         setReadyChecked={setReadyChecked}
         notReadyChecked={notReadyChecked}
+        shippedChecked={shippedChecked}
+        setShippedChecked={setShippedChecked}
+        notShippedChecked={notShippedChecked}
+        setNotShippedChecked={setNotShippedChecked}
         setNotReadyChecked={setNotReadyChecked}
         delayedChecked={delayedChecked}
         setDelayedChecked={setDelayedChecked}
