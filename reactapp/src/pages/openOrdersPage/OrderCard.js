@@ -126,7 +126,6 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
   };
 
   const updateDelayDate = async (date) => {
-    console.log("updateDelayDate()");
     try {
       const formattedDate = date ? date.toISOString().split("T")[0] : null;
       const updatedOrder = order;
@@ -139,6 +138,7 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
       console.error("Error updating order:", error);
     }
   };
+  
   const boxConfirmHandler = (boxConfirmStatus) => {
     if (boxConfirmStatus) {
       setFormDisplay(false);

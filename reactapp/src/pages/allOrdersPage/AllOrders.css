@@ -119,6 +119,13 @@
 .all-orders-table #ship-date {
   width: 10%;
 }
+.all-orders-table #ship-date input {
+  width: 25px;
+} 
+.all-orders-table #ship-date .react-datepicker__input-container {
+  margin-left: 2.5px;
+}
+
 .all-orders-table #order-number {
   width: 10%;
 }
