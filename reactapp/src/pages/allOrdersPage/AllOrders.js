@@ -3,7 +3,7 @@ import axios from "axios";
 import AllOrdersNav from "./AllOrdersNav";
 import "./AllOrders.css";
 import UnshipButton from "./UnshipButton";
-import Pagination from "./Pagination"; // Import the Pagination component
+import Pagination from "./Pagination";
 
 const AllOrders = () => {
   const [allOrders, setAllOrders] = useState([]);
@@ -79,11 +79,7 @@ const AllOrders = () => {
       .get("http://127.0.0.1:8000/all-orders/")
       .then((response) => {
         let filteredAllOrders = response.data;
-        if (delayedChecked) {
-          filteredAllOrders = filteredAllOrders.filter(
-            (order) => order.delay_date != null
-          );
-        }
+        
         if (readyChecked && notReadyChecked && delayedChecked) {
           filteredAllOrders = filteredAllOrders.filter(
             (order) => order.ready != null
@@ -276,11 +272,33 @@ const AllOrders = () => {
       });
   };
 
-  const handleAllSortChange = (event) => {
+  const handleSortChange = (event) => {
     const selectedOption = event.target.value;
     setSortOption(selectedOption);
   };
 
+  const handleSearchOrders = (query) => {
+    if (query === "") {
+      fetchAllOrders(); // Reset to original state if search query is empty
+    } else {
+      const checkboxQuery = `readyChecked=${readyChecked}&notReadyChecked=${notReadyChecked}&delayedChecked=${delayedChecked}`;
+  
+      // Construct a URL to search orders within the current filtered state
+      const searchUrl = `http://127.0.0.1:8000/all-orders-search/?search=${query}&${checkboxQuery}`;
+  
+      axios
+        .get(searchUrl)
+        .then((response) => {
+          const filteredSearchResults = response.data;
+          // Sort the search results as needed
+          filteredSearchResults.sort((a, b) => (oldestChecked ? a.ship_date - b.ship_date : b.ship_date - a.ship_date));
+          setAllOrders(filteredSearchResults);
+        })
+        .catch((error) => {
+          console.error("Error searching orders:", error);
+        });
+    }
+  };
   const handleUnship = (orderId) => {
     setFadingRows([...fadingRows, orderId]);
     axios
@@ -321,35 +339,22 @@ const AllOrders = () => {
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = allOrders.slice(indexOfFirstOrder, indexOfLastOrder);
 
-  const handleFilterOrders = (query) => {
-    if (query === "") {
-      fetchAllOrders();
-    } else {
-      axios
-        .get(`http://127.0.0.1:8000/all-orders-search/?search=${query}`)
-        .then((response) => {
-          const filteredAllOrders = response.data;
-          filteredAllOrders.sort((a, b) =>
-            a.ship_date < b.ship_date ? 1 : -1
-          );
-          setAllOrders(filteredAllOrders);
-        })
-        .catch((error) => {
-          console.error("Error searching orders:", error);
-        });
-    }
-  };
-
   return (
     <div className="all-main-div">
       <AllOrdersNav
-        handleAllSortChange={handleAllSortChange}
+        handleSortChange={handleSortChange}
+        handleSearchOrders={handleSearchOrders}
+        readyChecked={readyChecked}
+        setReadyChecked={setReadyChecked}
+        notReadyChecked={notReadyChecked}
+        setNotReadyChecked={setNotReadyChecked}
         delayedChecked={delayedChecked}
         setDelayedChecked={setDelayedChecked}
         oldestChecked={oldestChecked}
         setOldestChecked={setOldestChecked}
       />
       <div className="all-orders-table-container">
+
         <table className="all-orders-table">
           <thead>
             <tr>
@@ -359,16 +364,31 @@ const AllOrders = () => {
               <th id="items">Items</th>
               <th id="packages">Packages</th>
               <th id="notes">Notes</th>
+              <th id="ready">Ready</th>
               <th id="shipped">Shipped</th>
             </tr>
           </thead>
           <tbody>
-            {currentOrders.map((order) => (
+          {currentOrders.length === 0 ? (
+            <tr>
+              <td colSpan="8" className="no-orders-message">
+                No orders to display
+              </td>
+            </tr>
+          ) : (
+            currentOrders.map((order) => (
               <tr
                 key={order.id}
                 className={fadingRows.includes(order.id) ? "row-fade-out" : ""}
               >
-                <td>{order.ship_date}</td>
+                <td>
+                  <div>{order.ship_date}</div>
+                  {order.delay_date !== null ? (
+                    <div style={{ fontSize: "smaller", color: "red" }}>
+                      *Delayed: {order.delay_date}
+                    </div>
+                  ) : null}
+                </td>
                 <td>{order.order_number}</td>
                 <td>{order.customer_name}</td>
                 <td>
@@ -425,6 +445,7 @@ const AllOrders = () => {
                     ""
                   )}
                 </td>
+                <td id="ready">{order.ready === false ? "No" : "Yes"}</td>
                 <td id="shipped">
                   {order.shipped === false ? (
                     "No"
@@ -433,7 +454,8 @@ const AllOrders = () => {
                   )}
                 </td>
               </tr>
-            ))}
+            ))
+            )}
           </tbody>
         </table>
       </div>

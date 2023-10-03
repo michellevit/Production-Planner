@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const OpenOrdersNav = ({
-  handleFilterOrders,
+  handleSearchOrders,
   handleMaximizeAll,
   handleMinimizeAll,
   handleSortChange,
@@ -23,7 +23,7 @@ const OpenOrdersNav = ({
   const handleSearchInputChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    handleFilterOrders(query);
+    handleSearchOrders(query);
   };
 
   return (
