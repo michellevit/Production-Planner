@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import AllOrdersNav from "./AllOrdersNav";
 import "./AllOrders.css";
+import AllOrdersNav from "./AllOrdersNav";
+import EditShipDateButton from "./EditShipDateButton";
 import UnshipButton from "./UnshipButton";
 import Pagination from "./Pagination";
 
@@ -9,6 +10,7 @@ const AllOrders = () => {
   const [allOrders, setAllOrders] = useState([]);
   const [sortOption, setSortOption] = useState("All");
   const [currentDate, setCurrentDate] = useState("");
+  const [refreshOrders, setRefreshOrders] = useState(false);
   const [readyChecked, setReadyChecked] = useState(true);
   const [notReadyChecked, setNotReadyChecked] = useState(true);
   const [shippedChecked, setShippedChecked] = useState(true);
@@ -24,6 +26,7 @@ const AllOrders = () => {
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
+    let shouldRefreshOrders = false;
     const fetchAllOrders = () => {
       axios
         .get("http://127.0.0.1:8000/all-orders/")
@@ -31,34 +34,40 @@ const AllOrders = () => {
           let filteredAllOrders = response.data;
           if (searchQuery !== "") {
             filteredAllOrders = handleSearchOrders(searchQuery);
-          }
-          else {
+          } else {
             filteredAllOrders = applySorting(filteredAllOrders);
           }
           setAllOrders(filteredAllOrders);
-          const newTotalPages = Math.ceil((filteredAllOrders?.length || 0) / ordersPerPage);
+          const newTotalPages = Math.ceil(
+            (filteredAllOrders?.length || 0) / ordersPerPage
+          );
           if (currentPage > newTotalPages) {
             setCurrentPage(1);
           }
         })
         .catch((error) => {
           console.error("Error getting data", error);
+        })
+        .finally(() => {
+          if (shouldRefreshOrders) {
+            setRefreshOrders(!refreshOrders);
+          }
         });
     };
     fetchAllOrders();
+    shouldRefreshOrders = true;
   }, [
     sortOption,
     readyChecked,
     notReadyChecked,
-    shippedChecked, 
-    notShippedChecked, 
+    shippedChecked,
+    notShippedChecked,
     delayedChecked,
     oldestChecked,
     searchQuery,
     currentPage,
+    refreshOrders,
   ]);
-
-  
 
   const applySorting = (filteredAllOrders) => {
     let filterByAll = false;
@@ -147,9 +156,13 @@ const AllOrders = () => {
     }
     if (shippedChecked && notShippedChecked) {
     } else if (shippedChecked && !notShippedChecked) {
-      filteredAllOrders = filteredAllOrders.filter((order) => order.shipped === true);
+      filteredAllOrders = filteredAllOrders.filter(
+        (order) => order.shipped === true
+      );
     } else if (!shippedChecked && notShippedChecked) {
-      filteredAllOrders = filteredAllOrders.filter((order) => order.shipped === false);
+      filteredAllOrders = filteredAllOrders.filter(
+        (order) => order.shipped === false
+      );
     } else {
       filteredAllOrders = [];
     }
@@ -320,6 +333,21 @@ const AllOrders = () => {
     }
   };
 
+  const editShipDate = async (order, date) => {
+    try {
+      const formattedDate = date ? date.toISOString().split("T")[0] : null;
+      const updatedOrder = order;
+      updatedOrder.ship_date = formattedDate;
+      await axios.put(
+        `http://127.0.0.1:8000/all-orders/${order.id}/`,
+        updatedOrder
+      );
+      setRefreshOrders(!refreshOrders);
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
+
   const handleUnship = (orderId) => {
     setFadingRows([...fadingRows, orderId]);
     axios
@@ -348,7 +376,10 @@ const AllOrders = () => {
     return splitText[0];
   };
   const onPageChange = (pageNumber) => {
-    if (pageNumber < 1 || pageNumber > Math.ceil(allOrders.length / ordersPerPage)) {
+    if (
+      pageNumber < 1 ||
+      pageNumber > Math.ceil(allOrders.length / ordersPerPage)
+    ) {
       return;
     }
     setCurrentPage(() => pageNumber);
@@ -412,17 +443,20 @@ const AllOrders = () => {
                     fadingRows.includes(order.id) ? "row-fade-out" : ""
                   }
                 >
-                  <td>
-                    <div>{order.ship_date}</div>
+                  <td id="ship-date">
+                    <EditShipDateButton
+                      order={order}
+                      editShipDate={editShipDate}
+                    />
                     {order.delay_date !== null ? (
                       <div style={{ fontSize: "smaller", color: "red" }}>
                         *Delayed: {order.delay_date}
                       </div>
                     ) : null}
                   </td>
-                  <td>{order.order_number}</td>
-                  <td>{order.customer_name}</td>
-                  <td>
+                  <td id="order-number">{order.order_number}</td>
+                  <td id="customer-name">{order.customer_name}</td>
+                  <td id="items">
                     <table className="item-table">
                       <tbody>
                         {Object.keys(order.item_subtype_dict).map(
@@ -440,7 +474,7 @@ const AllOrders = () => {
                       </tbody>
                     </table>
                   </td>
-                  <td>
+                  <td id="packages">
                     <table className="package-table">
                       <tbody>
                         {Array.isArray(order.packages_array) &&
@@ -461,7 +495,7 @@ const AllOrders = () => {
                       </tbody>
                     </table>
                   </td>
-                  <td>
+                  <td id="notes">
                     {order.notes_array && Array.isArray(order.notes_array) ? (
                       <table className="notes-table">
                         <tbody>
