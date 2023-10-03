@@ -139,7 +139,7 @@ const AllOrders = () => {
                     {Array.isArray(order.packages_array) &&
                       order.packages_array.map((packageItem, index) => (
                         <tr
-                          key={order.id}
+                          key={index}
                           className={
                             fadingRows.includes(order.id) ? "row-fade-out" : ""
                           }
