@@ -12,11 +12,29 @@ const OpenOrders = () => {
   const [notReadyChecked, setNotReadyChecked] = useState(true);
   const [delayedChecked, setDelayedChecked] = useState(true);
   const [oldestChecked, setOldestChecked] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
+    const fetchOpenOrders = () => {
+      axios
+        .get("http://127.0.0.1:8000/open-orders/")
+        .then((response) => {
+          let filteredOpenOrders = response.data;
+          if (searchQuery !== "") {
+            filteredOpenOrders = handleSearchOrders(searchQuery);
+          }
+          else {
+            filteredOpenOrders = applySorting(filteredOpenOrders);
+          }
+          setOpenOrders(filteredOpenOrders);
+        })
+        .catch((error) => {
+          console.error("Error getting data", error);
+        });
+    };
     fetchOpenOrders();
   }, [
     sortOption,
@@ -24,20 +42,9 @@ const OpenOrders = () => {
     notReadyChecked,
     delayedChecked,
     oldestChecked,
+    searchQuery,
   ]);
 
-  const fetchOpenOrders = () => {
-    axios
-      .get("http://127.0.0.1:8000/open-orders/")
-      .then((response) => {
-        let filteredOpenOrders = response.data;
-        filteredOpenOrders = applySorting(filteredOpenOrders);
-        setOpenOrders(filteredOpenOrders);
-      })
-      .catch((error) => {
-        console.error("Error getting data", error);
-      });
-  };
 
   const applySorting = (filteredOpenOrders) => {
     let filterByAll = false;
@@ -275,7 +282,7 @@ const OpenOrders = () => {
 
   const handleSearchOrders = (query) => {
     if (query === "") {
-      fetchOpenOrders();
+      setSearchQuery("");
     } else {
       axios
         .get(`http://127.0.0.1:8000/open-orders-search/?search=${query}`)
@@ -283,6 +290,7 @@ const OpenOrders = () => {
           let filteredOpenOrders = response.data;
           filteredOpenOrders = applySorting(filteredOpenOrders);
           setOpenOrders(filteredOpenOrders);
+          return filteredOpenOrders;
         })
         .catch((error) => {
           console.error("Error searching orders:", error);
@@ -347,6 +355,8 @@ const OpenOrders = () => {
         setDelayedChecked={setDelayedChecked}
         oldestChecked={oldestChecked}
         setOldestChecked={setOldestChecked}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
       {openOrders.length === 0 ? (
         <div className="no-results">No results...</div>

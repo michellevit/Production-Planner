@@ -16,11 +16,29 @@ const AllOrders = () => {
   const [fadingRows, setFadingRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersPerPage] = useState(20);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
+    const fetchAllOrders = () => {
+      axios
+        .get("http://127.0.0.1:8000/all-orders/")
+        .then((response) => {
+          let filteredAllOrders = response.data;
+          if (searchQuery !== "") {
+            filteredAllOrders = handleSearchOrders(searchQuery);
+          }
+          else {
+            filteredAllOrders = applySorting(filteredAllOrders);
+          }
+          setAllOrders(filteredAllOrders);
+        })
+        .catch((error) => {
+          console.error("Error getting data", error);
+        });
+    };
     fetchAllOrders();
   }, [
     sortOption,
@@ -28,20 +46,10 @@ const AllOrders = () => {
     notReadyChecked,
     delayedChecked,
     oldestChecked,
+    searchQuery,
   ]);
 
-  const fetchAllOrders = () => {
-    axios
-      .get("http://127.0.0.1:8000/all-orders/")
-      .then((response) => {
-        let filteredAllOrders = response.data;
-        filteredAllOrders = applySorting(filteredAllOrders);
-        setAllOrders(filteredAllOrders);
-      })
-      .catch((error) => {
-        console.error("Error getting data", error);
-      });
-  };
+  
 
   const applySorting = (filteredAllOrders) => {
     let filterByAll = false;
@@ -265,28 +273,21 @@ const AllOrders = () => {
       });
     }
     if (oldestChecked) {
-      filteredAllOrders.sort((a, b) =>
-        a.ship_date > b.ship_date ? 1 : -1
-      );
+      filteredAllOrders.sort((a, b) => (a.ship_date > b.ship_date ? 1 : -1));
     } else {
-      filteredAllOrders.sort((a, b) =>
-        a.ship_date < b.ship_date ? 1 : -1
-      );
+      filteredAllOrders.sort((a, b) => (a.ship_date < b.ship_date ? 1 : -1));
     }
     return filteredAllOrders;
   };
-
 
   const handleSortChange = (event) => {
     const selectedOption = event.target.value;
     setSortOption(selectedOption);
   };
 
-
-
   const handleSearchOrders = (query) => {
     if (query === "") {
-      fetchAllOrders();
+      setSearchQuery("");
     } else {
       axios
         .get(`http://127.0.0.1:8000/all-orders-search/?search=${query}`)
@@ -294,6 +295,7 @@ const AllOrders = () => {
           let filteredAllOrders = response.data;
           filteredAllOrders = applySorting(filteredAllOrders);
           setAllOrders(filteredAllOrders);
+          return filteredAllOrders;
         })
         .catch((error) => {
           console.error("Error searching orders:", error);
@@ -339,7 +341,13 @@ const AllOrders = () => {
   };
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = allOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentOrders = allOrders
+    ? allOrders.slice(indexOfFirstOrder, indexOfLastOrder)
+    : [];
+  const totalPages =
+    allOrders && allOrders.length > 0
+      ? Math.ceil(allOrders.length / ordersPerPage)
+      : 0;
 
   return (
     <div className="all-main-div">
@@ -354,9 +362,10 @@ const AllOrders = () => {
         setDelayedChecked={setDelayedChecked}
         oldestChecked={oldestChecked}
         setOldestChecked={setOldestChecked}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
       <div className="all-orders-table-container">
-
         <table className="all-orders-table">
           <thead>
             <tr>
@@ -371,99 +380,101 @@ const AllOrders = () => {
             </tr>
           </thead>
           <tbody>
-          {currentOrders.length === 0 ? (
-            <tr>
-              <td colSpan="8" className="no-orders-message">
-                No orders to display
-              </td>
-            </tr>
-          ) : (
-            currentOrders.map((order) => (
-              <tr
-                key={order.id}
-                className={fadingRows.includes(order.id) ? "row-fade-out" : ""}
-              >
-                <td>
-                  <div>{order.ship_date}</div>
-                  {order.delay_date !== null ? (
-                    <div style={{ fontSize: "smaller", color: "red" }}>
-                      *Delayed: {order.delay_date}
-                    </div>
-                  ) : null}
-                </td>
-                <td>{order.order_number}</td>
-                <td>{order.customer_name}</td>
-                <td>
-                  <table className="item-table">
-                    <tbody>
-                      {Object.keys(order.item_subtype_dict).map(
-                        (itemType, index) => (
-                          <tr key={index}>
-                            <td id="item">
-                              {extractTextBeforeParentheses(itemType)}
-                            </td>
-                            <td id="qty">
-                              {order.item_subtype_dict[itemType]}
-                            </td>
-                          </tr>
-                        )
-                      )}
-                    </tbody>
-                  </table>
-                </td>
-                <td>
-                  <table className="package-table">
-                    <tbody>
-                      {Array.isArray(order.packages_array) &&
-                        order.packages_array.map((packageItem, index) => (
-                          <tr
-                            key={index}
-                            className={
-                              fadingRows.includes(order.id)
-                                ? "row-fade-out"
-                                : ""
-                            }
-                          >
-                            <td id="box-number">{index + 1}</td>
-                            <td id="dimensions">{packageItem.dimensions}</td>
-                            <td id="weight">{packageItem.weight} lb</td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </td>
-                <td>
-                  {order.notes_array && Array.isArray(order.notes_array) ? (
-                    <table className="notes-table">
-                      <tbody>
-                        {order.notes_array.map((noteItem, index) => (
-                          <tr key={index}>
-                            <td>{noteItem.noteText}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  ) : (
-                    ""
-                  )}
-                </td>
-                <td id="ready">{order.ready === false ? "No" : "Yes"}</td>
-                <td id="shipped">
-                  {order.shipped === false ? (
-                    "No"
-                  ) : (
-                    <UnshipButton order={order} handleUnship={handleUnship} />
-                  )}
+            {currentOrders.length === 0 ? (
+              <tr>
+                <td colSpan="8" className="no-orders-message">
+                  No orders to display
                 </td>
               </tr>
-            ))
+            ) : (
+              currentOrders.map((order) => (
+                <tr
+                  key={order.id}
+                  className={
+                    fadingRows.includes(order.id) ? "row-fade-out" : ""
+                  }
+                >
+                  <td>
+                    <div>{order.ship_date}</div>
+                    {order.delay_date !== null ? (
+                      <div style={{ fontSize: "smaller", color: "red" }}>
+                        *Delayed: {order.delay_date}
+                      </div>
+                    ) : null}
+                  </td>
+                  <td>{order.order_number}</td>
+                  <td>{order.customer_name}</td>
+                  <td>
+                    <table className="item-table">
+                      <tbody>
+                        {Object.keys(order.item_subtype_dict).map(
+                          (itemType, index) => (
+                            <tr key={index}>
+                              <td id="item">
+                                {extractTextBeforeParentheses(itemType)}
+                              </td>
+                              <td id="qty">
+                                {order.item_subtype_dict[itemType]}
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  </td>
+                  <td>
+                    <table className="package-table">
+                      <tbody>
+                        {Array.isArray(order.packages_array) &&
+                          order.packages_array.map((packageItem, index) => (
+                            <tr
+                              key={index}
+                              className={
+                                fadingRows.includes(order.id)
+                                  ? "row-fade-out"
+                                  : ""
+                              }
+                            >
+                              <td id="box-number">{index + 1}</td>
+                              <td id="dimensions">{packageItem.dimensions}</td>
+                              <td id="weight">{packageItem.weight} lb</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </td>
+                  <td>
+                    {order.notes_array && Array.isArray(order.notes_array) ? (
+                      <table className="notes-table">
+                        <tbody>
+                          {order.notes_array.map((noteItem, index) => (
+                            <tr key={index}>
+                              <td>{noteItem.noteText}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      ""
+                    )}
+                  </td>
+                  <td id="ready">{order.ready === false ? "No" : "Yes"}</td>
+                  <td id="shipped">
+                    {order.shipped === false ? (
+                      "No"
+                    ) : (
+                      <UnshipButton order={order} handleUnship={handleUnship} />
+                    )}
+                  </td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>
       </div>
       <Pagination
         currentPage={currentPage}
-        totalPages={Math.ceil(allOrders.length / ordersPerPage)}
+        totalPages={totalPages}
         onPageChange={onPageChange}
         itemsPerPage={ordersPerPage}
       />
