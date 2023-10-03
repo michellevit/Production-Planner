@@ -261,7 +261,7 @@ const OpenOrders = () => {
     setSortOption(selectedOption);
   }; 
 
-  const handleFilterOrders = (query) => {
+  const handleSearchOrders = (query) => {
     if (query === "") {
       fetchOpenOrders();
     } else {
@@ -326,7 +326,7 @@ const OpenOrders = () => {
   return (
     <div className="open-main-div">
       <OpenOrdersNav
-        handleFilterOrders={handleFilterOrders}
+        handlesearchOrders={handleSearchOrders}
         handleMaximizeAll={handleMaximizeAll}
         handleMinimizeAll={handleMinimizeAll}
         handleSortChange={handleSortChange}

@@ -134,9 +134,13 @@
 .all-orders-table #notes {
   width: 10%;
 }
+.all-orders-table #ready {
+  width: 5%;
+  text-align: center;
+}
 .all-orders-table #shipped {
-  width: 1%;
-  text-align: left;
+  width: 5%;
+  text-align: center;
 }
 
 .row-fade-out {

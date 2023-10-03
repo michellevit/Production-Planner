@@ -3,7 +3,12 @@ import "./AllOrdersNav.css";
 
 
 const AllOrdersNav = ( { 
-  handleAllSortChange,
+  handleSortChange,
+  handleSearchOrders,
+  readyChecked,
+  setReadyChecked,
+  notReadyChecked,
+  setNotReadyChecked,
   delayedChecked,
   setDelayedChecked,
   oldestChecked,
@@ -15,8 +20,9 @@ const AllOrdersNav = ( {
   const handleSearchInputChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    // handleFilterOrders(query);
+    handleSearchOrders(query);
   };
+
 
   return (
     <div className="all-orders-nav-container">
@@ -28,7 +34,7 @@ const AllOrdersNav = ( {
       <div className="row2">
         <select
             name="Sort by..."
-            onChange={handleAllSortChange}
+            onChange={handleSortChange}
             id="mySelect"
           >
             <option hidden>Sort by...</option>
@@ -55,10 +61,26 @@ const AllOrdersNav = ( {
       </div>
       <div className="row3">
         <ul>
-          <li><input type="checkbox" id="ready" value="Ready" /><label htmlFor="ready">Ready</label></li>
-          <li><input type="checkbox" id="notReady" value="Not Ready" /><label htmlFor="notReady">Not Ready</label></li>
-          <li><input type="checkbox" id="shipped" value="Shipped" /><label htmlFor="shipped">Shipped</label></li>
-          <li><input type="checkbox" id="notShipped" value="Not Shipped" /><label htmlFor="notShipped">Not Shipped</label></li>
+        <li>
+            <input
+              type="checkbox"
+              id="ready"
+              value="Ready"
+              checked={readyChecked}
+              onChange={() => setReadyChecked(!readyChecked)}
+            />
+            <label htmlFor="ready">Ready</label>
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              id="notReady"
+              value="Not Ready"
+              checked={notReadyChecked}
+              onChange={() => setNotReadyChecked(!notReadyChecked)}
+            />
+            <label htmlFor="notReady">Not Ready</label>
+          </li>
           <li>
             <input
               type="checkbox"
