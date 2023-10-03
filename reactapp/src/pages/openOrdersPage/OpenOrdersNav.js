@@ -11,6 +11,12 @@ const OpenOrdersNav = ({
   handleMaximizeAll,
   handleMinimizeAll,
   handleSortChange,
+  readyChecked,
+  setReadyChecked,
+  notReadyChecked,
+  setNotReadyChecked,
+  delayedChecked,
+  setDelayedChecked,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -54,34 +60,45 @@ const OpenOrdersNav = ({
       <div className="row3">
         <ul>
           <li>
-            <input type="checkbox" id="ready" value="Ready" />
+            <input
+              type="checkbox"
+              id="ready"
+              value="Ready"
+              checked={readyChecked}
+              onChange={() => setReadyChecked(!readyChecked)}
+            />
             <label htmlFor="ready">Ready</label>
           </li>
           <li>
-            <input type="checkbox" id="notReady" value="Not Ready" />
+            <input
+              type="checkbox"
+              id="notReady"
+              value="Not Ready"
+              checked={notReadyChecked}
+              onChange={() => setNotReadyChecked(!notReadyChecked)}
+            />
             <label htmlFor="notReady">Not Ready</label>
           </li>
           <li>
-            <input type="checkbox" id="shipped" value="Shipped" />
-            <label htmlFor="shipped">Shipped</label>
-          </li>
-          <li>
-            <input type="checkbox" id="notShipped" value="Not Shipped" />
-            <label htmlFor="notShipped">Not Shipped</label>
-          </li>
-          <li>
-            <input type="checkbox" id="delayed" value="Delayed" />
+            <input
+              type="checkbox"
+              id="delayed"
+              value="Delayed"
+              checked={delayedChecked}
+              onChange={() => setDelayedChecked(!delayedChecked)}
+            />
             <label htmlFor="delayed">Delayed</label>
           </li>
-          <li><button onClick={handleMaximizeAll}>
-          Max All <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter} />
-        </button>
-        </li>
-        <li>
-        <button onClick={handleMinimizeAll}>
-          Min All <FontAwesomeIcon icon={faDownLeftAndUpRightToCenter} />
-        </button>
-        </li>
+          <li>
+            <button onClick={handleMaximizeAll}>
+              Max All <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter} />
+            </button>
+          </li>
+          <li>
+            <button onClick={handleMinimizeAll}>
+              Min All <FontAwesomeIcon icon={faDownLeftAndUpRightToCenter} />
+            </button>
+          </li>
         </ul>
       </div>
     </div>
