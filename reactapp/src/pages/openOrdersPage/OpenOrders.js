@@ -25,8 +25,7 @@ const OpenOrders = () => {
           let filteredOpenOrders = response.data;
           if (searchQuery !== "") {
             filteredOpenOrders = handleSearchOrders(searchQuery);
-          }
-          else {
+          } else {
             filteredOpenOrders = applySorting(filteredOpenOrders);
           }
           setOpenOrders(filteredOpenOrders);
@@ -44,7 +43,6 @@ const OpenOrders = () => {
     oldestChecked,
     searchQuery,
   ]);
-
 
   const applySorting = (filteredOpenOrders) => {
     let filterByAll = false;
@@ -358,17 +356,21 @@ const OpenOrders = () => {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
-      {openOrders.length === 0 ? (
-        <div className="no-results">No results...</div>
+      {openOrders ? (
+        openOrders.length === 0 ? (
+          <div className="no-results">No results...</div>
+        ) : (
+          openOrders.map((order) => (
+            <OrderCard
+              key={order.id}
+              order={order}
+              openOrders={openOrders}
+              setOpenOrders={setOpenOrders}
+            />
+          ))
+        )
       ) : (
-        openOrders.map((order) => (
-          <OrderCard
-            key={order.id}
-            order={order}
-            openOrders={openOrders}
-            setOpenOrders={setOpenOrders}
-          />
-        ))
+        <div>Loading...</div>
       )}
     </div>
   );
