@@ -57,7 +57,7 @@ const AllOrders = () => {
     switch (sortOption) {
       case "All":
         filterByAll = true;
-        
+        break;
       case "Upcoming":
         filterByUpcoming = true;
         break;
