@@ -9,6 +9,10 @@ const AllOrdersNav = ( {
   setReadyChecked,
   notReadyChecked,
   setNotReadyChecked,
+  shippedChecked,
+  setShippedChecked,
+  notShippedChecked,
+  setNotShippedChecked,
   delayedChecked,
   setDelayedChecked,
   oldestChecked,
@@ -82,6 +86,26 @@ const AllOrdersNav = ( {
               onChange={() => setNotReadyChecked(!notReadyChecked)}
             />
             <label htmlFor="notReady">Not Ready</label>
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              id="shipped"
+              value="Shipped"
+              checked={shippedChecked}
+              onChange={() => setShippedChecked(!shippedChecked)}
+            />
+            <label htmlFor="shipped">Shipped</label>
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              id="notShipped"
+              value="Not Shipped"
+              checked={notShippedChecked}
+              onChange={() => setNotShippedChecked(!notShippedChecked)}
+            />
+            <label htmlFor="notShipped">Not Shipped</label>
           </li>
           <li>
             <input
