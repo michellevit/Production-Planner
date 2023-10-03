@@ -19,8 +19,9 @@ const OpenOrdersNav = ({
   setDelayedChecked,
   oldestChecked,
   setOldestChecked,
+  searchQuery,
+  setSearchQuery,
 }) => {
-  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchInputChange = (e) => {
     const query = e.target.value;

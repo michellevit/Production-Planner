@@ -13,8 +13,10 @@ const AllOrdersNav = ( {
   setDelayedChecked,
   oldestChecked,
   setOldestChecked,
+  searchQuery,
+  setSearchQuery,
 } ) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  
 
 
   const handleSearchInputChange = (e) => {
