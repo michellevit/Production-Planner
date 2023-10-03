@@ -144,7 +144,7 @@ const AllOrders = () => {
                             fadingRows.includes(order.id) ? "row-fade-out" : ""
                           }
                         >
-                          <td id="box-number">{index + 1}</td>
+                          <td id="box-number">{index + 1}</td>TEST!
                           <td id="dimensions">{packageItem.dimensions}</td>
                           <td id="weight">{packageItem.weight} lb</td>
                         </tr>
