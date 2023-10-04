@@ -32,7 +32,6 @@ const DeleteButton = ({ order, openOrders, setOpenOrders, setIsRemoving }) => {
   };
   return (
     <div>
-        <>
           <button id="delete-order-button" onClick={handleClickDeleteButton}>
             <FontAwesomeIcon icon={faClose} />
           </button>
@@ -42,7 +41,6 @@ const DeleteButton = ({ order, openOrders, setOpenOrders, setIsRemoving }) => {
             handleCancelDelete={handleCancelDelete}
             order={order}
           />
-        </>
     </div>
   );
 };
