@@ -26,7 +26,6 @@ const AllOrders = () => {
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
-    let shouldRefreshOrders = false;
     const fetchAllOrders = () => {
       axios
         .get("http://127.0.0.1:8000/all-orders/")
@@ -48,14 +47,9 @@ const AllOrders = () => {
         .catch((error) => {
           console.error("Error getting data", error);
         })
-        .finally(() => {
-          if (shouldRefreshOrders) {
-            setRefreshOrders(!refreshOrders);
-          }
-        });
     };
     fetchAllOrders();
-    shouldRefreshOrders = true;
+
   }, [
     sortOption,
     readyChecked,
@@ -342,7 +336,7 @@ const AllOrders = () => {
         `http://127.0.0.1:8000/all-orders/${order.id}/`,
         updatedOrder
       );
-      setRefreshOrders(!refreshOrders);
+      setRefreshOrders(true);
     } catch (error) {
       console.error("Error updating order:", error);
     }
