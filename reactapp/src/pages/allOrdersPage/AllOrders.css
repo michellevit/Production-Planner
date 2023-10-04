@@ -96,14 +96,6 @@
   width: 25%;
 }
 
-.all-orders-table svg {
-  color: rgb(152, 196, 152);
-}
-
-.all-orders-table .svg-inline--fa:hover {
-  opacity: 20%;
-  color: green;
-}
 
 .all-orders-table tbody tr {
   transition: opacity 0.5s ease;
@@ -117,13 +109,21 @@
 }
 
 .all-orders-table #ship-date {
-  width: 10%;
+  width: 15%;
 }
 .all-orders-table #ship-date input {
   width: 25px;
 } 
 .all-orders-table #ship-date .react-datepicker__input-container {
   margin-left: 2.5px;
+}
+
+.all-orders-table #ship-date .svg-inline--fa {
+  color: rgb(152, 196, 152);
+}
+
+.all-orders-table #ship-date .svg-inline--fa:hover {
+  opacity: 10%;
 }
 
 .all-orders-table #order-number {
@@ -133,10 +133,10 @@
   width: 10%;
 }
 .all-orders-table #items {
-  width: 20%;
+  width: 25%;
 }
 .all-orders-table #packages {
-  width: 20%;
+  width: 25%;
 }
 .all-orders-table #notes {
   width: 10%;
@@ -150,6 +150,18 @@
   text-align: center;
 }
 
+.all-orders-table #shipped svg {
+  color: #004596;
+}
+
+.all-orders-table #shipped svg:hover {
+  opacity: 20%;
+}
+
+.all-orders-table #delete {
+  text-align: center;
+  width: 5%;
+}
 .row-fade-out {
   opacity: 0;
   transition: opacity 5s ease-in-out;

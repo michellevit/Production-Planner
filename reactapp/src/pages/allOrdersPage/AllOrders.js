@@ -4,10 +4,13 @@ import "./AllOrders.css";
 import AllOrdersNav from "./AllOrdersNav";
 import EditShipDateButton from "./EditShipDateButton";
 import UnshipButton from "./UnshipButton";
+import DeleteButton from "./DeleteButton";
 import Pagination from "./Pagination";
+
 
 const AllOrders = () => {
   const [allOrders, setAllOrders] = useState([]);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [sortOption, setSortOption] = useState("All");
   const [currentDate, setCurrentDate] = useState("");
   const [refreshOrders, setRefreshOrders] = useState(false);
@@ -420,6 +423,7 @@ const AllOrders = () => {
               <th id="notes">Notes</th>
               <th id="ready">Ready</th>
               <th id="shipped">Shipped</th>
+              <th id="delete-col">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -511,6 +515,14 @@ const AllOrders = () => {
                     ) : (
                       <UnshipButton order={order} handleUnship={handleUnship} />
                     )}
+                  </td>
+                  <td id="delete-col">
+                      <DeleteButton 
+                        order={order}
+                        allOrders={allOrders}
+                        setAllOrders={setAllOrders}
+                        setIsRemoving={setIsRemoving}
+                      />
                   </td>
                 </tr>
               ))
