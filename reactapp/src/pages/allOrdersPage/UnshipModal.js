@@ -11,8 +11,8 @@ const UnshipModal = ({ show, handleConfirmUnship, handleCancelUnship, order }) =
         <div className="unship-modal">
         <p>
             {order?.order_number
-              ? `Are you sure you want to unship SO#${order.order_number}?`
-              : "Are you sure you want to unship this order?"}
+    ? `Are you sure you want to change the shipped status of SO#${order.order_number} to ${order.shipped ? "No" : "Yes"}?`
+    : "Are you sure you want to unship this order?"}
           </p>
           <div className="unship-modal-buttons">
             <button className="unship-confirm-button" onClick={handleConfirmUnship}>

@@ -5,32 +5,38 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "./DeleteModal";
 import axios from "axios";
 
-
-
-const DeleteButton = ({ order, allOrders, setAllOrders, setIsRemoving }) => {
-    const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const handleClickDeleteButton = () => {
-        setShowConfirmModal(true);
-      };
-      const handleConfirmDelete = () => {
-        setShowConfirmModal(false);
-        const deletedOrderID = order.id
-        axios
-          .delete(`http://127.0.0.1:8000/all-orders/${deletedOrderID}/`)
-          .catch((error) => {
-            console.error(
-              "Error deleting the order. Server responded with:",
-              error.response.status
-            );
-          });
-          setTimeout(() => {
-            setAllOrders(allOrders.filter((orderItem) => orderItem.id !== deletedOrderID));
-          }, 300);
-          setIsRemoving(false);
-      };
-      const handleCancelDelete = () => {
-        setShowConfirmModal(false);
-      };
+const DeleteButton = ({ order, setAllOrders, isRemoving, setIsRemoving }) => {
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const handleClickDeleteButton = () => {
+    setShowConfirmModal(true);
+  };
+  const handleConfirmDelete = () => {
+    setShowConfirmModal(false);
+    const deletedOrderID = order.id;
+    setAllOrders((prevOrders) =>
+      prevOrders.map((orderItem) =>
+        orderItem.id === deletedOrderID
+          ? { ...orderItem, isRemoving: true }
+          : orderItem
+      )
+    );
+    axios
+      .delete(`http://127.0.0.1:8000/all-orders/${deletedOrderID}/`)
+      .catch((error) => {
+        console.error(
+          "Error deleting the order. Server responded with:",
+          error.response.status
+        );
+      });
+    setTimeout(() => {
+      setAllOrders((prevOrders) =>
+        prevOrders.filter((orderItem) => orderItem.id !== deletedOrderID)
+      );
+    }, 500);
+  };
+  const handleCancelDelete = () => {
+    setShowConfirmModal(false);
+  };
   return (
     <div className="all-orders-delete-div">
       <button id="delete-order-button" onClick={handleClickDeleteButton}>
@@ -42,9 +48,8 @@ const DeleteButton = ({ order, allOrders, setAllOrders, setIsRemoving }) => {
         handleCancelDelete={handleCancelDelete}
         order={order}
       />
-</div>
+    </div>
   );
 };
 
 export default DeleteButton;
-
