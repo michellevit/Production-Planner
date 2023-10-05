@@ -141,6 +141,7 @@ def sort_workbook(sheet):
                             item_subtype_dict=item_subtype_dict,
                             packages_array="",
                             notes_array="",
+                            minimized_status=True,
                             ready=False,
                             shipped=False,
                         )
@@ -151,7 +152,7 @@ find_workbooks()
 
 ####################################
 
-## Delete data in Order table
+# Delete data in Order table
 
 # def delete_unnecessary_entries():
 #     Order.objects.all().delete()

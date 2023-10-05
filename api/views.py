@@ -75,10 +75,10 @@ class OrderDetailView(APIView):
                 order.notes_array = request.data['notes_array']
             if 'minimized_status' in request.data:
                 order.minimized_status = request.data['minimized_status']
+            if 'ready' in request.data:
+                order.ready = request.data['ready']
             if 'shipped' in request.data:
                 order.shipped = request.data['shipped']
-            if 'ready_status' in request.data:
-                order.ready_status = request.data['ready_status']
             order.save()
             return Response({"message": "Ready status updated successfully."})
         except Order.DoesNotExist:

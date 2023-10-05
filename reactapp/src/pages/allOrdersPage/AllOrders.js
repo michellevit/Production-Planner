@@ -7,10 +7,8 @@ import UnshipButton from "./UnshipButton";
 import DeleteButton from "./DeleteButton";
 import Pagination from "./Pagination";
 
-
 const AllOrders = () => {
   const [allOrders, setAllOrders] = useState([]);
-  const [isRemoving, setIsRemoving] = useState(false);
   const [sortOption, setSortOption] = useState("All");
   const [currentDate, setCurrentDate] = useState("");
   const [refreshOrders, setRefreshOrders] = useState(false);
@@ -20,12 +18,15 @@ const AllOrders = () => {
   const [notShippedChecked, setNotShippedChecked] = useState(true);
   const [delayedChecked, setDelayedChecked] = useState(true);
   const [oldestChecked, setOldestChecked] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [fadingRows, setFadingRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersPerPage] = useState(20);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
+    console.log("FadingRows: ", fadingRows);
+    console.log("isRemoving: ", isRemoving);
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
@@ -49,10 +50,10 @@ const AllOrders = () => {
         })
         .catch((error) => {
           console.error("Error getting data", error);
-        })
+        });
     };
     fetchAllOrders();
-
+    setRefreshOrders(false);
   }, [
     sortOption,
     readyChecked,
@@ -332,42 +333,57 @@ const AllOrders = () => {
 
   const editShipDate = async (order, date) => {
     try {
+      setFadingRows((prevFadingRows) => [...prevFadingRows, order.id]);
       const formattedDate = date ? date.toISOString().split("T")[0] : null;
       const updatedOrder = order;
       updatedOrder.ship_date = formattedDate;
-      await axios.put(
-        `http://127.0.0.1:8000/all-orders/${order.id}/`,
-        updatedOrder
-      );
-      setRefreshOrders(true);
+        setTimeout(async () => {
+        await axios.put(
+          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          updatedOrder
+        );
+        setTimeout(() => {
+          setFadingRows((prevFadingRows) =>
+            prevFadingRows.filter((id) => id !== order.id)
+          );
+          setRefreshOrders(true);
+        }, 700);
+      }, 700);
     } catch (error) {
       console.error("Error updating order:", error);
     }
   };
 
-  const handleUnship = (orderId) => {
-    setFadingRows([...fadingRows, orderId]);
-    axios
-      .put(`http://127.0.0.1:8000/all-orders/${orderId}/`, {
-        shipped: false,
-      })
-      .then((response) => {
+  const handleUnship = async (order) => {
+    try {
+      setFadingRows((prevFadingRows) => [...prevFadingRows, order.id]);
+      let currentOrderID = order.id;
+      const updatedOrder = { ...order };
+      updatedOrder.shipped = !order.shipped;
+      updatedOrder.ready = true;
+        setTimeout(async () => {
+        await axios.put(
+          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          updatedOrder
+        );
+        setAllOrders((prevAllOrders) =>
+          prevAllOrders.map((o) => (o.id === currentOrderID ? updatedOrder : o))
+        );
         setTimeout(() => {
           setFadingRows((prevFadingRows) =>
-            prevFadingRows.filter((rowId) => rowId !== orderId)
+            prevFadingRows.filter((id) => id !== order.id)
           );
-          setAllOrders((prevAllOrders) =>
-            prevAllOrders.filter((o) => o.id !== orderId)
-          );
-        }, 500);
-      })
-      .catch((error) => {
-        console.error(
-          "Error deleting the order. Server responded with:",
-          error.response.status
-        );
-      });
+        }, 400);
+      }, 400);
+    } catch (error) {
+      console.error(
+        "Error updating the order. Server responded with:",
+        error.response.status
+      );
+    }
   };
+  
+
   const extractTextBeforeParentheses = (text) => {
     const splitText = text.split(" (");
     return splitText[0];
@@ -437,14 +453,17 @@ const AllOrders = () => {
               currentOrders.map((order) => (
                 <tr
                   key={order.id}
-                  className={
-                    fadingRows.includes(order.id) ? "row-fade-out" : ""
-                  }
+                  className={`${
+                    fadingRows.includes(order.id) || order.isRemoving
+                      ? "fade-out"
+                      : ""
+                  }`}
                 >
                   <td id="ship-date">
                     <EditShipDateButton
                       order={order}
                       editShipDate={editShipDate}
+                      fadingRows={fadingRows}
                     />
                     {order.delay_date !== null ? (
                       <div style={{ fontSize: "smaller", color: "red" }}>
@@ -510,19 +529,18 @@ const AllOrders = () => {
                   </td>
                   <td id="ready">{order.ready === false ? "No" : "Yes"}</td>
                   <td id="shipped">
-                    {order.shipped === false ? (
-                      "No"
-                    ) : (
+                    <div id="shipped-status-div">
+                      {order.shipped === false ? "No" : "Yes"}
                       <UnshipButton order={order} handleUnship={handleUnship} />
-                    )}
+                    </div>
                   </td>
                   <td id="delete-col">
-                      <DeleteButton 
-                        order={order}
-                        allOrders={allOrders}
-                        setAllOrders={setAllOrders}
-                        setIsRemoving={setIsRemoving}
-                      />
+                    <DeleteButton
+                      order={order}
+                      setAllOrders={setAllOrders}
+                      isRemoving={isRemoving}
+                      setIsRemoving={setIsRemoving}
+                    />
                   </td>
                 </tr>
               ))
