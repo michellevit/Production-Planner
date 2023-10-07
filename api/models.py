@@ -16,6 +16,17 @@ class Order(models.Model):
     minimized_status = models.BooleanField(default=False)
     ready = models.BooleanField(default=False)
     shipped = models.BooleanField(default=False, db_index=True)
-
     def __str__(self):
         return self.order_number[0:50]
+    
+
+from django.db import models
+
+class OrderReport(models.Model):
+    created_date = models.DateTimeField(auto_now_add=True)
+    submitted_date = models.DateTimeField(auto_now=True)
+    file_name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.file_name[:50]
+    class Meta:
+        verbose_name_plural = "Order Reports"

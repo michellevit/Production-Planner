@@ -8,6 +8,7 @@ urlpatterns = [
     path('all-orders-search/', SearchAllOrdersListView.as_view(), name='all-orders-search'),
     path('open-orders/<int:pk>/', OrderDetailView.as_view(), name='open-order-detail'),
     path('all-orders/<int:pk>/', OrderDetailView.as_view(), name='all-order-detail'),
+    path("api/upload", FileUploadView.as_view(), name="file-upload"),
 ]
 
 

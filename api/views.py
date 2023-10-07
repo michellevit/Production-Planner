@@ -91,3 +91,15 @@ class OrderDetailView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Order.DoesNotExist:
             raise NotFound(detail="Order not found")
+        
+class FileUploadView(APIView):
+    def post(self, request):
+        uploaded_file = request.FILES.get("file")
+
+        if not uploaded_file:
+            return Response({"error": "No file uploaded."}, status=400)
+
+        # Process the uploaded file using your Python script here.
+        # You can call your Python script using subprocess or any other method.
+
+        return Response({"message": "File uploaded and processed successfully."})        
