@@ -1,0 +1,17 @@
+.add-order-report-container {
+    display: flex;
+    justify-content: center;
+}
+
+.add-order-report-container form {
+    background-color: white;
+    padding: 20px;
+    width: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-order-report-container input {
+    width: 90%;
+}

@@ -10,6 +10,7 @@ function Navbar() {
                 Production Planner
             </div>
             <ul>
+                <CustomLink to="/home">Home</CustomLink>
                 <CustomLink to="/open-orders">Open Orders</CustomLink>
                 <CustomLink to="/all-orders">All Orders</CustomLink>
             </ul>

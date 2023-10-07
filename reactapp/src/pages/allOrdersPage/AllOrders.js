@@ -25,8 +25,6 @@ const AllOrders = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    console.log("FadingRows: ", fadingRows);
-    console.log("isRemoving: ", isRemoving);
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
