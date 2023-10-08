@@ -1,9 +1,13 @@
+import io
 import os
 import openpyxl
 import django
 from django.db.models import Q
 from django.db import models
 from django.core.management.base import BaseCommand
+from api.models import OrderReport
+from django.core.files.storage import default_storage
+from django.conf import settings
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Production_Project.settings")
 django.setup()
@@ -27,9 +31,10 @@ def update_orders_dict(new_order):
         for existing_order in existing_orders:
             if (
                 existing_order.shipped
-                and existing_order.item_type_dict == new_order.item_type_dict
+                and existing_order.item_type_dict != new_order.item_type_dict
             ):
                 new_order.backorder = True
+                new_order.backorder = existing_order.backorder_number + 1
                 new_order.save()
         else:
             existing_order.ship_date = new_order.ship_date
@@ -45,33 +50,27 @@ def update_orders_dict(new_order):
         new_order.save()
 
 
-def find_workbooks():
-    current_directory = os.getcwd()
-    files_in_directory = os.listdir(current_directory)
-    xlsx_files = [file for file in files_in_directory if file.endswith(".xlsx")]
-    if not xlsx_files:
-        print("There are no excel workbooks in this directory.")
-    else:
-        for file in xlsx_files:
-            no_files = False
-            no_files = check_if_correct_workbook(file)
-        if no_files:
-            print(
-                "There are no QuickBooks Order Reports which are compatible with this program (in this directory)."
-            )
+def process_uploaded_report(file_name):
+    file_path = default_storage.url(file_name)
+    with default_storage.open(file_path, 'rb') as file:
+        file_content = file.read()
+        print(file_content)
+        check_if_correct_workbook(file_content) # I think this won't work
 
 
-def check_if_correct_workbook(file):
-    script_directory = os.path.dirname(os.path.abspath(__file__))
-    workbook_path = os.path.join(script_directory, file)
-    workbook = openpyxl.load_workbook(workbook_path)
-    sheet = workbook["Sheet1"]
-    cell_value = sheet["B2"].value
-    if cell_value != "Assembly":
-        no_files = True
-        return no_files
-    else:
-        sort_workbook(sheet)
+def check_if_correct_workbook(file_content):
+    try:
+        workbook = openpyxl.load_workbook(io.BytesIO(file_content), data_only=True)
+        sheet = workbook["Sheet1"]
+        cell_value = sheet["B2"].value
+
+        if cell_value != "Assembly":
+            no_files = True
+            return no_files
+        else:
+            sort_workbook(sheet)
+    except Exception as e:
+        print(f"Error loading workbook: {e}")
 
 
 def sort_workbook(sheet):
@@ -147,8 +146,6 @@ def sort_workbook(sheet):
                         )
                         update_orders_dict(new_order)
 
-
-find_workbooks()
 
 ####################################
 

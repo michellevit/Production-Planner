@@ -5,7 +5,7 @@ class Order(models.Model):
     updated = models.DateTimeField(auto_now=True)
     order_number = models.CharField(max_length=100)
     backorder = models.BooleanField(default=False)
-    backorder_number = models.CharField(max_length=10, default="0")
+    backorder_number = models.IntegerField(default=0)
     ship_date = models.DateField()
     delay_date = models.DateField(null=True, blank=True)
     customer_name = models.CharField(max_length=100)
@@ -20,13 +20,15 @@ class Order(models.Model):
         return self.order_number[0:50]
     
 
-from django.db import models
-
 class OrderReport(models.Model):
-    created_date = models.DateTimeField(auto_now_add=True)
     submitted_date = models.DateTimeField(auto_now=True)
     file_name = models.CharField(max_length=255)
     def __str__(self):
         return self.file_name[:50]
     class Meta:
         verbose_name_plural = "Order Reports"
+    def save(self, *args, **kwargs):
+        if OrderReport.objects.count() >= 10:
+            oldest_entry = OrderReport.objects.order_by('submitted_date').first()
+            oldest_entry.delete()
+        super(OrderReport, self).save(*args, **kwargs)

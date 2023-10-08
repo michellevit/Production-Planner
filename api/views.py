@@ -1,11 +1,16 @@
 from .models import * 
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer, OrderReportSerializer
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.parsers import FileUploadParser
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from django.db.models import Q
+from django.utils import timezone
+from .scripts.check_order_report import process_uploaded_report
+
+
 
 
 class OrderListView(APIView):
@@ -92,14 +97,25 @@ class OrderDetailView(APIView):
         except Order.DoesNotExist:
             raise NotFound(detail="Order not found")
         
-class FileUploadView(APIView):
-    def post(self, request):
-        uploaded_file = request.FILES.get("file")
+ 
+    
+class OrderReportUploadView(APIView):
+    parser_class = (FileUploadParser,)
 
-        if not uploaded_file:
-            return Response({"error": "No file uploaded."}, status=400)
+    def get(self, request, *args, **kwargs):
+        last_5_entries = OrderReport.objects.order_by('-submitted_date')[:5]
+        serializer = OrderReportSerializer(last_5_entries, many=True)
+        return Response(serializer.data)
 
-        # Process the uploaded file using your Python script here.
-        # You can call your Python script using subprocess or any other method.
-
-        return Response({"message": "File uploaded and processed successfully."})        
+    def post(self, request, *args, **kwargs):
+        file_serializer = OrderReportSerializer(data=request.data)
+        if file_serializer.is_valid():
+            file_serializer.validated_data['submitted_date'] = timezone.now()
+            uploaded_file = request.FILES.get("file")
+            file_name = uploaded_file.name
+            file_serializer.validated_data['file_name'] = file_name
+            file_serializer.save()
+            process_uploaded_report(file_name)
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
