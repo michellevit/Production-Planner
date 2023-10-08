@@ -50,12 +50,12 @@ def update_orders_dict(new_order):
         new_order.save()
 
 
-def process_uploaded_report(file_name):
-    file_path = default_storage.url(file_name)
-    with default_storage.open(file_path, 'rb') as file:
+def process_uploaded_report(file):
+    try:
         file_content = file.read()
-        print(file_content)
-        check_if_correct_workbook(file_content) # I think this won't work
+        check_if_correct_workbook(file_content)
+    except Exception as e:
+        print(f"Error processing uploaded report: {e}")
 
 
 def check_if_correct_workbook(file_content):

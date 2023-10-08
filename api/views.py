@@ -9,9 +9,13 @@ from rest_framework.response import Response
 from django.db.models import Q
 from django.utils import timezone
 from .scripts.check_order_report import process_uploaded_report
+import logging
+from django.db import transaction
+from django.core.files.storage import default_storage
+import os
+from django.conf import settings
 
-
-
+logger = logging.getLogger(__name__)
 
 class OrderListView(APIView):
     def get(self, request):
@@ -101,21 +105,19 @@ class OrderDetailView(APIView):
     
 class OrderReportUploadView(APIView):
     parser_class = (FileUploadParser,)
-
     def get(self, request, *args, **kwargs):
         last_5_entries = OrderReport.objects.order_by('-submitted_date')[:5]
         serializer = OrderReportSerializer(last_5_entries, many=True)
         return Response(serializer.data)
-
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
-        file_serializer = OrderReportSerializer(data=request.data)
-        if file_serializer.is_valid():
-            file_serializer.validated_data['submitted_date'] = timezone.now()
-            uploaded_file = request.FILES.get("file")
+        uploaded_file = request.FILES.get("file")        
+        if uploaded_file:
             file_name = uploaded_file.name
-            file_serializer.validated_data['file_name'] = file_name
-            file_serializer.save()
-            process_uploaded_report(file_name)
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+            process_uploaded_report(uploaded_file)      
+            order_report = OrderReport(file_name=file_name)
+            order_report.save()      
+            return Response({"message": "File processed successfully."}, status=status.HTTP_201_CREATED)
         else:
-            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            logger.error("No file uploaded.")
+            return Response({"message": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)

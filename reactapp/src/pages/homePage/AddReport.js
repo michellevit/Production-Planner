@@ -10,6 +10,7 @@ const AddReport = () => {
   const [uploads, setUploads] = useState([]);
   const [fileExtension, setFileExtension] = useState("");
   const [refreshReports, setRefreshReports] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     async function fetchLast5Uploads() {
@@ -47,12 +48,14 @@ const AddReport = () => {
     const fileExtensionName = selectedFile.name.split(".").pop();
     if (fileExtensionName.toLowerCase() !== "xlsx") {
       setFileExtension(fileExtensionName);
+      setErrorMessage(
+        `The uploaded file is incompatible.\nUploaded file type: .${fileExtensionName}\nCorrect file type: .xlsx`
+      );
       setShowFileUploadModal(true);
       return;
     }
     const fileNameWithoutExtension = selectedFile.name.replace(/\.[^/.]+$/, "");
     formData.append("file_name", fileNameWithoutExtension);
-
     try {
       const response = await fetch("http://127.0.0.1:8000/reports/", {
         method: "POST",
@@ -60,12 +63,11 @@ const AddReport = () => {
       });
 
       if (response.ok) {
-        console.log("File uploaded successfully.");
         setRefreshReports(true);
       } else {
+        setErrorMessage("There was an error uploading your file - please check the following:\n1. The file is a QuickBooks 'Orders by Item' report\n2. The order report was saved to the media folder");
+        setShowFileUploadModal(true);
         console.error("File upload failed.");
-        const errorData = await response.json();
-        console.log("Validation Errors:", errorData);
       }
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -81,8 +83,10 @@ const AddReport = () => {
           setShowFileUploadModal={setShowFileUploadModal}
           fileExtension={fileExtension}
           setFileExtension={setFileExtension}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
         />
-        <form id="add-order-report" onSubmit={handleSubmitOrderReport}>
+        <form id="add-order-report" onSubmit={handleSubmitOrderReport} encType="multipart/form-data">
           <input type="file" onChange={handleFileChange} />
           <button type="submit">
             <FontAwesomeIcon icon={faAdd} />
