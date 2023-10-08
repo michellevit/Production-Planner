@@ -19,7 +19,7 @@ const FileUploadModal = ({
       <div className="file-upload-modal-container">
         <div className="file-upload-modal">
           <p>The uploaded file is incompatible.</p>
-          <p>Your file type: <b>.{fileExtension}</b></p>
+          <p>Uploaded file type: <b>.{fileExtension}</b></p>
           <p>Correct file type: <b>.xlsx</b></p>
           <div className="modal-buttons">
             <button className="confirm-button" onClick={handleConfirmDelete}>

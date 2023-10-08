@@ -39,13 +39,16 @@ button:hover {
     margin-top: 100px;
 }
 
+.all {
+    background: grey;
+}
 
 .open {
     background: lightblue;
 }
 
-.all {
-    background: grey;
+.reports {
+    background: pink;
 }
 
 .all:hover {
@@ -56,6 +59,6 @@ button:hover {
     color: lightblue;
 }
 
-.closed:hover {
+.reports:hover {
     color: pink;
 }
