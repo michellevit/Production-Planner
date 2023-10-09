@@ -1,6 +1,6 @@
   /* DeleteModal.css */
 
-  .file-upload-modal-overlay {
+  .home-error-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,11 +13,11 @@
     z-index: 1000;
   }
 
-  .file-upload-modal-container {
+  .home-error-modal-container {
     height: 30%;
   }
   
-  .file-upload-modal {
+  .home-error-modal {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -25,11 +25,11 @@
     text-align: center;
   }
   
-  .file-upload-buttons {
+  .home-error-modal-buttons {
     margin-top: 20px;
   }
   
-  .file-upload-modal .confirm-button {
+  .home-error-modal .confirm-button {
     margin: 0 10px;
     padding: 8px 16px;
     border: none;

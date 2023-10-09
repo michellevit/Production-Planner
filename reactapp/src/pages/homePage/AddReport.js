@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import "./AddReport.css";
-import FileUploadModal from "./FileUploadModal";
+import HomeErrorModal from "./HomeErrorModal";
 
 const AddReport = () => {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [showFileUploadModal, setShowFileUploadModal] = useState(false);
+  const [showHomeErrorModal, setShowHomeErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [uploads, setUploads] = useState([]);
   const [fileExtension, setFileExtension] = useState("");
   const [refreshReports, setRefreshReports] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     async function fetchLast5Uploads() {
@@ -51,7 +51,7 @@ const AddReport = () => {
       setErrorMessage(
         `The uploaded file is incompatible.\nUploaded file type: .${fileExtensionName}\nCorrect file type: .xlsx`
       );
-      setShowFileUploadModal(true);
+      setShowHomeErrorModal(true);
       return;
     }
     const fileNameWithoutExtension = selectedFile.name.replace(/\.[^/.]+$/, "");
@@ -65,8 +65,8 @@ const AddReport = () => {
       if (response.ok) {
         setRefreshReports(true);
       } else {
-        setErrorMessage("There was an error uploading your file - please check the following:\n1. The file is a QuickBooks 'Orders by Item' report\n2. The order report was saved to the media folder");
-        setShowFileUploadModal(true);
+        setErrorMessage("There was an error uploading your file - please check the following:\n1. The file is a QuickBooks 'Orders by Item' report\n2. The order report was saved to an accessible folder");
+        setShowHomeErrorModal(true);
         console.error("File upload failed.");
       }
     } catch (error) {
@@ -78,10 +78,9 @@ const AddReport = () => {
     <div className="add-order-report-container">
       <div className="file-upload-form">
         <h2>Upload Order Report</h2>
-        <FileUploadModal
-          showFileUploadModal={showFileUploadModal}
-          setShowFileUploadModal={setShowFileUploadModal}
-          fileExtension={fileExtension}
+        <HomeErrorModal
+          showHomeErrorModal={showHomeErrorModal}
+          setShowHomeErrorModal={setShowHomeErrorModal}
           setFileExtension={setFileExtension}
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}

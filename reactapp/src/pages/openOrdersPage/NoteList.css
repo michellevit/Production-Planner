@@ -11,6 +11,7 @@
   flex-direction: row;  
   padding: 4px 0;
   border: none;
+  color: black;
 }
 
 .noteform-container input,
@@ -24,6 +25,7 @@
   width: 100%;
   margin: 0 5px 0 0;
   border-radius: 5px 0 0 5px;
+  padding: 5px 10px;
 }
 
 .noteform-container form button {

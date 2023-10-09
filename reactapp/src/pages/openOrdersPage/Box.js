@@ -5,8 +5,6 @@ import {
   faArrowUp,
   faArrowDown,
   faClose,
-  faCheck,
-  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Box = ({
@@ -47,13 +45,19 @@ const Box = ({
       return newBoxes;
     });
   };
-  const confirmHandler = () => {
-    setBoxConfirmStatus((prevConfirmStatus) => {
-      const newConfirmStatus = !prevConfirmStatus;
-      boxConfirmHandler(newConfirmStatus);
-      return newConfirmStatus;
-    });
-  };
+  // const confirmHandler = () => {
+  //   setBoxConfirmStatus((prevConfirmStatus) => {
+  //     const newConfirmStatus = !prevConfirmStatus;
+  //     boxConfirmHandler(newConfirmStatus);
+  //     return newConfirmStatus;
+  //   });
+  // };
+  // <button
+  //           className={boxConfirmStatus ? "edit-btn" : "check-btn"}
+  //           onClick={confirmHandler}
+  //         >
+  //           <FontAwesomeIcon icon={boxConfirmStatus ? faEdit : faCheck} />
+  //         </button>
 
   return (
     <div className="box">
@@ -76,12 +80,6 @@ const Box = ({
               </button>
             </div>
           )}
-          <button
-            className={boxConfirmStatus ? "edit-btn" : "check-btn"}
-            onClick={confirmHandler}
-          >
-            <FontAwesomeIcon icon={boxConfirmStatus ? faEdit : faCheck} />
-          </button>
         </div>
       )}
     </div>

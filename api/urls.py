@@ -13,6 +13,6 @@ urlpatterns = [
     path('reports/', OrderReportUploadView.as_view(), name="reports"),
 ]
 
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# To use django admin - uncomment this:
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
