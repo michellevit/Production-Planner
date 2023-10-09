@@ -20,7 +20,6 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
   const [minimized, setMinimized] = useState(order.minimized_status);
   const [boxConfirmStatus, setBoxConfirmStatus] = useState([]);
   const [formDisplay, setFormDisplay] = useState([]);
-  const [buttonDisplay, setButtonDisplay] = useState([]);
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
   useEffect(() => {
@@ -39,11 +38,9 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
                   setFormDisplay(true);
                 } else if (box.boxConfirmStatus) {
                   setFormDisplay(false);
-                  setButtonDisplay(false);
                   setBoxConfirmStatus(true);
                 } else if (box.boxConfirmStatus === false) {
                   setFormDisplay(true);
-                  setButtonDisplay(true);
                   setBoxConfirmStatus(false);
                 }
                 return box;
@@ -66,7 +63,7 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
   const readyHandler = async () => {
     setReadyStatus(true);
     setBoxConfirmStatus(true);
-    boxConfirmHandler(true);
+    boxFormHandler();
     setDelayDate(null);
     const updatedOrder = order;
     updatedOrder.ready = true;
@@ -108,7 +105,6 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
     updatedOrder.ship_date = formattedCurrentDate;
     updatedOrder.minimized = true;
     try {
-      console.log("mapping!");
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
@@ -138,16 +134,14 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
       console.error("Error updating order:", error);
     }
   };
-  
-  const boxConfirmHandler = (boxConfirmStatus) => {
-    if (boxConfirmStatus) {
+
+  const boxFormHandler = () => {
+    if (readyStatus) {
       setFormDisplay(false);
-      setButtonDisplay(false);
       setBoxConfirmStatus(true);
       handleBoxConfirmStatus(true);
     } else {
       setFormDisplay(true);
-      setButtonDisplay(true);
       handleBoxConfirmStatus(false);
     }
   };
@@ -200,15 +194,25 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
   };
   return (
     <div
-      className={`card-container ${readyStatus ? "ready-order-card" : ""} ${
-        isRemoving ? "card-container-fade-out" : ""
-      } ${delayDate !== null && !readyStatus ? "delayed-order-card" : ""}`}
+      className={`card-container ${
+        order.quote && readyStatus
+          ? "quoted-order-card"
+          : order.quote
+          ? "quote-order-card"
+          : readyStatus
+          ? "ready-order-card"
+          : ""
+      } ${isRemoving ? "card-container-fade-out" : ""} ${
+        delayDate !== null && !readyStatus ? "delayed-order-card" : ""
+      }`}
     >
       <div className="row" id="row1">
         <div id="row1-row1">
           <div id="row1col1"></div>
           <div className="order-number-container" id="row1col2">
-            <div className="order-number-text">SO# {order.order_number}</div>
+            <div className="order-number-text">
+              {order.quote ? "Quote#" : `SO#`} {order.order_number}
+            </div>
           </div>
           <div id="row1col3">
             <MinimizeCardButton
@@ -300,7 +304,6 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
             <BoxForm
               formDisplay={formDisplay}
               setFormDisplay={setFormDisplay}
-              setButtonDisplay={setButtonDisplay}
               setBoxes={setBoxes}
               boxes={boxes}
               boxConfirmStatus={boxConfirmStatus}
@@ -312,12 +315,6 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
               <BoxList
                 boxes={boxes}
                 setBoxes={setBoxes}
-                setFormDisplay={setFormDisplay}
-                buttonDisplay={buttonDisplay}
-                setButtonDisplay={setButtonDisplay}
-                boxConfirmStatus={boxConfirmStatus}
-                setBoxConfirmStatus={setBoxConfirmStatus}
-                boxConfirmHandler={boxConfirmHandler}
                 readyStatus={readyStatus}
                 updatePackages={updatePackages}
               />
@@ -340,9 +337,11 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
       {!minimized && (
         <div className="row" id="row6">
           <div className="row6-buttons-container">
-            {!readyStatus && <ReadyButton readyHandler={readyHandler} />}
+            {!readyStatus && (
+              <ReadyButton readyHandler={readyHandler} order={order} />
+            )}
             {readyStatus && <EditButton editHandler={editHandler} />}
-            {readyStatus && (
+            {readyStatus && !order.quote && (
               <ShippedButton
                 shippedHandler={shippedHandler}
                 setIsRemoving={setIsRemoving}

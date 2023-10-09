@@ -17,12 +17,13 @@ const AddOrder = () => {
     if (Object.keys(items).length === 0) {
       setErrorMessage("Please add at least one item.");
       setShowHomeErrorModal(true);
-      return; 
+      return;
     }
     const orderNumber = document.getElementById("add-order-so-number").value;
     const customerName = document.getElementById(
       "add-order-customer-name"
     ).value;
+
     const quoteValue = document.getElementById(
       "add-order-quote-boolean"
     ).checked;
@@ -39,10 +40,7 @@ const AddOrder = () => {
       quote: quoteValue,
     };
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/all-orders/",
-        orderData
-      );
+      await axios.post("http://127.0.0.1:8000/all-orders/", orderData);
       if (quoteValue === true) {
         setErrorMessage("Your quote has been added.");
       } else {
@@ -69,7 +67,12 @@ const AddOrder = () => {
             <tr>
               <td>SO#</td>
               <td>
-                <input type="text" id="add-order-so-number" required></input>
+                <input
+                  type="text"
+                  id="add-order-so-number"
+                  required
+                  maxLength={100}
+                ></input>
               </td>
             </tr>
             <tr>
@@ -79,6 +82,7 @@ const AddOrder = () => {
                   type="text"
                   id="add-order-customer-name"
                   required
+                  maxLength={100}
                 ></input>
               </td>
             </tr>

@@ -6,7 +6,6 @@ import React, { useState, useEffect } from "react";
 const BoxForm = ({
   formDisplay,
   setFormDisplay,
-  setButtonDisplay,
   setBoxes,
   boxes,
   boxConfirmStatus,
@@ -35,7 +34,6 @@ const BoxForm = ({
     e.preventDefault();
     setBoxConfirmStatus(false);
     setFormDisplay(true);
-    setButtonDisplay(true);
 
     if (dimensions === "") {
       return false;
@@ -52,7 +50,7 @@ const BoxForm = ({
       id: uniqueId(),
     };
     setBoxes((prevBoxes) => [...prevBoxes, newBox]);
-    updatePackages([...boxes, newBox]); // Update packages including the new box
+    updatePackages([...boxes, newBox]);
     setDimensions("");
     setWeight("");
   };
@@ -65,7 +63,7 @@ const BoxForm = ({
   useEffect(() => {
     if (readyStatus) {
       setFormDisplay(false);
-    } else if (boxes.length === 0) {
+    } else {
       setFormDisplay(true);
     }
   }, [readyStatus, boxes.length, setFormDisplay]);

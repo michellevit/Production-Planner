@@ -11,10 +11,6 @@ const Box = ({
   box,
   boxes,
   setBoxes,
-  buttonDisplay,
-  boxConfirmStatus,
-  setBoxConfirmStatus,
-  boxConfirmHandler,
   readyStatus,
   updatePackages,
 }) => {
@@ -45,29 +41,14 @@ const Box = ({
       return newBoxes;
     });
   };
-  // const confirmHandler = () => {
-  //   setBoxConfirmStatus((prevConfirmStatus) => {
-  //     const newConfirmStatus = !prevConfirmStatus;
-  //     boxConfirmHandler(newConfirmStatus);
-  //     return newConfirmStatus;
-  //   });
-  // };
-  // <button
-  //           className={boxConfirmStatus ? "edit-btn" : "check-btn"}
-  //           onClick={confirmHandler}
-  //         >
-  //           <FontAwesomeIcon icon={boxConfirmStatus ? faEdit : faCheck} />
-  //         </button>
-
   return (
     <div className="box">
-      <div className={readyStatus ? "box-info-ready" : "box-info-notready"}>
+       <div className={readyStatus ? "box-info-ready" : "box-info-notready"}>
         <b>Box {boxes.indexOf(box) + 1}: </b>
         {box.dimensions} - {box.weight} lb
       </div>
       {!readyStatus && (
         <div className="dims-button-container">
-          {buttonDisplay && (
             <div className="edit-buttons">
               <button className="up-btn" onClick={upHandler}>
                 <FontAwesomeIcon icon={faArrowUp} />
@@ -79,7 +60,6 @@ const Box = ({
                 <FontAwesomeIcon icon={faClose} />
               </button>
             </div>
-          )}
         </div>
       )}
     </div>
