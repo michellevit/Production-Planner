@@ -13,6 +13,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    border-radius: 15px;
 }
 
 .add-order-table {
@@ -20,58 +21,32 @@
     align-items: center;
     justify-content: center;
     border-collapse: separate;
-    border-spacing: 0 10px;
+    border-spacing: 0 20px;
 }
 
 .add-order-table input {
     border-radius: 0;
     border: 1px rgb(214, 214, 214) solid;
     padding: 4px 7px;
+    border-radius: 5px;
 }
 
 .add-order-table input:focus {
   outline: none;
 }
 
-.add-order-table td #add-quote {
+.add-order-table td #add-order-quote-boolean {
     width: 15px; 
     margin-left: 0;
 }
 
 .add-order-table td:first-child {
     width: 30%;
+    vertical-align: top;
 }
-
 
 table.add-order-table td input {
     width: 100%;
-}
-
-.add-order-table tr .items-row {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.add-order-table td #add-item {
-    width: 209px!important;
-}
-
-.add-order-table td #add-item-qty {
-    width: 45px;
-    margin-left: 3px;
-}
-
-.add-order-table #add-line-item-button, .add-order-table #add-note-button {
-    padding: 5px 7px;
-    background-color: #19c37d;
-    border: none;
-    color: white;
-    margin-left: 3px;
-}
-
-.add-order-table td #add-note {
-    width: 257px;
 }
 
 .add-order-table .react-datepicker-wrapper {
@@ -79,18 +54,17 @@ table.add-order-table td input {
 }
 
 .add-order-table .react-datepicker__close-icon {
-    right: -5px;
-    top: -7px;
+    right: -4px;
+    top: -17px;
 }
-
-
 
 .add-order-container #submit-new-order-button {
     padding: 8px 12px;
     background-color: #19c37d;
     border: none;
     color: white;
-    margin-top: 10px; 
+    margin-bottom: 20px;
+    border-radius: 5px;
 }
 
 .add-order-container button:hover {

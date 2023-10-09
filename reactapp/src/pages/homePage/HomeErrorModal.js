@@ -1,26 +1,25 @@
 import React from "react";
-import "./FileUploadModal.css";
+import "./HomeErrorModal.css";
 
-const FileUploadModal = ({
-  showFileUploadModal,
-  setShowFileUploadModal,
-  fileExtension,
+const HomeErrorModal = ({
+  showHomeErrorModal,
+  setShowHomeErrorModal,
   setFileExtension,
   errorMessage,
   setErrorMessage,
 }) => {
-  if (!showFileUploadModal) {
+  if (!showHomeErrorModal) {
     return null;
   }
   const handleConfirmDelete = () => {
-    setShowFileUploadModal(false);
+    setShowHomeErrorModal(false);
     setFileExtension("");
     setErrorMessage("");
   };
   return (
-    <div className="file-upload-modal-overlay">
-      <div className="file-upload-modal-container">
-        <div className="file-upload-modal">
+    <div className="home-error-modal-overlay">
+      <div className="home-error-modal-container">
+        <div className="home-error-modal">
           {errorMessage.split("\n").map((line, index) => (
             <p key={index}>{line}</p>
           ))}
@@ -35,4 +34,4 @@ const FileUploadModal = ({
   );
 };
 
-export default FileUploadModal;
+export default HomeErrorModal;

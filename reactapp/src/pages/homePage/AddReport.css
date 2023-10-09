@@ -21,6 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 15px;
 }
 
 .add-order-report-container input {
@@ -33,6 +34,7 @@
     background-color: #19c37d;
     border: none;
     color: white;
+    border-radius: 0 5px 5px 0; 
 }
 
 .add-order-report-container button:hover {
@@ -48,6 +50,7 @@
     padding: 4px 7px;
     background-color: rgb(214, 214, 214);
     font-weight: 600;
+    border-radius: 5px 0 0 5px; 
   }
   
   .add-order-report-container input::file-selector-button:hover {
@@ -61,6 +64,7 @@
     border: 1px rgb(214, 214, 214) solid;
     cursor: pointer;
     font-weight: 400;
+    border-radius: 5px 0 0 5px; 
   }
   
 
@@ -77,6 +81,7 @@
     background-color: white;
     padding: 20px;
     width: 100%;
+    border-radius: 15px;
 }
 
 .previous-uploads-table table th {

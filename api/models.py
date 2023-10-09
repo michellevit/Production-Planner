@@ -13,7 +13,8 @@ class Order(models.Model):
     item_subtype_dict = models.JSONField(default=dict)
     packages_array = models.JSONField(default=list, null=True, blank=True)
     notes_array = models.JSONField(default=list, null=True, blank=True)
-    minimized_status = models.BooleanField(default=False)
+    minimized_status = models.BooleanField(default=True)
+    quote = models.BooleanField(default=False)
     ready = models.BooleanField(default=False)
     shipped = models.BooleanField(default=False, db_index=True)
     def __str__(self):

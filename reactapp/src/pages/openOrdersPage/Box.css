@@ -19,7 +19,7 @@
   word-wrap: break-word;
   width: 100%;
   background: white;
-  padding: 4px 8px;
+  padding: 3px 8px;
   border-radius: 5px 0 0 5px;
   transition: all 0.3s ease;
 }
@@ -28,7 +28,7 @@
   word-wrap: break-word;
   width: 100%;
   background: white;
-  padding: 4px 8px;
+  padding: 3px 8px;
   border-radius: 5px;
 }
 
@@ -63,16 +63,17 @@
 
 .xmark-btn {
   background: red;
+  border-radius: 0 5px 5px 0;
 }
 
-.check-btn {
+/* .check-btn {
   background: #19c37d;
   align-items: flex-end;
   border-radius: 0 5px 5px 0;
-}
+} */
 
-.edit-btn {
+/* .edit-btn {
   background: #ff8f00;
   align-items: flex-end;
   border-radius: 0 5px 5px 0;
-}
+} */
