@@ -28,6 +28,14 @@
   background: #ff8f00;
 }
 
+.quote-order-card {
+  background: #8A2BE2;
+}
+
+.quoted-order-card {
+  background: #9370DB;
+}
+
 .row {
   width: 460px;
   display: flex;

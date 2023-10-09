@@ -16,6 +16,7 @@ import os
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
+# logger.error('EXAMPLE')
 
 class OrderListView(APIView):
     def get(self, request):
@@ -24,6 +25,7 @@ class OrderListView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        logger.error('1')
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -72,6 +74,7 @@ class OrderDetailView(APIView):
             raise NotFound(detail="Order not found")
     
     def put(self, request, pk):
+        logger.error('hi')
         try:
             order = Order.objects.get(pk=pk)
             if 'ship_date' in request.data:
@@ -88,6 +91,8 @@ class OrderDetailView(APIView):
                 order.ready = request.data['ready']
             if 'shipped' in request.data:
                 order.shipped = request.data['shipped']
+            if 'quote' in request.data:
+                order.quote = request.data['quote']
             order.save()
             return Response({"message": "Ready status updated successfully."})
         except Order.DoesNotExist:

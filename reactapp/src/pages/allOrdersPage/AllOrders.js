@@ -5,7 +5,9 @@ import AllOrdersNav from "./AllOrdersNav";
 import EditShipDateButton from "./EditShipDateButton";
 import UnshipButton from "./UnshipButton";
 import DeleteButton from "./DeleteButton";
+import QuoteFlag from "./QuoteFlag";
 import Pagination from "./Pagination";
+
 
 const AllOrders = () => {
   const [allOrders, setAllOrders] = useState([]);
@@ -335,7 +337,7 @@ const AllOrders = () => {
       const formattedDate = date ? date.toISOString().split("T")[0] : null;
       const updatedOrder = order;
       updatedOrder.ship_date = formattedDate;
-        setTimeout(async () => {
+      setTimeout(async () => {
         await axios.put(
           `http://127.0.0.1:8000/all-orders/${order.id}/`,
           updatedOrder
@@ -359,7 +361,7 @@ const AllOrders = () => {
       const updatedOrder = { ...order };
       updatedOrder.shipped = !order.shipped;
       updatedOrder.ready = true;
-        setTimeout(async () => {
+      setTimeout(async () => {
         await axios.put(
           `http://127.0.0.1:8000/all-orders/${order.id}/`,
           updatedOrder
@@ -380,7 +382,36 @@ const AllOrders = () => {
       );
     }
   };
-  
+
+  const handleUnquote = async (order) => {
+    try {
+      setFadingRows((prevFadingRows) => [...prevFadingRows, order.id]);
+      let currentOrderID = order.id;
+      const updatedOrder = order;
+      updatedOrder.quote = false;
+      updatedOrder.ready = false;
+      setTimeout(async () => {
+        await axios.put(
+          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          updatedOrder
+        );
+        console.log("hi");
+        setAllOrders((prevAllOrders) =>
+          prevAllOrders.map((o) => (o.id === currentOrderID ? updatedOrder : o))
+        );
+        setTimeout(() => {
+          setFadingRows((prevFadingRows) =>
+            prevFadingRows.filter((id) => id !== order.id)
+          );
+        }, 400);
+      }, 400);
+    } catch (error) {
+      console.error(
+        "Error updating the order. Server responded with:",
+        error.response.status
+      );
+    }
+  }
 
   const extractTextBeforeParentheses = (text) => {
     const splitText = text.split(" (");
@@ -469,7 +500,12 @@ const AllOrders = () => {
                       </div>
                     ) : null}
                   </td>
-                  <td id="order-number">{order.order_number}</td>
+                  <td id="order-number">
+                    {order.order_number}
+                    {order.quote ? (
+                      <QuoteFlag handleUnquote={handleUnquote} order={order}/>
+                    ) : null}
+                  </td>
                   <td id="customer-name">{order.customer_name}</td>
                   <td id="items">
                     <table className="item-table">
@@ -525,11 +561,13 @@ const AllOrders = () => {
                       ""
                     )}
                   </td>
-                  <td id="ready">{order.ready === false ? "No" : "Yes"}</td>
+                  <td id="ready">{(order.ready === false || order.quote) ? "No" : "Yes"}</td>
                   <td id="shipped">
                     <div id="shipped-status-div">
                       {order.shipped === false ? "No" : "Yes"}
-                      <UnshipButton order={order} handleUnship={handleUnship} />
+                      {order.quote ? (
+                      null
+                    ) : <UnshipButton order={order} handleUnship={handleUnship} />}
                     </div>
                   </td>
                   <td id="delete-col">

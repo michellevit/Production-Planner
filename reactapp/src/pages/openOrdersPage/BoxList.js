@@ -5,12 +5,6 @@ import Box from "./Box";
 const BoxList = ({
   boxes,
   setBoxes,
-  setFormDisplay,
-  buttonDisplay,
-  setButtonDisplay,
-  boxConfirmStatus,
-  setBoxConfirmStatus,
-  boxConfirmHandler,
   readyStatus,
   updatePackages
 }) => {
@@ -23,12 +17,6 @@ const BoxList = ({
               box={box}
               boxes={boxes}
               setBoxes={setBoxes}
-              setFormDisplay={setFormDisplay}
-              buttonDisplay={buttonDisplay}
-              setButtonDisplay={setButtonDisplay}
-              boxConfirmStatus={boxConfirmStatus}
-              setBoxConfirmStatus={setBoxConfirmStatus}
-              boxConfirmHandler={boxConfirmHandler}
               readyStatus={readyStatus}
               updatePackages={updatePackages}
             />
