@@ -93,7 +93,6 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
   };
 
   const shippedHandler = async () => {
-    console.log("shippedHandler()");
     const shippedOrderID = order.id;
     const updatedOrder = order;
     updatedOrder.shipped = true;

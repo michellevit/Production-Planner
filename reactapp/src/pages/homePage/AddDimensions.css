@@ -1,0 +1,124 @@
+.add-dimensions-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-dimensions-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.add-dimensions-container form {
+    background-color: white;
+    padding: 30px 40px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+}
+
+
+.add-dimensions-container input {
+    background-color: #f0f3f5;
+    font-weight: bold;
+    border: 1px rgb(214, 214, 214) solid;
+    font-weight: 400;
+    border-radius: 5px; 
+    width: 75px;
+    padding: 4px 7px;
+    margin: 0 5px;
+    text-align: center;
+}
+
+.add-dimensions-container input:focus {
+    border: 1px rgb(214, 214, 214) solid;
+    outline: none;
+}
+
+.add-dimensions-container button {
+    padding: 5px 7px;
+    background-color: #19c37d;
+    border: none;
+    color: white;
+    border-radius: 5px; 
+}
+
+.add-dimensions-container button:hover {
+    opacity: 0.5;
+}
+
+
+.existing-dimensions-table {
+    width: 500px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    text-align: left;
+
+}
+
+.existing-dimensions-table table {
+    background-color: white;
+    padding: 30px 40px;
+    width: 100%;
+    border-radius: 15px;
+    border-collapse: separate;
+    border-spacing: 0 2px;
+}
+
+.existing-dimensions-table table tbody {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.no-dimensions-message {
+    text-align: center;
+    width: 450px;
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 15px;
+}
+
+.existing-dimensions-table tr {
+    margin-bottom: 5px;
+}
+
+
+.existing-dimensions-table #package-size {
+    background-color: #f0f3f5;
+    border-radius: 5px 0 0 5px;
+    width: 250px;
+    padding-left: 10px;
+}
+
+.existing-dimensions-table button {
+    border: none;
+    width: 27px;
+    color: white;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .existing-dimensions-table button#move-up {
+    background-color: #3399CC;
+    border-radius: 0;
+  }
+
+  .existing-dimensions-table button#move-down {
+    background-color: #004596;
+    border-radius: 0;
+  }
+
+  .existing-dimensions-table button#delete {
+    background-color: red;
+    border-radius: 0 5px 5px 0;
+  }

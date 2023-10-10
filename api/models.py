@@ -33,3 +33,13 @@ class OrderReport(models.Model):
             oldest_entry = OrderReport.objects.order_by('submitted_date').first()
             oldest_entry.delete()
         super(OrderReport, self).save(*args, **kwargs)
+
+
+class Dimension(models.Model):
+    index_position = models.IntegerField(default=0)
+    package_size = models.CharField(max_length=100)
+    def __str__(self):
+        return self.package_size[:50]
+    class Meta:
+        verbose_name_plural = "Dimensions"
+

@@ -39,26 +39,36 @@ button:hover {
     margin-top: 100px;
 }
 
-.all {
-    background: grey;
-}
 
 .open {
     background: lightblue;
-}
-
-.reports {
-    background: pink;
-}
-
-.all:hover {
-    color: grey;
 }
 
 .open:hover {
     color: lightblue;
 }
 
+
+.all {
+    background: grey;
+}
+
+.all:hover {
+    color: grey;
+}
+
+.reports {
+    background: pink;
+}
+
 .reports:hover {
     color: pink;
+}
+
+.dimensions {
+    background: #a993d4;
+}
+
+.dimensions:hover {
+    color: #a993d4;
 }

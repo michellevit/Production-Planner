@@ -42,6 +42,7 @@ body {
   align-items: stretch;
   gap: 2rem;
   padding: 0 1.8rem;
+  z-index: 9999 !important;
 }
 
 .site-title {

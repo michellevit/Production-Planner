@@ -16,7 +16,7 @@ const UnquoteModal = ({
         <div className="unquote-modal">
           <p>
             {order?.order_number
-              ? `Would you like to convert Quote#${order.order_number} into a Sales Order?`
+              ? `Would you like to convert Quote# ${order.order_number} into a Sales Order?`
               : "Would you like to change this Quote into a Sales Order?"}
           </p>
           <div className="unquote-modal-buttons">

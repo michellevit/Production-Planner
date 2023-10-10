@@ -10,3 +10,9 @@ class OrderReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderReport
         fields = "__all__"
+
+
+class DimensionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dimension
+        fields = "__all__"
