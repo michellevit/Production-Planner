@@ -12,12 +12,12 @@
 }
 
 .add-note-item-container #add-note-text {
-    width: 256px;
+    width: 263px;
     border-radius: 5px 0 0 5px !important;
 }
 
 .add-note-item-container #add-note-item-name {
-    width: 193px;
+    width: 200px;
 }
 
 .add-note-item-container #add-note-item-qty {

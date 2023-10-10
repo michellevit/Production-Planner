@@ -129,7 +129,7 @@
   width: 10%;
 }
 .all-orders-table #items {
-  width: 25%;
+  width: 15%;
   vertical-align: top; 
 }
 
@@ -145,13 +145,15 @@
 }
 
 .all-orders-table #packages {
-  width: 25%;
+  width: 20%;
   vertical-align: top; 
 }
 .all-orders-table #notes {
-  width: 10%;
+  width: 20%;
   vertical-align: top; 
+  word-break:break-all;
 }
+
 .all-orders-table #ready {
   width: 5%;
   text-align: center;

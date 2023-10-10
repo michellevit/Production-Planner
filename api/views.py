@@ -1,5 +1,5 @@
 from .models import * 
-from .serializers import OrderSerializer, OrderReportSerializer
+from .serializers import OrderSerializer, OrderReportSerializer, DimensionSerializer
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
@@ -14,6 +14,9 @@ from django.db import transaction
 from django.core.files.storage import default_storage
 import os
 from django.conf import settings
+from .models import Dimension
+from django.db.models import Max
+
 
 logger = logging.getLogger(__name__)
 # logger.error('EXAMPLE')
@@ -25,7 +28,6 @@ class OrderListView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        logger.error('1')
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -74,7 +76,6 @@ class OrderDetailView(APIView):
             raise NotFound(detail="Order not found")
     
     def put(self, request, pk):
-        logger.error('hi')
         try:
             order = Order.objects.get(pk=pk)
             if 'ship_date' in request.data:
@@ -126,3 +127,30 @@ class OrderReportUploadView(APIView):
         else:
             logger.error("No file uploaded.")
             return Response({"message": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class DimensionView(APIView):
+    def get(self, request):
+        dimensions = Dimension.objects.all().order_by('index_position')
+        serializer = DimensionSerializer(dimensions, many=True)
+        return Response(serializer.data)
+    def post(self, request):
+        serializer = DimensionSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            max_index_position = Dimension.objects.aggregate(Max('index_position'))['index_position__max'] or 0
+            serializer.save(index_position=max_index_position + 1)  # Set the index_position
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def delete(self, request, pk):
+        try:
+            dimension = Dimension.objects.get(pk=pk)
+            dimension.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Dimension.DoesNotExist:
+            raise NotFound(detail="Dimension not found")
+        
+
+class DimensionDetailView(APIView):
+    def get(self, request, pk):
+        dimension = Dimension.objects.get(pk=pk)
+        serializer = DimensionSerializer(dimension)
+        return Response(serializer.data)

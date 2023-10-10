@@ -2,6 +2,7 @@ import "./BoxForm.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const BoxForm = ({
   formDisplay,
@@ -13,8 +14,27 @@ const BoxForm = ({
   readyStatus,
   updatePackages,
 }) => {
+  const [selectDimensionsData, setSelectDimensionsData] = useState([]);
   const [dimensions, setDimensions] = useState("");
   const [weight, setWeight] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchDimensions();
+      setSelectDimensionsData(data);
+    };
+
+    fetchData();
+    if (boxConfirmStatus) {
+      setDimensions("");
+      setWeight("");
+    }
+    if (readyStatus) {
+      setFormDisplay(false);
+    } else {
+      setFormDisplay(true);
+    }
+  }, [boxConfirmStatus, readyStatus, boxes.length, setFormDisplay]);
 
   const inputDimensionsHandler = (e) => {
     setDimensions(e.target.value);
@@ -54,19 +74,17 @@ const BoxForm = ({
     setDimensions("");
     setWeight("");
   };
-  useEffect(() => {
-    if (boxConfirmStatus) {
-      setDimensions("");
-      setWeight("");
+
+  const fetchDimensions = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/dimensions/");
+      return response.data; 
+    } catch (error) {
+      console.error("Error fetching dimensions", error);
+      return [];
     }
-  }, [boxConfirmStatus]);
-  useEffect(() => {
-    if (readyStatus) {
-      setFormDisplay(false);
-    } else {
-      setFormDisplay(true);
-    }
-  }, [readyStatus, boxes.length, setFormDisplay]);
+  };
+
   return (
     <div className="boxform-container">
       {formDisplay && (
@@ -79,11 +97,11 @@ const BoxForm = ({
             id="mySelect"
           >
             <option hidden>Dimensions</option>
-            <option value="TBD">TBD</option>
-            <option value="10 x 8 x 3">10" x 8" x 3"</option>
-            <option value="9.125 x 9.125 x 9.125">
-              9.125" 9.125" x 9.125"
-            </option>
+            {selectDimensionsData.map((dimension) => (
+              <option key={dimension.id} value={dimension.package_size}>
+                {dimension.package_size}
+              </option>
+            ))}
           </select>
           <input
             type="number"

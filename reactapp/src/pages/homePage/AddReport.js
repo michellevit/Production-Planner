@@ -25,7 +25,7 @@ const AddReport = () => {
       } catch (error) {
         console.error("Error fetching uploads data:", error);
       }
-    }
+    } 
     fetchLast5Uploads();
     if (refreshReports) {
       setRefreshReports(false);
