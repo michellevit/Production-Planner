@@ -9,7 +9,6 @@ const AddReport = () => {
   const [showHomeErrorModal, setShowHomeErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [uploads, setUploads] = useState([]);
-  const [fileExtension, setFileExtension] = useState("");
   const [refreshReports, setRefreshReports] = useState(false);
 
   useEffect(() => {
@@ -47,7 +46,6 @@ const AddReport = () => {
     formData.append("file", selectedFile);
     const fileExtensionName = selectedFile.name.split(".").pop();
     if (fileExtensionName.toLowerCase() !== "xlsx") {
-      setFileExtension(fileExtensionName);
       setErrorMessage(
         `The uploaded file is incompatible.\nUploaded file type: .${fileExtensionName}\nCorrect file type: .xlsx`
       );
@@ -81,7 +79,6 @@ const AddReport = () => {
         <HomeErrorModal
           showHomeErrorModal={showHomeErrorModal}
           setShowHomeErrorModal={setShowHomeErrorModal}
-          setFileExtension={setFileExtension}
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
         />

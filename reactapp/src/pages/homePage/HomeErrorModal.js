@@ -4,7 +4,6 @@ import "./HomeErrorModal.css";
 const HomeErrorModal = ({
   showHomeErrorModal,
   setShowHomeErrorModal,
-  setFileExtension,
   errorMessage,
   setErrorMessage,
 }) => {
@@ -13,7 +12,6 @@ const HomeErrorModal = ({
   }
   const handleConfirmDelete = () => {
     setShowHomeErrorModal(false);
-    setFileExtension("");
     setErrorMessage("");
   };
   return (

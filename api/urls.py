@@ -12,10 +12,9 @@ urlpatterns = [
     path('all-orders/<int:pk>/', OrderDetailView.as_view(), name='all-order-detail'),
     path('reports/', OrderReportUploadView.as_view(), name="reports"),
     path('dimensions/', DimensionView.as_view(), name="dimensions"),
-    path('dimensions/<int:pk>/', DimensionDetailView.as_view(), name='dimension-detail'),
-]
+    path('dimensions/<int:pk>/', DimensionView.as_view()),]
 
 # To use django admin - uncomment this:
 # http://127.0.0.1:8000/admin/
-# if settings.DEBUG:
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
