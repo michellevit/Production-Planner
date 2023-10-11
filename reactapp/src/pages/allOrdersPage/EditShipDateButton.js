@@ -18,7 +18,6 @@ const EditShipDateButton = ({ order, editShipDate, fadingRows }) => {
   const handleClickEditShipDate = () => {
     setShowEditShipDateModal(true);
     setIsFading(true);
-
   };
   const handleConfirmEditShipDate = () => {
     setShowEditShipDateModal(false);
@@ -31,16 +30,20 @@ const EditShipDateButton = ({ order, editShipDate, fadingRows }) => {
   };
   return (
     <div>
-      {order.ship_date}
-      <DatePicker
-        customInput={<EditShipDateIcon />}
-        selected={new Date(parseISO(order.ship_date))}
-        onChange={(date) => {
+      {order.delay_tbd ? "" : order.ship_date}
+      {order.delay_tbd ? (
+        ""
+      ) : (
+        <DatePicker
+          customInput={<EditShipDateIcon />}
+          selected={new Date(parseISO(order.ship_date))}
+          onChange={(date) => {
             handleClickEditShipDate();
             setNewDate(date);
           }}
-        timeZone="Vancouver"
-      />
+          timeZone="Vancouver"
+        />
+      )}
       <EditShipDateModal
         show={showEditShipDateModal}
         handleConfirmEditShipDate={handleConfirmEditShipDate}

@@ -12,19 +12,33 @@ const AddOrder = () => {
   const [showHomeErrorModal, setShowHomeErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [tbd, setTBD] = useState(false);
-  
+
   const handleSubmitNewOrder = async (e) => {
     e.preventDefault();
+    const orderNumber = document.getElementById("add-order-so-number").value;
+    if (orderNumber === "") {
+      setErrorMessage("Please enter an order number.");
+      setShowHomeErrorModal(true);
+      return;
+    }
+    const customerName = document.getElementById(
+      "add-order-customer-name"
+    ).value;
+    if (customerName === "") {
+      setErrorMessage("Please enter a customer name.");
+      setShowHomeErrorModal(true);
+      return;
+    }
+    if ((shipDate === "" || shipDate === null) && tbd === false) {
+      setErrorMessage("Please enter a ship date or select the TBD checkbox.");
+      setShowHomeErrorModal(true);
+      return;
+    }
     if (Object.keys(items).length === 0) {
       setErrorMessage("Please add at least one item.");
       setShowHomeErrorModal(true);
       return;
     }
-    const orderNumber = document.getElementById("add-order-so-number").value;
-    const customerName = document.getElementById(
-      "add-order-customer-name"
-    ).value;
-
     const quoteValue = document.getElementById(
       "add-order-quote-boolean"
     ).checked;
@@ -32,7 +46,7 @@ const AddOrder = () => {
       ? shipDate.toISOString().split("T")[0]
       : new Date().toISOString().split("T")[0];
     if (tbd) {
-      formattedShipDate = ""
+      formattedShipDate = null;
     }
     const orderData = {
       order_number: orderNumber,
@@ -54,6 +68,7 @@ const AddOrder = () => {
       setShowHomeErrorModal(true);
       document.getElementById("add-order-form").reset();
       setShipDate("");
+      setTBD(false);
       setItems({});
       setNotes([]);
     } catch (error) {
@@ -104,11 +119,16 @@ const AddOrder = () => {
                   isClearable
                   timeZone="Vancouver"
                 />
-                TBD&nbsp;<input type="checkbox" id="tbd-checkbox" checked={tbd}
+                TBD&nbsp;
+                <input
+                  type="checkbox"
+                  id="tbd-checkbox"
+                  checked={tbd}
                   onChange={(tbd) => {
                     setShipDate("");
                     setTBD(true);
-                  }}></input>
+                  }}
+                ></input>
               </td>
             </tr>
             <tr>

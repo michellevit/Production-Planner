@@ -119,7 +119,8 @@
 }
 
 .all-orders-table #ship-date .svg-inline--fa:hover {
-  opacity: 10%;
+  opacity: 0.5;
+  cursor: pointer;
 }
 
 .all-orders-table #order-number {

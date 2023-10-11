@@ -44,7 +44,7 @@ const AddNoteItem = ({
           id="add-note-text"
           type="text"
           value={noteItemText}
-          maxLength={38}
+          maxLength={120}
           onChange={(e) => setNoteItemText(e.target.value)}
         ></input>
         <button

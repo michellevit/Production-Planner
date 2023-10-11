@@ -167,13 +167,18 @@
 
 .row2col1 {
   text-align: left;
-  width: 25%;
+  width: 20%;
   font-weight: 700;
 }
 
 .row2col2 {
   text-align: left;
-  width: 75%;
+  width: 35%;
+}
+
+.row2col3 {
+  text-align: left;
+  width: 45%;
 }
 
 .delay-input {
@@ -182,11 +187,13 @@
   border-radius: 5px;
   width: 105px;
   color: red;
-  padding: 4px 8px;
 }
 
-
-
+.card-container .react-datepicker__input-container input {
+    width: 100%;
+    margin-right: 15px;
+    padding: 4px 8px;
+}
 
 .react-datepicker__close-icon::after {
   background-color: transparent;
@@ -222,7 +229,7 @@
 }
 
 .items-table tbody tr:last-child td {
-  border-bottom: none; /* Remove the border from the last row */
+  border-bottom: none; 
 }
 
 #item {

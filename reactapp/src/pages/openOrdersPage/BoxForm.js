@@ -42,10 +42,27 @@ const BoxForm = ({
     setDimensions(e.target.value);
   };
 
-  const inputWeightHandler = (e) => {
-    setWeight(e.target.value);
-  };
+  function isPositiveNumberOrFloat(input) {
+    const pattern = /^(0\.\d+|[0-9]\d*\.?\d*)$/;
+    return pattern.test(input);
+  }
 
+  const inputWeightHandler = (e) => {
+    const inputValue = e.target.value;
+    if (
+      inputValue.toLowerCase() === "t" ||
+      inputValue.toLowerCase() === "tb" ||
+      inputValue.toLowerCase() === "tbd"
+    ) {
+      setWeight(inputValue.toUpperCase());
+    }
+    else if (isPositiveNumberOrFloat(inputValue)) {
+      setWeight(inputValue);
+    }
+    else if (inputValue === "") {
+      setWeight("");
+    }
+  };
   const uniqueId = () => {
     const dateString = Date.now().toString(36);
     const randomness = Math.random().toString(36).substring(2);
@@ -58,19 +75,23 @@ const BoxForm = ({
     setFormDisplay(true);
 
     if (dimensions === "") {
-      return false;
-      setErrorMessage("Please enter a package size.")
+      setErrorMessage("Please enter a package size.");
       setShowErrorModal(true);
+      return false;
     }
 
-    if (dimensions !== "TBD" && weight === "") {
-      setWeight(null);
-      return true;
-      setErrorMessage("Please enter a package weight.")
-      setShowErrorModal(true);
+    if (weight === "") {
+      if (dimensions !== "TBD") {
+        setErrorMessage("Please enter a package weight.");
+        setShowErrorModal(true);
+        return false;
+      }
     }
-    const formattedWeight = parseFloat(weight).toFixed(2);
-    const finalWeight = parseFloat(formattedWeight);
+    let finalWeight = weight;
+    if (weight !== "TBD" && weight !== "") {
+      const formattedWeight = parseFloat(weight).toFixed(2);
+      finalWeight = parseFloat(formattedWeight);
+    }
     const newBox = {
       dimensions: dimensions,
       weight: finalWeight,
@@ -106,22 +127,16 @@ const BoxForm = ({
             <option hidden>Dimensions</option>
             <option>TBD</option>
             <option>9" x 7" x 1" &#40;Padded Envelope&#41;</option>
-            {selectDimensionsData
-              .map((item) => (
-                <option
-                  key={item.id}
-                  value={item.package_size}
-                >
-                  {item.package_size}
-                </option>
-              ))}
+            {selectDimensionsData.map((item) => (
+              <option key={item.id} value={item.package_size}>
+                {item.package_size}
+              </option>
+            ))}
           </select>
           <input
-            type="number"
+            type="text"
             className="weight"
             placeholder="lb"
-            min="0.01"
-            step="1"
             onChange={inputWeightHandler}
             value={weight}
           ></input>

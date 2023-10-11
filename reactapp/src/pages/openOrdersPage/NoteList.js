@@ -43,7 +43,7 @@ const NoteList = ({ readyStatus, notes, setNotes, updateNotes }) => {
             value={note}
             onChange={inputNoteHandler}
             placeholder="Add note"
-            maxLength={38}
+            maxLength={120}
           ></input>
           <button onClick={submitNoteHandler}>
             <FontAwesomeIcon icon={faAdd} />

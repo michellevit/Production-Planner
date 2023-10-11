@@ -8,7 +8,7 @@ class Order(models.Model):
     backorder_number = models.IntegerField(default=0)
     ship_date = models.DateField(null=True, blank=True)
     delay_date = models.DateField(null=True, default=None)
-    delay_tbd = models.BooleanField(default=False)
+    delay_tbd = models.BooleanField(null=True, default=False)
     customer_name = models.CharField(max_length=100)
     item_type_dict = models.JSONField(default=dict)
     item_subtype_dict = models.JSONField(default=dict)
