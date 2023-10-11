@@ -82,6 +82,8 @@ class OrderDetailView(APIView):
                 order.ship_date = request.data['ship_date']    
             if 'delay_date' in request.data:
                 order.delay_date = request.data['delay_date']
+            if 'delay_tbd' in request.data:
+                order.delay_tbd = request.data['delay_tbd'] 
             if 'packages_array' in request.data:
                 order.packages_array = request.data['packages_array']
             if 'notes_array' in request.data:

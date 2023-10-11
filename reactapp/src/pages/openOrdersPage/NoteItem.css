@@ -33,8 +33,6 @@
   padding: 2px 8px;
 }
 
-
-
 .noteitem button {
   border: none;
   width: 27px;
@@ -42,8 +40,6 @@
   align-items: center;
   justify-content: center;
 }
-
-
 
 .noteitem .xmark-btn {
   background: red;
