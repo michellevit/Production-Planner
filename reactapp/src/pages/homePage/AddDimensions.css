@@ -80,14 +80,6 @@
 }
 
 
-.no-dimensions-message {
-    text-align: center;
-    width: 450px;
-    background-color: white;
-    padding: 30px 40px;
-    border-radius: 15px;
-}
-
 .existing-dimensions-table tr {
     margin-bottom: 5px;
 }
@@ -96,8 +88,19 @@
 .existing-dimensions-table #package-size {
     background-color: #f0f3f5;
     border-radius: 5px 0 0 5px;
-    width: 250px;
+    width: 200px;
     padding-left: 10px;
+}
+
+.existing-dimensions-table #package-size-fixed {
+    background-color: #f0f3f5;
+    border-radius: 5px;
+    width: 227px;
+    padding: 3px 7px 3px 10px;
+}
+
+.existing-dimensions-table td {
+    padding: 0;
 }
 
 .existing-dimensions-table button {

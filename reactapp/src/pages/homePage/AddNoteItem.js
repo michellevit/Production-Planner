@@ -12,7 +12,6 @@ const AddNoteItem = ({
   errorMessage,
   setErrorMessage,
 }) => {
-  const [fileExtension, setFileExtension] = useState("");
   const [noteItemText, setNoteItemText] = useState("");
   const handleAddOrderNoteItem = (e) => {
     e.preventDefault();
@@ -38,7 +37,6 @@ const AddNoteItem = ({
         <HomeErrorModal
           showHomeErrorModal={showHomeErrorModal}
           setShowHomeErrorModal={setShowHomeErrorModal}
-          setFileExtension={setFileExtension}
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
         />

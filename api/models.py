@@ -36,10 +36,12 @@ class OrderReport(models.Model):
 
 
 class Dimension(models.Model):
-    index_position = models.IntegerField(default=0)
-    package_size = models.CharField(max_length=100)
+    length = models.IntegerField()
+    width = models.IntegerField()
+    height = models.IntegerField()
+    package_size = models.CharField(max_length=50)
     def __str__(self):
-        return self.package_size[:50]
+        return self.package_size[0:50]
     class Meta:
         verbose_name_plural = "Dimensions"
 

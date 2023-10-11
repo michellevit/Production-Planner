@@ -131,26 +131,19 @@ class OrderReportUploadView(APIView):
 
 class DimensionView(APIView):
     def get(self, request):
-        dimensions = Dimension.objects.all().order_by('index_position')
+        dimensions = Dimension.objects.all().order_by('length', 'width', 'height')
         serializer = DimensionSerializer(dimensions, many=True)
         return Response(serializer.data)
     def post(self, request):
         serializer = DimensionSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            max_index_position = Dimension.objects.aggregate(Max('index_position'))['index_position__max'] or 0
-            serializer.save(index_position=max_index_position + 1)  # Set the index_position
+        if serializer.is_valid():
+            serializer.save() 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     def delete(self, request, pk):
         try:
             dimension = Dimension.objects.get(pk=pk)
-            dimension.delete()
+            dimension.delete() 
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Dimension.DoesNotExist:
-            raise NotFound(detail="Dimension not found")
-        
-
-class DimensionDetailView(APIView):
-    def get(self, request, pk):
-        dimension = Dimension.objects.get(pk=pk)
-        serializer = DimensionSerializer(dimension)
-        return Response(serializer.data)
+            return Response(status=status.HTTP_404_NOT_FOUND)

@@ -78,7 +78,7 @@ const BoxForm = ({
   const fetchDimensions = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/dimensions/");
-      return response.data; 
+      return response.data;
     } catch (error) {
       console.error("Error fetching dimensions", error);
       return [];
@@ -97,11 +97,17 @@ const BoxForm = ({
             id="mySelect"
           >
             <option hidden>Dimensions</option>
-            {selectDimensionsData.map((dimension) => (
-              <option key={dimension.id} value={dimension.package_size}>
-                {dimension.package_size}
-              </option>
-            ))}
+            <option>TBD</option>
+            <option>9" x 7" x 1" &#40;Padded Envelope&#41;</option>
+            {selectDimensionsData
+              .map((item) => (
+                <option
+                  key={item.id}
+                  value={item.package_size}
+                >
+                  {item.package_size}
+                </option>
+              ))}
           </select>
           <input
             type="number"

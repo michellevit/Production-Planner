@@ -12,7 +12,6 @@ const AddLineItem = ({
   errorMessage,
   setErrorMessage,
 }) => {
-  const [fileExtension, setFileExtension] = useState("");
   const handleAddOrderLineItem = (e) => {
     e.preventDefault();
     const itemName = document.getElementById("add-line-item-name").value;
@@ -50,7 +49,6 @@ const AddLineItem = ({
         <HomeErrorModal
           showHomeErrorModal={showHomeErrorModal}
           setShowHomeErrorModal={setShowHomeErrorModal}
-          setFileExtension={setFileExtension}
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
         />

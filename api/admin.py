@@ -50,25 +50,31 @@ class OrderReportAdmin(admin.ModelAdmin):
     ) 
 
 
-
 class DimensionAdmin(admin.ModelAdmin):
     # Customize the display of the model in the admin interface
     list_display = (
         "id",
-        "index_position",
+        "length",
+        "width",
+        "height",
         "package_size",
     ) 
     # Add filters to the right side of the admin page
     list_filter = (
-        "index_position",
+        "length",
+        "width",
+        "height",
         "package_size",
     )
     # Add search functionality to the admin page
     search_fields = (
         "id",
-        "index_position",
+        "length",
+        "width",
+        "height",
         "package_size",
     ) 
+
 
 
 
