@@ -1,4 +1,4 @@
-.unquote-modal-overlay {
+  .error-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,11 +11,11 @@
     z-index: 1000;
   }
 
-  .unquote-modal-container {
+  .error-modal-container {
     height: 30%;
   }
   
-  .unquote-modal {
+  .error-modal {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -23,25 +23,17 @@
     text-align: center;
   }
   
-  .unquote-modal-buttons {
+  .error-modal-buttons {
     margin-top: 20px;
   }
   
-  .unquote-confirm-button,
-  .unquote-cancel-button {
+  .error-modal .error-confirm-button {
     margin: 0 10px;
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-  }
-  
-  .unquote-confirm-button {
     background-color: #ff5555;
-    color: white;
   }
-  
-  .unquote-cancel-button {
-    background-color: #777777;
-  }
+
   

@@ -46,6 +46,7 @@
     border: none;
     color: white;
     border-radius: 5px; 
+    cursor: pointer;
 }
 
 .add-dimensions-container button:hover {
@@ -54,8 +55,8 @@
 
 
 .existing-dimensions-table {
-    width: 500px;
     margin-top: 40px;
+    width: 500px;
     display: flex;
     flex-direction: column;
     font-size: 0.9rem;
@@ -124,4 +125,5 @@
   .existing-dimensions-table button#delete {
     background-color: red;
     border-radius: 0 5px 5px 0;
-  }
+    cursor: pointer;
+}

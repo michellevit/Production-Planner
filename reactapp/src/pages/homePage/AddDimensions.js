@@ -15,20 +15,8 @@ const AddDimensions = () => {
   const [packageHeight, setPackageHeight] = useState("");
   const [refreshDimensions, setRefreshDimensions] = useState(false);
   const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
-  const [currentDimension, setCurrentDimension] = useState("")
-  const handleClickDeleteButton = (currentDimension) => {
-    setCurrentDimension(currentDimension);
-    setShowConfirmDeleteModal(true);
-  };
-  const handleConfirmDelete = () => {
-    setShowConfirmDeleteModal(false);
-    handleDeleteDimension(currentDimension.id);
-    setCurrentDimension("");
-  };
-  const handleCancelDelete = () => {
-    setShowConfirmDeleteModal(false);
-    setCurrentDimension("");
-  };
+  const [currentDimension, setCurrentDimension] = useState("");
+
   useEffect(() => {
     const fetchDimensions = () => {
       axios
@@ -48,8 +36,29 @@ const AddDimensions = () => {
 
   const handleSubmitDimensions = async (event) => {
     event.preventDefault();
+    console.log("Dimensions: ", dimensions);
+    const newDimension = {
+      length: parseInt(packageLength),
+      width: parseInt(packageWidth),
+      height: parseInt(packageHeight),
+    };
+    console.log("New Dimension: ", newDimension);
+    const isDuplicate = dimensions.some(
+      (dimension) =>
+        dimension.length === newDimension.length &&
+        dimension.width === newDimension.width &&
+        dimension.height === newDimension.height
+    );
+    if (isDuplicate) {
+      console.log("Duplicate detected!");
+      setErrorMessage("Dimension with the same values already exists.");
+      setShowHomeErrorModal(true);
+      return;
+    }
+    console.log("Is Duplicate: ", isDuplicate);
+
+
     const formattedDimensions = `${packageLength}" x ${packageWidth}" x ${packageHeight}"`;
-    console.log(formattedDimensions);
     setPackageLength("");
     setPackageWidth("");
     setPackageHeight("");
@@ -63,25 +72,43 @@ const AddDimensions = () => {
       setRefreshDimensions(true);
     } catch (error) {
       console.error("Error adding dimension", error);
-      setErrorMessage("There was an error submitting your dimensions.");
+      setErrorMessage("Please add a length, width, and height.");
       setShowHomeErrorModal(true);
     }
   };
+
   const handleDeleteDimension = async () => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/dimensions/${currentDimension.id}/`);
+      await axios.delete(
+        `http://127.0.0.1:8000/dimensions/${currentDimension.id}/`
+      );
       setRefreshDimensions(true);
     } catch (error) {
       console.error("Error deleting dimension", error);
     }
   };
+
+  const handleClickDeleteButton = (currentDimension) => {
+    setCurrentDimension(currentDimension);
+    setShowConfirmDeleteModal(true);
+  };
+  const handleConfirmDelete = () => {
+    setShowConfirmDeleteModal(false);
+    handleDeleteDimension(currentDimension.id);
+    setCurrentDimension("");
+  };
+  const handleCancelDelete = () => {
+    setShowConfirmDeleteModal(false);
+    setCurrentDimension("");
+  };
+
   return (
     <div className="add-dimensions-container">
-      <ConfirmDeleteModal 
-      showConfirmDeleteModal={showConfirmDeleteModal}
-      handleConfirmDelete={handleConfirmDelete}
-      handleCancelDelete={handleCancelDelete}
-      currentDimension={currentDimension}
+      <ConfirmDeleteModal
+        showConfirmDeleteModal={showConfirmDeleteModal}
+        handleConfirmDelete={handleConfirmDelete}
+        handleCancelDelete={handleCancelDelete}
+        currentDimension={currentDimension}
       />
       <div className="add-dimensions-form"></div>
       <h2>Add Dimensions</h2>
@@ -127,7 +154,9 @@ const AddDimensions = () => {
               <td id="package-size-fixed">TBD</td>
             </tr>
             <tr>
-              <td id="package-size-fixed">9" x 7" x 1" &#40;Padded Envelope&#41;</td>
+              <td id="package-size-fixed">
+                9" x 7" x 1" &#40;Padded Envelope&#41;
+              </td>
             </tr>
             {dimensions.map((dimension) => (
               <tr key={dimension.id}>

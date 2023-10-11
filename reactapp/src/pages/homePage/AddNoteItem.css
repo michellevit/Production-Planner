@@ -28,6 +28,7 @@
 .add-note-item-container #add-note-item-button {
     padding: 5px 7px;
     background-color: #19c37d;
+    cursor: pointer;
     border: none;
     color: white;
     margin-left: 3px;

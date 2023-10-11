@@ -3,6 +3,7 @@ import axios from "axios";
 import "./OpenOrders.css";
 import OrderCard from "./OrderCard";
 import OpenOrdersNav from "./OpenOrdersNav";
+import ErrorModal from "./ErrorModal";
 
 const OpenOrders = () => {
   const [openOrders, setOpenOrders] = useState([]);
@@ -13,7 +14,8 @@ const OpenOrders = () => {
   const [delayedChecked, setDelayedChecked] = useState(true);
   const [oldestChecked, setOldestChecked] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("false");
   useEffect(() => {
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
@@ -101,7 +103,7 @@ const OpenOrders = () => {
     }
     if (readyChecked && notReadyChecked && !delayedChecked) {
       filteredOpenOrders = filteredOpenOrders.filter(
-        (order) => order.ready != null && order.delay_date === null
+        (order) => order.ready != null && (order.delay_date === null || order.delay_tbd != true)
       );
     }
     if (readyChecked && !notReadyChecked && delayedChecked) {
@@ -116,12 +118,12 @@ const OpenOrders = () => {
     }
     if (!readyChecked && notReadyChecked && !delayedChecked) {
       filteredOpenOrders = filteredOpenOrders.filter(
-        (order) => order.ready === false && order.delay_date === null
+        (order) => order.ready === false && (order.delay_date === null && order.delay_tbd != true)
       );
     }
     if (!readyChecked && !notReadyChecked && delayedChecked) {
       filteredOpenOrders = filteredOpenOrders.filter(
-        (order) => order.delay_date != null
+        (order) => order.delay_date != null || order.delay_tbd === true
       );
     }
     if (!readyChecked && !notReadyChecked && !delayedChecked) {
@@ -340,6 +342,12 @@ const OpenOrders = () => {
 
   return (
     <div className="open-main-div">
+      <ErrorModal 
+        showErrorModal={showErrorModal}
+        setShowErrorModal={setShowErrorModal}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
       <OpenOrdersNav
         handleSearchOrders={handleSearchOrders}
         handleMaximizeAll={handleMaximizeAll}
@@ -366,6 +374,10 @@ const OpenOrders = () => {
               order={order}
               openOrders={openOrders}
               setOpenOrders={setOpenOrders}
+              showErrorModal={showErrorModal}
+              setShowErrorModal={setShowErrorModal}
+              errorMessage={errorMessage}
+              setErrorMessage={setErrorMessage}
             />
           ))
         )

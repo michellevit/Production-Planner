@@ -13,6 +13,8 @@ const BoxForm = ({
   setBoxConfirmStatus,
   readyStatus,
   updatePackages,
+  setShowErrorModal,
+  setErrorMessage,
 }) => {
   const [selectDimensionsData, setSelectDimensionsData] = useState([]);
   const [dimensions, setDimensions] = useState("");
@@ -57,10 +59,15 @@ const BoxForm = ({
 
     if (dimensions === "") {
       return false;
+      setErrorMessage("Please enter a package size.")
+      setShowErrorModal(true);
     }
 
-    if (weight === "") {
+    if (dimensions !== "TBD" && weight === "") {
+      setWeight(null);
       return true;
+      setErrorMessage("Please enter a package weight.")
+      setShowErrorModal(true);
     }
     const formattedWeight = parseFloat(weight).toFixed(2);
     const finalWeight = parseFloat(formattedWeight);
@@ -113,7 +120,7 @@ const BoxForm = ({
             type="number"
             className="weight"
             placeholder="lb"
-            min="0"
+            min="0.01"
             step="1"
             onChange={inputWeightHandler}
             value={weight}

@@ -33,6 +33,7 @@
     border: none;
     color: white;
     border-radius: 0 5px 5px 0; 
+    cursor: pointer;
 }
 
 .add-order-report-container button:hover {
@@ -49,6 +50,7 @@
     background-color: rgb(214, 214, 214);
     font-weight: 600;
     border-radius: 5px 0 0 5px; 
+    cursor: pointer;
   }
   
   .add-order-report-container input::file-selector-button:hover {
@@ -93,9 +95,8 @@
 
 .no-file-message {
     text-align: center;
-    width: 450px;
+    width: 500px;
     background-color: white;
     padding: 30px 40px;
     border-radius: 15px;
-    
 }

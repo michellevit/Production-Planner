@@ -34,6 +34,7 @@
   width: 27px;
   background-color: white;
   border-radius: 0 5px 5px 0;
+  cursor: pointer;
 }
 
 .boxform-container button:hover {

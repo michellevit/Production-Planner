@@ -49,13 +49,23 @@ table.add-order-table td input {
     width: 100%;
 }
 
+.add-order-table #delay-date-col {
+    display: flex;
+    flex-direction: row;
+}
+
 .add-order-table .react-datepicker-wrapper {
-    width: 100%;
+    width: 75%;
+    margin-right: 15px;
 }
 
 .add-order-table .react-datepicker__close-icon {
     right: -4px;
     top: -17px;
+}
+
+.add-order-table #tbd-checkbox {
+    width: auto;
 }
 
 .add-order-container #submit-new-order-button {
@@ -65,6 +75,7 @@ table.add-order-table td input {
     color: white;
     margin-bottom: 20px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .add-order-container button:hover {

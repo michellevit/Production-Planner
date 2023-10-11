@@ -39,7 +39,8 @@ const AddReport = () => {
     event.preventDefault();
 
     if (!selectedFile) {
-      console.log("Please select a file.");
+      setErrorMessage("Please select a file.");
+      setShowHomeErrorModal(true);
       return;
     }
     const formData = new FormData();

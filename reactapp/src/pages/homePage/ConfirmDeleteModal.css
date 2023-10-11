@@ -39,11 +39,11 @@
   }
   
   .confirm-delete-confirm-button {
-    background-color: #ff5555;
+    background-color: #ff5555!important;
     color: white;
   }
   
   .confirm-delete-cancel-button {
-    background-color: #ccc;
+    background-color: #777777!important;
   }
   
