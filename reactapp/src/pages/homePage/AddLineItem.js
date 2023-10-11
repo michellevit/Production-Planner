@@ -53,7 +53,7 @@ const AddLineItem = ({
           setErrorMessage={setErrorMessage}
         />
         <input id="add-line-item-name" type="text" maxLength={24}></input>
-        <input id="add-line-item-qty" type="number"></input>
+        <input id="add-line-item-qty" type="number" min="1"></input>
         <button id="add-line-item-button" onClick={handleAddOrderLineItem}>
           <FontAwesomeIcon icon={faAdd} />
         </button>

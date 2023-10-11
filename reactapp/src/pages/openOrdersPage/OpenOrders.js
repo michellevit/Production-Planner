@@ -103,7 +103,7 @@ const OpenOrders = () => {
     }
     if (readyChecked && notReadyChecked && !delayedChecked) {
       filteredOpenOrders = filteredOpenOrders.filter(
-        (order) => order.ready != null && (order.delay_date === null || order.delay_tbd != true)
+        (order) => order.ready != null && (order.delay_date === null && order.delay_tbd === false)
       );
     }
     if (readyChecked && !notReadyChecked && delayedChecked) {
@@ -118,7 +118,7 @@ const OpenOrders = () => {
     }
     if (!readyChecked && notReadyChecked && !delayedChecked) {
       filteredOpenOrders = filteredOpenOrders.filter(
-        (order) => order.ready === false && (order.delay_date === null && order.delay_tbd != true)
+        (order) => order.ready === false && (order.delay_date === null && order.delay_tbd === false)
       );
     }
     if (!readyChecked && !notReadyChecked && delayedChecked) {

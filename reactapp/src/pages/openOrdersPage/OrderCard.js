@@ -24,6 +24,7 @@ const OrderCard = ({
 }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [delayDate, setDelayDate] = useState();
+  const [tbdStatus, setTBDStatus] = useState(false);
   const [boxes, setBoxes] = useState([]);
   const [minimized, setMinimized] = useState(order.minimized_status);
   const [boxConfirmStatus, setBoxConfirmStatus] = useState([]);
@@ -37,8 +38,14 @@ const OrderCard = ({
           `http://127.0.0.1:8000/open-orders/${order.id}/`
         );
         if (response.data) {
-          const { ready, delay_date, packages_array, notes_array } =
-            response.data;
+          const {
+            ready,
+            ship_date,
+            delay_date,
+            delay_tbd,
+            packages_array,
+            notes_array,
+          } = response.data;
           const updatedBoxes = Array.isArray(packages_array)
             ? packages_array.map((box) => {
                 if (typeof box.boxConfirmStatus === "undefined") {
@@ -56,17 +63,27 @@ const OrderCard = ({
             : [];
           const formattedDelayDate = delay_date ? parseISO(delay_date) : null;
           setDelayDate(formattedDelayDate);
+          setTBDStatus(delay_tbd);
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);
           setMinimized(order.minimized_status);
+          if (ship_date === null) {
+            if (delay_date === null) {
+              setTBDStatus(true);
+            }
+            else {
+              setTBDStatus(false);
+            }
+          }
         }
+        console.log("TBD Status: ", tbdStatus);
       } catch (error) {
         console.error("Error fetching order details:", error);
       }
     };
     fetchOrderDetails();
-  }, [order.id, order.minimized_status]);
+  }, [order.id, order.minimized_status, order.delay_tbd, order.delay_date, order.ship_date]);
 
   const readyHandler = async () => {
     setReadyStatus(true);
@@ -131,8 +148,41 @@ const OrderCard = ({
   const updateDelayDate = async (date) => {
     try {
       const formattedDate = date ? date.toISOString().split("T")[0] : null;
+      if (formattedDate !== null) {
+        setTBDStatus(false);
+      } 
+      if (date === null) {
+        setTBDStatus(true);
+      }
       const updatedOrder = order;
       updatedOrder.delay_date = formattedDate;
+      await axios.put(
+        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        updatedOrder
+      );
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
+
+  const handleTBD = async () => {
+    let newStatus = !tbdStatus;
+    if (newStatus === true) {
+      setDelayDate(null);
+      setTBDStatus(true);
+    }
+    else if (newStatus === false && order.ship_date === null) {
+      newStatus = true;
+      setTBDStatus(true);
+    }
+    else if (newStatus === false) {
+      newStatus = false;
+      setTBDStatus(false);
+    }
+    try {
+      const updatedOrder = order;
+      updatedOrder.delay_tbd = newStatus;
+      updatedOrder.date = null;
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
@@ -210,7 +260,11 @@ const OrderCard = ({
           ? "ready-order-card"
           : ""
       } ${isRemoving ? "card-container-fade-out" : ""} ${
-        delayDate !== null && !readyStatus ? "delayed-order-card" : ""
+        (delayDate !== null || tbdStatus === true) &&
+        !readyStatus &&
+        !order.quote
+          ? "delayed-order-card"
+          : ""
       }`}
     >
       <div className="row" id="row1">
@@ -239,7 +293,7 @@ const OrderCard = ({
           <div id="min-customer-info">
             {order.customer_name}
             <br></br>
-            {order.ship_date}
+            {tbdStatus ? "TBD" : order.ship_date}
           </div>
         ) : null}
       </div>
@@ -250,12 +304,16 @@ const OrderCard = ({
               <tr className="order-data" id="customer-name">
                 <td className="row2col1">Customer:</td>
                 <td className="row2col2">{order.customer_name}</td>
+                <td className="row2col2"></td>
               </tr>
               <tr className="order-data" id="ship-date">
                 <td className="row2col1">Ship Date:</td>
-                <td className="row2col2">{order.ship_date}</td>
+                <td className="row2col2">
+                  {tbdStatus ? "TBD" : order.ship_date}
+                </td>
+                <td className="row2col3"></td>
               </tr>
-              {!readyStatus && (
+              {(!readyStatus && !order.quote) && (
                 <tr className="order-data" id="delay-date">
                   <td className="row2col1">Delay:</td>
                   <td className="row2col2">
@@ -270,7 +328,17 @@ const OrderCard = ({
                       isClearable
                       className="delay-input"
                     />
+                    
                   </td>
+                  <td className="row2col3">{!order.quote && "TBD"}
+                    {!order.quote &&
+                      <input
+                        type="checkbox"
+                        id="order-card-tbd-checkbox"
+                        checked={tbdStatus}
+                        onChange={handleTBD}
+                      ></input>
+                    }</td>
                 </tr>
               )}
             </tbody>

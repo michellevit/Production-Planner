@@ -8,7 +8,6 @@ import DeleteButton from "./DeleteButton";
 import QuoteFlag from "./QuoteFlag";
 import Pagination from "./Pagination";
 
-
 const AllOrders = () => {
   const [allOrders, setAllOrders] = useState([]);
   const [sortOption, setSortOption] = useState("All");
@@ -124,7 +123,7 @@ const AllOrders = () => {
     }
     if (readyChecked && notReadyChecked && !delayedChecked) {
       filteredAllOrders = filteredAllOrders.filter(
-        (order) => order.ready != null && order.delay_date === null
+        (order) => order.ready != null && (order.delay_date === null && order.delay_tbd === false)
       );
     }
     if (readyChecked && !notReadyChecked && delayedChecked) {
@@ -139,12 +138,12 @@ const AllOrders = () => {
     }
     if (!readyChecked && notReadyChecked && !delayedChecked) {
       filteredAllOrders = filteredAllOrders.filter(
-        (order) => order.ready === false && order.delay_date === null
+        (order) => order.ready === false && (order.delay_date === null && order.delay_tbd === false)
       );
     }
     if (!readyChecked && !notReadyChecked && delayedChecked) {
       filteredAllOrders = filteredAllOrders.filter(
-        (order) => order.delay_date != null
+        (order) => order.delay_date != null || order.delay_tbd === true
       );
     }
     if (!readyChecked && !notReadyChecked && !delayedChecked) {
@@ -411,7 +410,7 @@ const AllOrders = () => {
         error.response.status
       );
     }
-  }
+  };
 
   const extractTextBeforeParentheses = (text) => {
     const splitText = text.split(" (");
@@ -499,11 +498,16 @@ const AllOrders = () => {
                         *Delayed: {order.delay_date}
                       </div>
                     ) : null}
+                    {order.delay_tbd === true ? (
+                      <div style={{ fontSize: "smaller", color: "red" }}>
+                        *Delayed: TBD
+                      </div>
+                    ) : null}
                   </td>
                   <td id="order-number">
                     {order.order_number}
                     {order.quote ? (
-                      <QuoteFlag handleUnquote={handleUnquote} order={order}/>
+                      <QuoteFlag handleUnquote={handleUnquote} order={order} />
                     ) : null}
                   </td>
                   <td id="customer-name">{order.customer_name}</td>
@@ -540,7 +544,12 @@ const AllOrders = () => {
                             >
                               <td id="box-number">{index + 1}</td>
                               <td id="dimensions">{packageItem.dimensions}</td>
-                              <td id="weight">{packageItem.weight} lb</td>
+                              <td id="weight">
+                                {(packageItem.weight === "") && <span></span>}
+                                {(packageItem.dimensions !== "TBD" && packageItem.weight === "TBD") && <span>TBD</span>}
+                                {(packageItem.dimensions === "TBD" && packageItem.weight === "TBD") && <span></span>}
+                                {(packageItem.weight !== "TBD" && packageItem.weight !== "") && packageItem.weight + " lb"}
+                              </td>
                             </tr>
                           ))}
                       </tbody>
@@ -561,13 +570,18 @@ const AllOrders = () => {
                       ""
                     )}
                   </td>
-                  <td id="ready">{(order.ready === false || order.quote) ? "No" : "Yes"}</td>
+                  <td id="ready">
+                    {order.ready === false || order.quote ? "No" : "Yes"}
+                  </td>
                   <td id="shipped">
                     <div id="shipped-status-div">
                       {order.shipped === false ? "No" : "Yes"}
-                      {order.quote ? (
-                      null
-                    ) : <UnshipButton order={order} handleUnship={handleUnship} />}
+                      {order.quote ? null : (
+                        <UnshipButton
+                          order={order}
+                          handleUnship={handleUnship}
+                        />
+                      )}
                     </div>
                   </td>
                   <td id="delete-col">

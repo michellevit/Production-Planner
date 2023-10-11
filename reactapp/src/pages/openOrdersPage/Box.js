@@ -7,13 +7,7 @@ import {
   faClose,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Box = ({
-  box,
-  boxes,
-  setBoxes,
-  readyStatus,
-  updatePackages,
-}) => {
+const Box = ({ box, boxes, setBoxes, readyStatus, updatePackages }) => {
   const upHandler = () => {
     const index = boxes.indexOf(box);
     if (index !== 0) {
@@ -43,24 +37,27 @@ const Box = ({
   };
   return (
     <div className="box">
-       <div className={readyStatus ? "box-info-ready" : "box-info-notready"}>
+      <div className={readyStatus ? "box-info-ready" : "box-info-notready"}>
         <b>Box {boxes.indexOf(box) + 1}: </b>
         {box.dimensions}
-        {box.weight !== null && <span> - {box.weight} lb</span>}
+        {Number.isFinite(box.weight) && <span> - {box.weight} lb</span>}
+        {((box.weight === "TBD") && (box.dimensions === "TBD")) && <span></span>}
+        {((box.weight === "TBD") && (box.dimensions !== "TBD")) && <span>- TBD</span>}
+        {(box.weight === "") && <span></span>}
       </div>
       {!readyStatus && (
         <div className="dims-button-container">
-            <div className="edit-buttons">
-              <button className="up-btn" onClick={upHandler}>
-                <FontAwesomeIcon icon={faArrowUp} />
-              </button>
-              <button className="down-btn" onClick={downHandler}>
-                <FontAwesomeIcon icon={faArrowDown} />
-              </button>
-              <button className="xmark-btn" onClick={deleteHandler}>
-                <FontAwesomeIcon icon={faClose} />
-              </button>
-            </div>
+          <div className="edit-buttons">
+            <button className="up-btn" onClick={upHandler}>
+              <FontAwesomeIcon icon={faArrowUp} />
+            </button>
+            <button className="down-btn" onClick={downHandler}>
+              <FontAwesomeIcon icon={faArrowDown} />
+            </button>
+            <button className="xmark-btn" onClick={deleteHandler}>
+              <FontAwesomeIcon icon={faClose} />
+            </button>
+          </div>
         </div>
       )}
     </div>

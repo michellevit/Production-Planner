@@ -142,7 +142,7 @@ const AddDimensions = () => {
           value={packageHeight}
           onChange={(event) => setPackageHeight(event.target.value)}
         ></input>
-        <button type="submit">
+        <button type="submit" id="submit-dimensions">
           <FontAwesomeIcon icon={faAdd} />
         </button>
       </form>

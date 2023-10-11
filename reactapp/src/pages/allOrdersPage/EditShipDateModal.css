@@ -37,11 +37,12 @@
   }
   
   .edit-ship-date-confirm-button {
-    background-color: #ff5555;
+    background-color: #19c37d;
     color: white;
   }
   
   .edit-ship-date-cancel-button {
     background-color: #777777;
+    color: white;
   }
   
