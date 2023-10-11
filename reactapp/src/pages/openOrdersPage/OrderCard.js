@@ -13,7 +13,15 @@ import ShippedButton from "./ShippedButton";
 import "./OrderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
 
-const OrderCard = ({ order, openOrders, setOpenOrders }) => {
+const OrderCard = ({
+  order,
+  openOrders,
+  setOpenOrders,
+  showErrorModal,
+  setShowErrorModal,
+  errorMessage,
+  setErrorMessage,
+}) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [delayDate, setDelayDate] = useState();
   const [boxes, setBoxes] = useState([]);
@@ -309,6 +317,8 @@ const OrderCard = ({ order, openOrders, setOpenOrders }) => {
               setBoxConfirmStatus={setBoxConfirmStatus}
               readyStatus={readyStatus}
               updatePackages={updatePackages}
+              setShowErrorModal={setShowErrorModal}
+              setErrorMessage={setErrorMessage}
             />
             {boxes.length > 0 && (
               <BoxList

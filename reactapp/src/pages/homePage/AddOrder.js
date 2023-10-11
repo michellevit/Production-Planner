@@ -11,7 +11,8 @@ const AddOrder = () => {
   const [notes, setNotes] = useState([]);
   const [showHomeErrorModal, setShowHomeErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [tbd, setTBD] = useState(false);
+  
   const handleSubmitNewOrder = async (e) => {
     e.preventDefault();
     if (Object.keys(items).length === 0) {
@@ -27,12 +28,16 @@ const AddOrder = () => {
     const quoteValue = document.getElementById(
       "add-order-quote-boolean"
     ).checked;
-    const formattedShipDate = shipDate
+    let formattedShipDate = shipDate
       ? shipDate.toISOString().split("T")[0]
       : new Date().toISOString().split("T")[0];
+    if (tbd) {
+      formattedShipDate = ""
+    }
     const orderData = {
       order_number: orderNumber,
       ship_date: formattedShipDate,
+      delay_tbd: tbd,
       customer_name: customerName,
       item_type_dict: items,
       item_subtype_dict: items,
@@ -88,16 +93,22 @@ const AddOrder = () => {
             </tr>
             <tr>
               <td>Ship Date</td>
-              <td>
+              <td id="delay-date-col">
                 <DatePicker
                   placeholderText=""
                   selected={shipDate}
                   onChange={(date) => {
                     setShipDate(date);
+                    setTBD(false);
                   }}
                   isClearable
                   timeZone="Vancouver"
                 />
+                TBD&nbsp;<input type="checkbox" id="tbd-checkbox" checked={tbd}
+                  onChange={(tbd) => {
+                    setShipDate("");
+                    setTBD(true);
+                  }}></input>
               </td>
             </tr>
             <tr>

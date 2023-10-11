@@ -45,7 +45,8 @@ const Box = ({
     <div className="box">
        <div className={readyStatus ? "box-info-ready" : "box-info-notready"}>
         <b>Box {boxes.indexOf(box) + 1}: </b>
-        {box.dimensions} - {box.weight} lb
+        {box.dimensions}
+        {box.weight !== null && <span> - {box.weight} lb</span>}
       </div>
       {!readyStatus && (
         <div className="dims-button-container">
