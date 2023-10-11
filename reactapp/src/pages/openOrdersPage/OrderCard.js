@@ -64,20 +64,21 @@ const OrderCard = ({
           const formattedDelayDate = delay_date ? parseISO(delay_date) : null;
           setDelayDate(formattedDelayDate);
           setTBDStatus(delay_tbd);
+          console.log("useEffect - delay_tbd: ", delay_tbd);
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);
           setMinimized(order.minimized_status);
           if (ship_date === null) {
             if (delay_date === null) {
-              setTBDStatus(true);
+              checkTBD(true);
+              
             }
             else {
-              setTBDStatus(false);
+              checkTBD(false);
             }
           }
         }
-        console.log("TBD Status: ", tbdStatus);
       } catch (error) {
         console.error("Error fetching order details:", error);
       }
@@ -151,11 +152,9 @@ const OrderCard = ({
       if (formattedDate !== null) {
         setTBDStatus(false);
       } 
-      if (date === null) {
-        setTBDStatus(true);
-      }
       const updatedOrder = order;
       updatedOrder.delay_date = formattedDate;
+      updatedOrder.delay_tbd = false;
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
@@ -165,28 +164,41 @@ const OrderCard = ({
     }
   };
 
-  const handleTBD = async () => {
-    let newStatus = !tbdStatus;
-    if (newStatus === true) {
-      setDelayDate(null);
-      setTBDStatus(true);
-    }
-    else if (newStatus === false && order.ship_date === null) {
-      newStatus = true;
-      setTBDStatus(true);
-    }
-    else if (newStatus === false) {
-      newStatus = false;
-      setTBDStatus(false);
-    }
+  const checkTBD = async (tbdBoolean) => {
+    setTBDStatus(tbdBoolean);
+    const updatedOrder = order;
+    updatedOrder.delay_tbd = tbdBoolean;
     try {
-      const updatedOrder = order;
-      updatedOrder.delay_tbd = newStatus;
-      updatedOrder.date = null;
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
       );
+      console.log("Sending updatedOrder:", updatedOrder);
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  }
+
+
+  const handleTBD = async () => {
+    let newStatus = !tbdStatus;
+    if (newStatus === false && order.ship_date === null) {
+      newStatus = true;
+    }
+    else if (newStatus === false && order.ship_date !== null) {
+      newStatus = false;
+    }
+    setTBDStatus(newStatus);
+    setDelayDate(null);
+    const updatedOrder = order;
+    updatedOrder.delay_date = null;
+    updatedOrder.delay_tbd = newStatus;
+    try {
+      await axios.put(
+        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        updatedOrder
+      );
+      console.log("Sending updatedOrder:", updatedOrder);
     } catch (error) {
       console.error("Error updating order:", error);
     }
@@ -237,10 +249,10 @@ const OrderCard = ({
     }
   };
   const updateNotes = async (newNotes) => {
+    console.log("updateNotes");
     try {
       const updatedOrder = order;
       updatedOrder.notes_array = newNotes;
-      console.log("Sending updatedOrder:", updatedOrder);
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
