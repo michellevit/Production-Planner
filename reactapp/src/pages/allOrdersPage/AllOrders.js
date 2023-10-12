@@ -123,7 +123,10 @@ const AllOrders = () => {
     }
     if (readyChecked && notReadyChecked && !delayedChecked) {
       filteredAllOrders = filteredAllOrders.filter(
-        (order) => order.ready != null && (order.delay_date === null && order.delay_tbd === false)
+        (order) =>
+          order.ready != null &&
+          order.delay_date === null &&
+          order.delay_tbd === false
       );
     }
     if (readyChecked && !notReadyChecked && delayedChecked) {
@@ -138,7 +141,10 @@ const AllOrders = () => {
     }
     if (!readyChecked && notReadyChecked && !delayedChecked) {
       filteredAllOrders = filteredAllOrders.filter(
-        (order) => order.ready === false && (order.delay_date === null && order.delay_tbd === false)
+        (order) =>
+          order.ready === false &&
+          order.delay_date === null &&
+          order.delay_tbd === false
       );
     }
     if (!readyChecked && !notReadyChecked && delayedChecked) {
@@ -336,6 +342,8 @@ const AllOrders = () => {
       const formattedDate = date ? date.toISOString().split("T")[0] : null;
       const updatedOrder = order;
       updatedOrder.ship_date = formattedDate;
+      updatedOrder.delay_date = null;
+      updatedOrder.tbd = false;
       setTimeout(async () => {
         await axios.put(
           `http://127.0.0.1:8000/all-orders/${order.id}/`,
@@ -353,6 +361,50 @@ const AllOrders = () => {
     }
   };
 
+  const editDelayDate = async (order, date) => {
+    try {
+      setFadingRows((prevFadingRows) => [...prevFadingRows, order.id]);
+      const formattedDate = date ? date.toISOString().split("T")[0] : null;
+      const updatedOrder = order;
+      updatedOrder.delay_date = formattedDate;
+      updatedOrder.tbd = false;
+      setTimeout(async () => {
+        await axios.put(
+          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          updatedOrder
+        );
+        setTimeout(() => {
+          setFadingRows((prevFadingRows) =>
+            prevFadingRows.filter((id) => id !== order.id)
+          );
+          setRefreshOrders(true);
+        }, 700);
+      }, 700);
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
+  const editDelayTBD = async (order, tbdStatus) => {
+    try {
+      setFadingRows((prevFadingRows) => [...prevFadingRows, order.id]);
+      const updatedOrder = order;
+      updatedOrder.delay_tbd = tbdStatus;
+      setTimeout(async () => {
+        await axios.put(
+          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          updatedOrder
+        );
+        setTimeout(() => {
+          setFadingRows((prevFadingRows) =>
+            prevFadingRows.filter((id) => id !== order.id)
+          );
+          setRefreshOrders(true);
+        }, 700);
+      }, 700);
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
   const handleUnship = async (order) => {
     try {
       setFadingRows((prevFadingRows) => [...prevFadingRows, order.id]);
@@ -394,7 +446,6 @@ const AllOrders = () => {
           `http://127.0.0.1:8000/all-orders/${order.id}/`,
           updatedOrder
         );
-        console.log("hi");
         setAllOrders((prevAllOrders) =>
           prevAllOrders.map((o) => (o.id === currentOrderID ? updatedOrder : o))
         );
@@ -488,21 +539,13 @@ const AllOrders = () => {
                   }`}
                 >
                   <td id="ship-date">
-                    <EditShipDateButton
-                      order={order}
-                      editShipDate={editShipDate}
-                      fadingRows={fadingRows}
-                    />
-                    {order.delay_date !== null ? (
-                      <div style={{ fontSize: "smaller", color: "red" }}>
-                        *Delayed: {order.delay_date}
-                      </div>
-                    ) : null}
-                    {order.delay_tbd === true ? (
-                      <div style={{ fontSize: "smaller", color: "red" }}>
-                        *Delayed: TBD
-                      </div>
-                    ) : null}
+                      <EditShipDateButton
+                        order={order}
+                        currentDate={currentDate}
+                        editShipDate={editShipDate}
+                        editDelayDate={editDelayDate}
+                        editDelayTBD={editDelayTBD}
+                      />
                   </td>
                   <td id="order-number">
                     {order.order_number}
@@ -545,10 +588,16 @@ const AllOrders = () => {
                               <td id="box-number">{index + 1}</td>
                               <td id="dimensions">{packageItem.dimensions}</td>
                               <td id="weight">
-                                {(packageItem.weight === "") && <span></span>}
-                                {(packageItem.dimensions !== "TBD" && packageItem.weight === "TBD") && <span>TBD</span>}
-                                {(packageItem.dimensions === "TBD" && packageItem.weight === "TBD") && <span></span>}
-                                {(packageItem.weight !== "TBD" && packageItem.weight !== "") && packageItem.weight + " lb"}
+                                {packageItem.weight === "" && <span></span>}
+                                {packageItem.dimensions !== "TBD" &&
+                                  packageItem.weight === "TBD" && (
+                                    <span>TBD</span>
+                                  )}
+                                {packageItem.dimensions === "TBD" &&
+                                  packageItem.weight === "TBD" && <span></span>}
+                                {packageItem.weight !== "TBD" &&
+                                  packageItem.weight !== "" &&
+                                  packageItem.weight + " lb"}
                               </td>
                             </tr>
                           ))}
