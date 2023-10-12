@@ -1,24 +1,33 @@
 import React from "react";
 import "./EditShipDateModal.css";
 
-const EditShipDateModal = ({ show, handleConfirmEditShipDate, handleCancelEditShipDate, order }) => {
-  if (!show) {
+const EditShipDateModal = ({
+  showEditShipDateModal,
+  modalMessage,
+  handleConfirmEditShipDate,
+  handleCancelEditShipDate,
+}) => {
+  if (!showEditShipDateModal) {
     return null;
   }
   return (
     <div className="edit-ship-date-modal-overlay">
       <div className="edit-ship-date-modal-container">
         <div className="edit-ship-date-modal">
-        <p>
-            {order?.order_number
-              ? `Are you sure you want to change the ship date for SO#${order.order_number}?`
-              : "Are you sure you want to change the ship date for this order?"}
+          <p>
+            {modalMessage}
           </p>
           <div className="edit-ship-date-modal-buttons">
-            <button className="edit-ship-date-confirm-button" onClick={handleConfirmEditShipDate}>
+            <button
+              className="edit-ship-date-confirm-button"
+              onClick={handleConfirmEditShipDate}
+            >
               Yes
             </button>
-            <button className="edit-ship-date-cancel-button" onClick={handleCancelEditShipDate}>
+            <button
+              className="edit-ship-date-cancel-button"
+              onClick={handleCancelEditShipDate}
+            >
               No
             </button>
           </div>

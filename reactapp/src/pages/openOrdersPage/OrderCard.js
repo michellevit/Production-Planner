@@ -179,7 +179,6 @@ const OrderCard = ({
     }
   }
 
-
   const handleTBD = async () => {
     let newStatus = !tbdStatus;
     if (newStatus === false && order.ship_date === null) {

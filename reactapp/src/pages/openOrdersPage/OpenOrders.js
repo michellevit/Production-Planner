@@ -269,9 +269,14 @@ const OpenOrders = () => {
     }
     if (oldestChecked) {
       filteredOpenOrders.sort((a, b) => (a.ship_date > b.ship_date ? 1 : -1));
+
     } else {
       filteredOpenOrders.sort((a, b) => (a.ship_date < b.ship_date ? 1 : -1));
     }
+    filteredOpenOrders.sort((a, b) => {
+      if (a.delay_date === null && a.delay_tbd === true) return 1;
+      if (b.delay_date === null && b.delay_tbd === true) return -1;
+    });
     return filteredOpenOrders;
   };
 
