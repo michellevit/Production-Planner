@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import { parseISO } from "date-fns";
 import EditShipDateIcon from "./EditShipDateIcon";
 import EditShipDateModal from "./EditShipDateModal";
+import ErrorModal from "./ErrorModal";
 import "./EditShipDateButton.css";
 
 const EditShipDateButton = ({
@@ -18,12 +19,13 @@ const EditShipDateButton = ({
   const [modalMessage, setModalMessage] = useState("");
   const [nextStep, setNextStep] = useState("");
   const [tbdStatus, setTBDStatus] = useState(false);
-
   const [shipDateText, setShipDateText] = useState("");
   const [defaultDate, setDefaultDate] = useState(currentDate);
-
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+ 
+ 
   useEffect(() => {
-    console.log("useEffect");
     if (isFading) {
       setShowEditShipDateModal(true);
     } else {
@@ -33,8 +35,17 @@ const EditShipDateButton = ({
     setTBDStatus(order.delay_tbd);
   }, [isFading, order]);
 
+  function formatDate(inputDate) {
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    const formattedDate = new Date(inputDate).toLocaleDateString(
+      undefined,
+      options
+    );
+    return formattedDate;
+  }
+
+
   const handleShipDateText = () => {
-    console.log("handleShipDateText");
     let tempDate = "";
     if (
       order.ship_date !== null &&
@@ -42,37 +53,37 @@ const EditShipDateButton = ({
       order.delay_tbd === false
     ) {
       tempDate = new Date(parseISO(order.ship_date));
-      setShipDateText(order.ship_date);
+      const formattedDate = formatDate(order.ship_date);
+      setShipDateText(formattedDate);
       setDefaultDate(tempDate);
     } else if (order.delay_date !== null && order.delay_tbd === false) {
-      setShipDateText("Delayed: " + order.delay_date);
+      const formattedDate = formatDate(order.delay_date);
+      setShipDateText(formattedDate);
       tempDate = new Date(parseISO(order.delay_date));
       setDefaultDate(tempDate);
     } else if (order.delay_tbd === true) {
-      setShipDateText("Delayed: TBD");
+      setShipDateText("TBD");
       tempDate = new Date();
       setDefaultDate(tempDate);
     }
   };
+
+
   const handleClickEditShipDate = (inputDate) => {
-    console.log("handleClickEditShipDate");
     setNewDate(inputDate);
-    console.log("newDate: ", inputDate);
     setNextStep("callEditShipDateFunction");
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = inputDate.toLocaleDateString(undefined, options);
-    console.log("formattedDate: ", formattedDate);
+    const formattedDate = formatDate(inputDate);
     setModalMessage(
       `Are you sure you want to change the ship date for SO#${order.order_number} to ${formattedDate}?`
     );
     setShowEditShipDateModal(true);
     setIsFading(true);
   };
+
+
   const handleClickEditDelayDate = (inputDate) => {
-    console.log("handleClickEditDelayDate");
     setNewDate(inputDate);
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = inputDate.toLocaleDateString(undefined, options);
+    const formattedDate = formatDate(inputDate)
     setModalMessage(
       `Are you sure you want to set the delay date for SO#${order.order_number} to ${formattedDate}?`
     );
@@ -80,61 +91,78 @@ const EditShipDateButton = ({
     setShowEditShipDateModal(true);
     setIsFading(true);
   };
+
+
   const handleClickEditTBDStatus = () => {
-    console.log("handleClickEditTBDStatus");
-    if (!tbdStatus === true) {
+    const tempTBDStatus = !tbdStatus;
+    console.log(tempTBDStatus);
+    if (tempTBDStatus === true) {
       setModalMessage(
-        `Are you sure you want to the delay date for SO#${order.order_number} to TBD?`
+        `Are you sure you want to set the date for SO#${order.order_number} to TBD?`
       );
-    } else if (!tbdStatus === false && order.ship_date === null) {
-      setModalMessage(
+      setNextStep("callEditDelayTBDFunction");
+      setIsFading(true);
+      setShowEditShipDateModal(true);
+    } else if (tempTBDStatus === false && order.ship_date === null) {
+      setErrorMessage(
         `Please add a ship date or delay date to remove the TBD status`
       );
-    } else if (!tbdStatus === false && order.ship_date !== null) {
+      setShowErrorModal(true);
+    } else if (tempTBDStatus === false && order.ship_date !== null) {
+      const formattedDate = formatDate(order.ship_date)
       setModalMessage(
-        `Are you sure you want to rmeove the TBD status of SO#${order.order_number} and set the ship date to ${order.ship_date}?`
+        `Are you sure you want to remove the TBD status of SO#${order.order_number} and set the ship date to ${formattedDate}?`
       );
+      setNextStep("callEditDelayTBDFunction");
+      setIsFading(true);
+      setShowEditShipDateModal(true);
     }
-
-    setTBDStatus(!tbdStatus);
-    setNextStep("callEditDelayTBDFunction");
-    setShowEditShipDateModal(true);
-    setIsFading(true);
   };
 
   const handleConfirmEditShipDate = () => {
-    console.log("handleConfirmEditShipDate");
     setShowEditShipDateModal(false);
     setModalMessage("");
     setIsFading(false);
-    console.log("newDate: ", newDate);
-    console.log("tbdStatus: ", tbdStatus);
-    console.log("Next Step: ", nextStep);
     if (nextStep === "callEditShipDateFunction") {
       editShipDate(order, newDate);
     } else if (nextStep === "callEditDelayDateFunction") {
       editDelayDate(order, newDate);
     } else if (nextStep === "callEditDelayTBDFunction") {
-      editDelayTBD(order, tbdStatus);
+      editDelayTBD(order, !tbdStatus);
     }
     setNextStep("");
   };
+
+
   const handleCancelEditShipDate = () => {
     setShowEditShipDateModal(false);
     setModalMessage("");
+    setNextStep("");
     setIsFading(false);
   };
+
 
   return (
     <div>
       <div
         className={
-          (order.delay_date === null && order.delay_tbd === false)
+          order.delay_date === null && order.delay_tbd === false
             ? ""
-            : "red-delay-text"
+            : "red-delay-date-text"
         }
       >
         {shipDateText}
+        <div
+          className={
+            order.delay_date === null && order.delay_tbd === false
+              ? ""
+              : "red-delay-text"
+          }
+        >
+          {order.delay_date === null && order.delay_tbd === false
+            ? ""
+            : "Delayed"}
+        </div>
       </div>
       <div className="edit-ship-date-div">
         Edit Ship Date:
@@ -176,6 +204,12 @@ const EditShipDateButton = ({
         modalMessage={modalMessage}
         handleConfirmEditShipDate={handleConfirmEditShipDate}
         handleCancelEditShipDate={handleCancelEditShipDate}
+      />
+      <ErrorModal
+        showErrorModal={showErrorModal}
+        setShowErrorModal={setShowErrorModal}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
       />
     </div>
   );

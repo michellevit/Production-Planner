@@ -7,9 +7,14 @@
 }
 
 .edit-ship-date-div input#delay-tbd-checkbox {
-    width: 12px;
+    width: 10px;
+}
+
+.red-delay-date-text {
+    color: red;
 }
 
 .red-delay-text {
     color: red;
+    font-size: 0.7rem;
 }

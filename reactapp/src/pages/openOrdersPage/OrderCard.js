@@ -23,6 +23,7 @@ const OrderCard = ({
   setErrorMessage,
 }) => {
   const [isRemoving, setIsRemoving] = useState(false);
+  const [shipDate, setShipDate] = useState("");
   const [delayDate, setDelayDate] = useState();
   const [tbdStatus, setTBDStatus] = useState(false);
   const [boxes, setBoxes] = useState([]);
@@ -64,11 +65,11 @@ const OrderCard = ({
           const formattedDelayDate = delay_date ? parseISO(delay_date) : null;
           setDelayDate(formattedDelayDate);
           setTBDStatus(delay_tbd);
-          console.log("useEffect - delay_tbd: ", delay_tbd);
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);
           setMinimized(order.minimized_status);
+          setShipDate(formatDate(ship_date));
           if (ship_date === null) {
             if (delay_date === null) {
               checkTBD(true);
@@ -85,7 +86,12 @@ const OrderCard = ({
     };
     fetchOrderDetails();
   }, [order.id, order.minimized_status, order.delay_tbd, order.delay_date, order.ship_date]);
-
+  
+  function formatDate(inputDate) {
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    const formattedDate = new Date(inputDate).toLocaleDateString(undefined, options);
+    return formattedDate;
+  }
   const readyHandler = async () => {
     setReadyStatus(true);
     setBoxConfirmStatus(true);
@@ -173,7 +179,6 @@ const OrderCard = ({
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
       );
-      console.log("Sending updatedOrder:", updatedOrder);
     } catch (error) {
       console.error("Error updating order:", error);
     }
@@ -197,7 +202,6 @@ const OrderCard = ({
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
       );
-      console.log("Sending updatedOrder:", updatedOrder);
     } catch (error) {
       console.error("Error updating order:", error);
     }
@@ -248,7 +252,6 @@ const OrderCard = ({
     }
   };
   const updateNotes = async (newNotes) => {
-    console.log("updateNotes");
     try {
       const updatedOrder = order;
       updatedOrder.notes_array = newNotes;
@@ -304,7 +307,7 @@ const OrderCard = ({
           <div id="min-customer-info">
             {order.customer_name}
             <br></br>
-            {tbdStatus ? "TBD" : order.ship_date}
+            {tbdStatus ? "TBD" : shipDate}
           </div>
         ) : null}
       </div>
@@ -320,7 +323,7 @@ const OrderCard = ({
               <tr className="order-data" id="ship-date">
                 <td className="row2col1">Ship Date:</td>
                 <td className="row2col2">
-                  {tbdStatus ? "TBD" : order.ship_date}
+                  {tbdStatus ? "TBD" : shipDate}
                 </td>
                 <td className="row2col3"></td>
               </tr>
