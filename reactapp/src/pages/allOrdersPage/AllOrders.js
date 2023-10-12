@@ -343,7 +343,7 @@ const AllOrders = () => {
       const updatedOrder = order;
       updatedOrder.ship_date = formattedDate;
       updatedOrder.delay_date = null;
-      updatedOrder.tbd = false;
+      updatedOrder.delay_tbd = false;
       setTimeout(async () => {
         await axios.put(
           `http://127.0.0.1:8000/all-orders/${order.id}/`,
@@ -367,7 +367,7 @@ const AllOrders = () => {
       const formattedDate = date ? date.toISOString().split("T")[0] : null;
       const updatedOrder = order;
       updatedOrder.delay_date = formattedDate;
-      updatedOrder.tbd = false;
+      updatedOrder.delay_tbd = false;
       setTimeout(async () => {
         await axios.put(
           `http://127.0.0.1:8000/all-orders/${order.id}/`,
@@ -384,11 +384,13 @@ const AllOrders = () => {
       console.error("Error updating order:", error);
     }
   };
+
   const editDelayTBD = async (order, tbdStatus) => {
     try {
       setFadingRows((prevFadingRows) => [...prevFadingRows, order.id]);
       const updatedOrder = order;
       updatedOrder.delay_tbd = tbdStatus;
+      updatedOrder.ready = false;
       setTimeout(async () => {
         await axios.put(
           `http://127.0.0.1:8000/all-orders/${order.id}/`,
