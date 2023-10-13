@@ -159,9 +159,7 @@ const EditShipDateButton = ({
               : "red-delay-text"
           }
         >
-          {order.delay_date === null && order.delay_tbd === false
-            ? ""
-            : "Delayed"}
+          {order.delay_date !== null && "(Delayed)"}
         </div>
       </div>
       <div className="edit-ship-date-div">
