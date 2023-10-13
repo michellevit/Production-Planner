@@ -195,6 +195,10 @@
     padding: 4px 8px;
 }
 
+.card-container .react-datepicker__close-icon {
+  padding: 2px;
+}
+
 .react-datepicker__close-icon::after {
   background-color: transparent;
   color: rgba(136, 135, 135, 0.75);
