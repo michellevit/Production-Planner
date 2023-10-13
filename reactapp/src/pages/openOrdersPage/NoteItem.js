@@ -13,8 +13,7 @@ const NoteItem = ({ note, notes, setNotes, updateNotes, readyStatus }) => {
   return (
     <div className="noteitem">
       <div className={readyStatus ? "noteitem-info-ready" : "noteitem-info-notready"}>
-        <b>Note {notes.indexOf(note) + 1}: </b>
-        {note.noteText}
+        <b>Note {notes.indexOf(note) + 1}: </b>{note.noteText}
       </div>
       {!readyStatus && (
       <button className="xmark-btn" onClick={deleteHandler}>

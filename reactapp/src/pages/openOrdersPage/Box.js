@@ -5,6 +5,7 @@ import {
   faArrowUp,
   faArrowDown,
   faClose,
+  faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Box = ({ box, boxes, setBoxes, readyStatus, updatePackages }) => {
@@ -27,6 +28,20 @@ const Box = ({ box, boxes, setBoxes, readyStatus, updatePackages }) => {
       setBoxes(boxes.map((box) => box));
     }
     updatePackages(boxes);
+  };
+  const uniqueId = () => {
+    const dateString = Date.now().toString(36);
+    const randomness = Math.random().toString(36).substring(2);
+    return dateString + randomness;
+  };
+  const duplicateHandler = () => {
+    const duplicatedBox = {
+      id: uniqueId(), 
+      dimensions: box.dimensions,
+      weight: box.weight,
+    };
+    setBoxes((prevBoxes) => [...prevBoxes, duplicatedBox]);
+    updatePackages([...boxes, duplicatedBox]);
   };
   const deleteHandler = () => {
     setBoxes((prevBoxes) => {
@@ -53,6 +68,9 @@ const Box = ({ box, boxes, setBoxes, readyStatus, updatePackages }) => {
             </button>
             <button className="down-btn" onClick={downHandler}>
               <FontAwesomeIcon icon={faArrowDown} />
+            </button>
+            <button className="duplicate-btn" onClick={duplicateHandler}>
+              <FontAwesomeIcon icon={faCopy} />
             </button>
             <button className="xmark-btn" onClick={deleteHandler}>
               <FontAwesomeIcon icon={faClose} />

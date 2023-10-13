@@ -40,9 +40,8 @@
     outline: none;
 }
 
-.add-dimensions-container button#submit-dimensions, .add-dimensions-container button#delete {
+.add-dimensions-container button {
     padding: 5px 7px;
-    background-color: #19c37d;
     border: none;
     color: white;
     border-radius: 5px; 
@@ -112,18 +111,17 @@
     justify-content: center;
   }
 
-  .existing-dimensions-table button#move-up {
-    background-color: #3399CC;
-    border-radius: 0;
-  }
-
-  .existing-dimensions-table button#move-down {
-    background-color: #004596;
-    border-radius: 0;
+  .add-dimensions-container button#submit-dimensions {
+    background-color: #19c37d;
   }
 
   .existing-dimensions-table button#delete {
-    background-color: red;
     border-radius: 0 5px 5px 0;
     cursor: pointer;
+    color: red;
+}
+
+.existing-dimensions-table button#delete:hover {
+    opacity: 1;
+    color: rgba(255, 0, 0, 0.5);
 }

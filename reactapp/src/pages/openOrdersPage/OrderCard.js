@@ -28,7 +28,6 @@ const OrderCard = ({
   const [tbdStatus, setTBDStatus] = useState(false);
   const [boxes, setBoxes] = useState([]);
   const [minimized, setMinimized] = useState(order.minimized_status);
-  const [boxConfirmStatus, setBoxConfirmStatus] = useState([]);
   const [formDisplay, setFormDisplay] = useState([]);
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
@@ -41,7 +40,6 @@ const OrderCard = ({
         if (response.data) {
           const {
             ready,
-            order_number,
             ship_date,
             delay_date,
             delay_tbd,
@@ -51,15 +49,10 @@ const OrderCard = ({
           } = response.data;
           const updatedBoxes = Array.isArray(packages_array)
             ? packages_array.map((box) => {
-                if (typeof box.boxConfirmStatus === "undefined") {
-                  box.boxConfirmStatus = false;
-                  setFormDisplay(true);
-                } else if (box.boxConfirmStatus) {
+                if (typeof box.ready === true) {
                   setFormDisplay(false);
-                  setBoxConfirmStatus(true);
-                } else if (box.boxConfirmStatus === false) {
+                } else if (box.ready === false) {
                   setFormDisplay(true);
-                  setBoxConfirmStatus(false);
                 }
                 return box;
               })
@@ -97,7 +90,6 @@ const OrderCard = ({
   }
   const readyHandler = async () => {
     setReadyStatus(true);
-    setBoxConfirmStatus(true);
     boxFormHandler();
     setDelayDate(null);
     const updatedOrder = order;
@@ -213,35 +205,11 @@ const OrderCard = ({
   const boxFormHandler = () => {
     if (readyStatus) {
       setFormDisplay(false);
-      setBoxConfirmStatus(true);
-      handleBoxConfirmStatus(true);
     } else {
       setFormDisplay(true);
-      handleBoxConfirmStatus(false);
     }
   };
 
-  const handleBoxConfirmStatus = (boxConfirmStatus) => {
-    if (boxConfirmStatus) {
-      setBoxes((prevBoxes) => {
-        const newBoxes = prevBoxes.map((box) => ({
-          ...box,
-          boxConfirmStatus: true,
-        }));
-        updatePackages(newBoxes);
-        return newBoxes;
-      });
-    } else {
-      setBoxes((prevBoxes) => {
-        const newBoxes = prevBoxes.map((box) => ({
-          ...box,
-          boxConfirmStatus: false,
-        }));
-        updatePackages(newBoxes);
-        return newBoxes;
-      });
-    }
-  };
   const updatePackages = async (boxes) => {
     try {
       const updatedOrder = order;
@@ -398,8 +366,6 @@ const OrderCard = ({
               setFormDisplay={setFormDisplay}
               setBoxes={setBoxes}
               boxes={boxes}
-              boxConfirmStatus={boxConfirmStatus}
-              setBoxConfirmStatus={setBoxConfirmStatus}
               readyStatus={readyStatus}
               updatePackages={updatePackages}
               setShowErrorModal={setShowErrorModal}
