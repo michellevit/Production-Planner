@@ -41,11 +41,13 @@ const OrderCard = ({
         if (response.data) {
           const {
             ready,
+            order_number,
             ship_date,
             delay_date,
             delay_tbd,
             packages_array,
             notes_array,
+            minimized_status,
           } = response.data;
           const updatedBoxes = Array.isArray(packages_array)
             ? packages_array.map((box) => {
@@ -68,12 +70,11 @@ const OrderCard = ({
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);
-          setMinimized(order.minimized_status);
+          setMinimized(minimized_status);
           setShipDate(formatDate(ship_date));
           if (ship_date === null) {
             if (delay_date === null) {
               checkTBD(true);
-              
             }
             else {
               checkTBD(false);
@@ -88,9 +89,11 @@ const OrderCard = ({
   }, [order.id, order.minimized_status, order.delay_tbd, order.delay_date, order.ship_date]);
   
   function formatDate(inputDate) {
-    const options = { day: 'numeric', month: 'short', year: 'numeric' };
-    const formattedDate = new Date(inputDate).toLocaleDateString(undefined, options);
-    return formattedDate;
+    if (inputDate !== null) {
+      const options = { day: 'numeric', month: 'short', year: 'numeric' };
+      inputDate = new Date(inputDate).toLocaleDateString(undefined, options);
+    }
+    return inputDate;
   }
   const readyHandler = async () => {
     setReadyStatus(true);
