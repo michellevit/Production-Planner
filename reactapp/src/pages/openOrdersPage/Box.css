@@ -63,6 +63,12 @@
   cursor: pointer;
 }
 
+.duplicate-btn {
+  background: #ff8f00;
+  cursor: pointer;
+}
+
+
 .xmark-btn {
   background: red;
   border-radius: 0 5px 5px 0;

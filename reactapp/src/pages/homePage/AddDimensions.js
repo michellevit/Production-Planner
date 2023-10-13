@@ -38,9 +38,9 @@ const AddDimensions = () => {
     event.preventDefault();
     console.log("Dimensions: ", dimensions);
     const newDimension = {
-      length: parseInt(packageLength),
-      width: parseInt(packageWidth),
-      height: parseInt(packageHeight),
+      length: parseFloat(packageLength),
+      width: parseFloat(packageWidth),
+      height: parseFloat(packageHeight),
     };
     console.log("New Dimension: ", newDimension);
     const isDuplicate = dimensions.some(
@@ -64,9 +64,9 @@ const AddDimensions = () => {
     setPackageHeight("");
     try {
       await axios.post("http://127.0.0.1:8000/dimensions/", {
-        length: packageLength,
-        width: packageWidth,
-        height: packageHeight,
+        length: parseFloat(packageLength),
+        width: parseFloat(packageWidth),
+        height: parseFloat(packageHeight),
         package_size: formattedDimensions,
       });
       setRefreshDimensions(true);

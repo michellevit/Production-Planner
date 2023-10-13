@@ -27,10 +27,6 @@ const BoxForm = ({
     };
 
     fetchData();
-    if (boxConfirmStatus) {
-      setDimensions("");
-      setWeight("");
-    }
     if (readyStatus) {
       setFormDisplay(false);
     } else {
@@ -71,7 +67,6 @@ const BoxForm = ({
 
   const submitBoxHandler = (e) => {
     e.preventDefault();
-    setBoxConfirmStatus(false);
     setFormDisplay(true);
 
     if (dimensions === "") {

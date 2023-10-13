@@ -37,9 +37,9 @@ class OrderReport(models.Model):
 
 
 class Dimension(models.Model):
-    length = models.IntegerField()
-    width = models.IntegerField()
-    height = models.IntegerField()
+    length = models.FloatField()
+    width = models.FloatField()
+    height = models.FloatField()
     package_size = models.CharField(max_length=50)
     def __str__(self):
         return self.package_size[0:50]
