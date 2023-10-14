@@ -37,10 +37,7 @@ const EditShipDateButton = ({
 
   function formatDate(inputDate) {
     const options = { day: "numeric", month: "short", year: "numeric" };
-    const formattedDate = new Date(inputDate).toLocaleDateString(
-      undefined,
-      options
-    );
+    const formattedDate = new Date(inputDate).toLocaleDateString("en-US", options);
     return formattedDate;
   }
 
@@ -53,11 +50,11 @@ const EditShipDateButton = ({
       order.delay_tbd === false
     ) {
       tempDate = new Date(parseISO(order.ship_date));
-      const formattedDate = formatDate(order.ship_date);
+      const formattedDate = formatDate(tempDate);
       setShipDateText(formattedDate);
       setDefaultDate(tempDate);
     } else if (order.delay_date !== null && order.delay_tbd === false) {
-      const formattedDate = formatDate(order.delay_date);
+      const formattedDate = formatDate(new Date(parseISO(order.delay_date)));
       setShipDateText(formattedDate);
       tempDate = new Date(parseISO(order.delay_date));
       setDefaultDate(tempDate);
@@ -162,8 +159,14 @@ const EditShipDateButton = ({
           {order.delay_date !== null && "(Delayed)"}
         </div>
       </div>
+      <div className="edit-ship-date-table">
+      <table>
+        <tr>
       <div className="edit-ship-date-div">
+        <td className="label">
         Edit Ship Date:
+        </td>
+        <td className="input-col">
         <DatePicker
           customInput={<EditShipDateIcon />}
           selected={defaultDate}
@@ -172,10 +175,16 @@ const EditShipDateButton = ({
           }}
           timeZone="Vancouver"
         />
+        </td>
       </div>
+      </tr>
       {!order.shipped && (
+        <tr>
         <div className="edit-ship-date-div">
+          <td className="label">
           Edit Delay Date:
+          </td>
+          <td  className="input-col">
           <DatePicker
             customInput={<EditShipDateIcon />}
             selected={defaultDate}
@@ -184,18 +193,26 @@ const EditShipDateButton = ({
             }}
             timeZone="Vancouver"
           />
+          </td>
         </div>
+        </tr>
       )}
       {!order.shipped && (
+        <tr>
         <div className="edit-ship-date-div">
+          <td className="label">
           Delay TBD:
+          </td>
+          <td  className="input-col">
           <input
             type="checkbox"
             id="delay-tbd-checkbox"
             checked={tbdStatus}
             onChange={handleClickEditTBDStatus}
           ></input>
+          </td>
         </div>
+        </tr>
       )}
       <EditShipDateModal
         showEditShipDateModal={showEditShipDateModal}
@@ -203,6 +220,8 @@ const EditShipDateButton = ({
         handleConfirmEditShipDate={handleConfirmEditShipDate}
         handleCancelEditShipDate={handleCancelEditShipDate}
       />
+      </table>
+      </div>
       <ErrorModal
         showErrorModal={showErrorModal}
         setShowErrorModal={setShowErrorModal}

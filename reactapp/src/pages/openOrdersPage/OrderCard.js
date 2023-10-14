@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import DatePicker from "react-datepicker";
-import { parseISO } from "date-fns";
-import MinimizeCardButton from "./MinimizeCardButton";
-import DeleteButton from "./DeleteButton";
 import BoxForm from "./BoxForm";
 import BoxList from "./BoxList";
-import NoteList from "./NoteList";
-import ReadyButton from "./ReadyButton";
+import DatePicker from "react-datepicker";
+import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
+import React, { useState, useEffect } from "react";
+import MinimizeCardButton from "./MinimizeCardButton";
+import NoteList from "./NoteList";
+import { parseISO } from "date-fns";
+import ReadyButton from "./ReadyButton";
 import ShippedButton from "./ShippedButton";
 import "./OrderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -17,9 +17,7 @@ const OrderCard = ({
   order,
   openOrders,
   setOpenOrders,
-  showErrorModal,
   setShowErrorModal,
-  errorMessage,
   setErrorMessage,
 }) => {
   const [isRemoving, setIsRemoving] = useState(false);

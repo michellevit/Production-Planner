@@ -5,9 +5,8 @@ import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 const Pagination = ({
   currentPage,
+  setCurrentPage,
   totalPages,
-  onPageChange,
-  itemsPerPage,
 }) => {
     const renderPageNumbers = () => {
     const pageNumbers = [];
@@ -24,7 +23,7 @@ const Pagination = ({
                 className={`pagination-button ${
                   isCurrent ? "current-page" : ""
                 }`}
-                onClick={() => onPageChange(number)}
+                onClick={() => setCurrentPage(number)}
                 disabled={isCurrent}
               >
                 {number}
@@ -40,7 +39,7 @@ const Pagination = ({
     <div className="pagination">
       <button
         className={`pagination-button ${currentPage === 1 ? "disabled" : ""}`}
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => setCurrentPage(currentPage - 1)}
         disabled={currentPage === 1}
       >
         <FontAwesomeIcon icon={faAngleLeft} />
@@ -50,7 +49,7 @@ const Pagination = ({
         className={`pagination-button ${
           currentPage === totalPages ? "disabled" : ""
         }`}
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => setCurrentPage(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
         <FontAwesomeIcon icon={faAngleRight} />
