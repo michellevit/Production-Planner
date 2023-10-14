@@ -14,7 +14,13 @@ urlpatterns = [
     path('dimensions/', DimensionView.as_view(), name="dimensions"),
     path('dimensions/<int:pk>/', DimensionView.as_view()),]
 
+# Example of OrderDetailView url: http://localhost:8000/open-orders/42/
+# *don't forget the final slash character
+
 # To use django admin - uncomment this:
 # http://127.0.0.1:8000/admin/
 # if settings.DEBUG:
 #     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Pages w/ Pagination: 
+# http://localhost:8000/open-orders/?page=1

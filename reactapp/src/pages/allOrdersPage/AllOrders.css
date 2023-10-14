@@ -70,6 +70,10 @@
   padding: 8px;
 }
 
+.all-orders-table th {
+  align-items: center;
+}
+
 
 
 .all-orders-table #qty {
@@ -124,7 +128,7 @@
 }
 
 .all-orders-table #order-number {
-  width: 10%;
+  width: 200px;
 }
 .all-orders-table #customer {
   width: 10%;
@@ -152,7 +156,6 @@
 .all-orders-table #notes {
   width: 20%;
   vertical-align: top; 
-  word-break:break-all;
 }
 
 .all-orders-table #ready {

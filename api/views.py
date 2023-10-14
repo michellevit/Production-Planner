@@ -1,37 +1,31 @@
+from django.db import transaction
+from django.db.models import Q
 from .models import * 
-from .serializers import OrderSerializer, OrderReportSerializer, DimensionSerializer
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from django.db.models import Q
-from django.utils import timezone
 from .scripts.check_order_report import process_uploaded_report
+from .serializers import *
 import logging
-from django.db import transaction
-from django.core.files.storage import default_storage
-import os
-from django.conf import settings
-from .models import Dimension
-from django.db.models import Max
 
 
 logger = logging.getLogger(__name__)
 # logger.error('EXAMPLE')
 
-class OrderListView(APIView):
-    def get(self, request):
-        orders = Order.objects.all()
-        serializer = OrderSerializer(orders, many=True)
-        return Response(serializer.data)
 
-    def post(self, request):
-        serializer = OrderSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
+class CustomPagination(PageNumberPagination):
+    page_size = 20
+
+
+class OrderListView(generics.ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    pagination_class = CustomPagination
+
 
 class OpenOrdersListView(APIView):
     def get(self, request):
@@ -39,9 +33,9 @@ class OpenOrdersListView(APIView):
         serializer = OrderSerializer(open_orders, many=True)
         return Response(serializer.data)
     
+    
 class SearchOpenOrdersListView(generics.ListAPIView):
     serializer_class = OrderSerializer
-
     def get_queryset(self):
         queryset = Order.objects.filter(shipped=False)
         search_query = self.request.query_params.get('search', None)
@@ -52,11 +46,13 @@ class SearchOpenOrdersListView(generics.ListAPIView):
             )
         return queryset
     
+
 class SearchAllOrdersListView(generics.ListAPIView):
     serializer_class = OrderSerializer
+    pagination_class = CustomPagination
 
     def get_queryset(self):
-        queryset = Order.objects
+        queryset = Order.objects.all()
         search_query = self.request.query_params.get('search', None)
         if search_query:
             queryset = queryset.filter(
@@ -74,7 +70,6 @@ class OrderDetailView(APIView):
             return Response(serializer.data)
         except Order.DoesNotExist:
             raise NotFound(detail="Order not found")
-    
     def put(self, request, pk):
         try:
             order = Order.objects.get(pk=pk)
@@ -108,7 +103,6 @@ class OrderDetailView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Order.DoesNotExist:
             raise NotFound(detail="Order not found")
-        
  
     
 class OrderReportUploadView(APIView):

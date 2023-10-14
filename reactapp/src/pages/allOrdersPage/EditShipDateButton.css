@@ -1,13 +1,46 @@
+.edit-ship-date-table {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.edit-ship-date-table table {
+    border-collapse: collapse;
+    width: auto;
+}
+
+.edit-ship-date-table .label {
+    text-align: right; 
+}
+
+.edit-ship-date-table .input-col {
+    text-align: left; 
+}
+
+
+
+.edit-ship-date-table tr td {
+    border: 0;
+    padding: 0;
+}
+
+.edit-ship-date-table table tr {
+    width: 50%;
+}
+
 .edit-ship-date-div {
     font-size: 0.7rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: left;
+    justify-content: right;
+    width: 100%;
 }
 
 .edit-ship-date-div input#delay-tbd-checkbox {
     width: 10px;
+    margin-left: 2px;
 }
 
 .red-delay-date-text {
