@@ -31,8 +31,13 @@
   color: white;
   font-weight: bold;
   text-align: center;
+  vertical-align: center;
   padding: 8px;
-   
+}
+
+
+.all-orders-table th{
+  vertical-align: middle!important; 
 }
 
 .all-orders-table td {
@@ -109,7 +114,7 @@
 }
 
 .all-orders-table #ship-date {
-  width: 15%;
+  width: 10%;
 }
 .all-orders-table #ship-date input {
   width: 25px;
@@ -128,13 +133,13 @@
 }
 
 .all-orders-table #order-number {
-  width: 200px;
+  width: 10%;
 }
 .all-orders-table #customer {
   width: 10%;
 }
 .all-orders-table #items {
-  width: 15%;
+  width: 20%;
   vertical-align: top; 
 }
 

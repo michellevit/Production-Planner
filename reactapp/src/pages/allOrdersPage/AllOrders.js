@@ -35,15 +35,7 @@ const AllOrders = () => {
         .get(`http://127.0.0.1:8000/${currentView}/?page=${currentPage}${searchQueryFormatted}`)
         .then((response) => {
           let filteredAllOrders = response.data.results;
-          setTotalPages(Math.ceil(response.data.count / ordersPerPage));
-          console.log("Current Page: ", currentPage);
-          console.log("Current View: ", currentView);
-          console.log("searchQuery: ", searchQuery);
-          console.log("searchQueryFormatted: ", searchQueryFormatted);
-          // else {
-          //   filteredAllOrders = applySorting(filteredAllOrders);
-          // }
-         
+          setTotalPages(Math.ceil(response.data.count / ordersPerPage));        
           setAllOrders(filteredAllOrders);
         })
         .catch((error) => {

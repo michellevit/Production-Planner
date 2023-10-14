@@ -293,7 +293,6 @@ const OpenOrders = () => {
         .get(`http://127.0.0.1:8000/open-orders-search/?search=${query}`)
         .then((response) => {
           let filteredOpenOrders = response.data;
-          console.log(filteredOpenOrders);
           filteredOpenOrders = applySorting(filteredOpenOrders);
           setOpenOrders(filteredOpenOrders);
           return filteredOpenOrders;
