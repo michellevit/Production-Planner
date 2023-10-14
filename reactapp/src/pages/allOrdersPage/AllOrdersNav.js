@@ -40,23 +40,23 @@ const AllOrdersNav = ( {
       <div className="row2">
         <select
             name="Sort by..."
-            onChange={handleSortChange}
-            id="mySelect"
+            onChange={(e) => handleSortChange(e.target.value)}
           >
             <option hidden>Sort by...</option>
-            <option value="All">All</option>
+            <option value="all">All</option>
             <option disabled={true}>--------</option>
-            <option value="Upcoming">Upcoming</option>
-            <option value="Past">Past</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="past">Past</option>
             <option disabled={true}>--------</option>
-            <option value="Today">Today</option>
-            <option value="Tomorrow">Tomorrow</option>
-            <option value="This-Week">This Week</option>
-            <option value="Next-Week">Next Week</option>
-            <option value="This-Month">This Month</option>
+            <option value="today">Today</option>
+            <option value="tomorrow">Tomorrow</option>
+            <option value="this-week">This Week</option>
+            <option value="next-week">Next Week</option>
+            <option value="this-month">This Month</option>
+            <option value="next-month">Last Month</option>
             <option disabled={true}>--------</option>
-            <option value="Last-Week">Last Week</option>
-            <option value="Last-Month">Last Month</option>
+            <option value="last-week">Last Week</option>
+            <option value="last-month">Last Month</option>
           </select>
         <input
           type="text"
