@@ -92,7 +92,6 @@ const EditShipDateButton = ({
 
   const handleClickEditTBDStatus = () => {
     const tempTBDStatus = !tbdStatus;
-    console.log(tempTBDStatus);
     if (tempTBDStatus === true) {
       setModalMessage(
         `Are you sure you want to set the date for SO#${order.order_number} to TBD?`
@@ -159,14 +158,8 @@ const EditShipDateButton = ({
           {order.delay_date !== null && "(Delayed)"}
         </div>
       </div>
-      <div className="edit-ship-date-table">
-      <table>
-        <tr>
       <div className="edit-ship-date-div">
-        <td className="label">
         Edit Ship Date:
-        </td>
-        <td className="input-col">
         <DatePicker
           customInput={<EditShipDateIcon />}
           selected={defaultDate}
@@ -175,16 +168,10 @@ const EditShipDateButton = ({
           }}
           timeZone="Vancouver"
         />
-        </td>
       </div>
-      </tr>
       {!order.shipped && (
-        <tr>
         <div className="edit-ship-date-div">
-          <td className="label">
           Edit Delay Date:
-          </td>
-          <td  className="input-col">
           <DatePicker
             customInput={<EditShipDateIcon />}
             selected={defaultDate}
@@ -193,26 +180,18 @@ const EditShipDateButton = ({
             }}
             timeZone="Vancouver"
           />
-          </td>
         </div>
-        </tr>
       )}
       {!order.shipped && (
-        <tr>
         <div className="edit-ship-date-div">
-          <td className="label">
           Delay TBD:
-          </td>
-          <td  className="input-col">
           <input
             type="checkbox"
             id="delay-tbd-checkbox"
             checked={tbdStatus}
             onChange={handleClickEditTBDStatus}
           ></input>
-          </td>
         </div>
-        </tr>
       )}
       <EditShipDateModal
         showEditShipDateModal={showEditShipDateModal}
@@ -220,8 +199,6 @@ const EditShipDateButton = ({
         handleConfirmEditShipDate={handleConfirmEditShipDate}
         handleCancelEditShipDate={handleCancelEditShipDate}
       />
-      </table>
-      </div>
       <ErrorModal
         showErrorModal={showErrorModal}
         setShowErrorModal={setShowErrorModal}
