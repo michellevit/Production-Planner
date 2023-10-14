@@ -36,6 +36,7 @@ class OpenOrdersListView(APIView):
     
 class SearchOpenOrdersListView(generics.ListAPIView):
     serializer_class = OrderSerializer
+    pagination_class = None
     def get_queryset(self):
         queryset = Order.objects.filter(shipped=False)
         search_query = self.request.query_params.get('search', None)
