@@ -4,11 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesUp, faAnglesDown } from "@fortawesome/free-solid-svg-icons";
 import "./MinimizeCardButton.css";
 
-const MinimizeCardButton = ({ order, minimized, setMinimized }) => {
+const MinimizeCardButton = ({ order, localMinimized, setLocalMinimized }) => {
   const minmaxButton = async () => {
-    setMinimized(!minimized);
+    setLocalMinimized(!localMinimized);
     const updatedOrder = order;
-    updatedOrder.minimized_status = !minimized;
+    updatedOrder.minimized_status = !localMinimized;
     try {
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
@@ -21,7 +21,7 @@ const MinimizeCardButton = ({ order, minimized, setMinimized }) => {
   return (
     <div>
         <button className="minButton" onClick={minmaxButton}>
-          <FontAwesomeIcon icon={minimized ? faAnglesDown : faAnglesUp} />
+          <FontAwesomeIcon icon={localMinimized ? faAnglesDown : faAnglesUp} />
         </button>
     </div>
   );

@@ -4,13 +4,10 @@ Project Title: Production Planner
 ----------
 Table of Contents: 
 1. Project Description
-2. Example
-3. Technologies Used
-4. How to Install and Run the Script
-5. How to Use the Program
-6. Optional Changes
-7. Troubleshooting
-8. Credits
+2. Technologies Used
+3. How to Install and Run the Script
+4. How to Use the Program
+5. Credits
 
 
 ----------
@@ -32,7 +29,7 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 ----------
-3. Technologies Used:
+2. Technologies Used:
 -Django Rest Framework
 -Python
 -JavaScript
@@ -43,12 +40,12 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 ----------
-4. How to Install and Run the Script:
+3. How to Install and Run the Script:
 -In progress-
 
 
 ----------
-5. How to Use the Program:
+4. How to Use the Program:
 1. Open the app...(in progress)
 2. Navigate to the Home page -> 'Add Report' tab, and browse for the new order report
 3. Production Team: Add order information for each order on the 'Open Orders' page
@@ -56,5 +53,5 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 --------
-6. Credits: 
+5. Credits: 
 Michelle Flandin
