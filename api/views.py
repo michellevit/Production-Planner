@@ -1,6 +1,7 @@
 from datetime import timedelta
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, Case, When, F, Value, IntegerField
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 from .models import * 
 from rest_framework import status
@@ -94,9 +95,39 @@ class SearchOpenOrdersListView(generics.ListAPIView):
 
 #path('all-orders/', OrderListView.as_view(), name='all-orders')
 class OrderListView(generics.ListAPIView):
-    queryset = Order.objects.all()
     serializer_class = OrderSerializer
     pagination_class = CustomPagination
+    def get_queryset(self):
+        queryset = Order.objects.all()
+        queryset = queryset.annotate(
+            oldest_order=Case(
+                When(ship_date__isnull=True, delay_date__isnull=True, delay_tbd=True, then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField(),
+            )
+        )
+        queryset = queryset.annotate(
+            updated_ship_date=Coalesce(F('ship_date'), F('delay_date'))
+        )
+        queryset = queryset.order_by('oldest_order', 'updated_ship_date')
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            queryset = queryset.filter(
+                Q(order_number__icontains=search_query) |
+                Q(customer_name__icontains=search_query)
+            )
+        return queryset
+
+
+#path('all-orders-create/', CreateOrderView.as_view(), name='create-order'),
+class CreateOrderView(APIView):
+    def post(self, request):
+        order_data = request.data
+        serializer = OrderSerializer(data=order_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 #path('all-orders-search/', SearchAllOrdersListView.as_view(), name='all-orders-search')
@@ -177,6 +208,18 @@ class FilteredOrdersListView(generics.ListAPIView):
                 ship_date__lte=end_of_last_month + timedelta(hours=23, minutes=59, seconds=59)
             )
         queryset = queryset.order_by('-ship_date')
+        if not self.request.query_params.get('ready_checked', False):
+            queryset = queryset.filter(ready=False)
+        if not self.request.query_params.get('not_ready_checked', False):
+            queryset = queryset.filter(ready=True)
+        if not self.request.query_params.get('shipped_checked', False):
+            queryset = queryset.filter(shipped=False)
+        if not self.request.query_params.get('not_shipped_checked', False):
+            queryset = queryset.filter(shipped=True)
+        if not self.request.query_params.get('delayed_checked', False):
+            queryset = queryset.filter(Q(delay_date__isnull=True) & Q(delay_tbd=False))
+        if self.request.query_params.get('oldest_checked', False):
+            queryset = queryset.order_by('ship_date')
         return queryset
 
 

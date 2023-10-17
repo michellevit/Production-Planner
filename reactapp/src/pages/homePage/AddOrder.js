@@ -59,7 +59,7 @@ const AddOrder = () => {
       quote: quoteValue,
     };
     try {
-      await axios.post("http://127.0.0.1:8000/all-orders/", orderData);
+      await axios.post("http://127.0.0.1:8000/all-orders-create/", orderData);
       if (quoteValue === true) {
         setErrorMessage("Your quote has been added.");
       } else {
@@ -72,6 +72,7 @@ const AddOrder = () => {
       setItems({});
       setNotes([]);
     } catch (error) {
+      console.log(orderData);
       setErrorMessage(
         "There was an error submitting your order.\nPlease ensure that all required fields have been completed."
       );

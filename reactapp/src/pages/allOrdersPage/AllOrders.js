@@ -10,41 +10,47 @@ import Pagination from "./Pagination";
 
 const AllOrders = () => {
   const [allOrders, setAllOrders] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentView, setCurrentView] = useState("all-orders");
   const [currentDate, setCurrentDate] = useState("");
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [fadingRows, setFadingRows] = useState([]);
   const [refreshOrders, setRefreshOrders] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const ordersPerPage = 20;
+  // Sort Filters: Select + Search
+  const [currentView, setCurrentView] = useState("all-orders-filtered");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQueryFormatted, setSearchQueryFormatted] = useState("");
+  const [urlCharacter, setURLCharacter] = useState("/?");
+  // Sort Filters: Checkboxes
   const [readyChecked, setReadyChecked] = useState(true);
   const [notReadyChecked, setNotReadyChecked] = useState(true);
   const [shippedChecked, setShippedChecked] = useState(true);
   const [notShippedChecked, setNotShippedChecked] = useState(true);
   const [delayedChecked, setDelayedChecked] = useState(true);
   const [oldestChecked, setOldestChecked] = useState(false);
-  const [isRemoving, setIsRemoving] = useState(false);
-  const [fadingRows, setFadingRows] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchQueryFormatted, setSearchQueryFormatted] = useState("");
-  const ordersPerPage = 20;
 
   useEffect(() => {
     const formattedDate = new Date();
     setCurrentDate(formattedDate);
-    console.log('Current View: ', currentView);
     const fetchAllOrders = () => {
+      const filterParams = [
+        `ready_checked=${readyChecked}`,
+        `not_ready_checked=${notReadyChecked}`,
+        `shipped_checked=${shippedChecked}`,
+        `not_shipped_checked=${notShippedChecked}`,
+        `delayed_checked=${delayedChecked}`,
+        `oldest_checked=${oldestChecked}`,
+      ].filter(param => param.endsWith('_checked=true')).join('&');
       axios
         .get(
-          `http://127.0.0.1:8000/${currentView}&page=${currentPage}${searchQueryFormatted}`
+          `http://127.0.0.1:8000/${currentView}${searchQueryFormatted}${urlCharacter}page=${currentPage}&${filterParams}`
         )
         .then((response) => {
-          console.log(`http://127.0.0.1:8000/${currentView}&page=${currentPage}${searchQueryFormatted}`);
-          console.log("Current View: ", currentView);
-          console.log("Response: ", response);
+          console.log(`http://127.0.0.1:8000/${currentView}${searchQueryFormatted}${urlCharacter}page=${currentPage}&${filterParams}`);
           let filteredAllOrders = response.data.results;
           setTotalPages(Math.ceil(response.data.count / ordersPerPage));
           setAllOrders(filteredAllOrders);
-          console.log("filteredAllOrders: ", filteredAllOrders);
-          console.log("All Orders: ", allOrders);
         })
         .catch((error) => {
           console.error("Error getting data", error);
@@ -66,6 +72,7 @@ const AllOrders = () => {
   const handleSortChange = (filterChoice) => {
     setCurrentPage(1); 
     setCurrentView(`all-orders-filtered/?filter=${filterChoice}`);
+    setURLCharacter("&");
     setRefreshOrders(true);
   };
 
@@ -73,12 +80,14 @@ const AllOrders = () => {
     if (query === "") {
       setSearchQuery("");
       setSearchQueryFormatted("");
-      setCurrentView("all-orders");
+      setCurrentView("all-orders-filtered");
+      setURLCharacter("/?");
       setRefreshOrders(true);
     } else {
       setCurrentPage(1);
       setCurrentView(`all-orders-search`);
-      setSearchQueryFormatted(`&search=${query}`);
+      setSearchQueryFormatted(`/?search=${query}`);
+      setURLCharacter("&");
       setRefreshOrders(true);
     }
   };
