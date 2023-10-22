@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <title>GTC Order Logistics App</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'welcome.css' %}">
+</head>
+<body>
+    <div id="main">
+    <h1>GTC Order Logistics App</h1>
+    <a href="{% url 'open-orders' %}"><button class="open">View Open Orders</button></a>
+    <p></p>
+    <a href="{% url 'all-orders' %}"><button class="all">View All Orders</button></a>
+    <p></p>
+    <a href="{% url 'reports' %}"><button class="reports">View Reports</button></a>
+    <p></p>
+    <a href="{% url 'dimensions' %}"><button class="dimensions">View Dimensions</button></a>
+</div>
+</body>
+</html>

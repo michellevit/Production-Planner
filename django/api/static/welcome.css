@@ -1,0 +1,75 @@
+body {
+    font-family: 'trebuchet MS';
+}
+
+h1 {
+    color: black;
+    text-align: center; 
+    margin-bottom: 50px;
+    font-size: 2em;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: lightblue;
+}
+
+
+button {
+    color: white;
+    padding: 20px;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+button:hover {
+    background: white;
+    opacity: 50%;
+}
+
+#main {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    margin-top: 100px;
+}
+
+
+.open {
+    background: lightblue;
+}
+
+.open:hover {
+    color: lightblue;
+}
+
+
+.all {
+    background: grey;
+}
+
+.all:hover {
+    color: grey;
+}
+
+.reports {
+    background: pink;
+}
+
+.reports:hover {
+    color: pink;
+}
+
+.dimensions {
+    background: #a993d4;
+}
+
+.dimensions:hover {
+    color: #a993d4;
+}
