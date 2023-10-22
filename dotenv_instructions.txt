@@ -1,0 +1,10 @@
+Instructions: 
+
+1. Rename this file '.env'
+2. Add the following informadata with the sensitive data: 
+
+django_secret_key = '[key here]'
+DB_ROOT_PASSWORD = '[password here]'
+MYSQL_DB_NAME = '[db name here]'
+DB_USER = '[db user here]'
+DB_PASSWORD = '[db apssword here]'

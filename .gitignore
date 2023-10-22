@@ -1,0 +1,28 @@
+# Root Directory .gitignore
+.env
+node_modules
+*.pyc
+.xlsx
+.bat
+
+# Reactapp .gitignore Rules
+# dependencies
+/reactapp/node_modules
+/reactapp/.pnp
+/reactapp/pnp.js
+
+# testing
+/reactapp/coverage
+
+# production
+/reactapp/build
+
+# misc
+/reactapp/.DS_Store
+/reactapp/.env.local
+/reactapp/.env.development.local
+/reactapp/.env.test.local
+/reactapp/.env.production.local
+/reactapp/npm-debug.log*
+/reactapp/yarn-debug.log*
+/reactapp/yarn-error.log*
