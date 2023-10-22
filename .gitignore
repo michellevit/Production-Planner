@@ -1,6 +1,5 @@
 # Root Directory .gitignore
 .env
-node_modules
 *.pyc
 .xlsx
 .bat
