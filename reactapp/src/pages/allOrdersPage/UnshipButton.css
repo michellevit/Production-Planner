@@ -1,0 +1,22 @@
+#unship-button-div {
+  display: flex;
+  align-items: center;
+}
+
+#unship-order-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+}
+
+.unship-fade-container {
+  transition: opacity 1s ease;
+}
+
+.unship-fade-out {
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
+}

@@ -1,0 +1,47 @@
+.boxform-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.boxform-container form {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 4px 0;
+  border: none;
+}
+
+.boxform-container select,
+.boxform-container input,
+.boxform-container button {
+  padding: 4px 8px;
+  border: none;
+}
+
+.boxform-container select {
+  width: 100%;
+  border-radius: 5px 0 0 5px;
+}
+
+.boxform-container input {
+  width: 75px;
+  margin: 0 5px;
+  border-radius: 0;
+}
+
+.boxform-container form button {
+  width: 27px;
+  background-color: white;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+.boxform-container button:hover {
+  opacity: 0.75;
+}
+
+.boxform-container input:focus,
+.boxform-container select:focus {
+  outline: none;
+}

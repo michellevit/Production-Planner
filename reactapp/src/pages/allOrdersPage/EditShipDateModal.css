@@ -1,0 +1,48 @@
+.edit-ship-date-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .edit-ship-date-modal-container {
+    height: 30%;
+  }
+  
+  .edit-ship-date-modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+  
+  .edit-ship-date-modal-buttons {
+    margin-top: 20px;
+  }
+  
+  .edit-ship-date-confirm-button,
+  .edit-ship-date-cancel-button {
+    margin: 0 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .edit-ship-date-confirm-button {
+    background-color: #19c37d;
+    color: white;
+  }
+  
+  .edit-ship-date-cancel-button {
+    background-color: #777777;
+    color: white;
+  }
+  
