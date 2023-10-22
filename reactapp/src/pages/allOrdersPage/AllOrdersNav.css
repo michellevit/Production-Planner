@@ -1,0 +1,111 @@
+.all-orders-nav-container {
+    width: 100%;
+    background-color: rgb(182, 182, 182);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 3rem;
+    justify-content: center;
+    padding: 1rem 0.8rem;
+}
+
+.all-orders-nav-container .row1 {
+  width: 100%; 
+  display: flex;
+  flex-direction: column;
+  align-items:center; 
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.all-orders-nav-container .row2 {
+  width: 100%; 
+  display: flex;
+  flex-direction: row;
+  align-items:center; 
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.all-orders-nav-container .row3 {
+  width: 100%; 
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center;
+  margin: 0.5rem;
+}
+
+.all-orders-nav-container .row3 input {
+  width: 15px;
+}
+
+.all-orders-nav-container .row3 li {
+  list-style-type: none;
+  margin: 0 5px;
+}
+
+.all-orders-nav-container .row3 ul {
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+}
+
+
+
+
+.all-orders-nav-container input,
+.all-orders-nav-container button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 5px;
+}
+
+.all-orders-nav-container input:focus {
+  outline: none;
+}
+
+.all-orders-nav-container input {
+    width: 150px;
+    border-radius: 5px;
+    margin: 0 5px;
+  }
+  
+  .all-orders-nav-container form button {
+    width: 27px;
+    background-color: white;
+    border-radius: 5px;
+  }
+
+  .all-orders-nav-container button:hover {
+    opacity: 0.5;
+  }
+
+
+  .all-orders-nav-container button {
+    border-radius: 5px;
+    margin: 0 5px;
+  }
+
+  .all-orders-nav-container .svg-inline--fa {
+    color: rgb(92, 92, 92);
+  }
+
+  
+  .all-orders-nav-container select {
+    padding: 4px 8px;
+    border: none;
+    width: 150px;
+    border-radius: 5px;
+    margin: 0 5px;
+  }
+
+  .all-orders-nav-container select:focus {
+    outline: none;
+  }
+
+.no-results {
+  margin-top: 5%;
+  font-size: 1rem;
+  font-weight: 400;
+}

@@ -1,0 +1,61 @@
+.noteform-container {
+  display: flex;
+  width: 100%;
+  justify-content:center;
+  flex-direction: column;
+}
+
+.noteform-container form {
+  width: 100%;
+  display: flex;
+  flex-direction: row;  
+  padding: 4px 0;
+  border: none;
+  color: black;
+}
+
+.noteform-container input,
+.noteform-container button {
+  padding: 4px 8px;
+  border: none;
+  margin: 0;
+}
+
+.noteform-container input {
+  width: 100%;
+  margin: 0 5px 0 0;
+  border-radius: 5px 0 0 5px;
+  padding: 5px 10px;
+}
+
+.noteform-container form button {
+  width: 27px;
+  background-color: white;
+  border-radius: 0 5px 5px 0;
+}
+
+.noteform-container button:hover {
+  opacity: 0.75;
+}
+
+.noteform-container input:focus,
+.noteform-container select:focus {
+  outline: none;
+}
+
+
+.notelist-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.notelist-container,
+ul {
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+}
+
+

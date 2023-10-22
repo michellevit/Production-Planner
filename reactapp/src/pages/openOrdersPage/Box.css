@@ -1,0 +1,76 @@
+.box-container {
+  display: flex;
+  flex-direction: row;
+  transition: all 1s ease;
+  width: 100%;
+  justify-content: center;
+}
+
+.box {
+  display: flex;
+  justify-content: center;
+  color: black;
+  text-align: left;
+  margin: 5px 0;
+  width: 100%;
+}
+
+.box-info-notready {
+  word-wrap: break-word;
+  width: 100%;
+  background: white;
+  padding: 3px 8px;
+  border-radius: 5px 0 0 5px;
+  transition: all 0.3s ease;
+}
+
+.box-info-ready {
+  word-wrap: break-word;
+  width: 100%;
+  background: white;
+  padding: 3px 8px;
+  border-radius: 5px;
+}
+
+.dims-button-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.edit-buttons {
+  display: flex;
+}
+
+.box button {
+  border: none;
+  width: 27px;
+  color: white;
+  align-items: center;
+  justify-content: center;
+}
+
+.box button:hover {
+  opacity: 0.5;
+}
+
+.up-btn {
+  background: #3399CC;
+  cursor: pointer;
+}
+
+.down-btn {
+  background: #004596;
+  cursor: pointer;
+}
+
+.duplicate-btn {
+  background: #ff8f00;
+  cursor: pointer;
+}
+
+
+.xmark-btn {
+  background: red;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}

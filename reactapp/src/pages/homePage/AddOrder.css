@@ -1,0 +1,83 @@
+.add-order-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-order-container form {
+    background-color: white;
+    padding: 30px 40px;
+    width: 500px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 15px;
+}
+
+.add-order-table {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border-collapse: separate;
+    border-spacing: 0 20px;
+}
+
+.add-order-table input {
+    border-radius: 0;
+    border: 1px rgb(214, 214, 214) solid;
+    padding: 4px 7px;
+    border-radius: 5px;
+}
+
+.add-order-table input:focus {
+  outline: none;
+}
+
+.add-order-table td #add-order-quote-boolean {
+    width: 15px; 
+    margin-left: 0;
+}
+
+.add-order-table td:first-child {
+    width: 30%;
+    vertical-align: top;
+}
+
+table.add-order-table td input {
+    width: 100%;
+}
+
+.add-order-table #delay-date-col {
+    display: flex;
+    flex-direction: row;
+}
+
+.add-order-table .react-datepicker-wrapper {
+    width: 75%;
+    margin-right: 15px;
+}
+
+.add-order-table .react-datepicker__close-icon {
+    right: -4px;
+    top: -17px;
+}
+
+.add-order-table #tbd-checkbox {
+    width: auto;
+}
+
+.add-order-container #submit-new-order-button {
+    padding: 8px 12px;
+    background-color: #19c37d;
+    border: none;
+    color: white;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-order-container button:hover {
+    opacity: 0.5;
+}

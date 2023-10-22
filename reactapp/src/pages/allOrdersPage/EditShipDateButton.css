@@ -1,0 +1,21 @@
+.edit-ship-date-div {
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.edit-ship-date-div input#delay-tbd-checkbox {
+    width: 10px;
+    margin-left: 2px;
+}
+
+.red-delay-date-text {
+    color: red;
+}
+
+.red-delay-text {
+    color: red;
+    font-size: 0.7rem;
+}

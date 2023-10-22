@@ -1,0 +1,17 @@
+.all-orders-delete-div #delete-order-button button {
+    border: none;
+    width: 27px;
+    color: white;
+    background: red;
+}
+
+.all-orders-delete-div #delete-order-button .svg-inline--fa {
+    border: none;
+    color: red;
+  }
+
+
+.all-orders-delete-div #delete-order-button .svg-inline--fa:hover {
+    opacity: 20%;
+    color: red;
+  }

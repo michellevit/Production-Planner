@@ -1,0 +1,222 @@
+.all-main-div {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0;
+}
+
+.all-orders-table-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.all-orders-table {
+  width: 95%;
+  border: 2px solid #004596;
+  border-radius: 5px;
+  border-spacing: 0;
+  border-collapse: separate;
+}
+
+.all-orders-table th {
+  background-color: #004596;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: center;
+  padding: 8px;
+}
+
+
+.all-orders-table th{
+  vertical-align: middle!important; 
+}
+
+.all-orders-table td {
+  border: 1px solid #333;
+  padding: 8px;
+  text-align: center;
+}
+
+.all-orders-table > tbody > tr:nth-child(even) {
+  background-color: #e4e4e4;
+}
+
+.all-orders-table > tbody > tr:nth-child(odd) {
+  background-color: white;
+}
+
+.all-orders-table .item-table,
+.all-orders-table .package-table,
+.all-orders-table .notes-table {
+  border-collapse: collapse;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+
+
+.all-orders-table .item-table th,
+.all-orders-table .item-table td,
+.all-orders-table .package-table th,
+.all-orders-table .package-table td,
+.all-orders-table .notes-table th,
+.all-orders-table .notes-table td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.all-orders-table th {
+  align-items: center;
+}
+
+
+
+.all-orders-table #qty {
+  text-align: center;
+  width: 30%;
+}
+
+.all-orders-table #box-number {
+  text-align: center;
+  width: 10%;
+}
+
+.all-orders-table #dimensions {
+  text-align: left;
+  width: 65%;
+}
+
+.all-orders-table #weight {
+  text-align: center;
+  width: 25%;
+}
+
+
+.all-orders-table tbody tr {
+  transition: opacity 0.5s ease;
+}
+
+.all-orders-table tbody tr.fade-out {
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.all-orders-table #ship-date {
+  width: 10%;
+}
+.all-orders-table #ship-date input {
+  width: 25px;
+} 
+.all-orders-table #ship-date .react-datepicker__input-container {
+  margin-left: 2.5px;
+}
+
+.all-orders-table #ship-date .svg-inline--fa {
+  color: rgb(152, 196, 152);
+}
+
+.all-orders-table #ship-date .svg-inline--fa:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.all-orders-table #order-number {
+  width: 10%;
+}
+.all-orders-table #customer {
+  width: 10%;
+}
+.all-orders-table #items {
+  width: 20%;
+  vertical-align: top; 
+}
+
+.all-orders-table #item {
+  text-align: left;
+  width: 70%;
+}
+
+.all-orders-table #qty {
+  text-align: center;
+  width: 30%;
+  vertical-align: top; /* Add this line to align content at the top */
+}
+
+.all-orders-table #packages {
+  width: 20%;
+  vertical-align: top; 
+}
+.all-orders-table #notes {
+  width: 20%;
+  vertical-align: top; 
+}
+
+.all-orders-table #ready {
+  width: 5%;
+  text-align: center;
+}
+.all-orders-table #shipped {
+  width: 5%;
+  text-align: center;
+}
+
+#shipped-status-div {
+  display: flex;
+  justify-content: center;
+}
+
+.all-orders-table #shipped svg {
+  color: #004596;
+}
+
+.all-orders-table #shipped svg:hover {
+  opacity: 20%;
+}
+
+.all-orders-table #delete {
+  text-align: center;
+  width: 5%;
+
+}
+
+.all-orders-table tbody tr {
+  transition: opacity 0.5s ease; 
+}
+
+.fade-out {
+  animation: fadeOut 0.5s;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
