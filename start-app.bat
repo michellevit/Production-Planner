@@ -13,7 +13,8 @@ REM cd /path/to/your/docker-compose
 cd C:\Users\Michelle\Documents\Coding_Projects\Production-Planner
 
 REM Build or rebuild the Docker images
-docker-compose build
+REM Only needed for first time deployment or if changes have been made to app
+REM docker-compose build
 
 REM Start your Docker Compose application
 docker-compose up -d
