@@ -103,7 +103,10 @@ const OpenOrders = () => {
     }
     if (readyChecked && notReadyChecked && !delayedChecked) {
       filteredOpenOrders = filteredOpenOrders.filter(
-        (order) => order.ready != null && (order.delay_date === null && order.delay_tbd === false)
+        (order) =>
+          order.ready != null &&
+          order.delay_date === null &&
+          order.delay_tbd === false
       );
     }
     if (readyChecked && !notReadyChecked && delayedChecked) {
@@ -118,7 +121,10 @@ const OpenOrders = () => {
     }
     if (!readyChecked && notReadyChecked && !delayedChecked) {
       filteredOpenOrders = filteredOpenOrders.filter(
-        (order) => order.ready === false && (order.delay_date === null && order.delay_tbd === false)
+        (order) =>
+          order.ready === false &&
+          order.delay_date === null &&
+          order.delay_tbd === false
       );
     }
     if (!readyChecked && !notReadyChecked && delayedChecked) {
@@ -269,7 +275,6 @@ const OpenOrders = () => {
     }
     if (oldestChecked) {
       filteredOpenOrders.sort((a, b) => (a.ship_date > b.ship_date ? 1 : -1));
-
     } else {
       filteredOpenOrders.sort((a, b) => (a.ship_date < b.ship_date ? 1 : -1));
     }
@@ -317,7 +322,8 @@ const OpenOrders = () => {
         return updatedOrder;
       });
       const updatedOrdersData = await Promise.all(updatePromises);
-      setOpenOrders(updatedOrdersData);
+      const newOpenOrders = applySorting(updatedOrdersData);
+      setOpenOrders(newOpenOrders);
     } catch (error) {
       console.error("Error updating orders:", error);
     }
@@ -329,7 +335,6 @@ const OpenOrders = () => {
         ...order,
         minimized_status: true,
       }));
-
       const updatePromises = updatedOrders.map(async (updatedOrder) => {
         await axios.put(
           `http://127.0.0.1:8000/open-orders/${updatedOrder.id}/`,
@@ -337,9 +342,9 @@ const OpenOrders = () => {
         );
         return updatedOrder;
       });
-
       const updatedOrdersData = await Promise.all(updatePromises);
-      setOpenOrders(updatedOrdersData);
+      const newOpenOrders = applySorting(updatedOrdersData);
+      setOpenOrders(newOpenOrders);
     } catch (error) {
       console.error("Error updating orders:", error);
     }
@@ -347,7 +352,7 @@ const OpenOrders = () => {
 
   return (
     <div className="open-main-div">
-      <ErrorModal 
+      <ErrorModal
         showErrorModal={showErrorModal}
         setShowErrorModal={setShowErrorModal}
         errorMessage={errorMessage}
