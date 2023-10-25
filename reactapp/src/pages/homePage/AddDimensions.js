@@ -36,13 +36,11 @@ const AddDimensions = () => {
 
   const handleSubmitDimensions = async (event) => {
     event.preventDefault();
-    console.log("Dimensions: ", dimensions);
     const newDimension = {
       length: parseFloat(packageLength),
       width: parseFloat(packageWidth),
       height: parseFloat(packageHeight),
     };
-    console.log("New Dimension: ", newDimension);
     const isDuplicate = dimensions.some(
       (dimension) =>
         dimension.length === newDimension.length &&
@@ -50,12 +48,10 @@ const AddDimensions = () => {
         dimension.height === newDimension.height
     );
     if (isDuplicate) {
-      console.log("Duplicate detected!");
       setErrorMessage("Dimension with the same values already exists.");
       setShowHomeErrorModal(true);
       return;
     }
-    console.log("Is Duplicate: ", isDuplicate);
 
 
     const formattedDimensions = `${packageLength}" x ${packageWidth}" x ${packageHeight}"`;

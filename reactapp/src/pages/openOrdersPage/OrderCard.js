@@ -19,6 +19,7 @@ const OrderCard = ({
   setOpenOrders,
   setShowErrorModal,
   setErrorMessage,
+  globalMinimized,
 }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [shipDate, setShipDate] = useState("");
@@ -26,7 +27,7 @@ const OrderCard = ({
   const [tbdStatus, setTBDStatus] = useState(false);
   const [boxes, setBoxes] = useState([]);
   const [minimized, setMinimized] = useState(order.minimized_status);
-  const [localMinimized, setLocalMinimized] = useState(order.minimized_status);
+  // const [localMinimized, setLocalMinimized] = useState(order.minimized_status);
   const [formDisplay, setFormDisplay] = useState([]);
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
@@ -44,6 +45,7 @@ const OrderCard = ({
             delay_tbd,
             packages_array,
             notes_array,
+            minimized_status,
           } = response.data;
           const updatedBoxes = Array.isArray(packages_array)
             ? packages_array.map((box) => {
@@ -61,7 +63,7 @@ const OrderCard = ({
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);
-          setMinimized(localMinimized);
+          setMinimized(minimized_status);
           setShipDate(formatDate(ship_date));
           if (ship_date === null) {
             if (delay_date === null) {
@@ -261,8 +263,8 @@ const OrderCard = ({
           <div id="row1col3">
             <MinimizeCardButton
               order={order}
-              localMinimized={localMinimized}
-              setLocalMinimized={setLocalMinimized}
+              minimized={minimized}
+              setMinimized={setMinimized}
             />
             <DeleteButton
               order={order}
