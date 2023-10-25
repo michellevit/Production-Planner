@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': os.getenv("MYSQL_DB_NAME"),
         'USER': os.getenv("DB_USER"),
         'PASSWORD': os.getenv("DB_PASSWORD"),
-        'HOST': 'db',  # Use the service name from docker-compose.yml
+        'HOST': 'db', 
         'PORT': '3306',
     }
 }
