@@ -44,7 +44,6 @@ const OrderCard = ({
             delay_tbd,
             packages_array,
             notes_array,
-            minimized_status,
           } = response.data;
           const updatedBoxes = Array.isArray(packages_array)
             ? packages_array.map((box) => {
