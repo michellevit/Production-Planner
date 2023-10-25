@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Changed import
+import { Route, Routes } from 'react-router-dom'; // Changed import
 
 import Navbar from "./Navbar";
 import HomePage from "./pages/homePage/HomePage";
@@ -13,20 +13,18 @@ import "./styles.css";
 function App() {
   return (
     <div className="app">
-      <Router>
-        <Navbar />
-        <div className="container">
-          <Routes>
-            <Route path="home" element={<HomePage />} />
-            <Route path="add-order" element={<AddOrder />} />
-            <Route path="add-order-report" element={<AddOrderReport />} />
-            <Route path="add-dimensions" element={<AddDimensions />} />
-            <Route path="open-orders" element={<OpenOrders />} />
-            <Route path="all-orders" element={<AllOrders />} />
-            <Route path="/*" element={<HomePage />} /> 
-          </Routes>
-        </div>
-      </Router>
+      <Navbar />
+      <div className="container">
+        <Routes>
+          <Route path="home" element={<HomePage />} />
+          <Route path="add-order" element={<AddOrder />} />
+          <Route path="add-order-report" element={<AddOrderReport />} />
+          <Route path="add-dimensions" element={<AddDimensions />} />
+          <Route path="open-orders" element={<OpenOrders />} />
+          <Route path="all-orders" element={<AllOrders />} />
+          <Route path="/*" element={<HomePage />} /> 
+        </Routes>
+      </div>
     </div>
   );
 }
