@@ -1,0 +1,14 @@
+# Ignore all .log files
+*.log
+
+# Ignore all .env files (you might not want sensitive environment variables included)
+*.env
+
+# Ignore all __pycache__ directories (for Python projects)
+**/__pycache__/
+
+# Ignore node modules (for Node.js projects)
+node_modules/
+
+# Ignore other non-essential files
+.DS_Store
