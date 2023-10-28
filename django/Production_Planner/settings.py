@@ -150,5 +150,5 @@ LOGGING = {
     'root': {
         'handlers': ['file'],
         'level': 'ERROR',
-    },
+    }
 }

@@ -19,7 +19,6 @@ const OrderCard = ({
   setOpenOrders,
   setShowErrorModal,
   setErrorMessage,
-  globalMinimized,
 }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [shipDate, setShipDate] = useState("");
@@ -27,7 +26,6 @@ const OrderCard = ({
   const [tbdStatus, setTBDStatus] = useState(false);
   const [boxes, setBoxes] = useState([]);
   const [minimized, setMinimized] = useState(order.minimized_status);
-  // const [localMinimized, setLocalMinimized] = useState(order.minimized_status);
   const [formDisplay, setFormDisplay] = useState([]);
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
@@ -68,8 +66,7 @@ const OrderCard = ({
           if (ship_date === null) {
             if (delay_date === null) {
               checkTBD(true);
-            }
-            else {
+            } else {
               checkTBD(false);
             }
           }
@@ -79,15 +76,40 @@ const OrderCard = ({
       }
     };
     fetchOrderDetails();
-  }, [order.id, order.minimized_status, order.delay_tbd, order.delay_date, order.ship_date]);
-  
+  }, [
+    order.id,
+    order.minimized_status,
+    order.delay_tbd,
+    order.delay_date,
+    order.ship_date,
+  ]);
+
   function formatDate(inputDate) {
-    if (inputDate !== null) {
-      const options = { day: 'numeric', month: 'short', year: 'numeric' };
-      inputDate = new Date(inputDate).toLocaleDateString(undefined, options);
-    }
-    return inputDate;
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const dateParts = inputDate.split("-");
+    const year = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10) - 1;
+    const day = parseInt(dateParts[2], 10);
+    const dateObj = new Date(Date.UTC(year, month, day));
+    const formattedDate = `${
+      months[dateObj.getUTCMonth()]
+    } ${dateObj.getUTCDate()}, ${dateObj.getUTCFullYear()}`;
+    return formattedDate;
   }
+
   const readyHandler = async () => {
     setReadyStatus(true);
     boxFormHandler();
@@ -152,7 +174,7 @@ const OrderCard = ({
       const formattedDate = date ? date.toISOString().split("T")[0] : null;
       if (formattedDate !== null) {
         setTBDStatus(false);
-      } 
+      }
       const updatedOrder = order;
       updatedOrder.delay_date = formattedDate;
       updatedOrder.delay_tbd = false;
@@ -177,14 +199,13 @@ const OrderCard = ({
     } catch (error) {
       console.error("Error updating order:", error);
     }
-  }
+  };
 
   const handleTBD = async () => {
     let newStatus = !tbdStatus;
     if (newStatus === false && order.ship_date === null) {
       newStatus = true;
-    }
-    else if (newStatus === false && order.ship_date !== null) {
+    } else if (newStatus === false && order.ship_date !== null) {
       newStatus = false;
     }
     setTBDStatus(newStatus);
@@ -289,16 +310,14 @@ const OrderCard = ({
               <tr className="order-data" id="customer-name">
                 <td className="row2col1">Customer:</td>
                 <td className="row2col2">{order.customer_name}</td>
-                <td className="row2col2"></td>
+                <td className="row2col3"></td>
               </tr>
               <tr className="order-data" id="ship-date">
                 <td className="row2col1">Ship Date:</td>
-                <td className="row2col2">
-                  {tbdStatus ? "TBD" : shipDate}
-                </td>
+                <td className="row2col2">{tbdStatus ? "TBD" : shipDate}</td>
                 <td className="row2col3"></td>
               </tr>
-              {(!readyStatus && !order.quote) && (
+              {!readyStatus && !order.quote && (
                 <tr className="order-data" id="delay-date">
                   <td className="row2col1">Delay:</td>
                   <td className="row2col2">
@@ -313,17 +332,18 @@ const OrderCard = ({
                       isClearable
                       className="delay-input"
                     />
-                    
                   </td>
-                  <td className="row2col3">{!order.quote && "TBD"}
-                    {!order.quote &&
+                  <td className="row2col3">
+                    {!order.quote && "TBD"}
+                    {!order.quote && (
                       <input
                         type="checkbox"
                         id="order-card-tbd-checkbox"
                         checked={tbdStatus}
                         onChange={handleTBD}
                       ></input>
-                    }</td>
+                    )}
+                  </td>
                 </tr>
               )}
             </tbody>
