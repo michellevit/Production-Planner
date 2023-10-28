@@ -47,7 +47,6 @@ const AllOrders = () => {
           `http://127.0.0.1:8000/${currentView}${searchQueryFormatted}${urlCharacter}page=${currentPage}&${filterParams}`
         )
         .then((response) => {
-          console.log(`http://127.0.0.1:8000/${currentView}${searchQueryFormatted}${urlCharacter}page=${currentPage}&${filterParams}`);
           let filteredAllOrders = response.data.results;
           setTotalPages(Math.ceil(response.data.count / ordersPerPage));
           setAllOrders(filteredAllOrders);

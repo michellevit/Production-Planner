@@ -28,8 +28,9 @@
   .confirm-modal-buttons {
     margin-top: 20px;
   }
-  
+  .confirm-delete-modal-buttons 
   .confirm-delete-confirm-button,
+  .confirm-delete-modal-buttons 
   .confirm-delete-cancel-button {
     margin: 0 10px;
     padding: 8px 16px;

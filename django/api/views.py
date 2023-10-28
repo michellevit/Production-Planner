@@ -16,12 +16,12 @@ from .serializers import *
 import logging
 
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger('file')
 # logger.error('EXAMPLE')
+#print('hi') -> this will show up in Docker container backend 'Logs' section
 
 class CustomPagination(PageNumberPagination):
     page_size = 20
-
 
 
 
@@ -146,12 +146,14 @@ class SearchAllOrdersListView(generics.ListAPIView):
         return queryset
     
     
-#path('filtered-orders/', FilteredOrdersListView.as_view(), name='filtered-orders')
+#path('all-orders-filtered/', FilteredOrdersListView.as_view(), name='all-orders-filtered')
 class FilteredOrdersListView(generics.ListAPIView):
     serializer_class = OrderSerializer
     pagination_class = CustomPagination
     def get_queryset(self):
-        today = timezone.now().date()
+        current_datetime_utc = timezone.now()
+        current_datetime_vancouver = current_datetime_utc.astimezone(timezone.get_current_timezone())
+        today = current_datetime_vancouver.date()
         filter_choice = self.request.query_params.get('filter', 'all')
         queryset = Order.objects.all()
         if filter_choice == 'upcoming':
@@ -163,50 +165,63 @@ class FilteredOrdersListView(generics.ListAPIView):
         elif filter_choice == 'tomorrow':
             tomorrow = today + timedelta(days=1)
             queryset = queryset.filter(ship_date=tomorrow)
-        elif filter_choice == 'this-week':
-            end_of_week = today + timedelta(days=(6 - today.weekday()))
-            start_of_week = end_of_week - timedelta(days=6)
+        if filter_choice == 'this-week':
+            is_today_sunday = (today.weekday() == 6)
+            start_of_week = today - timedelta(days=today.weekday() + 1) if not is_today_sunday else today
+            end_of_week = start_of_week + timedelta(days=6)
             queryset = queryset.filter(
                 ship_date__gte=start_of_week,
                 ship_date__lte=end_of_week + timedelta(hours=23, minutes=59, seconds=59)
             )
+        elif filter_choice == 'this-month':
+            start_of_month = today.replace(day=1)
+            if today.month == 12: 
+                end_of_month = start_of_month.replace(year=today.year + 1, month=1) - timedelta(days=1)
+            else:
+                end_of_month = start_of_month.replace(month=today.month + 1) - timedelta(days=1)
+            queryset = queryset.filter(
+                ship_date__gte=start_of_month,
+                ship_date__lte=end_of_month + timedelta(hours=23, minutes=59, seconds=59)
+            )
         elif filter_choice == 'next-week':
-            days_until_next_week = 7 - today.weekday()
-            start_of_next_week = today + timedelta(days=days_until_next_week)
+            days_until_next_sunday = 6 - today.weekday()
+            start_of_next_week = today + timedelta(days=days_until_next_sunday)
             end_of_next_week = start_of_next_week + timedelta(days=6)
             queryset = queryset.filter(
                 ship_date__gte=start_of_next_week,
                 ship_date__lte=end_of_next_week + timedelta(hours=23, minutes=59, seconds=59)
             )
-        elif filter_choice == 'this-month':
-            end_of_month = today.replace(day=1, month=today.month + 1) - timedelta(days=1)
-            queryset = queryset.filter(
-                ship_date__gte=today,
-                ship_date__lte=end_of_month + timedelta(hours=23, minutes=59, seconds=59)
-            )
         elif filter_choice == 'next-month':
-            start_of_next_month = today.replace(day=1, month=today.month + 1)
-            end_of_next_month = start_of_next_month.replace(
-                day=(start_of_next_month.replace(day=1, month=start_of_next_month.month + 1) - timedelta(days=1)).day,
-            )
+            if today.month == 12:  
+                start_of_next_month = today.replace(day=1, month=1, year=today.year + 1)
+            else:
+                start_of_next_month = today.replace(day=1, month=today.month + 1)
+            if start_of_next_month.month == 12:  
+                end_of_next_month = start_of_next_month.replace(year=start_of_next_month.year + 1, month=1) - timedelta(days=1)
+            else:
+                end_of_next_month = start_of_next_month.replace(month=start_of_next_month.month + 1) - timedelta(days=1)
             queryset = queryset.filter(
                 ship_date__gte=start_of_next_month,
                 ship_date__lte=end_of_next_month + timedelta(hours=23, minutes=59, seconds=59)
             )
         elif filter_choice == 'last-week':
-            end_of_last_week = today - timedelta(days=(today.weekday() + 1))
+            days_since_last_saturday = today.weekday() + 2
+            end_of_last_week = today - timedelta(days=days_since_last_saturday)
             start_of_last_week = end_of_last_week - timedelta(days=6)
             queryset = queryset.filter(
                 ship_date__gte=start_of_last_week,
                 ship_date__lte=end_of_last_week + timedelta(hours=23, minutes=59, seconds=59)
             )
         elif filter_choice == 'last-month':
-            start_of_last_month = today.replace(day=1, month=today.month - 1)
+            if today.month == 1:
+                start_of_last_month = today.replace(day=1, month=12, year=today.year - 1)
+            else:
+                start_of_last_month = today.replace(day=1, month=today.month - 1)
             end_of_last_month = today.replace(day=1) - timedelta(days=1)
             queryset = queryset.filter(
                 ship_date__gte=start_of_last_month,
                 ship_date__lte=end_of_last_month + timedelta(hours=23, minutes=59, seconds=59)
-            )
+            ) 
         queryset = queryset.order_by('-ship_date')
         if not self.request.query_params.get('ready_checked', False):
             queryset = queryset.filter(ready=False)
