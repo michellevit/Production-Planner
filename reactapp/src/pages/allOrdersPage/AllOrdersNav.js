@@ -28,8 +28,6 @@ const AllOrdersNav = ( {
     setSearchQuery(query);
     handleSearchOrders(query);
   };
-
-
   return (
     <div className="all-orders-nav-container">
       <div className="row1">
@@ -45,16 +43,16 @@ const AllOrdersNav = ( {
             <option hidden>Sort by...</option>
             <option value="all">All</option>
             <option disabled={true}>--------</option>
-            <option value="upcoming">Upcoming</option>
-            <option value="past">Past</option>
-            <option disabled={true}>--------</option>
             <option value="today">Today</option>
             <option value="tomorrow">Tomorrow</option>
             <option value="this-week">This Week</option>
-            <option value="next-week">Next Week</option>
             <option value="this-month">This Month</option>
-            <option value="next-month">Last Month</option>
             <option disabled={true}>--------</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="next-week">Next Week</option>
+            <option value="next-month">Next Month</option>
+            <option disabled={true}>--------</option>
+            <option value="past">Past</option>
             <option value="last-week">Last Week</option>
             <option value="last-month">Last Month</option>
           </select>
