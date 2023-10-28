@@ -1,12 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: Define database connection details
+set DB_USER=db_user
+set DB_PASSWORD=20231028-pass
 set DB_HOST=db
 set DB_PORT=3306
-set DB_NAME=%MYSQL_DB_NAME%
-set DB_USER=%DB_USER%
-set DB_PASSWORD=%DB_PASSWORD%
+set DB_NAME=Production_Planner_DB
 
 :: Get the current date in the desired format (YYYYMMDD)
 for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do (
@@ -16,10 +15,10 @@ set DATE=!datetime:~0,8!
 
 :: Define backup file name and path
 set BACKUP_DIR=C:\Users\Michelle\Documents\Coding_Projects\Production-Planner\db-backups
-set BACKUP_FILE=%BACKUP_DIR%\backup_%DATE%.sql
+set BACKUP_FILE=%BACKUP_DIR%\%DATE%_backup.sql
 
 :: Create the backup using mysqldump
-mysqldump -h %DB_HOST% -P %DB_PORT% -u %DB_USER% -p%DB_PASSWORD% %DB_NAME% > %BACKUP_FILE%
+docker exec production-planner-db-1 mysqldump -u %DB_USER% -p%DB_PASSWORD% %DB_NAME% > "%BACKUP_FILE%"
 
 echo Database backup completed: %BACKUP_FILE%
 
