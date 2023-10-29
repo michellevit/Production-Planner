@@ -11,9 +11,11 @@ const AddLineItem = ({
   setShowHomeErrorModal,
   errorMessage,
   setErrorMessage,
+  setMatchingDims,
 }) => {
   const handleAddOrderLineItem = (e) => {
     e.preventDefault();
+    setMatchingDims(false);
     const itemName = document.getElementById("add-line-item-name").value;
     const itemQty = document.getElementById("add-line-item-qty").value;
     if (itemName.trim() === "") {
@@ -52,7 +54,7 @@ const AddLineItem = ({
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
         />
-        <input id="add-line-item-name" type="text" maxLength={24}></input>
+        <input id="add-line-item-name" type="text"></input>
         <input id="add-line-item-qty" type="number" min="1"></input>
         <button id="add-line-item-button" onClick={handleAddOrderLineItem}>
           <FontAwesomeIcon icon={faAdd} />

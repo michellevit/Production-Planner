@@ -12,6 +12,43 @@ const AddOrder = () => {
   const [showHomeErrorModal, setShowHomeErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [tbd, setTBD] = useState(false);
+  const [matchingDims, setMatchingDims] = useState(false);
+  const [suggestedDims, setSuggestedDims] = useState([]);
+
+  const handleGetQuote = async (e) => {
+    e.preventDefault();
+    if (Object.keys(items).length === 0) {
+      setErrorMessage("Please add at least one item.");
+      setShowHomeErrorModal(true);
+      return;
+    }
+    console.log("Items sent to backend:", items);
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/fetch-matching-packages/",
+        {
+          item_type_dict: items,
+        }
+      );
+      console.log("RESPONSE:", response.data);
+      if (response.data.success) {
+        console.log("SUCCESS");
+        setMatchingDims(true);
+        const packagesArray = response.data.packages_array;
+        setSuggestedDims(packagesArray);
+        console.log(packagesArray);
+      } else {
+        setErrorMessage("No quote available.");
+        setShowHomeErrorModal(true);
+      }
+    } catch (error) {
+      console.error("Error fetching matching packages:", error);
+      setErrorMessage(
+        "An error occurred while trying to fetch a matching quote."
+      );
+      setShowHomeErrorModal(true);
+    }
+  };
 
   const handleSubmitNewOrder = async (e) => {
     e.preventDefault();
@@ -91,7 +128,6 @@ const AddOrder = () => {
                 <input
                   type="text"
                   id="add-order-so-number"
-                  required
                   maxLength={100}
                 ></input>
               </td>
@@ -102,7 +138,6 @@ const AddOrder = () => {
                 <input
                   type="text"
                   id="add-order-customer-name"
-                  required
                   maxLength={100}
                 ></input>
               </td>
@@ -142,6 +177,7 @@ const AddOrder = () => {
                   setShowHomeErrorModal={setShowHomeErrorModal}
                   errorMessage={errorMessage}
                   setErrorMessage={setErrorMessage}
+                  setMatchingDims={setMatchingDims}
                 />
               </td>
             </tr>
@@ -166,10 +202,36 @@ const AddOrder = () => {
             </tr>
           </tbody>
         </table>
-        <button id="submit-new-order-button" onClick={handleSubmitNewOrder}>
-          Submit
-        </button>
+        <div className="add-order-buttons-div">
+          <button id="submit-new-order-button" onClick={handleSubmitNewOrder}>
+            Submit
+          </button>
+          <button id="quote-new-order-button" onClick={handleGetQuote}>
+            Quote
+          </button>
+        </div>
       </form>
+      {matchingDims && (
+        <div className="suggested-dims-div">
+          <h2>Suggested Dimensions</h2>
+          <table>
+            <thead>
+              <tr>
+                <th className="suggested-dims">Dimensions</th>
+                <th className="suggested-weight">Weight</th>
+              </tr>
+            </thead>
+            <tbody>
+              {suggestedDims.map((item, index) => (
+                <tr key={index}>
+                  <td className="suggested-dims">{item.dimensions}</td>
+                  <td className="suggested-weight">{item.weight}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

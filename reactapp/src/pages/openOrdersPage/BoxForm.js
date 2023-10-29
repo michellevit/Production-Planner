@@ -121,7 +121,7 @@ const BoxForm = ({
           >
             <option hidden>Dimensions</option>
             <option>TBD</option>
-            <option>9" x 7" x 1" &#40;Padded Envelope&#41;</option>
+            <option>9" x 7" x 1" &#40;Envelope&#41;</option>
             {selectDimensionsData.map((item) => (
               <option key={item.id} value={item.package_size}>
                 {item.package_size}

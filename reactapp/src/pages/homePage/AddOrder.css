@@ -68,6 +68,11 @@ table.add-order-table td input {
     width: auto;
 }
 
+.add-order-buttons-div {
+    display: flex;
+    flex-direction: row;
+}
+
 .add-order-container #submit-new-order-button {
     padding: 8px 12px;
     background-color: #19c37d;
@@ -78,6 +83,50 @@ table.add-order-table td input {
     cursor: pointer;
 }
 
+.add-order-container #quote-new-order-button {
+    padding: 8px 12px;
+    background-color: #8A2BE2;
+    border: none;
+    color: white;
+    margin-bottom: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 .add-order-container button:hover {
     opacity: 0.5;
+}
+
+
+.suggested-dims-div {
+    background-color: white;
+    width: 500px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.suggested-dims-div table {
+    background-color: white;
+    padding: 30px 40px;
+    width: 70%;
+    border-radius: 15px;
+    margin: auto;
+}
+
+.suggested-dims-div table th {
+    font-weight: 700;
+    border-bottom: 1px solid rgb(187, 187, 187);
+}
+
+.suggested-dims-div table .suggested-dims td, .suggested-dims-div table .suggested-dims th {
+    width: 50%;
+}
+
+.suggested-dims-div table .suggested-weight td, .suggested-dims-div table .suggested-weight th {
+    width: 50%;
 }
