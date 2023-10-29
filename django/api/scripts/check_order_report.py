@@ -1,22 +1,28 @@
 import io
-import os
-import openpyxl
 import django
+import json
+import openpyxl
+import os
+from api.models import Order, OrderReport
+from api.utils import sort_dict, hash_item_type_dict
 from django.db.models import Q
 from django.db import models
 from django.core.management.base import BaseCommand
-from api.models import OrderReport
 from django.core.files.storage import default_storage
 from django.conf import settings
 
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Production_Project.settings")
 django.setup()
-from api.models import Order
+
 
 orders_dict = {}
 
 
 def update_orders_dict(new_order):
+    sorted_item_type_dict = sort_dict(new_order.item_type_dict)
+    dict_to_string = json.dumps(sorted_item_type_dict, separators=(',', ':'))
+    new_order.item_type_dict_hash = hash_item_type_dict(dict_to_string)
     if new_order.order_number in orders_dict:
         orders_dict[new_order.order_number].item_type_dict.update(
             new_order.item_type_dict
@@ -25,7 +31,7 @@ def update_orders_dict(new_order):
             new_order.item_subtype_dict
         )
     else:
-        orders_dict[new_order.order_number] = new_order
+        orders_dict[new_order.order_number] = new_order        
     if Order.objects.filter(order_number=new_order.order_number).exists():
         existing_orders = Order.objects.filter(order_number=new_order.order_number)
         for existing_order in existing_orders:
@@ -34,7 +40,7 @@ def update_orders_dict(new_order):
                 and existing_order.item_type_dict != new_order.item_type_dict
             ):
                 new_order.backorder = True
-                new_order.backorder = existing_order.backorder_number + 1
+                new_order.backorder_number = existing_order.backorder_number + 1
                 new_order.save()
         else:
             existing_order.ship_date = new_order.ship_date
@@ -89,6 +95,8 @@ def sort_workbook(sheet):
     for index, row in enumerate(sheet.iter_rows(min_row=0, min_col=3, max_col=12)):
         item_type = row[0].value
         item_subtype = None
+        if item_type:
+            item_type = item_type.strip()
         if item_type is None:
             continue
         elif "Total" in item_type:
@@ -116,9 +124,9 @@ def sort_workbook(sheet):
                         else:
                             ########## If no: update subtype, and continue next_row fn
                             if "- Other" in next_row[1].value:
-                                item_subtype = next_row[1].value.replace("- Other", "")
+                                item_subtype = next_row[1].value.replace("- Other", "").strip()
                             else:
-                                item_subtype = next_row[1].value
+                                item_subtype = next_row[1].value.strip()
                                 continue
                     else:
                         ####### If no: create a new item next_row[2, 4, 6, 8] + add it to dict + continue next_row loop

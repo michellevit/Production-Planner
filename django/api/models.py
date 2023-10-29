@@ -1,9 +1,11 @@
 from django.db import models
+from .utils import *
+
 
 class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    order_number = models.CharField(max_length=100)
+    order_number = models.CharField(max_length=100, default="none")
     backorder = models.BooleanField(default=False)
     backorder_number = models.IntegerField(default=0)
     ship_date = models.DateField(null=True, blank=True)
@@ -11,6 +13,7 @@ class Order(models.Model):
     delay_tbd = models.BooleanField(null=True, default=False)
     customer_name = models.CharField(max_length=100)
     item_type_dict = models.JSONField(default=dict)
+    item_type_dict_hash = models.CharField(max_length=32, db_index=True, blank=True, null=True)
     item_subtype_dict = models.JSONField(default=dict)
     packages_array = models.JSONField(default=list, null=True, blank=True)
     notes_array = models.JSONField(default=list, null=True, blank=True)
@@ -20,6 +23,10 @@ class Order(models.Model):
     shipped = models.BooleanField(default=False, db_index=True)
     def __str__(self):
         return self.order_number[0:50]
+    def save(self, *args, **kwargs):
+        sorted_item_type_dict = sort_dict(self.item_type_dict)
+        self.item_type_dict_hash = hash_item_type_dict(sorted_item_type_dict)
+        super(Order, self).save(*args, **kwargs)
     
 
 class OrderReport(models.Model):

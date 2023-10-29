@@ -10,6 +10,7 @@ import NoteList from "./NoteList";
 import { parseISO } from "date-fns";
 import ReadyButton from "./ReadyButton";
 import ShippedButton from "./ShippedButton";
+import SuggestedDims from "./SuggestedDims";
 import "./OrderCard.css";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -29,6 +30,8 @@ const OrderCard = ({
   const [formDisplay, setFormDisplay] = useState([]);
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
+  const [matchingDims, setMatchingDims] = useState(false);
+  const [suggestedBoxes, setSuggestedBoxes] = useState([]);
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -38,12 +41,14 @@ const OrderCard = ({
         if (response.data) {
           const {
             ready,
+            boxes: responseBoxes = [],
             ship_date,
             delay_date,
             delay_tbd,
             packages_array,
             notes_array,
             minimized_status,
+            item_type_dict_hash,
           } = response.data;
           const updatedBoxes = Array.isArray(packages_array)
             ? packages_array.map((box) => {
@@ -70,6 +75,27 @@ const OrderCard = ({
               checkTBD(false);
             }
           }
+          if (responseBoxes?.length === 0) {
+            console.log(order.order_number);
+            console.log("Entered the function");
+            console.log("\n");
+            axios.post('http://127.0.0.1:8000/fetch-matching-packages/', { item_type_dict: order.item_type_dict })
+              .then(response => {
+                if (response.data.success && item_type_dict_hash !== "0") {
+                  console.log(order.order_number)
+                  console.log(response.data.packages_array);
+                  console.log("\n");
+                  setMatchingDims(true);
+                  setSuggestedBoxes(response.data.packages_array);
+                }
+              })
+              .catch(error => {
+                console.error("Error fetching matching packages:", error);
+              });
+          }
+          else {
+            setMatchingDims(false);
+          }
         }
       } catch (error) {
         console.error("Error fetching order details:", error);
@@ -82,6 +108,8 @@ const OrderCard = ({
     order.delay_tbd,
     order.delay_date,
     order.ship_date,
+    order.packages_array,
+    order.item_type_dict_hash,
   ]);
 
   function formatDate(inputDate) {
@@ -399,6 +427,7 @@ const OrderCard = ({
                 updatePackages={updatePackages}
               />
             )}
+            {matchingDims && !readyStatus && <SuggestedDims suggestedBoxes={suggestedBoxes} setBoxes={setBoxes} setMatchingDims={setMatchingDims} order={order}/>}
           </div>
         </div>
       )}

@@ -14,6 +14,8 @@ urlpatterns = [
     path('all-orders-create/', CreateOrderView.as_view(), name='create-order'),
     path('reports/', OrderReportUploadView.as_view(), name="reports"),
     path('dimensions/', DimensionView.as_view(), name="dimensions"),
-    path('dimensions/<int:pk>/', DimensionView.as_view()),]
+    path('dimensions/<int:pk>/', DimensionView.as_view()),
+    path('fetch-matching-packages/', FetchMatchingPackagesView.as_view(), name='fetch-matching-packages'),
+]
     
 
