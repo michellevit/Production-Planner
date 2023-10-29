@@ -2,6 +2,7 @@ from datetime import timedelta
 from django.db import transaction
 from django.db.models import Q, Case, When, F, Value, IntegerField
 from django.db.models.functions import Coalesce
+from django.http import JsonResponse
 from django.utils import timezone
 from .models import * 
 from rest_framework import status
@@ -13,10 +14,13 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from .scripts.check_order_report import process_uploaded_report
 from .serializers import *
+from .utils import sort_dict
+import json
 import logging
 
 
-# logger = logging.getLogger('file')
+
+logger = logging.getLogger('file')
 # logger.error('EXAMPLE')
 #print('hi') -> this will show up in Docker container backend 'Logs' section
 
@@ -64,6 +68,8 @@ class OrderDetailView(APIView):
                 order.shipped = request.data['shipped']
             if 'quote' in request.data:
                 order.quote = request.data['quote']
+            if 'item_type_dict_hash' in request.data:
+                order.item_type_dict_hash = request.data['item_type_dict_hash']
             order.save()
             return Response({"message": "Ready status updated successfully."})
         except Order.DoesNotExist:
@@ -281,3 +287,24 @@ class DimensionView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Dimension.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        
+
+# path('fetch-matching-packages/', FetchMatchingPackagesView.as_view(), name='fetch-matching-packages')
+
+class FetchMatchingPackagesView(APIView):
+    def post(self, request):
+        data = request.data
+        item_type_dict = data.get('item_type_dict')
+        if not item_type_dict:
+            return JsonResponse({'success': False, 'message': 'item_type_dict not provided'})
+        sorted_dict = sort_dict(item_type_dict)
+        hash_value = hash_item_type_dict(sorted_dict)
+        print(hash_value)
+        try:
+            matching_order = Order.objects.filter(shipped=True, item_type_dict_hash=hash_value).first()
+            if matching_order:
+                return JsonResponse({'success': True, 'packages_array': matching_order.packages_array})
+            else:
+                return JsonResponse({'success': False, 'message': 'No matching order found'})
+        except Exception as e:  
+            return JsonResponse({'success': False, 'message': str(e)})

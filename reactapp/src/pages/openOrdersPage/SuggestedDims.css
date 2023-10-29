@@ -1,0 +1,53 @@
+.suggested-dims-container {
+    display: flex;
+    width: 100%;
+    justify-content:center;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+
+  }
+
+  .suggested-dims-container h3 {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 5px 0;
+    padding: 0;
+  }
+
+  .suggested-dims-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .suggested-dims-container button {
+    display: flex;
+    margin: 5px 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+  }
+
+  tr.suggested-dims-line-item {
+    color: black;
+    width: 100%;
+    margin: 5px 0;;
+    border-radius: 5px;
+    padding: 2px 8px;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  .suggested-dims-container #suggestedDimsYes {
+    background-color: #19c37d;
+  }
+
+  .suggested-dims-container #suggestedDimsNo {
+    
+    background-color: #ff5555;
+  }
+
