@@ -17,7 +17,7 @@ Summary:
 To help coordinate the sales, production and shipping of orders.
 
 In-depth Overview:
-Every day new orders are entered into QuickBooks and the Production team must evaluate which orders are able to be shipped, and then prepare each order for shipping - this involves significant communication and back-and-forth between the Administrator and Production team. Here is the sequence of events:
+Every day new orders are entered into QuickBooks and the Production team must evaluate which orders are able to be shipped, and then prepare each order for shipping - this involves significant back-and-forth between the Administrator and Production team. Here is the sequence of events:
 
 1. The Administrator enters new orders into QuickBooks in the morning, then creates an order report on QuickBooks, which is then uploaded to the Production Planner App.
 2. The Production Planner app displays each order, allowing the Production team to easily mark it as delayed or add the dimensions/weight for the prepared package when it is ready (or any notes).
