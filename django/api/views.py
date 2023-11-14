@@ -299,7 +299,7 @@ class FetchMatchingPackagesView(APIView):
             return JsonResponse({'success': False, 'message': 'item_type_dict not provided'})
         sorted_dict = sort_dict(item_type_dict)
         hash_value = hash_item_type_dict(sorted_dict)
-        print(hash_value)
+        print("HELLO", hash_value)
         try:
             matching_order = Order.objects.filter(shipped=True, item_type_dict_hash=hash_value).first()
             if matching_order:
