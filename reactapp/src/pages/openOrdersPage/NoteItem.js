@@ -8,7 +8,6 @@ const NoteItem = ({ note, notes, setNotes, updateNotes, readyStatus }) => {
     let newNotes = notes.filter((el) => el.id !== note.id);
     setNotes(newNotes);
     updateNotes(newNotes);
-    console.log("set notes: ", newNotes)
   };
   return (
     <div className="noteitem">

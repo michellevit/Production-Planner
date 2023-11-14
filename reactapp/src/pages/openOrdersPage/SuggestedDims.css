@@ -18,6 +18,11 @@
     padding: 0;
   }
 
+  .suggested-dims-container table {
+    border-collapse: collapse;
+  }
+
+
   .suggested-dims-button-container {
     display: flex;
     flex-direction: row;
@@ -36,12 +41,18 @@
 
   tr.suggested-dims-line-item {
     color: black;
+    display: flex;
     width: 100%;
-    margin: 5px 0;;
+    margin: 5px 0;
     border-radius: 5px;
     padding: 2px 8px;
     background-color: rgba(255, 255, 255, 0.5);
   }
+
+  td.suggested-dims-line-item {
+    width: fit-content;
+  }
+
   .suggested-dims-container #suggestedDimsYes {
     background-color: #19c37d;
   }

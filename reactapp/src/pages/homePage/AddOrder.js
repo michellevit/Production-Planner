@@ -40,6 +40,7 @@ const AddOrder = () => {
       } else {
         setErrorMessage("No quote available.");
         setShowHomeErrorModal(true);
+        setSuggestedDims([]);
       }
     } catch (error) {
       console.error("Error fetching matching packages:", error);
@@ -99,8 +100,10 @@ const AddOrder = () => {
       await axios.post("http://127.0.0.1:8000/all-orders-create/", orderData);
       if (quoteValue === true) {
         setErrorMessage("Your quote has been added.");
+        setSuggestedDims([]);
       } else {
         setErrorMessage("Your order has been added.");
+        setSuggestedDims([]);
       }
       setShowHomeErrorModal(true);
       document.getElementById("add-order-form").reset();
@@ -225,7 +228,7 @@ const AddOrder = () => {
               {suggestedDims.map((item, index) => (
                 <tr key={index}>
                   <td className="suggested-dims">{item.dimensions}</td>
-                  <td className="suggested-weight">{item.weight}</td>
+                  <td className="suggested-weight">{item.weight} lb</td>
                 </tr>
               ))}
             </tbody>
