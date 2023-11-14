@@ -5,9 +5,11 @@ Project Title: Production Planner
 Table of Contents: 
 1. Project Description
 2. Technologies Used
-3. How to Install and Run the Script
-4. How to Use the Program
-5. Credits
+3. How To Run In Development
+4. How To Deploy In Production
+5. How To Use The Program
+6. How To Clear The Database
+6. Credits
 
 
 ----------
@@ -17,7 +19,7 @@ Summary:
 To help coordinate the sales, production and shipping of orders.
 
 In-depth Overview:
-Every day new orders are entered into QuickBooks and the Production team must evaluate which orders are able to be shipped, and then prepare each order for shipping - this involves significant communication and back-and-forth between the Administrator and Production team. Here is the sequence of events:
+Every day new orders are entered into QuickBooks and the Production team must evaluate which orders are able to be shipped, and then prepare each order for shipping - this involves significant back-and-forth between the Administrator and Production team. Here is the sequence of events:
 
 1. The Administrator enters new orders into QuickBooks in the morning, then creates an order report on QuickBooks, which is then uploaded to the Production Planner App.
 2. The Production Planner app displays each order, allowing the Production team to easily mark it as delayed or add the dimensions/weight for the prepared package when it is ready (or any notes).
@@ -38,8 +40,30 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 ----------
-3. How to Install and Run the Script:
--In progress-
+3. How To Run In Development:
+-Activate the virtual environment: 
+--Open terminal, navigate/cd to project, use the command: # C:/Users/path/to/virtualenv/Scripts/Activate.ps1
+-Go to the file django/Production_Planner/settings.py and change the 'DEVELOPMENT_MODE' var to True
+--This will switch the database to SQLite (unlike MySQL which requires Docker container to run)
+-Initialize the database after updating the settings:
+--In the terminal, navigate to the django folder and run: python manage.py migrate
+-Start the server:
+--navigate to the django folder (in the terminal) and run: python manage.py runserver
+--browser: http://localhost:8000/
+-Start the reactapp:
+--navigate to the reactapp folder (in the terminal) and run: npm start
+--browser: http://localhost:3000/
+
+
+----------
+4. How To Deploy In Production:
+-Go to the file django/Production_Planner/settings.py and change the 'DEVELOPMENT_MODE' var to False
+--This will switch the database to MySQL (unlike SQLite which does not require Docker, but is less robust for production)
+-Start the Docker container: 
+--Double-click the start-app.bat file OR:
+---Open terminal, navigate/cd to project, execute docker-compose build, then docker-compose up
+--To stop the Docker container: 
+---docker-compose down
 
 
 ----------
