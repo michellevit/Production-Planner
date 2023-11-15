@@ -47,7 +47,7 @@ This app replaces the previous process, which consisted of a paper report being 
 --Change the 'DEVELOPMENT_MODE' var to True
 ----This will switch the database to SQLite (unlike MySQL which requires Docker container to run)
 --Change the 'DEBUG' to True
-----Now print statements in backend will output in the terminal where the server is running
+----Now print statements (in the backend) will output in the terminal where the server is running
 -Initialize the database after updating the settings:
 --In the terminal, navigate to the django folder and run: python manage.py migrate
 -Start the server:
@@ -64,8 +64,11 @@ This app replaces the previous process, which consisted of a paper report being 
 
 ----------
 4. How To Deploy In Production:
--Go to the file django/Production_Planner/settings.py and change the 'DEVELOPMENT_MODE' var to False
---This will switch the database to MySQL (unlike SQLite which does not require Docker, but is less robust for production)
+-Go to the file django/Production_Planner/settings.py
+--Change the 'DEVELOPMENT_MODE' var to False
+---This will switch the database to MySQL (unlike SQLite which does not require Docker, but is less robust for production)
+--Change the 'DEBUG' var to False
+---Now print statements (in the backend) will output in the Docker 'backend' image logs
 -Start the Docker container: 
 --Double-click the start-app.bat file OR:
 ---Open terminal, navigate/cd to project, execute docker-compose build, then docker-compose up
