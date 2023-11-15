@@ -53,3 +53,12 @@ class Dimension(models.Model):
     class Meta:
         verbose_name_plural = "Dimensions"
 
+
+class Product(models.Model):
+    item_name = models.CharField(max_length=100, unique=True)
+    def __str__(self):
+        return self.item_name  # Updated to return item_name
+    class Meta:
+        verbose_name_plural = "Products"
+        ordering = ['item_name']
+

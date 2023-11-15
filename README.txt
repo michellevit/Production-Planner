@@ -43,22 +43,32 @@ This app replaces the previous process, which consisted of a paper report being 
 3. How To Run In Development:
 -Activate the virtual environment: 
 --Open terminal, navigate/cd to project, use the command: # C:/Users/path/to/virtualenv/Scripts/Activate.ps1
--Go to the file django/Production_Planner/settings.py and change the 'DEVELOPMENT_MODE' var to True
---This will switch the database to SQLite (unlike MySQL which requires Docker container to run)
+-Go to the file django/Production_Planner/settings.py:
+--Change the 'DEVELOPMENT_MODE' var to True
+----This will switch the database to SQLite (unlike MySQL which requires Docker container to run)
+--Change the 'DEBUG' to True
+----Now print statements (in the backend) will output in the terminal where the server is running
 -Initialize the database after updating the settings:
 --In the terminal, navigate to the django folder and run: python manage.py migrate
 -Start the server:
---navigate to the django folder (in the terminal) and run: python manage.py runserver
---browser: http://localhost:8000/
+--Navigate to the django folder (in the terminal) and run: python manage.py runserver
+--Browser: http://localhost:8000/
 -Start the reactapp:
---navigate to the reactapp folder (in the terminal) and run: npm start
---browser: http://localhost:3000/
+--Navigate to the reactapp folder (in the terminal) and run: npm start
+--Browser: http://localhost:3000/
+-To access django admin interface:
+--Broswer: http://localhost:8000/admin/login/?next=/admin/
+--Login details in .env file
+--To create a superuser: python manage.py createsuperuser
 
 
 ----------
 4. How To Deploy In Production:
--Go to the file django/Production_Planner/settings.py and change the 'DEVELOPMENT_MODE' var to False
---This will switch the database to MySQL (unlike SQLite which does not require Docker, but is less robust for production)
+-Go to the file django/Production_Planner/settings.py
+--Change the 'DEVELOPMENT_MODE' var to False
+---This will switch the database to MySQL (unlike SQLite which does not require Docker, but is less robust for production)
+--Change the 'DEBUG' var to False
+---Now print statements (in the backend) will output in the Docker 'backend' image logs
 -Start the Docker container: 
 --Double-click the start-app.bat file OR:
 ---Open terminal, navigate/cd to project, execute docker-compose build, then docker-compose up
