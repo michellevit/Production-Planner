@@ -49,7 +49,6 @@ const OrderCard = ({
             notes_array,
             minimized_status,
             item_type_dict_hash,
-            order_number,
           } = response.data;
           const updatedBoxes = Array.isArray(packages_array)
             ? packages_array.map((box) => {

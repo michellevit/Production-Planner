@@ -16,6 +16,7 @@ urlpatterns = [
     path('dimensions/', DimensionView.as_view(), name="dimensions"),
     path('dimensions/<int:pk>/', DimensionView.as_view()),
     path('fetch-matching-packages/', FetchMatchingPackagesView.as_view(), name='fetch-matching-packages'),
+    path('products/', ProductView.as_view(), name='products'),
 ]
     
 
