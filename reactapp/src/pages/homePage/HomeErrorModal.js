@@ -18,9 +18,7 @@ const HomeErrorModal = ({
     <div className="home-error-modal-overlay">
       <div className="home-error-modal-container">
         <div className="home-error-modal">
-          {errorMessage.split("\n").map((line, index) => (
-            <p key={index}>{line}</p>
-          ))}
+          {errorMessage && <div className="error-message"><p>{errorMessage}</p></div>}
           <div className="modal-buttons">
             <button className="confirm-button" onClick={handleConfirmDelete}>
               OK

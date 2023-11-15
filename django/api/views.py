@@ -299,7 +299,6 @@ class FetchMatchingPackagesView(APIView):
             return JsonResponse({'success': False, 'message': 'item_type_dict not provided'})
         sorted_dict = sort_dict(item_type_dict)
         hash_value = hash_item_type_dict(sorted_dict)
-        print("HELLO", hash_value)
         try:
             matching_order = Order.objects.filter(shipped=True, item_type_dict_hash=hash_value).first()
             if matching_order:
@@ -308,3 +307,12 @@ class FetchMatchingPackagesView(APIView):
                 return JsonResponse({'success': False, 'message': 'No matching order found'})
         except Exception as e:  
             return JsonResponse({'success': False, 'message': str(e)})
+        
+
+# path('products/', views.get_products, name='get_products')
+class ProductView(APIView):
+    def get(self, request):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+    

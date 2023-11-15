@@ -3,6 +3,13 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import AddLineItem from "./AddLineItem";
 import AddNoteItem from "./AddNoteItem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faClose,
+  faAnglesUp,
+  faAnglesDown,
+} from "@fortawesome/free-solid-svg-icons";
 import "./AddOrder.css";
 
 const AddOrder = () => {
@@ -10,10 +17,12 @@ const AddOrder = () => {
   const [items, setItems] = useState({});
   const [notes, setNotes] = useState([]);
   const [showHomeErrorModal, setShowHomeErrorModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
   const [tbd, setTBD] = useState(false);
   const [matchingDims, setMatchingDims] = useState(false);
   const [suggestedDims, setSuggestedDims] = useState([]);
+  const [showProductList, setShowProductList] = useState(false);
+  const [productList, setProductList] = useState([]);
 
   const handleGetQuote = async (e) => {
     e.preventDefault();
@@ -22,7 +31,6 @@ const AddOrder = () => {
       setShowHomeErrorModal(true);
       return;
     }
-    console.log("Items sent to backend:", items);
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/fetch-matching-packages/",
@@ -38,7 +46,28 @@ const AddOrder = () => {
         setSuggestedDims(packagesArray);
         console.log(packagesArray);
       } else {
-        setErrorMessage("No quote available.");
+        setErrorMessage(
+          <div>
+            No quote available.
+            <div className="error-smaller-text">
+              <br />
+              <br />
+              <b>Note:</b>
+              <br />
+              Please use the full general part number
+              <br />
+              (not the customer-specific part number, or an abbreviation)
+              <br />
+              <br />
+              <b>Example:</b>
+              <br />
+              TA110 (Optical Tachometer) <FontAwesomeIcon icon={faCheck} />
+              <br />
+              TA110-E/F (Optical Tachometer/Counter (English/French)){" "}
+              <FontAwesomeIcon icon={faClose} />
+            </div>
+          </div>
+        );
         setShowHomeErrorModal(true);
         setSuggestedDims([]);
       }
@@ -118,6 +147,18 @@ const AddOrder = () => {
       );
       setShowHomeErrorModal(true);
     }
+  };
+  const handleShowProductList = () => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/products/");
+        setProductList(response.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProducts();
+    setShowProductList(!showProductList);
   };
   return (
     <div className="add-order-container">
@@ -216,25 +257,52 @@ const AddOrder = () => {
       </form>
       {matchingDims && (
         <div className="suggested-dims-div">
-          <h2>Suggested Dimensions</h2>
+          <h3>Suggested Dimensions</h3>
+          <div id="line-item-quoted">
+            <ul>
+              {Object.keys(items).map((itemName) => (
+                <li key={itemName}>
+                  <div className="line-item-info">
+                    {itemName} - {items[itemName]}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
           <table>
-            <thead>
-              <tr>
-                <th className="suggested-dims">Dimensions</th>
-                <th className="suggested-weight">Weight</th>
-              </tr>
-            </thead>
             <tbody>
               {suggestedDims.map((item, index) => (
-                <tr key={index}>
-                  <td className="suggested-dims">{item.dimensions}</td>
-                  <td className="suggested-weight">{item.weight} lb</td>
+                <tr>
+                Box {index + 1}: {item.dimensions} - {item.weight} lb
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
+      <div id="products-table">
+        <h3>
+          Products
+          <button onClick={handleShowProductList}>
+            {showProductList ? (
+              <FontAwesomeIcon icon={faAnglesUp} />
+            ) : (
+              <FontAwesomeIcon icon={faAnglesDown} />
+            )}
+          </button>
+        </h3>
+        <table>
+          {showProductList && (
+            <tbody>
+              {productList.map((product, index) => (
+                <tr key={index}>
+                  <td>{product.item_name}</td>{" "}
+                </tr>
+              ))}
+            </tbody>
+          )}
+        </table>
+      </div>
     </div>
   );
 };
