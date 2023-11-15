@@ -2,7 +2,11 @@ from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 import os
 
+# Development DB: SQLite | Production DB: MySQL
 DEVELOPMENT_MODE = True
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -12,15 +16,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(find_dotenv())
 SECRET_KEY = os.getenv("django_secret_key")
 
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",

@@ -51,11 +51,11 @@ button:hover {
 
 
 .all {
-    background: grey;
+    background: rgb(110, 110, 230);
 }
 
 .all:hover {
-    color: grey;
+    color: rgb(110, 110, 230);
 }
 
 .reports {
@@ -72,4 +72,12 @@ button:hover {
 
 .dimensions:hover {
     color: #a993d4;
+}
+
+.products {
+    background: grey;
+}
+
+.products:hover {
+    color: grey;
 }

@@ -1,34 +1,35 @@
 .add-order-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .add-order-container form {
-    background-color: white;
-    padding: 30px 40px;
-    width: 500px;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border-radius: 15px;
+  background-color: white;
+  padding: 30px 40px;
+  width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 15px;
+  margin-bottom: 40px;
 }
 
 .add-order-table {
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    border-collapse: separate;
-    border-spacing: 0 20px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-collapse: separate;
+  border-spacing: 0 20px;
 }
 
 .add-order-table input {
-    border-radius: 0;
-    border: 1px rgb(214, 214, 214) solid;
-    padding: 4px 7px;
-    border-radius: 5px;
+  border-radius: 0;
+  border: 1px rgb(214, 214, 214) solid;
+  padding: 4px 7px;
+  border-radius: 5px;
 }
 
 .add-order-table input:focus {
@@ -36,98 +37,157 @@
 }
 
 .add-order-table td #add-order-quote-boolean {
-    width: 15px; 
-    margin-left: 0;
+  width: 15px;
+  margin-left: 0;
 }
 
 .add-order-table td:first-child {
-    width: 30%;
-    vertical-align: top;
+  width: 30%;
+  vertical-align: top;
 }
 
 table.add-order-table td input {
-    width: 100%;
+  width: 100%;
 }
 
 .add-order-table #delay-date-col {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .add-order-table .react-datepicker-wrapper {
-    width: 75%;
-    margin-right: 15px;
+  width: 75%;
+  margin-right: 15px;
 }
 
 .add-order-table .react-datepicker__close-icon {
-    right: -4px;
-    top: -17px;
+  right: -4px;
+  top: -17px;
 }
 
 .add-order-table #tbd-checkbox {
-    width: auto;
+  width: auto;
 }
 
 .add-order-buttons-div {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .add-order-container #submit-new-order-button {
-    padding: 8px 12px;
-    background-color: #19c37d;
-    border: none;
-    color: white;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 8px 12px;
+  background-color: #19c37d;
+  border: none;
+  color: white;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .add-order-container #quote-new-order-button {
-    padding: 8px 12px;
-    background-color: #8A2BE2;
-    border: none;
-    color: white;
-    margin-bottom: 20px;
-    margin-left: 5px;
-    margin-right: 5px;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 8px 12px;
+  background-color: #8a2be2;
+  border: none;
+  color: white;
+  margin-bottom: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .add-order-container button:hover {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
-
 .suggested-dims-div {
-    background-color: white;
-    width: 500px;
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    font-size: 0.9rem;
-    text-align: left;
-    border-radius: 15px;
-    padding: 30px 40px;
+  background-color: #ddb8ff71;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  text-align: left;
+  border-radius: 15px;
+  padding: 30px 40px;
+  margin-bottom: 40px;
 }
 
 .suggested-dims-div table {
-    background-color: white;
-    padding: 20px 0;
-    width: 70%;
-    margin: auto;
+  background-color: rgba(255, 255, 255, 0.5);
+  margin-top: 10px;
+  padding: 10px 10px;
+  width: fit-content;
+  margin: 0 auto;
+  border-radius: 5px;
 }
 
 .suggested-dims-div table th {
-    font-weight: 700;
-    border-bottom: 1px solid rgb(187, 187, 187);
+  font-weight: 700;
+  border-bottom: 1px solid rgb(187, 187, 187);
 }
 
-.suggested-dims-div table .suggested-dims td, .suggested-dims-div table .suggested-dims th {
-    width: 50%;
+.suggested-dims-div table .suggested-dims td,
+.suggested-dims-div table .suggested-dims th {
+  width: 50%;
 }
 
-.suggested-dims-div table .suggested-weight td, .suggested-dims-div table .suggested-weight th {
-    width: 50%;
+.suggested-dims-div table .suggested-weight td,
+.suggested-dims-div table .suggested-weight th {
+  width: 50%;
+}
+
+.suggested-dims-div #line-item-quoted {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  margin: 1rem auto 1rem auto;
+}
+
+.suggested-dims-div #line-item-quoted li {
+  font-size: 0.8rem;
+  list-style-type: none;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 5px;
+  padding: 5px 8px 5px 8px;
+  width: fit-content;
+}
+
+.error-smaller-text {
+  font-size: 0.8em;
+}
+
+.add-order-container #products-table {
+  background-color: white;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  text-align: left;
+  border-radius: 15px;
+  padding: 30px 40px;
+}
+
+.add-order-container h3 {
+  font-size: 1rem;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  color: black;
+}
+
+.add-order-container #products-table button {
+  padding: 8px 12px;
+  background-color: white;
+  border: none;
+  color: #555;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-order-container #products-table td {
+  font-size: 0.7rem;
+  color: #555;
+  padding: 0.2rem 0;
 }
