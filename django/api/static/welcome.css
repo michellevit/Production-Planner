@@ -51,33 +51,33 @@ button:hover {
 
 
 .all {
-    background: rgb(110, 110, 230);
+    background: CadetBlue;
 }
 
 .all:hover {
-    color: rgb(110, 110, 230);
+    color: CadetBlue;
 }
 
 .reports {
-    background: pink;
-}
-
-.reports:hover {
-    color: pink;
-}
-
-.dimensions {
-    background: #a993d4;
-}
-
-.dimensions:hover {
-    color: #a993d4;
-}
-
-.products {
     background: grey;
 }
 
-.products:hover {
+.reports:hover {
     color: grey;
+}
+
+.dimensions {
+    background: Pink;
+}
+
+.dimensions:hover {
+    color: Pink;
+}
+
+.products {
+    background: Thistle;
+}
+
+.products:hover {
+    color: Thistle;
 }

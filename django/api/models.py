@@ -52,13 +52,15 @@ class Dimension(models.Model):
         return self.package_size[0:50]
     class Meta:
         verbose_name_plural = "Dimensions"
-
+        unique_together = [['length', 'width', 'height', 'package_size']]
+        ordering = ['length', 'width', 'height']
 
 class Product(models.Model):
     item_name = models.CharField(max_length=100, unique=True)
     def __str__(self):
-        return self.item_name  # Updated to return item_name
+        return self.item_name 
     class Meta:
         verbose_name_plural = "Products"
         ordering = ['item_name']
+        
 
