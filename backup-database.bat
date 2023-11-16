@@ -22,4 +22,9 @@ docker exec production-planner-db-1 mysqldump -u %DB_USER% -p%DB_PASSWORD% %DB_N
 
 echo Database backup completed: %BACKUP_FILE%
 
+:: Delete old backups, keeping only the 10 most recent
+cd %BACKUP_DIR%
+for /f "skip=10 delims=" %%F in ('dir /b /o-d *.sql') do del "%%F"
+
+
 endlocal
