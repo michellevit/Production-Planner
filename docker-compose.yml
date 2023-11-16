@@ -33,8 +33,7 @@ services:
     volumes:
       - ./nginx/nginx-setup.conf:/etc/nginx/conf.d/default.conf
       - ./django/static:/var/www/django/static
-    # Uncomment react_build during production.
-      # - react_build:/var/www/reactapp 
+      - react_build:/var/www/reactapp 
 
   db:
     image: mysql:latest
@@ -47,7 +46,7 @@ services:
       - "3306:3306"  
     volumes:
       - mysql_data:/var/lib/mysql
-
+      - ./db-backups:/db-backups
 volumes:
-  react_build:
   mysql_data:
+  react_build: 
