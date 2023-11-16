@@ -38,13 +38,10 @@ const AddOrder = () => {
           item_type_dict: items,
         }
       );
-      console.log("RESPONSE:", response.data);
       if (response.data.success) {
-        console.log("SUCCESS");
         setMatchingDims(true);
         const packagesArray = response.data.packages_array;
         setSuggestedDims(packagesArray);
-        console.log(packagesArray);
       } else {
         setErrorMessage(
           <div>
@@ -141,7 +138,6 @@ const AddOrder = () => {
       setItems({});
       setNotes([]);
     } catch (error) {
-      console.log(orderData);
       setErrorMessage(
         "There was an error submitting your order.\nPlease ensure that all required fields have been completed."
       );
