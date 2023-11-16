@@ -94,6 +94,7 @@ This app replaces the previous process, which consisted of a paper report being 
 --In the powershell where Docker was started: execute ctrl-c then run 'docker-compose down'
 -After updating static files, navigate to the root directory and run: docker-compose exec backend python manage.py collectstatic --no-input
 
+
 ----------
 5. Initial Setup (For Development + Production)
 -Set the environment variables:
@@ -117,13 +118,22 @@ This app replaces the previous process, which consisted of a paper report being 
 ----------
 6. How To Use The Program:
 -Open the app by double-clicking the 'start-app.bat' file 
--Navigate to the Home page -> 'Add Report' tab, and browse for the new order report
--Production Team: Add order information for each order on the 'Open Orders' page
--Administrator: Review order information on the 'All Orders' page
+--*Note: it may take several minutes for the frontend to boot up
+--Open the frontend using the browser url:  http://localhost:3000/
+--Open the backend using the browser url: http://localhost:8000/
+-Production Team:
+--Navigate to the Open Orders page to add shipping details for the unshipped orders
+--Navigate to the Home -> Add Report tab to see when the latest report was added
+--Navigate to the Home -> Add Dimensions tab to add more dimensions to the open-orders order options
+-Administrator: 
+--Navigate to the Home -> Add Report tab to upload the latest order report (only the last 5 are recorded in 'Previous Uploads' section)
+--Navigate to the Home -> Add Order tab to manually add an order/quote, or get a dimensions/weight quote for an order
+--Navigate to the All Orders page to review shipping details
 
 
 ----------
 7. How To Backup The Database (+ Restore)
+-Note: The backup-database.bat script will delete old backups, keeping only the 10 most recent backups
 -To backup the database:
 --In the project's root directory, double click the 'backup-database.bat' file
 --The backup will be saved in the 'db-backups' folder

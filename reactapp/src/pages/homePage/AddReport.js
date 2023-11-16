@@ -91,7 +91,7 @@ const AddReport = () => {
         </form>
       </div>
       <div className="previous-uploads-table">
-        <h2>Previously uploaded files</h2>
+        <h2>Previous Uploads</h2>
         {uploads.length === 0 ? (
           <p className="no-file-message">No files have been uploaded.</p>
         ) : (
