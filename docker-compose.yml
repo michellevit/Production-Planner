@@ -46,7 +46,7 @@ services:
       - "3306:3306"  
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./db-backups:/db-backups #Do I need this?
+      - ./db-backups:/db-backups
 volumes:
   mysql_data:
   react_build: 

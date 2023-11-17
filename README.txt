@@ -143,16 +143,15 @@ Note: This app replaces the previous process, which consisted of a paper report 
 -----To clean/reset the Docker environment:
 ------In the PowerShell where Docker was started: execute ctrl-c then run 'docker-compose down'
 ------After updating static files, navigate to the root directory and run: docker-compose exec backend python manage.py collectstatic --no-input
-
 -In DEVELOPMENT:
 --Start the server:
 ---Navigate to the django folder (in the terminal) 
 ---Run: python manage.py runserver
----Browser: http://localhost:8000/
+---Browser: http://localhost:8000/ OR http://aw1.gtc.local:8000/
 --Start the reactapp:
 ---Navigate to the reactapp folder (in the terminal)
 ---Run: npm start
----Browser: http://localhost:3000/
+---Browser: http://localhost:3000/ OR http://aw1.gtc.local:3000/
 --To access django admin interface:
 ---Broswer: http://localhost:8000/admin/login/?next=/admin/
 
@@ -170,7 +169,7 @@ Note: This app replaces the previous process, which consisted of a paper report 
 
 
 ----------
-8. How To Backup The Database (+ Restore)
+8. How To Backup The Database + Restore (for Production mode)
 -Note: The backup-database.bat script will delete old backups, keeping only the 10 most recent backups
 -To backup the database:
 --In the project's root directory, double click the 'backup-database.bat' file
@@ -219,7 +218,17 @@ Note: This app replaces the previous process, which consisted of a paper report 
 -Select the main branch: git checkout main
 -Run: git pull origin main
 -Run: docker-compose build
--Start the Docker app again to see changes - run: docker-compose up
+-Start the Docker app again to see changes
+--To update ALL services - run: 
+        docker-compose down
+        docker-compose up -d
+--To update affected services - run:
+        docker-compose up --build [backend/frontend/db]
+        (e.g. docker-compose up --build backend)
+-Cleanup (Optional):
+--If you're certain that the changes are working as expected, you can remove any old or unused containers and images to save disk space:
+--Run: docker-compose down --rmi local  
+--Note: This removes containers and images not in use
 
 
 -----------
