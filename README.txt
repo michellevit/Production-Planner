@@ -5,8 +5,8 @@ Project Title: Production Planner
 Table of Contents: 
 1. Project Description
 2. Technologies Used
-3. How To Run In Development
-4. How To Deploy In Production
+3. Preparing To Run In Development
+4. Preparing To Deploy In Production
 5. Initial Setup (For Development + Production)
 6. How To Use The Program
 7. How To Backup The Database (+ Restore)
@@ -42,7 +42,7 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 ----------
-3. How To Run In Development:
+3. Preparing To Run In Development:
 -Activate the virtual environment: 
 --Open terminal, navigate/cd to project
 --use the command: # C:/Users/path/to/virtualenv/Scripts/Activate.ps1
@@ -67,7 +67,7 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 ----------
-4. How To Deploy In Production:
+4. Preparing To Deploy In Production:
 -Go to the file django/Production_Planner/settings.py
 --Change the 'DEVELOPMENT_MODE' var to False
 ---This will switch the database to MySQL (unlike SQLite which does not require Docker, but is less robust for production)
@@ -96,30 +96,31 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 ----------
-5. Initial Setup (For Development + Production)
+5. First-Time Setup (For Development + Production)
+-Clone the project repository from GitHub:
+--Open a Terminal and navigate to the folder you want to save the Production Planner app to
+--In the terminal, run: git clone https://github.com/michellevit/Production-Planner.git
 -Set the environment variables:
---Open the .env file
---Add the following data with the correct values:
-    django_secret_key = '[key here]'
-    DB_ROOT_PASSWORD = '[password here]'
-    MYSQL_DB_NAME = '[db name here]'
-    DB_USER = '[db user here]'
-    DB_PASSWORD = '[db apssword here]'
---Populate the 'Dimension' DB Table:
----In the terminal, navigate to the project root directory
----Run: docker-compose exec backend python manage.py import_dimensions_to_db
---Populate the 'Product' DB Table:
----In the terminal, navigate to the project root directory
---Create a superuser to access Django admin site (use credentials in .env file):
----python manage.py createsuperuser
----To access Django's admin interface - go to broswer url: http://localhost:8000/admin/login/?next=/admin/
+--Open the env.txt file
+--Replace the 'xyz' placeholders with real values
+---Note: the env.txt file includes instructions to get new secret keys, etc)
+--Change the file name from 'env.txt' to '.env'
+-Populate the 'Dimension' DB Table:
+--In the terminal, navigate to the project root directory
+--Run: docker-compose exec backend python manage.py import_dimensions_to_db
+-Populate the 'Product' DB Table:
+--In the terminal, navigate to the project root directory
+-Create a superuser to access Django admin site:
+--python manage.py createsuperuser
+--Use credentials from the .env file
+--To access Django's admin interface - go to broswer url: http://localhost:8000/admin/login/?next=/admin/
 
 
 ----------
 6. How To Use The Program:
 -Open the app by double-clicking the 'start-app.bat' file 
 --*Note: it may take several minutes for the frontend to boot up
---Open the frontend using the browser url:  http://localhost:3000/
+--The frontend browser url should automatically open:  http://localhost:3000/
 --Open the backend using the browser url: http://localhost:8000/
 -Production Team:
 --Navigate to the Open Orders page to add shipping details for the unshipped orders
@@ -145,20 +146,25 @@ This app replaces the previous process, which consisted of a paper report being 
 ---Note: replace the [username] and [password] with data from the .env file, and [YYYYMMDD] with the backup date you want to restore to
 --Enter: exit;
 
+
 ----------
 8. How To Clear The Database
 -Option 1: 
---*To delete one entry at a time
+--*To delete one entry at a time (works in both Production/MySQL or Development/SQLite)
 --Go to the Django Admin interface (http://localhost:8000/admin) 
 --Manually delete entries
 -Option 2:
---*For the Order table data only
+--*To delete the Order table data only (works in both Production/MySQL or Development/SQLite)
 --Open the django/api/script/check_order_report.py file
 --Uncomment lines 161-167
 --In the terminal, navigate to the django folder and run 'python manage.py check_order_report.py'
 --Return to the check_order_report.py script and comment out lines 161-167
--Option 3: 
---*If using Docker
+-Option 3:
+--*To delete the database through the terminal (works only in Development/SQLite)
+--Open the terminal and navigate to the 'django' folder of the project
+--Run 'python manage.py flush' and confirm yes
+-Option 4: 
+--*To delete when using Docker/MySQL (works only in Production/MySQL)
 --Navigate to the project's root folder
 --Run: docker exec -it production-planner-db-1 bash
 --Connect to mysql: mysql -u username -p
