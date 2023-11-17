@@ -68,9 +68,9 @@ def check_if_correct_workbook(file_content):
     try:
         workbook = openpyxl.load_workbook(io.BytesIO(file_content), data_only=True)
         sheet = workbook["Sheet1"]
-        cell_value = sheet["B2"].value
+        cell_value = sheet["E1"].value
 
-        if cell_value != "Assembly":
+        if cell_value != "Ship Date":
             no_files = True
             return no_files
         else:
