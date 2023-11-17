@@ -8,7 +8,7 @@ Table of Contents:
 3. First-Time Setup
 4. Preparing To Run In Development
 5. Preparing To Deploy In Production
-6. How To Use The Program
+6. How To Start The Program
 7. How To Use The Program
 8. How To Backup The Database (+ Restore)
 9. How To Clear The Database
@@ -57,11 +57,6 @@ Note: This app replaces the previous process, which consisted of a paper report 
 ---Note: the env.txt file includes instructions to get new secret keys, etc
 --Change the file name from 'env.txt' to '.env'
 -Follow instructions for 'Preparing To Run In Development' (step 4) OR 'Preparing To Deploy In Production' (step 5)
--Populate the 'Dimension' DB Table:
---In the terminal, navigate to the project root directory
---Run: docker-compose exec backend python manage.py import_dimensions_to_db
--Populate the 'Product' DB Table:
---In the terminal, navigate to the project root directory
 -Create a superuser to access Django admin site:
 --python manage.py createsuperuser
 --Use credentials from the .env file
@@ -81,6 +76,13 @@ Note: This app replaces the previous process, which consisted of a paper report 
 -Initialize the Database: 
 --In the terminal, navigate to the django folder and run: python manage.py makemigrations
 --Then run: python manage.py migrate
+-Populate the 'Dimension' DB Table:
+--In the terminal, navigate to the folder: /django/api/commands/
+--Run: python manage.py import_dimensions_to_db
+-Populate the 'Product' DB Table:
+--In the terminal, navigate to the folder: /django/api/commands/
+--Run: python manage.py import_dimensions_to_db
+-Complete the 'Preparing To Run In Development' (step 4) instructions
 
 
 ----------
@@ -105,28 +107,43 @@ Note: This app replaces the previous process, which consisted of a paper report 
 --Restart computer
 -Start the Docker container: 
 -Open the terminal and navigate/cd into the project
+--Start Docker (or make sure it is already running)
 --Run 'docker-compose build'
 --Then run 'docker-compose up'
---Note: it usually takes ~6 minutes for the react server to start
+--Note: it may take ~5-8 minutes for the react server to start
 -Initialize the Database: 
 --Run migrations for the database:
 ---In the terminal, navigate to the project root directory 
 ---Run: docker-compose exec backend python manage.py migrate
----Run: docker-compose exec backend python manage.py import_products_to_db
--To stop the Docker container: 
---In the PowerShell where Docker was started: execute ctrl-c
--To clean/reset the Docker environment:
---In the PowerShell where Docker was started: execute ctrl-c then run 'docker-compose down'
--After updating static files, navigate to the root directory and run: docker-compose exec backend python manage.py collectstatic --no-input
+-Populate the 'Dimension' DB Table:
+--In the terminal, navigate to the project root directory
+--Run: docker-compose exec backend python manage.py import_dimensions_to_db
+-Populate the 'Product' DB Table:
+--In the terminal, navigate to the project root directory
+--Run: docker-compose exec backend python manage.py import_dimensions_to_db
+-Complete the 'Preparing To Run In Development' (step 4) instructions
 
 
 ----------
 6. How To Start The Program
 -In PRODUCTION:
---Open the app by double-clicking the 'start-app.bat' file 
+--Option 1 (via Docker): 
+---Open the app by double-clicking the 'start-app.bat' file 
 ---*Note: it may take several minutes for the frontend to boot up
 ---The frontend browser url should automatically open:  http://localhost:3000/
 ---Open the backend using the browser url: http://localhost:8000/
+--Option 2 (via Terminal):
+---In the terminal, navigate to the project's root directory
+---Run: docker-compose up
+--To stop the Docker container: 
+---Option 1 (via Docker): 
+----In the Docker application, click the stop button
+---Option 2  (via Terminal):
+----In the PowerShell where Docker was started: execute ctrl-c
+-----To clean/reset the Docker environment:
+------In the PowerShell where Docker was started: execute ctrl-c then run 'docker-compose down'
+------After updating static files, navigate to the root directory and run: docker-compose exec backend python manage.py collectstatic --no-input
+
 -In DEVELOPMENT:
 --Start the server:
 ---Navigate to the django folder (in the terminal) 
