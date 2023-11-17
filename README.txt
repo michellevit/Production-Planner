@@ -5,17 +5,18 @@ Project Title: Production Planner
 Table of Contents: 
 1. Project Description
 2. Technologies Used
-3. Preparing To Run In Development
-4. Preparing To Deploy In Production
-5. Initial Setup (For Development + Production)
+3. Initial Setup (For Development + Production)
+4. Preparing To Run In Development
+5. Preparing To Deploy In Production
 6. How To Use The Program
 7. How To Backup The Database (+ Restore)
 8. How To Clear The Database
-9. Credits
+9. How To Fetch Updates
+10. Credits
 
 
 ----------
-1. Project Description: 
+1. Project Description
 
 Summary: 
 To help coordinate the sales, production and shipping of orders.
@@ -31,7 +32,7 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 ----------
-2. Technologies Used:
+2. Technologies Used
 -Django Rest Framework
 -Python
 -JavaScript
@@ -40,9 +41,33 @@ This app replaces the previous process, which consisted of a paper report being 
 -CSS
 -JSON
 
+----------
+3. First-Time Setup (For Development + Production)
+-Install Git: 
+--Download the Git installer for Windows: https://git-scm.com/download/win
+-Open a Powershell Terminal (if using VSCode make sure to close + open VSCode after installing Git to apply path changes)
+-Clone the project repository from GitHub:
+--Open a Terminal and navigate to the folder you want to save the Production Planner app to
+--In the terminal, run: git clone https://github.com/michellevit/Production-Planner.git
+-Follow instructions for 'Preparing to Deploy' in Production or Development (depending on your use case)
+-Set the environment variables:
+--Open the env.txt file
+--Replace the 'xyz' placeholders with real values
+---Note: the env.txt file includes instructions to get new secret keys, etc)
+--Change the file name from 'env.txt' to '.env'
+-Populate the 'Dimension' DB Table:
+--In the terminal, navigate to the project root directory
+--Run: docker-compose exec backend python manage.py import_dimensions_to_db
+-Populate the 'Product' DB Table:
+--In the terminal, navigate to the project root directory
+-Create a superuser to access Django admin site:
+--python manage.py createsuperuser
+--Use credentials from the .env file
+--To access Django's admin interface - go to broswer url: http://localhost:8000/admin/login/?next=/admin/
+
 
 ----------
-3. Preparing To Run In Development:
+4. Preparing To Run In Development
 -Activate the virtual environment: 
 --Open terminal, navigate/cd to project
 --use the command: # C:/Users/path/to/virtualenv/Scripts/Activate.ps1
@@ -67,7 +92,7 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 ----------
-4. Preparing To Deploy In Production:
+5. Preparing To Deploy In Production
 -Go to the file django/Production_Planner/settings.py
 --Change the 'DEVELOPMENT_MODE' var to False
 ---This will switch the database to MySQL (unlike SQLite which does not require Docker, but is less robust for production)
@@ -96,28 +121,7 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 ----------
-5. First-Time Setup (For Development + Production)
--Clone the project repository from GitHub:
---Open a Terminal and navigate to the folder you want to save the Production Planner app to
---In the terminal, run: git clone https://github.com/michellevit/Production-Planner.git
--Set the environment variables:
---Open the env.txt file
---Replace the 'xyz' placeholders with real values
----Note: the env.txt file includes instructions to get new secret keys, etc)
---Change the file name from 'env.txt' to '.env'
--Populate the 'Dimension' DB Table:
---In the terminal, navigate to the project root directory
---Run: docker-compose exec backend python manage.py import_dimensions_to_db
--Populate the 'Product' DB Table:
---In the terminal, navigate to the project root directory
--Create a superuser to access Django admin site:
---python manage.py createsuperuser
---Use credentials from the .env file
---To access Django's admin interface - go to broswer url: http://localhost:8000/admin/login/?next=/admin/
-
-
-----------
-6. How To Use The Program:
+6. How To Use The Program
 -Open the app by double-clicking the 'start-app.bat' file 
 --*Note: it may take several minutes for the frontend to boot up
 --The frontend browser url should automatically open:  http://localhost:3000/
@@ -177,5 +181,14 @@ This app replaces the previous process, which consisted of a paper report being 
 
 
 -----------
-9. Credits: 
+10. How To Fetch Updates
+-Open a Terminal and navigate to the Production-Planner directory
+-Select the main branch: git checkout main
+-Run: git pull origin main
+-Run: docker-compose build
+-Start the Docker app again to see changes - run: docker-compose up
+
+
+-----------
+10. Credits
 Michelle Flandin
