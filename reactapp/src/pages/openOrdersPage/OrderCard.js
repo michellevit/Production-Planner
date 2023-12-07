@@ -23,6 +23,7 @@ const OrderCard = ({
 }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [shipDate, setShipDate] = useState("");
+  const [confirmedStatus, setConfirmedStatus] = useState(false);
   const [delayDate, setDelayDate] = useState();
   const [tbdStatus, setTBDStatus] = useState(false);
   const [boxes, setBoxes] = useState([]);
@@ -43,6 +44,7 @@ const OrderCard = ({
           const {
             ready,
             ship_date,
+            confirmed,
             delay_date,
             delay_tbd,
             packages_array,
@@ -60,6 +62,7 @@ const OrderCard = ({
                 return box;
               })
             : [];
+          setConfirmedStatus(confirmed);
           const formattedDelayDate = delay_date ? parseISO(delay_date) : null;
           setDelayDate(formattedDelayDate);
           setTBDStatus(delay_tbd);
@@ -104,6 +107,7 @@ const OrderCard = ({
   }, [
     order.id,
     order.minimized_status,
+    order.confirmed,
     order.delay_tbd,
     order.delay_date,
     order.ship_date,
@@ -138,10 +142,12 @@ const OrderCard = ({
 
   const readyHandler = async () => {
     setReadyStatus(true);
+    setConfirmedStatus(true)
     boxFormHandler();
     setDelayDate(null);
     const updatedOrder = order;
     updatedOrder.ready = true;
+    updatedOrder.confirmed = true;
     updatedOrder.delay_date = null;
     try {
       await axios.put(
@@ -200,10 +206,12 @@ const OrderCard = ({
       const formattedDate = date ? date.toISOString().split("T")[0] : null;
       if (formattedDate !== null) {
         setTBDStatus(false);
+        setConfirmedStatus(false);
       }
       const updatedOrder = order;
       updatedOrder.delay_date = formattedDate;
       updatedOrder.delay_tbd = false;
+      updatedOrder.confirmed = false;
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
         updatedOrder
@@ -215,6 +223,7 @@ const OrderCard = ({
 
   const checkTBD = async (tbdBoolean) => {
     setTBDStatus(tbdBoolean);
+    setConfirmedStatus(false);
     const updatedOrder = order;
     updatedOrder.delay_tbd = tbdBoolean;
     try {
@@ -229,6 +238,7 @@ const OrderCard = ({
 
   const handleTBD = async () => {
     let newStatus = !tbdStatus;
+    setConfirmedStatus(false)
     if (newStatus === false && order.ship_date === null) {
       newStatus = true;
     } else if (newStatus === false && order.ship_date !== null) {
@@ -239,6 +249,22 @@ const OrderCard = ({
     const updatedOrder = order;
     updatedOrder.delay_date = null;
     updatedOrder.delay_tbd = newStatus;
+    updatedOrder.confirmed = false;
+    try {
+      await axios.put(
+        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        updatedOrder
+      );
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
+
+  const handleConfirmed = async () => {
+    let newStatus = !confirmedStatus;
+    const updatedOrder = order;
+    updatedOrder.confirmed = !confirmedStatus;
+    setConfirmedStatus(newStatus);
     try {
       await axios.put(
         `http://127.0.0.1:8000/open-orders/${order.id}/`,
@@ -281,17 +307,21 @@ const OrderCard = ({
       console.error("Error updating order:", error);
     }
   };
+
+
+
+
   return (
     <div
-      className={`card-container ${
-        order.quote && readyStatus
-          ? "quoted-order-card"
-          : order.quote
-          ? "quote-order-card"
-          : readyStatus
-          ? "ready-order-card"
-          : ""
-      } ${isRemoving ? "card-container-fade-out" : ""} ${
+    className={`card-container ${
+      order.quote
+        ? "quoted-order-card"
+        : !order.quote && order.confirmed && !order.ready
+        ? "confirmed-order-card"
+        : !order.quote && confirmedStatus && readyStatus
+        ? "ready-order-card"
+        : ""
+    } ${isRemoving ? "card-container-fade-out" : ""} ${
         (delayDate !== null || tbdStatus === true) &&
         !readyStatus &&
         !order.quote
@@ -341,7 +371,15 @@ const OrderCard = ({
               <tr className="order-data" id="ship-date">
                 <td className="row2col1">Ship Date:</td>
                 <td className="row2col2">{tbdStatus ? "TBD" : shipDate}</td>
-                <td className="row2col3"></td>
+                <td className="row2col3">{!order.ready  && !order.quote && !tbdStatus && order.delay_date == null && (
+                      <input
+                        type="checkbox"
+                        id="order-card-confirmed-checkbox"
+                        checked={confirmedStatus}
+                        onChange={handleConfirmed}
+                      ></input>
+                    )}
+                    {!order.ready && !order.quote && !tbdStatus && order.delay_date == null && "Confirmed"}</td>
               </tr>
               {!readyStatus && !order.quote && (
                 <tr className="order-data" id="delay-date">
@@ -360,7 +398,6 @@ const OrderCard = ({
                     />
                   </td>
                   <td className="row2col3">
-                    {!order.quote && "TBD"}
                     {!order.quote && (
                       <input
                         type="checkbox"
@@ -369,6 +406,7 @@ const OrderCard = ({
                         onChange={handleTBD}
                       ></input>
                     )}
+                    {!order.quote && "TBD"}
                   </td>
                 </tr>
               )}

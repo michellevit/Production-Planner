@@ -3,7 +3,7 @@ from dotenv import load_dotenv, find_dotenv
 import os
 
 # Development DB: SQLite | Production DB: MySQL
-DEVELOPMENT_MODE = False
+DEVELOPMENT_MODE = True
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
