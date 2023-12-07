@@ -15,7 +15,6 @@ from rest_framework.response import Response
 from .scripts.check_order_report import process_uploaded_report
 from .serializers import *
 from .utils import sort_dict
-import json
 import logging
 
 
@@ -52,6 +51,8 @@ class OrderDetailView(APIView):
             order = Order.objects.get(pk=pk)
             if 'ship_date' in request.data:
                 order.ship_date = request.data['ship_date']    
+            if 'confirmed' in request.data:
+                order.confirmed = request.data['confirmed']   
             if 'delay_date' in request.data:
                 order.delay_date = request.data['delay_date']
             if 'delay_tbd' in request.data:

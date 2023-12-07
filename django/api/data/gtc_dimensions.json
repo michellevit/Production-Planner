@@ -1,5 +1,11 @@
 [
     {
+        "length": 8.0,
+        "width": 6.0,
+        "height": 4.0,
+        "package_size": "8\" x 6\" x 4\""
+    },
+    {
         "length": 9.0,
         "width": 7.0,
         "height": 1.0,
@@ -18,9 +24,81 @@
         "package_size": "10\" x 8\" x 4\""
     },
     {
+        "length": 12.0,
+        "width": 8.0,
+        "height": 3.0,
+        "package_size": "12\" x 8\" x 3\""
+    },
+    {
+        "length": 12.0,
+        "width": 9.0,
+        "height": 6.0,
+        "package_size": "12\" x 9\" x 6\""
+    },
+    {
+        "length": 12.25,
+        "width": 9.25,
+        "height": 12.0,
+        "package_size": "12.25\" x 9.25\" x 12\""
+    },
+    {
         "length": 13.0,
         "width": 10.0,
         "height": 3.0,
         "package_size": "13\" x 10\" x 3\""
+    },    
+    {
+        "length": 13.0,
+        "width": 10.0,
+        "height": 8.0,
+        "package_size": "13\" x 10\" x 8\""
+    },
+    {
+        "length": 16.0,
+        "width": 10.0,
+        "height": 8.0,
+        "package_size": "16\" x 10\" x 8\""
+    },
+    {
+        "length": 16.0,
+        "width": 10.0,
+        "height": 12.0,
+        "package_size": "16\" x 10\" x 12\""
+    },
+    {
+        "length": 16.0,
+        "width": 12.0,
+        "height": 12.0,
+        "package_size": "16\" x 12\" x 12\""
+    },
+    {
+        "length": 18.0,
+        "width": 14.0,
+        "height": 8.0,
+        "package_size": "18\" x 14\" x 8\""
+    },
+    {
+        "length": 20.0,
+        "width": 12.0,
+        "height": 12.0,
+        "package_size": "20\" x 12\" x 12\""
+    },
+    {
+        "length": 20.0,
+        "width": 16.0,
+        "height": 12.0,
+        "package_size": "20\" x 16\" x 12\""
+    },
+    {
+        "length": 21.5,
+        "width": 13.25,
+        "height": 9.125,
+        "package_size": "21.5\" x 13.25\" x 9.125\""
+    },
+    {
+        "length": 26.0,
+        "width": 20.0,
+        "height": 12.0,
+        "package_size": "26\" x 20\" x 12\""
     }
 ]
