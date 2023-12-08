@@ -18,54 +18,81 @@ const AllOrders = () => {
   const [refreshOrders, setRefreshOrders] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [numberOfFilters, setNumberOfFilters] = useState("");
   const ordersPerPage = 20;
   // Sort Filters: Select + Search
-  const [currentView, setCurrentView] = useState("all-orders-filtered");
+  const [currentView, setCurrentView] = useState(
+    JSON.parse(localStorage.getItem("currentView")) || "all"
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [searchQueryFormatted, setSearchQueryFormatted] = useState("");
   const [urlCharacter, setURLCharacter] = useState("/?");
   // Sort Filters: Checkboxes
-  const [confirmedChecked, setConfirmedChecked] = useState(true);
-  const [notConfirmedChecked, setNotConfirmedChecked] = useState(true);
-  const [readyChecked, setReadyChecked] = useState(true);
-  const [notReadyChecked, setNotReadyChecked] = useState(true);
-  const [shippedChecked, setShippedChecked] = useState(true);
-  const [notShippedChecked, setNotShippedChecked] = useState(true);
-  const [delayedChecked, setDelayedChecked] = useState(true);
-  const [quoteChecked, setQuoteChecked] = useState(true);
-  const [oldestChecked, setOldestChecked] = useState(false);
+  const [confirmedChecked, setConfirmedChecked] = useState(
+    JSON.parse(localStorage.getItem("confirmedChecked")) || false
+  );
+  const [notConfirmedChecked, setNotConfirmedChecked] = useState(
+    JSON.parse(localStorage.getItem("notConfirmedChecked")) || false
+  );
+  const [readyChecked, setReadyChecked] = useState(
+    JSON.parse(localStorage.getItem("readyChecked")) || false
+  );
+  const [notReadyChecked, setNotReadyChecked] = useState(
+    JSON.parse(localStorage.getItem("notReadyChecked")) || false
+  );
+  const [shippedChecked, setShippedChecked] = useState(
+    JSON.parse(localStorage.getItem("shippedChecked")) || false
+  );
+  const [notShippedChecked, setNotShippedChecked] = useState(
+    JSON.parse(localStorage.getItem("notShippedChecked")) || false
+  );
+  const [delayedChecked, setDelayedChecked] = useState(
+    JSON.parse(localStorage.getItem("delayedChecked")) || false
+  );
+  const [quoteChecked, setQuoteChecked] = useState(
+    JSON.parse(localStorage.getItem("quoteChecked")) || false
+  );
+  const [oldestChecked, setOldestChecked] = useState(
+    JSON.parse(localStorage.getItem("oldestChecked")) || false
+  );
 
   useEffect(() => {
     const formattedDate = new Date();
     setCurrentDate(formattedDate);
-    const fetchAllOrders = () => {
-      const filterParams = [
-        `ready_checked=${readyChecked}`,
-        `not_ready_checked=${notReadyChecked}`,
-        `shipped_checked=${shippedChecked}`,
-        `not_shipped_checked=${notShippedChecked}`,
-        `delayed_checked=${delayedChecked}`,
-        `quote_checked=${quoteChecked}`,
-        `oldest_checked=${oldestChecked}`,
-      ]
-        .filter((param) => param.endsWith("_checked=true"))
-        .join("&");
-      axios
-        .get(
-          `http://127.0.0.1:8000/${currentView}${searchQueryFormatted}${urlCharacter}page=${currentPage}&${filterParams}`
-        )
-        .then((response) => {
-          let filteredAllOrders = response.data.results;
-          setTotalPages(Math.ceil(response.data.count / ordersPerPage));
-          setAllOrders(filteredAllOrders);
-        })
-        .catch((error) => {
-          console.error("Error getting data", error);
-        });
+    countNumberOfFilters();
+    const fetchAllOrders = async () => {
+      try {
+        const filterParams = [
+          `confirmed_checked=${confirmedChecked}`,
+          `not_confirmed_checked=${notConfirmedChecked}`,
+          `ready_checked=${readyChecked}`,
+          `not_ready_checked=${notReadyChecked}`,
+          `shipped_checked=${shippedChecked}`,
+          `not_shipped_checked=${notShippedChecked}`,
+          `delayed_checked=${delayedChecked}`,
+          `quote_checked=${quoteChecked}`,
+          `oldest_checked=${oldestChecked}`,
+        ]
+          .filter((param) => param.endsWith("_checked=true"))
+          .join("&");
+        const requestUrl = `http://127.0.0.1:8000/all-orders-filtered/?filter=${currentView}&${searchQueryFormatted}page=${currentPage}&${filterParams}`;
+        const response = await axios.get(requestUrl);
+        setAllOrders(response.data.results);
+        setTotalPages(Math.ceil(response.data.count / ordersPerPage));
+      } catch (error) {
+        console.error("Error getting data", error);
+      }
     };
+
     fetchAllOrders();
-    setRefreshOrders(false);
   }, [
+    refreshOrders,
+    currentView,
+    searchQueryFormatted,
+    urlCharacter,
+    currentPage,
+    confirmedChecked,
+    notConfirmedChecked,
     readyChecked,
     notReadyChecked,
     shippedChecked,
@@ -73,30 +100,74 @@ const AllOrders = () => {
     delayedChecked,
     quoteChecked,
     oldestChecked,
-    refreshOrders,
-    currentPage,
   ]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+    localStorage.setItem("currentView", JSON.stringify(currentView));
+    localStorage.setItem("confirmedChecked", JSON.stringify(confirmedChecked));
+    localStorage.setItem(
+      "notConfirmedChecked",
+      JSON.stringify(notConfirmedChecked)
+    );
+    localStorage.setItem("readyChecked", JSON.stringify(readyChecked));
+    localStorage.setItem("notReadyChecked", JSON.stringify(notReadyChecked));
+    localStorage.setItem("shippedChecked", JSON.stringify(shippedChecked));
+    localStorage.setItem(
+      "notShippedChecked",
+      JSON.stringify(notShippedChecked)
+    );
+    localStorage.setItem("delayedChecked", JSON.stringify(delayedChecked));
+    localStorage.setItem("quoteChecked", JSON.stringify(quoteChecked));
+    localStorage.setItem("oldestChecked", JSON.stringify(oldestChecked));
+  }, [
+    currentView,
+    confirmedChecked,
+    notConfirmedChecked,
+    readyChecked,
+    notReadyChecked,
+    shippedChecked,
+    notShippedChecked,
+    delayedChecked,
+    quoteChecked,
+    oldestChecked,
+  ]);
+
+  const countNumberOfFilters = () => {
+    const filterStates = [
+        confirmedChecked,
+        notConfirmedChecked,
+        readyChecked,
+        notReadyChecked,
+        shippedChecked,
+        notShippedChecked,
+        delayedChecked,
+        quoteChecked
+    ];
+    const numberOfActiveFilters = filterStates.filter(state => state === true).length;
+    setNumberOfFilters(numberOfActiveFilters > 0 ? `(${numberOfActiveFilters})` : "");
+}
+
 
   const handleSortChange = (filterChoice) => {
     setCurrentPage(1);
-    setCurrentView(`all-orders-filtered/?filter=${filterChoice}`);
+    setCurrentView(filterChoice);
     setURLCharacter("&");
-    setRefreshOrders(true);
+    localStorage.setItem("currentView", JSON.stringify(filterChoice));
+
   };
 
   const handleSearchOrders = (query) => {
     if (query === "") {
       setSearchQuery("");
       setSearchQueryFormatted("");
-      setCurrentView("all-orders-filtered");
+      setCurrentView(currentView);
       setURLCharacter("/?");
-      setRefreshOrders(true);
     } else {
       setCurrentPage(1);
       setCurrentView(`all-orders-search`);
       setSearchQueryFormatted(`/?search=${query}`);
       setURLCharacter("&");
-      setRefreshOrders(true);
     }
   };
 
@@ -239,10 +310,12 @@ const AllOrders = () => {
       <AllOrdersNav
         handleSortChange={handleSortChange}
         handleSearchOrders={handleSearchOrders}
-        confirmedChecked = {confirmedChecked}
-        setConfirmedChecked = {setConfirmedChecked}
-        notConfirmedChecked = {notConfirmedChecked}
-        setNotConfirmedChecked = {setConfirmedChecked}
+        currentView={currentView}
+        numberOfFilters={numberOfFilters}
+        confirmedChecked={confirmedChecked}
+        setConfirmedChecked={setConfirmedChecked}
+        notConfirmedChecked={notConfirmedChecked}
+        setNotConfirmedChecked={setNotConfirmedChecked}
         readyChecked={readyChecked}
         setReadyChecked={setReadyChecked}
         notReadyChecked={notReadyChecked}
@@ -279,7 +352,7 @@ const AllOrders = () => {
           <tbody>
             {allOrders.length === 0 ? (
               <tr>
-                <td colSpan="9" className="no-orders-message">
+                <td colSpan="10" className="no-orders-message">
                   No orders to display
                 </td>
               </tr>
@@ -375,20 +448,31 @@ const AllOrders = () => {
                     )}
                   </td>
                   <td id="confirmed">
-                    {order.confirmed === true
-                      ? <FontAwesomeIcon icon={faCheck} className="check-icon" />
-                      : <FontAwesomeIcon icon={faClose} className="x-icon" />}
+                    {order.confirmed === true ? (
+                      <FontAwesomeIcon icon={faCheck} className="check-icon" />
+                    ) : (
+                      <FontAwesomeIcon icon={faClose} className="x-icon" />
+                    )}
                   </td>
                   <td id="ready">
-                    {order.ready === true && order.quote === true
-                      ?  <FontAwesomeIcon icon={faStar} className="star-icon" />
-                      : order.ready === true
-                      ? <FontAwesomeIcon icon={faCheck} className="check-icon" />
-                      : <FontAwesomeIcon icon={faClose} className="x-icon" />}
+                    {order.ready === true && order.quote === true ? (
+                      <FontAwesomeIcon icon={faStar} className="star-icon" />
+                    ) : order.ready === true ? (
+                      <FontAwesomeIcon icon={faCheck} className="check-icon" />
+                    ) : (
+                      <FontAwesomeIcon icon={faClose} className="x-icon" />
+                    )}
                   </td>
                   <td id="shipped">
                     <div id="shipped-status-div">
-                      {order.shipped === true ? <FontAwesomeIcon icon={faCheck} className="check-icon" /> : <FontAwesomeIcon icon={faClose} className="x-icon" />}
+                      {order.shipped === true ? (
+                        <FontAwesomeIcon
+                          icon={faCheck}
+                          className="check-icon"
+                        />
+                      ) : (
+                        <FontAwesomeIcon icon={faClose} className="x-icon" />
+                      )}
                       {order.quote ? null : (
                         <UnshipButton
                           order={order}
