@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import "./AllOrdersNav.css";
@@ -6,6 +6,13 @@ import "./AllOrdersNav.css";
 const AllOrdersNav = ({
   handleSortChange,
   handleSearchOrders,
+  currentView,
+  currentViewTitle,
+  numberOfFilters,
+  confirmedChecked,
+  setConfirmedChecked,
+  notConfirmedChecked,
+  setNotConfirmedChecked,
   readyChecked,
   setReadyChecked,
   notReadyChecked,
@@ -24,6 +31,21 @@ const AllOrdersNav = ({
   setSearchQuery,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownOpen]);
 
   const handleSearchInputChange = (e) => {
     const query = e.target.value;
@@ -39,10 +61,9 @@ const AllOrdersNav = ({
       </div>
       <div className="row2">
         <select
-          name="Sort by..."
+          value={currentView}
           onChange={(e) => handleSortChange(e.target.value)}
         >
-          <option hidden>Sort by...</option>
           <option value="all">All</option>
           <option disabled={true}>--------</option>
           <option value="today">Today</option>
@@ -59,12 +80,33 @@ const AllOrdersNav = ({
           <option value="last-month">Last Month</option>
         </select>
 
-        <div className={`custom-dropdown ${dropdownOpen ? "open" : ""}`}>
+        <div
+          className={`custom-dropdown ${dropdownOpen ? "open" : ""}`}
+          ref={dropdownRef}
+        >
           <button onClick={() => setDropdownOpen(!dropdownOpen)}>
-            <span>Filter By</span>
+            <span>Filters {numberOfFilters}</span>
             <FontAwesomeIcon icon={faAngleDown} />
           </button>
           <div className="custom-dropdown-menu">
+            <label>
+              <input
+                type="checkbox"
+                value="Confirmed"
+                checked={confirmedChecked}
+                onChange={() => setConfirmedChecked(!confirmedChecked)}
+              />
+              Confirmed
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="Not Confirmed"
+                checked={notConfirmedChecked}
+                onChange={() => setNotConfirmedChecked(!notConfirmedChecked)}
+              />
+              Not Confirmed
+            </label>
             <label>
               <input
                 type="checkbox"
