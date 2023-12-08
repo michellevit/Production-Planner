@@ -4,7 +4,7 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
 const EditShipDateIcon = forwardRef((props, ref) => (
   <div ref={ref} className="custom-date-picker-input" {...props}>
-    <FontAwesomeIcon icon={faEdit} />
+    <FontAwesomeIcon icon={faEdit} className="edit-icon" />
   </div>
 ));
 

@@ -7,6 +7,8 @@ import UnshipButton from "./UnshipButton";
 import DeleteButton from "./DeleteButton";
 import QuoteFlag from "./QuoteFlag";
 import Pagination from "./Pagination";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faClose, faStar } from "@fortawesome/free-solid-svg-icons";
 
 const AllOrders = () => {
   const [allOrders, setAllOrders] = useState([]);
@@ -23,11 +25,14 @@ const AllOrders = () => {
   const [searchQueryFormatted, setSearchQueryFormatted] = useState("");
   const [urlCharacter, setURLCharacter] = useState("/?");
   // Sort Filters: Checkboxes
+  const [confirmedChecked, setConfirmedChecked] = useState(true);
+  const [notConfirmedChecked, setNotConfirmedChecked] = useState(true);
   const [readyChecked, setReadyChecked] = useState(true);
   const [notReadyChecked, setNotReadyChecked] = useState(true);
   const [shippedChecked, setShippedChecked] = useState(true);
   const [notShippedChecked, setNotShippedChecked] = useState(true);
   const [delayedChecked, setDelayedChecked] = useState(true);
+  const [quoteChecked, setQuoteChecked] = useState(true);
   const [oldestChecked, setOldestChecked] = useState(false);
 
   useEffect(() => {
@@ -40,8 +45,11 @@ const AllOrders = () => {
         `shipped_checked=${shippedChecked}`,
         `not_shipped_checked=${notShippedChecked}`,
         `delayed_checked=${delayedChecked}`,
+        `quote_checked=${quoteChecked}`,
         `oldest_checked=${oldestChecked}`,
-      ].filter(param => param.endsWith('_checked=true')).join('&');
+      ]
+        .filter((param) => param.endsWith("_checked=true"))
+        .join("&");
       axios
         .get(
           `http://127.0.0.1:8000/${currentView}${searchQueryFormatted}${urlCharacter}page=${currentPage}&${filterParams}`
@@ -63,13 +71,14 @@ const AllOrders = () => {
     shippedChecked,
     notShippedChecked,
     delayedChecked,
+    quoteChecked,
     oldestChecked,
     refreshOrders,
     currentPage,
   ]);
 
   const handleSortChange = (filterChoice) => {
-    setCurrentPage(1); 
+    setCurrentPage(1);
     setCurrentView(`all-orders-filtered/?filter=${filterChoice}`);
     setURLCharacter("&");
     setRefreshOrders(true);
@@ -230,6 +239,10 @@ const AllOrders = () => {
       <AllOrdersNav
         handleSortChange={handleSortChange}
         handleSearchOrders={handleSearchOrders}
+        confirmedChecked = {confirmedChecked}
+        setConfirmedChecked = {setConfirmedChecked}
+        notConfirmedChecked = {notConfirmedChecked}
+        setNotConfirmedChecked = {setConfirmedChecked}
         readyChecked={readyChecked}
         setReadyChecked={setReadyChecked}
         notReadyChecked={notReadyChecked}
@@ -240,6 +253,8 @@ const AllOrders = () => {
         setNotReadyChecked={setNotReadyChecked}
         delayedChecked={delayedChecked}
         setDelayedChecked={setDelayedChecked}
+        quoteChecked={quoteChecked}
+        setQuoteChecked={setQuoteChecked}
         oldestChecked={oldestChecked}
         setOldestChecked={setOldestChecked}
         searchQuery={searchQuery}
@@ -255,6 +270,7 @@ const AllOrders = () => {
               <th id="items">Items</th>
               <th id="packages">Packages</th>
               <th id="notes">Notes</th>
+              <th id="confirmed">Confirmed</th>
               <th id="ready">Ready</th>
               <th id="shipped">Shipped</th>
               <th id="delete-col">Delete</th>
@@ -358,12 +374,21 @@ const AllOrders = () => {
                       ""
                     )}
                   </td>
+                  <td id="confirmed">
+                    {order.confirmed === true
+                      ? <FontAwesomeIcon icon={faCheck} className="check-icon" />
+                      : <FontAwesomeIcon icon={faClose} className="x-icon" />}
+                  </td>
                   <td id="ready">
-                    {order.ready === false || order.quote ? "No" : "Yes"}
+                    {order.ready === true && order.quote === true
+                      ?  <FontAwesomeIcon icon={faStar} className="star-icon" />
+                      : order.ready === true
+                      ? <FontAwesomeIcon icon={faCheck} className="check-icon" />
+                      : <FontAwesomeIcon icon={faClose} className="x-icon" />}
                   </td>
                   <td id="shipped">
                     <div id="shipped-status-div">
-                      {order.shipped === false ? "No" : "Yes"}
+                      {order.shipped === true ? <FontAwesomeIcon icon={faCheck} className="check-icon" /> : <FontAwesomeIcon icon={faClose} className="x-icon" />}
                       {order.quote ? null : (
                         <UnshipButton
                           order={order}

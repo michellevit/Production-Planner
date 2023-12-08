@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import "./DeleteButton.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "./DeleteModal";
 import axios from "axios";
 
@@ -40,7 +39,7 @@ const DeleteButton = ({ order, setAllOrders, isRemoving, setIsRemoving }) => {
   return (
     <div className="all-orders-delete-div">
       <button id="delete-order-button" onClick={handleClickDeleteButton}>
-        <FontAwesomeIcon icon={faClose} />
+        <FontAwesomeIcon icon={faTrash} />
       </button>
       <DeleteModal
         show={showConfirmModal}

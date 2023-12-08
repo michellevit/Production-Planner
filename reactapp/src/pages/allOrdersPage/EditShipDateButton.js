@@ -4,7 +4,6 @@ import { parseISO } from "date-fns";
 import EditShipDateIcon from "./EditShipDateIcon";
 import EditShipDateModal from "./EditShipDateModal";
 import ErrorModal from "./ErrorModal";
-import "./EditShipDateButton.css";
 
 const EditShipDateButton = ({
   order,
@@ -159,7 +158,7 @@ const EditShipDateButton = ({
         </div>
       </div>
       <div className="edit-ship-date-div">
-        Edit Ship Date:
+        Ship Date
         <DatePicker
           customInput={<EditShipDateIcon />}
           selected={defaultDate}
@@ -171,7 +170,7 @@ const EditShipDateButton = ({
       </div>
       {!order.shipped && (
         <div className="edit-ship-date-div">
-          Edit Delay Date:
+          Delay Date
           <DatePicker
             customInput={<EditShipDateIcon />}
             selected={defaultDate}
@@ -184,7 +183,7 @@ const EditShipDateButton = ({
       )}
       {!order.shipped && (
         <div className="edit-ship-date-div">
-          Delay TBD:
+          Delay TBD
           <input
             type="checkbox"
             id="delay-tbd-checkbox"
