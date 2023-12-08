@@ -163,6 +163,9 @@ class FilteredOrdersListView(generics.ListAPIView):
         today = current_datetime_vancouver.date()
         filter_choice = self.request.query_params.get('filter', 'all')
         queryset = Order.objects.all()
+        
+        # DROPDOWN FILTERS
+
         if filter_choice == 'upcoming':
             queryset = queryset.filter(ship_date__gte=today)
         elif filter_choice == 'past':
@@ -172,7 +175,7 @@ class FilteredOrdersListView(generics.ListAPIView):
         elif filter_choice == 'tomorrow':
             tomorrow = today + timedelta(days=1)
             queryset = queryset.filter(ship_date=tomorrow)
-        if filter_choice == 'this-week':
+        elif filter_choice == 'this-week':
             is_today_sunday = (today.weekday() == 6)
             start_of_week = today - timedelta(days=today.weekday() + 1) if not is_today_sunday else today
             end_of_week = start_of_week + timedelta(days=6)
@@ -229,19 +232,43 @@ class FilteredOrdersListView(generics.ListAPIView):
                 ship_date__gte=start_of_last_month,
                 ship_date__lte=end_of_last_month + timedelta(hours=23, minutes=59, seconds=59)
             ) 
-        queryset = queryset.order_by('-ship_date')
-        if not self.request.query_params.get('ready_checked', False):
-            queryset = queryset.filter(ready=False)
-        if not self.request.query_params.get('not_ready_checked', False):
-            queryset = queryset.filter(ready=True)
-        if not self.request.query_params.get('shipped_checked', False):
-            queryset = queryset.filter(shipped=False)
-        if not self.request.query_params.get('not_shipped_checked', False):
-            queryset = queryset.filter(shipped=True)
-        if not self.request.query_params.get('delayed_checked', False):
-            queryset = queryset.filter(Q(delay_date__isnull=True) & Q(delay_tbd=False))
-        if self.request.query_params.get('oldest_checked', False):
+
+        # CHECKBOX FILTERS
+
+        confirmed_checked = self.request.query_params.get('confirmed_checked', 'false') == 'true'
+        not_confirmed_checked = self.request.query_params.get('not_confirmed_checked', 'false') == 'true'
+        ready_checked = self.request.query_params.get('ready_checked', 'false') == 'true'
+        not_ready_checked = self.request.query_params.get('not_ready_checked', 'false') == 'true'
+        shipped_checked = self.request.query_params.get('shipped_checked', 'false') == 'true'
+        not_shipped_checked = self.request.query_params.get('not_shipped_checked', 'false') == 'true'
+        delayed_checked = self.request.query_params.get('delayed_checked', 'false') == 'true'
+        quote_checked = self.request.query_params.get('quote', 'false') == 'true'
+        if delayed_checked and not any([ready_checked, not_ready_checked, shipped_checked, not_shipped_checked]):
+            queryset = queryset.filter(Q(delay_date__isnull=False) | Q(delay_tbd=True))
+        else:
+        #     if confirmed_checked:
+        #         queryset = queryset.filter(confirmed=True)
+        #     if not_confirmed_checked:
+        #         queryset = queryset.filter(confirmed=False)
+            if ready_checked:
+                queryset = queryset.filter(ready=True)
+            if not_ready_checked:
+                queryset = queryset.filter(ready=False)
+        #     if shipped_checked:
+        #         queryset = queryset.filter(shipped=True)
+        #     if not_shipped_checked:
+        #         queryset = queryset.filter(shipped=False)
+        #     if delayed_checked:
+        #         queryset = queryset.filter(Q(delay_date__isnull=False) | Q(delay_tbd=True))
+        #     if quote_checked: 
+        #         queryset = queryset.filter(quote=True)
+        # ORDER BY OLDEST VS NEWEST
+
+        if self.request.query_params.get('oldest_checked', 'false') == 'true':
             queryset = queryset.order_by('ship_date')
+        else:
+            queryset = queryset.order_by('-ship_date')
+
         return queryset
 
 
