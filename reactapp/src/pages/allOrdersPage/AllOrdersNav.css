@@ -1,111 +1,121 @@
 .all-orders-nav-container {
-    width: 100%;
-    background-color: rgb(182, 182, 182);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 3rem;
-    justify-content: center;
-    padding: 1rem 0.8rem;
+  width: 100%;
+  background-color: rgb(182, 182, 182);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 3rem;
+  justify-content: center;
+  padding: 1rem 0.8rem;
 }
 
 .all-orders-nav-container .row1 {
-  width: 100%; 
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items:center; 
+  align-items: center;
   justify-content: center;
   margin-top: 0.5rem;
 }
 
 .all-orders-nav-container .row2 {
-  width: 100%; 
+  width: 100%;
   display: flex;
   flex-direction: row;
-  align-items:center; 
+  align-items: center;
   justify-content: center;
   margin-bottom: 0.5rem;
+  column-gap: 10px;
 }
 
-.all-orders-nav-container .row3 {
-  width: 100%; 
-  display: flex;
-  flex-direction: column;
-  align-items: center; 
-  justify-content: center;
-  margin: 0.5rem;
-}
-
-.all-orders-nav-container .row3 input {
-  width: 15px;
-}
-
-.all-orders-nav-container .row3 li {
-  list-style-type: none;
-  margin: 0 5px;
-}
-
-.all-orders-nav-container .row3 ul {
-  display: flex;
-  align-items: center; 
-  justify-content: center;
-}
-
-
-
-
-.all-orders-nav-container input,
-.all-orders-nav-container button {
+.all-orders-nav-container input#search {
   padding: 4px 8px;
   border: none;
   border-radius: 5px;
+  width: 150px;
 }
 
 .all-orders-nav-container input:focus {
   outline: none;
 }
 
-.all-orders-nav-container input {
-    width: 150px;
-    border-radius: 5px;
-    margin: 0 5px;
-  }
-  
-  .all-orders-nav-container form button {
-    width: 27px;
-    background-color: white;
-    border-radius: 5px;
-  }
+.all-orders-nav-container select {
+  padding: 4px 8px;
+  border: none;
+  width: 150px;
+  border-radius: 5px;
+  margin: 0 5px;
+}
 
-  .all-orders-nav-container button:hover {
-    opacity: 0.5;
-  }
-
-
-  .all-orders-nav-container button {
-    border-radius: 5px;
-    margin: 0 5px;
-  }
-
-  .all-orders-nav-container .svg-inline--fa {
-    color: rgb(92, 92, 92);
-  }
-
-  
-  .all-orders-nav-container select {
-    padding: 4px 8px;
-    border: none;
-    width: 150px;
-    border-radius: 5px;
-    margin: 0 5px;
-  }
-
-  .all-orders-nav-container select:focus {
-    outline: none;
-  }
+.all-orders-nav-container select:focus {
+  outline: none;
+}
 
 .no-results {
   margin-top: 5%;
   font-size: 1rem;
   font-weight: 400;
+}
+
+/* Checkbox Dropdown Menu */
+
+.custom-dropdown button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  font-size: smaller;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 4px 4px 4px 12px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  margin: 0;
+}
+
+.custom-dropdown button .svg-inline--fa {
+  vertical-align: -0.2em;
+  color: black;
+  font-size: 0.8rem;
+}
+
+.custom-dropdown button:hover {
+  opacity: 1;
+}
+
+.custom-dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 4px 0;
+  z-index: 1;
+  width: 150px;
+  max-height: fit-content;
+  overflow-y: auto;
+  margin: 0;
+}
+
+.custom-dropdown-menu label {
+  display: block;
+  padding: 1px 12px;
+  margin: 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.custom-dropdown-menu input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.custom-dropdown.open .custom-dropdown-menu {
+  display: block;
+}
+
+/* Styling for when the dropdown is open */
+.custom-dropdown.open button {
+  border-color: #aaa;
 }

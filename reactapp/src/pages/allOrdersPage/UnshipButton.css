@@ -10,6 +10,11 @@
   display: flex;
 }
 
+#unship-order-button:hover {
+  opacity: 0.5;
+}
+
+
 .unship-fade-container {
   transition: opacity 1s ease;
 }

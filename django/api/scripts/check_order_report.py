@@ -149,6 +149,7 @@ def sort_workbook(sheet):
                             packages_array="",
                             notes_array="",
                             minimized_status=True,
+                            confirmed=False,
                             quote=False,
                             ready=False,
                             shipped=False,
