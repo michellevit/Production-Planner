@@ -34,7 +34,6 @@ const OrderCard = ({
   const [matchingDims, setMatchingDims] = useState("");
   const [suggestedBoxes, setSuggestedBoxes] = useState([]);
   useEffect(() => {
-    console.log('Inside OrderCard UseEffect');
     const fetchOrderDetails = async () => {
       try {
         const response = await axios.get(
