@@ -76,6 +76,7 @@ const AllOrders = () => {
           .filter((param) => param.endsWith("_checked=true"))
           .join("&");
         const requestUrl = `http://127.0.0.1:8000/all-orders-filtered/?filter=${currentView}&${searchQueryFormatted}page=${currentPage}&${filterParams}`;
+        console.log(requestUrl);
         const response = await axios.get(requestUrl);
         setAllOrders(response.data.results);
         setTotalPages(Math.ceil(response.data.count / ordersPerPage));

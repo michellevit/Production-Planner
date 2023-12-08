@@ -240,12 +240,10 @@ class FilteredOrdersListView(generics.ListAPIView):
         shipped_checked = self.request.query_params.get('shipped_checked', 'false') == 'true'
         not_shipped_checked = self.request.query_params.get('not_shipped_checked', 'false') == 'true'
         delayed_checked = self.request.query_params.get('delayed_checked', 'false') == 'true'
-        quote_checked = self.request.query_params.get('quote', 'false') == 'true'
+        quote_checked = self.request.query_params.get('quote_checked', 'false') == 'true'
         if not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, delayed_checked, quote_checked]):
             queryset = Order.objects.none()
-        else:
-            queryset = Order.objects.all()
-        if delayed_checked and not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, quote_checked]):
+        elif delayed_checked and not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, quote_checked]):
              queryset = queryset.filter(Q(delay_date__isnull=False) | Q(delay_tbd=True))
         elif quote_checked and not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, delayed_checked]):
              queryset = queryset.filter(quote=True)
@@ -268,10 +266,10 @@ class FilteredOrdersListView(generics.ListAPIView):
                 queryset = queryset.filter(shipped=True)
             elif not_shipped_checked:
                 queryset = queryset.filter(shipped=False)
-            if not delayed_checked:
-                queryset = queryset.exclude(Q(delay_date__isnull=False) | Q(delay_tbd=True))
-            if not quote_checked: 
-                queryset = queryset.exclude(quote=True)
+            if delayed_checked:
+                queryset = queryset.filter(Q(delay_date__isnull=False) | Q(delay_tbd=True))
+            if quote_checked: 
+                queryset = queryset.filter(quote=True)
         # ORDER BY OLDEST VS NEWEST
         if self.request.query_params.get('oldest_checked', 'false') == 'true':
             queryset = queryset.order_by('ship_date')
