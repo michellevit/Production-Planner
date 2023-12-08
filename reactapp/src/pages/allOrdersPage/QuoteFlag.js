@@ -23,12 +23,13 @@ const QuoteFlag = ({ handleUnquote, order }) => {
         handleCancelUnquote={handleCancelUnquote}
         order={order}
       />
-      <div style={{ fontSize: "smaller", color: "red" }}>
+      <div style={{ fontSize: "smaller", color: "#6a5acd" }}>
         *Quote{" "}
         <FontAwesomeIcon
           icon={faRightFromBracket}
           onClick={handleClickUnquoteButton}
           style={{ cursor: "pointer" }}
+          className="unquote-icon"
         />
       </div>
     </div>

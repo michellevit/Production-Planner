@@ -51,7 +51,7 @@ const AddOrder = () => {
               <br />
               <b>Note:</b>
               <br />
-              Please use the full general part number
+              Please use the full part number (in list below)
               <br />
               (not the customer-specific part number, or an abbreviation)
               <br />

@@ -23,7 +23,7 @@ const UnshipButton = ({ order, handleUnship }) => {
         onClick={handleClickUnshipButton}
         type="button"
       >
-        <FontAwesomeIcon icon={faRotateLeft} />
+        <FontAwesomeIcon icon={faRotateLeft} className="unship-icon"/>
       </button>
       <UnshipModal
         show={showUnshipModal}
