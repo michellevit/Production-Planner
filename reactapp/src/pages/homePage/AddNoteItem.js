@@ -46,6 +46,7 @@ const AddNoteItem = ({
           value={noteItemText}
           maxLength={120}
           onChange={(e) => setNoteItemText(e.target.value)}
+          autoComplete="off"
         ></input>
         <button
           id="add-note-item-button"
