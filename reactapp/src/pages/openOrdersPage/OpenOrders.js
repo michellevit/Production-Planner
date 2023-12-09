@@ -9,6 +9,7 @@ const OpenOrders = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("false");
   const [orders, setOrders] = useState([]);
+  const [refreshOrders, setRefreshOrders] = useState(false);
   const [numberOfFilters, setNumberOfFilters] = useState("");
   // Sort Filters: Select + Search
   const [currentView, setCurrentView] = useState(
@@ -43,6 +44,9 @@ const OpenOrders = () => {
   const [quoteChecked, setQuoteChecked] = useState(
     JSON.parse(localStorage.getItem("openOrders_quoteChecked")) || false
   );
+  const [notQuoteChecked, setNotQuoteChecked] = useState(
+    JSON.parse(localStorage.getItem("openOrders_notQuoteChecked")) || false
+  );
   const [oldestChecked, setOldestChecked] = useState(
     JSON.parse(localStorage.getItem("openOrders_oldestChecked")) || false
   );
@@ -62,18 +66,31 @@ const OpenOrders = () => {
           `delayed_checked=${delayedChecked}`,
           `not_delayed_checked=${notDelayedChecked}`,
           `quote_checked=${quoteChecked}`,
+          `not_quote_checked=${notQuoteChecked}`,
           `oldest_checked=${oldestChecked}`,
         ]
           .filter((param) => param.endsWith("_checked=true"))
           .join("&");
         const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=open&filter=${currentView}&search=${searchQuery}&${filterParams}`;
         const response = await axios.get(requestUrl);
-        setOrders(response.data.results);
+        const fetchedOrders = response.data.results.map((order) => {
+          const minimizedStatus = localStorage.getItem(
+            `order_minimized_${order.id}`
+          );
+          return {
+            ...order,
+            minimized_status: minimizedStatus
+              ? JSON.parse(minimizedStatus)
+              : true,
+          };
+        });
+        setOrders(fetchedOrders);
+        setRefreshOrders(false);
       } catch (error) {
         console.error("Error getting data", error);
       }
     };
-    fetchOrders();    
+    fetchOrders();
   }, [
     currentView,
     searchQuery,
@@ -86,27 +103,56 @@ const OpenOrders = () => {
     delayedChecked,
     notDelayedChecked,
     quoteChecked,
+    notQuoteChecked,
     oldestChecked,
   ]);
 
   useEffect(() => {
     localStorage.setItem("openOrders_currentView", JSON.stringify(currentView));
-    localStorage.setItem("openOrders_confirmedChecked", JSON.stringify(confirmedChecked));
+    localStorage.setItem(
+      "openOrders_confirmedChecked",
+      JSON.stringify(confirmedChecked)
+    );
     localStorage.setItem(
       "openOrders_notConfirmedChecked",
       JSON.stringify(notConfirmedChecked)
     );
-    localStorage.setItem("openOrders_readyChecked", JSON.stringify(readyChecked));
-    localStorage.setItem("openOrders_notReadyChecked", JSON.stringify(notReadyChecked));
-    localStorage.setItem("openOrders_shippedChecked", JSON.stringify(shippedChecked));
+    localStorage.setItem(
+      "openOrders_readyChecked",
+      JSON.stringify(readyChecked)
+    );
+    localStorage.setItem(
+      "openOrders_notReadyChecked",
+      JSON.stringify(notReadyChecked)
+    );
+    localStorage.setItem(
+      "openOrders_shippedChecked",
+      JSON.stringify(shippedChecked)
+    );
     localStorage.setItem(
       "openOrders_notShippedChecked",
       JSON.stringify(notShippedChecked)
     );
-    localStorage.setItem("openOrders_delayedChecked", JSON.stringify(delayedChecked));
-    localStorage.setItem("openOrders_notDelayedChecked", JSON.stringify(notDelayedChecked));
-    localStorage.setItem("openOrders_quoteChecked", JSON.stringify(quoteChecked));
-    localStorage.setItem("openOrders_oldestChecked", JSON.stringify(oldestChecked));
+    localStorage.setItem(
+      "openOrders_delayedChecked",
+      JSON.stringify(delayedChecked)
+    );
+    localStorage.setItem(
+      "openOrders_notDelayedChecked",
+      JSON.stringify(notDelayedChecked)
+    );
+    localStorage.setItem(
+      "openOrders_quoteChecked",
+      JSON.stringify(quoteChecked)
+    );
+    localStorage.setItem(
+      "openOrders_notQuoteChecked",
+      JSON.stringify(notQuoteChecked)
+    );
+    localStorage.setItem(
+      "openOrders_oldestChecked",
+      JSON.stringify(oldestChecked)
+    );
   }, [
     currentView,
     confirmedChecked,
@@ -118,7 +164,9 @@ const OpenOrders = () => {
     delayedChecked,
     notDelayedChecked,
     quoteChecked,
+    notQuoteChecked,
     oldestChecked,
+    refreshOrders,
   ]);
 
   const countNumberOfFilters = () => {
@@ -132,6 +180,7 @@ const OpenOrders = () => {
       delayedChecked,
       notDelayedChecked,
       quoteChecked,
+      notQuoteChecked,
     ];
     const numberOfActiveFilters = filterStates.filter(
       (state) => state === true
@@ -150,44 +199,25 @@ const OpenOrders = () => {
     setSearchQuery(query);
   };
 
-  const handleMaximizeAll = async () => {
-    try {
-      const updatedOrders = orders.map((order) => ({
-        ...order,
-        minimized_status: false,
-      }));
-      const updatePromises = updatedOrders.map(async (updatedOrder) => {
-        await axios.put(
-          `http://127.0.0.1:8000/open-orders/${updatedOrder.id}/`,
-          updatedOrder
-        );
-        return updatedOrder;
-      });
-      const updatedOrdersData = await Promise.all(updatePromises);
-      setOrders(updatedOrdersData);
-    } catch (error) {
-      console.error("Error updating orders:", error);
-    }
+  const handleMaximizeAll = () => {
+    const updatedOrders = orders.map((order) => {
+      localStorage.setItem(
+        `order_minimized_${order.id}`,
+        JSON.stringify(false)
+      );
+      return { ...order, minimized_status: false };
+    });
+    setOrders(updatedOrders);
+    setRefreshOrders(true);
   };
 
-  const handleMinimizeAll = async () => {
-    try {
-      const updatedOrders = orders.map((order) => ({
-        ...order,
-        minimized_status: true,
-      }));
-      const updatePromises = updatedOrders.map(async (updatedOrder) => {
-        await axios.put(
-          `http://127.0.0.1:8000/open-orders/${updatedOrder.id}/`,
-          updatedOrder
-        );
-        return updatedOrder;
-      });
-      const updatedOrdersData = await Promise.all(updatePromises);
-      setOrders(updatedOrdersData);
-    } catch (error) {
-      console.error("Error updating orders:", error);
-    }
+  const handleMinimizeAll = () => {
+    const updatedOrders = orders.map((order) => {
+      localStorage.setItem(`order_minimized_${order.id}`, JSON.stringify(true));
+      return { ...order, minimized_status: true };
+    });
+    setOrders(updatedOrders);
+    setRefreshOrders(true);
   };
 
   return (
@@ -221,6 +251,8 @@ const OpenOrders = () => {
         setNotDelayedChecked={setNotDelayedChecked}
         quoteChecked={quoteChecked}
         setQuoteChecked={setQuoteChecked}
+        notQuoteChecked={notQuoteChecked}
+        setNotQuoteChecked={setNotQuoteChecked}
         oldestChecked={oldestChecked}
         setOldestChecked={setOldestChecked}
         searchQuery={searchQuery}

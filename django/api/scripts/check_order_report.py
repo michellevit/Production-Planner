@@ -148,7 +148,6 @@ def sort_workbook(sheet):
                             item_subtype_dict=item_subtype_dict,
                             packages_array="",
                             notes_array="",
-                            minimized_status=True,
                             confirmed=False,
                             quote=False,
                             ready=False,

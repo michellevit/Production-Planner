@@ -10,7 +10,7 @@ const ErrorModal = ({
   if (!showErrorModal) {
     return null;
   }
-  const handleConfirmDelete = () => {
+  const handleClickOK = () => {
     setShowErrorModal(false);
     setErrorMessage("");
   };
@@ -22,7 +22,7 @@ const ErrorModal = ({
             <p key={index}>{line}</p>
           ))}
           <div className="error-modal-buttons">
-            <button className="error-confirm-button" onClick={handleConfirmDelete}>
+            <button className="error-confirm-button" onClick={handleClickOK}>
               OK
             </button>
           </div>
