@@ -1,6 +1,6 @@
 from datetime import timedelta
 from django.db import transaction
-from django.db.models import Q, Case, When, F, Value, IntegerField
+from django.db.models import Q, Case, When, F, Value, IntegerField, DateField
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
 from django.utils import timezone
@@ -222,11 +222,11 @@ class FilteredOrdersListView(generics.ListAPIView):
         not_delayed_checked = self.request.query_params.get('not_delayed_checked', 'false') == 'true'
         quote_checked = self.request.query_params.get('quote_checked', 'false') == 'true'
         not_quote_checked = self.request.query_params.get('not_quote_checked', 'false') == 'true'
-        if not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, delayed_checked, quote_checked, not_quote_checked]):
+        if not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, delayed_checked, not_delayed_checked, quote_checked, not_quote_checked]):
             queryset = Order.objects.none()
-        elif delayed_checked and not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, quote_checked, not_quote_checked]):
+        elif delayed_checked and not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, not_delayed_checked, quote_checked, not_quote_checked]):
              queryset = queryset.filter(Q(delay_date__isnull=False) | Q(delay_tbd=True))
-        elif quote_checked and not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, delayed_checked, not_quote_checked]):
+        elif quote_checked and not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, delayed_checked, not_delayed_checked, not_quote_checked]):
              queryset = queryset.filter(quote=True)
         else:
             if confirmed_checked and not_confirmed_checked:
@@ -260,11 +260,24 @@ class FilteredOrdersListView(generics.ListAPIView):
             elif not_quote_checked:
                 queryset = queryset.filter(quote=False)
         
-        # ORDER BY OLDEST VS NEWEST
+        # Add a custom field for sorting
+        queryset = queryset.annotate(
+            custom_sort=Case(
+                When(ship_date__isnull=False, delay_date__isnull=True, delay_tbd=False, then='ship_date'),
+                When(ship_date__isnull=False, delay_date__isnull=False, delay_tbd=False, then='delay_date'),
+                When(ship_date__isnull=True, delay_date__isnull=False, delay_tbd=False, then='delay_date'),
+                When(ship_date__isnull=False, delay_date__isnull=True, delay_tbd=True, then=Value(today)),
+                When(ship_date__isnull=True, delay_date__isnull=True, delay_tbd=True, then=Value(today)),
+                default=Value(today + timedelta(days=36500)),
+                output_field=DateField(),
+            )
+        )
+        # Determine the ordering direction
         if self.request.query_params.get('oldest_checked', 'false') == 'true':
-            queryset = queryset.order_by('ship_date')
+            queryset = queryset.order_by('custom_sort')
         else:
-            queryset = queryset.order_by('-ship_date')
+            queryset = queryset.order_by('-custom_sort')
+
         
         if search_query:
             queryset = queryset.filter(
