@@ -219,6 +219,7 @@ class FilteredOrdersListView(generics.ListAPIView):
         shipped_checked = self.request.query_params.get('shipped_checked', 'false') == 'true'
         not_shipped_checked = self.request.query_params.get('not_shipped_checked', 'false') == 'true'
         delayed_checked = self.request.query_params.get('delayed_checked', 'false') == 'true'
+        not_delayed_checked = self.request.query_params.get('not_delayed_checked', 'false') == 'true'
         quote_checked = self.request.query_params.get('quote_checked', 'false') == 'true'
         if not any([confirmed_checked, not_confirmed_checked, ready_checked, not_ready_checked, shipped_checked, not_shipped_checked, delayed_checked, quote_checked]):
             queryset = Order.objects.none()
@@ -245,8 +246,12 @@ class FilteredOrdersListView(generics.ListAPIView):
                 queryset = queryset.filter(shipped=True)
             elif not_shipped_checked:
                 queryset = queryset.filter(shipped=False)
-            if delayed_checked:
+            if delayed_checked and not_delayed_checked:
+                pass
+            elif delayed_checked:
                 queryset = queryset.filter(Q(delay_date__isnull=False) | Q(delay_tbd=True))
+            elif not_delayed_checked:
+                queryset = queryset.filter(Q(delay_date__isnull=True) and Q(delay_tbd=False))
             if quote_checked: 
                 queryset = queryset.filter(quote=True)
         
