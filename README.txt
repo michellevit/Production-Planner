@@ -77,10 +77,10 @@ Note: This app replaces the previous process, which consisted of a paper report 
 --In the terminal, navigate to the django folder and run: python manage.py makemigrations
 --Then run: python manage.py migrate
 -Populate the 'Dimension' DB Table:
---In the terminal, navigate to the folder: /django/api/commands/
+--In the terminal, navigate to the folder: Production-Planner/django
 --Run: python manage.py import_dimensions_to_db
 -Populate the 'Product' DB Table:
---In the terminal, navigate to the folder: /django/api/commands/
+--In the terminal, navigate to the folder: Production-Planner/django
 --Run: python manage.py import_dimensions_to_db
 -Complete the 'Preparing To Run In Development' (step 4) instructions
 
