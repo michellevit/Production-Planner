@@ -8,7 +8,7 @@
 .add-order-container form {
   background-color: white;
   padding: 30px 40px;
-  width: 500px;
+  width: 550px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -160,10 +160,9 @@ table.add-order-table td input {
 
 .add-order-container #products-table {
   background-color: white;
-  width: 500px;
+  width: 550px;
   display: flex;
   flex-direction: column;
-  font-size: 0.9rem;
   text-align: left;
   border-radius: 15px;
   padding: 30px 40px;
@@ -187,7 +186,7 @@ table.add-order-table td input {
 }
 
 .add-order-container #products-table td {
-  font-size: 0.7rem;
+  font-size: smaller;
   color: #555;
   padding: 0.2rem 0;
 }
