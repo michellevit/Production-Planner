@@ -12,11 +12,6 @@ REM Change directory to where your docker-compose.yml file is located
 REM cd /path/to/your/docker-compose
 cd C:\Users\Michelle\Documents\Coding_Projects\Production-Planner
 
-REM Build or rebuild the Docker images
-REM Only needed for first time deployment or if changes have been made to app
-REM docker-compose build
-REM docker-compose exec backend python manage.py migrate
-
 REM Start your Docker Compose application
 docker-compose up -d
 

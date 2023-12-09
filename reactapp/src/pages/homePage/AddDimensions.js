@@ -121,6 +121,7 @@ const AddDimensions = () => {
           maxLength={7}
           value={packageLength}
           onChange={(event) => setPackageLength(event.target.value)}
+          autoComplete="off"
         ></input>{" "}
         x
         <input
@@ -129,6 +130,7 @@ const AddDimensions = () => {
           maxLength={7}
           value={packageWidth}
           onChange={(event) => setPackageWidth(event.target.value)}
+          autoComplete="off"
         ></input>{" "}
         x
         <input
@@ -137,6 +139,7 @@ const AddDimensions = () => {
           maxLength={7}
           value={packageHeight}
           onChange={(event) => setPackageHeight(event.target.value)}
+          autoComplete="off"
         ></input>
         <button type="submit" id="submit-dimensions">
           <FontAwesomeIcon icon={faAdd} />

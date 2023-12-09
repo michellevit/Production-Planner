@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./AddLineItem.css";
 import ErrorModal from "../../components/ErrorModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,12 +7,30 @@ import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 const AddLineItem = ({
   items,
   setItems,
+  productNames,
   showErrorModal,
   setShowErrorModal,
   errorMessage,
   setErrorMessage,
   setMatchingDims,
 }) => {
+  const [filteredProductNames, setFilteredProductNames] = useState([]);
+  const handleInputChange = (e) => {
+    const input = e.target.value.toLowerCase();
+    if (input) {
+      const startsWithInput = productNames.filter((name) =>
+        name.toLowerCase().startsWith(input)
+      );
+      const containsInput = productNames.filter(
+        (name) =>
+          name.toLowerCase().includes(input) &&
+          !name.toLowerCase().startsWith(input)
+      );
+      setFilteredProductNames([...startsWithInput, ...containsInput]);
+    } else {
+      setFilteredProductNames([]);
+    }
+  };
   const handleAddOrderLineItem = (e) => {
     e.preventDefault();
     setMatchingDims(false);
@@ -54,8 +72,34 @@ const AddLineItem = ({
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
         />
-        <input id="add-line-item-name" type="text"></input>
-        <input id="add-line-item-qty" type="number" min="1"></input>
+        <input
+          id="add-line-item-name"
+          type="text"
+          onChange={handleInputChange}
+          autoComplete="off"
+        />
+        {filteredProductNames.length > 0 && (
+          <div className="suggestions-dropdown">
+            {filteredProductNames.map((name, index) => (
+              <div
+                key={index}
+                className="suggestion-item"
+                onClick={() => {
+                  document.getElementById("add-line-item-name").value = name;
+                  setFilteredProductNames([]);
+                }}
+              >
+                {name}
+              </div>
+            ))}
+          </div>
+        )}
+        <input
+          id="add-line-item-qty"
+          type="number"
+          min="1"
+          autoComplete="off"
+        ></input>
         <button id="add-line-item-button" onClick={handleAddOrderLineItem}>
           <FontAwesomeIcon icon={faAdd} />
         </button>

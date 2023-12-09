@@ -1,52 +1,85 @@
 .add-line-item-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .add-line-item-container .add-line-item-inputs {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .add-line-item-container #add-line-item-name {
-    width: 200px;
-    border-radius: 5px 0 0 5px !important;
+  width: 70%;
+  border-radius: 5px 0 0 5px !important;
 }
 
 .add-line-item-container #add-line-item-qty {
-    width: 60px;
-    margin-left: 3px;
-    border-radius: 0 !important;
+  width: 20%;
+  margin-left: 3px;
+  border-radius: 0 !important;
 }
 
 .add-line-item-container #add-line-item-button {
-    padding: 5px 7px;
-    background-color: #19c37d;
-    border: none;
-    color: white;
-    margin-left: 3px;
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
+  padding: 5px 7px;
+  background-color: #19c37d;
+  border: none;
+  color: white;
+  margin-left: 3px;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
 }
 
 .add-line-item-container #line-item-list li {
-    font-size: 0.8rem;
-    list-style-type: none;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    margin: 5px 0;
-    background-color: #f0f3f5;
-    border-radius: 5px;
-    padding: 2px 0 2px 8px;
+  font-size: 0.8rem;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+  background-color: #f0f3f5;
+  border-radius: 5px;
+  padding: 2px 0 2px 8px;
 }
 
 .add-line-item-container .delete-line-item-button {
-    display: flex;
-    padding: 6px 9px;
-    border: none;
-    color: red;
-    border-radius: 5px;
+  display: flex;
+  padding: 6px 9px;
+  border: none;
+  color: red;
+  border-radius: 5px;
+}
+
+/* Suggestions Dropdown */
+.suggestions-dropdown {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-height: 200px;
+  overflow-y: auto;
+  width: 200px;
+  z-index: 1000;
+  font-size: smaller;
+}
+
+.suggestion-item {
+  padding: 8px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(204, 204, 204, 0.5);
+}
+
+.suggestion-item:hover {
+  background-color: #f8f8f8;
+}
+
+.suggestions-dropdown::-webkit-scrollbar {
+  width: 12px;
+}
+
+.suggestions-dropdown::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 6px;
 }

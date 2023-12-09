@@ -12,7 +12,7 @@
 }
 
 .add-note-item-container #add-note-text {
-    width: 263px;
+    width: 91%;
     border-radius: 5px 0 0 5px !important;
 }
 
@@ -41,7 +41,7 @@
     display: flex;
     justify-content: space-between; 
     align-items: center; 
-    margin: 5px 0;
+    margin: 10px 0;
     padding: 0 0 0 8px;
     background-color: #f0f3f5;
     border-radius: 5px;

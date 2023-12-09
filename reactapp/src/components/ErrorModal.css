@@ -37,4 +37,6 @@
     color: white;
   }
 
-  
+  .error-modal-note {
+    font-size: smaller;
+  }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import AddLineItem from "./AddLineItem";
@@ -25,6 +25,10 @@ const AddOrder = () => {
   const [showProductList, setShowProductList] = useState(false);
   const [productList, setProductList] = useState([]);
 
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   const handleGetQuote = async (e) => {
     e.preventDefault();
     if (Object.keys(items).length === 0) {
@@ -44,28 +48,10 @@ const AddOrder = () => {
         const packagesArray = response.data.packages_array;
         setSuggestedDims(packagesArray);
       } else {
-        setErrorMessage(
-          <div>
-            No quote available.
-            <div className="error-smaller-text">
-              <br />
-              <br />
-              <b>Note:</b>
-              <br />
-              Please use the full part number (in list below)
-              <br />
-              (not the customer-specific part number, or an abbreviation)
-              <br />
-              <br />
-              <b>Example:</b>
-              <br />
-              TA110 (Optical Tachometer) <FontAwesomeIcon icon={faCheck} />
-              <br />
-              TA110-E/F (Optical Tachometer/Counter (English/French)){" "}
-              <FontAwesomeIcon icon={faClose} />
-            </div>
-          </div>
-        );
+        setErrorMessage({
+          main: "There are no suggested dimensions available.",
+          note: "Note: please make sure to use the full part number as per the 'Products' list below (not customer specific).",
+        });
         setShowErrorModal(true);
         setSuggestedDims([]);
       }
@@ -145,16 +131,15 @@ const AddOrder = () => {
       setShowErrorModal(true);
     }
   };
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/products/");
+      setProductList(response.data.map((product) => product.item_name));
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
   const handleShowProductList = () => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/products/");
-        setProductList(response.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-    fetchProducts();
     setShowProductList(!showProductList);
   };
   return (
@@ -170,6 +155,7 @@ const AddOrder = () => {
                   type="text"
                   id="add-order-so-number"
                   maxLength={100}
+                  autoComplete="off"
                 ></input>
               </td>
             </tr>
@@ -180,6 +166,7 @@ const AddOrder = () => {
                   type="text"
                   id="add-order-customer-name"
                   maxLength={100}
+                  autoComplete="off"
                 ></input>
               </td>
             </tr>
@@ -214,6 +201,7 @@ const AddOrder = () => {
                 <AddLineItem
                   items={items}
                   setItems={setItems}
+                  productNames={productList}
                   showErrorModal={showErrorModal}
                   setShowErrorModal={setShowErrorModal}
                   errorMessage={errorMessage}
@@ -270,7 +258,7 @@ const AddOrder = () => {
             <tbody>
               {suggestedDims.map((item, index) => (
                 <tr>
-                Box {index + 1}: {item.dimensions} - {item.weight} lb
+                  Box {index + 1}: {item.dimensions} - {item.weight} lb
                 </tr>
               ))}
             </tbody>
@@ -288,17 +276,17 @@ const AddOrder = () => {
             )}
           </button>
         </h3>
-        <table>
-          {showProductList && (
+        {showProductList && (
+          <table>
             <tbody>
-              {productList.map((product, index) => (
+              {productList.map((productName, index) => (
                 <tr key={index}>
-                  <td>{product.item_name}</td>{" "}
+                  <td>{productName}</td>
                 </tr>
               ))}
             </tbody>
-          )}
-        </table>
+          </table>
+        )}
       </div>
     </div>
   );
