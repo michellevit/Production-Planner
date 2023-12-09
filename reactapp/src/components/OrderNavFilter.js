@@ -26,6 +26,8 @@ const OrderNavFilter = ({
   setNotDelayedChecked,
   quoteChecked,
   setQuoteChecked,
+  notQuoteChecked,
+  setNotQuoteChecked,
   oldestChecked,
   setOldestChecked,
   searchQuery,
@@ -168,6 +170,15 @@ const OrderNavFilter = ({
               onChange={() => setQuoteChecked(!quoteChecked)}
             />
             Quote
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="Not a Quote"
+              checked={notQuoteChecked}
+              onChange={() => setNotQuoteChecked(!notQuoteChecked)}
+            />
+            Not a Quote
           </label>
           <label>
             <input

@@ -30,6 +30,8 @@ const OrderNav = ({
   setNotDelayedChecked,
   quoteChecked,
   setQuoteChecked,
+  notQuoteChecked,
+  setNotQuoteChecked,
   oldestChecked,
   setOldestChecked,
   searchQuery,
@@ -69,6 +71,8 @@ const OrderNav = ({
           setNotDelayedChecked={setNotDelayedChecked}
           quoteChecked={quoteChecked}
           setQuoteChecked={setQuoteChecked}
+          notQuoteChecked={notQuoteChecked}
+          setNotQuoteChecked={setNotQuoteChecked}
           oldestChecked={oldestChecked}
           setOldestChecked={setOldestChecked}
           searchQuery={searchQuery}
