@@ -85,21 +85,6 @@ class OrderDetailView(APIView):
             raise NotFound(detail="Order not found")
 
 
-#path('open-orders-search/', SearchOpenOrdersListView.as_view(), name='open-orders-search')
-class SearchOpenOrdersListView(generics.ListAPIView):
-    serializer_class = OrderSerializer
-    pagination_class = None
-    def get_queryset(self):
-        queryset = Order.objects.filter(shipped=False)
-        search_query = self.request.query_params.get('search', None)
-        if search_query:
-            queryset = queryset.filter(
-                Q(order_number__icontains=search_query) |
-                Q(customer_name__icontains=search_query)
-            )
-        return queryset
-
-
 #path('all-orders/', OrderListView.as_view(), name='all-orders')
 class OrderListView(generics.ListAPIView):
     serializer_class = OrderSerializer
@@ -137,32 +122,26 @@ class CreateOrderView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#path('all-orders-search/', SearchAllOrdersListView.as_view(), name='all-orders-search')
-class SearchAllOrdersListView(generics.ListAPIView):
+    
+#path('orders-filtered/', FilteredOrdersListView.as_view(), name='orders-filtered')
+class FilteredOrdersListView(generics.ListAPIView):
     serializer_class = OrderSerializer
     pagination_class = CustomPagination
 
     def get_queryset(self):
-        queryset = Order.objects.all()
-        search_query = self.request.query_params.get('search', None)
-        if search_query:
-            queryset = queryset.filter(
-                Q(order_number__icontains=search_query) |
-                Q(customer_name__icontains=search_query)
-            )
-        return queryset
-    
-    
-#path('all-orders-filtered/', FilteredOrdersListView.as_view(), name='all-orders-filtered')
-class FilteredOrdersListView(generics.ListAPIView):
-    serializer_class = OrderSerializer
-    pagination_class = CustomPagination
-    def get_queryset(self):
         current_datetime_utc = timezone.now()
         current_datetime_vancouver = current_datetime_utc.astimezone(timezone.get_current_timezone())
         today = current_datetime_vancouver.date()
+
         filter_choice = self.request.query_params.get('filter', 'all')
+        search_query = self.request.query_params.get('search', None)
+        order_type = self.request.query_params.get('type', 'all')
+
         queryset = Order.objects.all()
+
+        if order_type == 'open':
+            queryset = queryset.filter(shipped=False)
+
         # DROPDOWN FILTERS
         if filter_choice == 'all':
             queryset = Order.objects.all()
@@ -270,13 +249,20 @@ class FilteredOrdersListView(generics.ListAPIView):
                 queryset = queryset.filter(Q(delay_date__isnull=False) | Q(delay_tbd=True))
             if quote_checked: 
                 queryset = queryset.filter(quote=True)
+        
         # ORDER BY OLDEST VS NEWEST
         if self.request.query_params.get('oldest_checked', 'false') == 'true':
             queryset = queryset.order_by('ship_date')
         else:
             queryset = queryset.order_by('-ship_date')
-        return queryset
+        
+        if search_query:
+            queryset = queryset.filter(
+                Q(order_number__icontains=search_query) |
+                Q(customer_name__icontains=search_query)
+            )
 
+        return queryset
 
 
  
