@@ -7,7 +7,6 @@ const AllOrdersNav = ({
   handleSortChange,
   handleSearchOrders,
   currentView,
-  currentViewTitle,
   numberOfFilters,
   confirmedChecked,
   setConfirmedChecked,

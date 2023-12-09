@@ -1,10 +1,12 @@
-import React from "react";
-import "./OpenOrdersNav.css";
+import React, { useState, useEffect, useRef } from "react";import "./OpenOrdersNav.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUpRightAndDownLeftFromCenter,
   faDownLeftAndUpRightToCenter,
+  faAngleDown,
 } from "@fortawesome/free-solid-svg-icons";
+import "./OpenOrdersNav.css";
+
 
 const OpenOrdersNav = ({
   handleSearchOrders,

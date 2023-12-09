@@ -25,8 +25,6 @@ const AllOrders = () => {
     JSON.parse(localStorage.getItem("currentView")) || "all"
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchQueryFormatted, setSearchQueryFormatted] = useState("");
-  const [urlCharacter, setURLCharacter] = useState("/?");
   // Sort Filters: Checkboxes
   const [confirmedChecked, setConfirmedChecked] = useState(
     JSON.parse(localStorage.getItem("confirmedChecked")) || false
@@ -75,8 +73,7 @@ const AllOrders = () => {
         ]
           .filter((param) => param.endsWith("_checked=true"))
           .join("&");
-        const requestUrl = `http://127.0.0.1:8000/all-orders-filtered/?filter=${currentView}&${searchQueryFormatted}page=${currentPage}&${filterParams}`;
-        console.log(requestUrl);
+        const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=all&filter=${currentView}&search=${searchQuery}&page=${currentPage}&${filterParams}`;
         const response = await axios.get(requestUrl);
         setAllOrders(response.data.results);
         setTotalPages(Math.ceil(response.data.count / ordersPerPage));
@@ -89,8 +86,7 @@ const AllOrders = () => {
   }, [
     refreshOrders,
     currentView,
-    searchQueryFormatted,
-    urlCharacter,
+    searchQuery,
     currentPage,
     confirmedChecked,
     notConfirmedChecked,
@@ -136,40 +132,32 @@ const AllOrders = () => {
 
   const countNumberOfFilters = () => {
     const filterStates = [
-        confirmedChecked,
-        notConfirmedChecked,
-        readyChecked,
-        notReadyChecked,
-        shippedChecked,
-        notShippedChecked,
-        delayedChecked,
-        quoteChecked
+      confirmedChecked,
+      notConfirmedChecked,
+      readyChecked,
+      notReadyChecked,
+      shippedChecked,
+      notShippedChecked,
+      delayedChecked,
+      quoteChecked,
     ];
-    const numberOfActiveFilters = filterStates.filter(state => state === true).length;
-    setNumberOfFilters(numberOfActiveFilters > 0 ? `(${numberOfActiveFilters})` : "");
-}
-
+    const numberOfActiveFilters = filterStates.filter(
+      (state) => state === true
+    ).length;
+    setNumberOfFilters(
+      numberOfActiveFilters > 0 ? `(${numberOfActiveFilters})` : ""
+    );
+  };
 
   const handleSortChange = (filterChoice) => {
     setCurrentPage(1);
     setCurrentView(filterChoice);
-    setURLCharacter("&");
     localStorage.setItem("currentView", JSON.stringify(filterChoice));
-
   };
 
   const handleSearchOrders = (query) => {
-    if (query === "") {
-      setSearchQuery("");
-      setSearchQueryFormatted("");
-      setCurrentView(currentView);
-      setURLCharacter("/?");
-    } else {
-      setCurrentPage(1);
-      setCurrentView(`all-orders-search`);
-      setSearchQueryFormatted(`/?search=${query}`);
-      setURLCharacter("&");
-    }
+    setCurrentPage(1);
+    setSearchQuery(query);
   };
 
   const editShipDate = async (order, date) => {
