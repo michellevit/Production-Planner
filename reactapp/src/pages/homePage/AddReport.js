@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import "./AddReport.css";
-import HomeErrorModal from "./HomeErrorModal";
+import ErrorModal from "../../components/ErrorModal";
 
 const AddReport = () => {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [showHomeErrorModal, setShowHomeErrorModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [uploads, setUploads] = useState([]);
   const [refreshReports, setRefreshReports] = useState(false);
@@ -40,7 +40,7 @@ const AddReport = () => {
 
     if (!selectedFile) {
       setErrorMessage("Please select a file.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
     const formData = new FormData();
@@ -50,7 +50,7 @@ const AddReport = () => {
       setErrorMessage(
         `The uploaded file is incompatible.\nUploaded file type: .${fileExtensionName}\nCorrect file type: .xlsx`
       );
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
     const fileNameWithoutExtension = selectedFile.name.replace(/\.[^/.]+$/, "");
@@ -65,7 +65,7 @@ const AddReport = () => {
         setRefreshReports(true);
       } else {
         setErrorMessage("There was an error uploading your file - please check the following:\n1. The file is a QuickBooks 'Orders by Item' report\n2. The order report was saved to an accessible folder");
-        setShowHomeErrorModal(true);
+        setShowErrorModal(true);
         console.error("File upload failed.");
       }
     } catch (error) {
@@ -77,9 +77,9 @@ const AddReport = () => {
     <div className="add-order-report-container">
       <div className="file-upload-form">
         <h2>Upload Order Report</h2>
-        <HomeErrorModal
-          showHomeErrorModal={showHomeErrorModal}
-          setShowHomeErrorModal={setShowHomeErrorModal}
+        <ErrorModal
+          showErrorModal={showErrorModal}
+          setShowErrorModal={setShowErrorModal}
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
         />

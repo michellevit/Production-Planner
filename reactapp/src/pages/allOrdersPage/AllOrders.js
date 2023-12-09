@@ -232,7 +232,7 @@ const AllOrders = () => {
       setFadingRows((prevFadingRows) => [...prevFadingRows, order.id]);
       const updatedOrder = order;
       updatedOrder.delay_tbd = tbdStatus;
-      updatedOrder.ready = false;
+      updatedOrder.delay_date = null;
       setTimeout(async () => {
         await axios.put(
           `http://127.0.0.1:8000/all-orders/${order.id}/`,

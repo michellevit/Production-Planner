@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import "./AddLineItem.css";
-import HomeErrorModal from "./HomeErrorModal";
+import ErrorModal from "../../components/ErrorModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 
 const AddLineItem = ({
   items,
   setItems,
-  showHomeErrorModal,
-  setShowHomeErrorModal,
+  showErrorModal,
+  setShowErrorModal,
   errorMessage,
   setErrorMessage,
   setMatchingDims,
@@ -20,13 +20,13 @@ const AddLineItem = ({
     const itemQty = document.getElementById("add-line-item-qty").value;
     if (itemName.trim() === "") {
       setErrorMessage("Please enter a valid item name.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
     const parsedItemQty = parseFloat(itemQty);
     if (isNaN(parsedItemQty) || parsedItemQty <= 0) {
       setErrorMessage("Please enter a valid (positive) quantity.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
     const roundedItemQty =
@@ -48,9 +48,9 @@ const AddLineItem = ({
   return (
     <div className="add-line-item-container">
       <div>
-        <HomeErrorModal
-          showHomeErrorModal={showHomeErrorModal}
-          setShowHomeErrorModal={setShowHomeErrorModal}
+        <ErrorModal
+          showErrorModal={showErrorModal}
+          setShowErrorModal={setShowErrorModal}
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
         />

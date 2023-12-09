@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "./AddNoteItem.css";
-import HomeErrorModal from "./HomeErrorModal";
+import ErrorModal from "../../components/ErrorModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 
 const AddNoteItem = ({
   notes,
   setNotes,
-  showHomeErrorModal,
-  setShowHomeErrorModal,
+  showErrorModal,
+  setShowErrorModal,
   errorMessage,
   setErrorMessage,
 }) => {
@@ -17,7 +17,7 @@ const AddNoteItem = ({
     e.preventDefault();
     if (noteItemText.trim() === "") {
       setErrorMessage("Please enter text before submitting.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
     const newNote = {
@@ -34,12 +34,12 @@ const AddNoteItem = ({
   return (
     <div className="add-note-item-container">
       <div>
-        <HomeErrorModal
-          showHomeErrorModal={showHomeErrorModal}
-          setShowHomeErrorModal={setShowHomeErrorModal}
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
-        />
+      <ErrorModal
+        showErrorModal={showErrorModal}
+        setShowErrorModal={setShowErrorModal}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
         <input
           id="add-note-text"
           type="text"
