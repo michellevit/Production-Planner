@@ -30,18 +30,24 @@
 .home-page-nav-container .row2 li {
   list-style-type: none;
   margin: 0 20px;
+  width: 150px;
+  text-align: center;
   padding: 4px 8px;
+  column-gap: 10px;
   border: none;
   border-radius: 5px;
   background-color: white;
+  cursor: pointer;
 }
 
 .home-page-nav-container .row2 li:hover {
   opacity: 0.5;
+  color: black;
 }
 
 .home-page-nav-container .row2 li.active {
   opacity: 0.5;
+  color: black;
 }
 
 
@@ -49,15 +55,4 @@
   display: flex;
   align-items: center; 
   justify-content: center;
-}
-
-.home-page-nav-container a {
-  color: inherit;
-  text-decoration: none;
-  list-style-type: none;
-  margin: 0 20px;
-  padding: 4px 8px;
-  border: none;
-  border-radius: 5px;
-  background-color: white;
 }
