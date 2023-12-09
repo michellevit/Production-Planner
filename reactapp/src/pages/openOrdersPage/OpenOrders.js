@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import OrderNav from "../../components/OrderNav";
 import OrderCard from "./OrderCard";
-import ErrorModal from "./ErrorModal";
+import ErrorModal from "../../components/ErrorModal";
 import "./OpenOrders.css";
 
 const OpenOrders = () => {

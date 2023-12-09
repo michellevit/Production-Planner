@@ -10,7 +10,6 @@ const BoxForm = ({
   setBoxes,
   boxes,
   boxConfirmStatus,
-  setBoxConfirmStatus,
   readyStatus,
   updatePackages,
   setShowErrorModal,
