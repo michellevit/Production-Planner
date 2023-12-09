@@ -16,8 +16,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const OrderCard = ({
   order,
-  openOrders,
-  setOpenOrders,
+  orders,
+  setOrders,
   setShowErrorModal,
   setErrorMessage,
 }) => {
@@ -190,8 +190,8 @@ const OrderCard = ({
       );
       setIsRemoving(true);
       setTimeout(() => {
-        setOpenOrders(
-          openOrders.filter((orderItem) => orderItem.id !== shippedOrderID)
+        setOrders(
+          orders.filter((orderItem) => orderItem.id !== shippedOrderID)
         );
         setIsRemoving(false);
       }, 300);
@@ -344,8 +344,8 @@ const OrderCard = ({
             />
             <DeleteButton
               order={order}
-              openOrders={openOrders}
-              setOpenOrders={setOpenOrders}
+              orders={orders}
+              setOrders={setOrders}
               setIsRemoving={setIsRemoving}
             />
           </div>

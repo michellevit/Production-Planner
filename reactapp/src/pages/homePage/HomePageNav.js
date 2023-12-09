@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useMatch, useResolvedPath } from "react-router-dom"
+import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import "./HomePageNav.css";
 
 const HomePageNav = () => {
@@ -11,27 +11,24 @@ const HomePageNav = () => {
         </header>
       </div>
       <div className="row2">
-      <ul>
-        <CustomLink to="/add-report">Add Report</CustomLink>
-        <CustomLink to="/add-order">Add Order</CustomLink>
-        <CustomLink to="/add-dimensions">Add Dimensions</CustomLink>
-      </ul>
+        <ul>
+          <CustomLink to="/add-report">Add Report</CustomLink>
+          <CustomLink to="/add-order">Add Order</CustomLink>
+          <CustomLink to="/add-dimensions">Add Dimensions</CustomLink>
+        </ul>
       </div>
     </div>
   );
 };
 
-function CustomLink({to, children, ...props}) {
-  const resolvedPath = useResolvedPath(to)
-  const isActive = useMatch({ path: resolvedPath.pathname, end: true })
+function CustomLink({ to, children, ...props }) {
+  const resolvedPath = useResolvedPath(to);
+  const isActive = useMatch({ path: resolvedPath.pathname, end: true });
   return (
-      <li className={isActive ? "active" : ""}>
-          <Link to={to} {...props}>
-              {children}
-          </Link>
-      </li>
-  )
+    <Link to={to} {...props}>
+      <li className={isActive ? "active" : ""}>{children}</li>
+    </Link>
+  );
 }
 
 export default HomePageNav;
-

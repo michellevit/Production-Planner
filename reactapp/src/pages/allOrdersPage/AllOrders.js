@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AllOrders.css";
-import AllOrdersNav from "./AllOrdersNav";
+import OrderNav from "../../components/OrderNav";
 import EditShipDateButton from "./EditShipDateButton";
 import UnshipButton from "./UnshipButton";
 import DeleteButton from "./DeleteButton";
@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faClose, faStar } from "@fortawesome/free-solid-svg-icons";
 
 const AllOrders = () => {
-  const [allOrders, setAllOrders] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
   const [isRemoving, setIsRemoving] = useState(false);
   const [fadingRows, setFadingRows] = useState([]);
@@ -25,8 +25,6 @@ const AllOrders = () => {
     JSON.parse(localStorage.getItem("currentView")) || "all"
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchQueryFormatted, setSearchQueryFormatted] = useState("");
-  const [urlCharacter, setURLCharacter] = useState("/?");
   // Sort Filters: Checkboxes
   const [confirmedChecked, setConfirmedChecked] = useState(
     JSON.parse(localStorage.getItem("confirmedChecked")) || false
@@ -49,6 +47,9 @@ const AllOrders = () => {
   const [delayedChecked, setDelayedChecked] = useState(
     JSON.parse(localStorage.getItem("delayedChecked")) || false
   );
+  const [notDelayedChecked, setNotDelayedChecked] = useState(
+    JSON.parse(localStorage.getItem("notDelayedChecked")) || false
+  );
   const [quoteChecked, setQuoteChecked] = useState(
     JSON.parse(localStorage.getItem("quoteChecked")) || false
   );
@@ -58,9 +59,10 @@ const AllOrders = () => {
 
   useEffect(() => {
     const formattedDate = new Date();
+    formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
     countNumberOfFilters();
-    const fetchAllOrders = async () => {
+    const fetchOrders = async () => {
       try {
         const filterParams = [
           `confirmed_checked=${confirmedChecked}`,
@@ -70,27 +72,26 @@ const AllOrders = () => {
           `shipped_checked=${shippedChecked}`,
           `not_shipped_checked=${notShippedChecked}`,
           `delayed_checked=${delayedChecked}`,
+          `not_delayed_checked=${notDelayedChecked}`,
           `quote_checked=${quoteChecked}`,
           `oldest_checked=${oldestChecked}`,
         ]
           .filter((param) => param.endsWith("_checked=true"))
           .join("&");
-        const requestUrl = `http://127.0.0.1:8000/all-orders-filtered/?filter=${currentView}&${searchQueryFormatted}page=${currentPage}&${filterParams}`;
-        console.log(requestUrl);
+        const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=all&filter=${currentView}&search=${searchQuery}&page=${currentPage}&${filterParams}`;
         const response = await axios.get(requestUrl);
-        setAllOrders(response.data.results);
+        setOrders(response.data.results);
         setTotalPages(Math.ceil(response.data.count / ordersPerPage));
       } catch (error) {
         console.error("Error getting data", error);
       }
     };
 
-    fetchAllOrders();
+    fetchOrders();
   }, [
     refreshOrders,
     currentView,
-    searchQueryFormatted,
-    urlCharacter,
+    searchQuery,
     currentPage,
     confirmedChecked,
     notConfirmedChecked,
@@ -99,6 +100,7 @@ const AllOrders = () => {
     shippedChecked,
     notShippedChecked,
     delayedChecked,
+    notDelayedChecked,
     quoteChecked,
     oldestChecked,
   ]);
@@ -119,6 +121,7 @@ const AllOrders = () => {
       JSON.stringify(notShippedChecked)
     );
     localStorage.setItem("delayedChecked", JSON.stringify(delayedChecked));
+    localStorage.setItem("notDelayedChecked", JSON.stringify(notDelayedChecked));
     localStorage.setItem("quoteChecked", JSON.stringify(quoteChecked));
     localStorage.setItem("oldestChecked", JSON.stringify(oldestChecked));
   }, [
@@ -130,46 +133,40 @@ const AllOrders = () => {
     shippedChecked,
     notShippedChecked,
     delayedChecked,
+    notDelayedChecked,
     quoteChecked,
     oldestChecked,
   ]);
 
   const countNumberOfFilters = () => {
     const filterStates = [
-        confirmedChecked,
-        notConfirmedChecked,
-        readyChecked,
-        notReadyChecked,
-        shippedChecked,
-        notShippedChecked,
-        delayedChecked,
-        quoteChecked
+      confirmedChecked,
+      notConfirmedChecked,
+      readyChecked,
+      notReadyChecked,
+      shippedChecked,
+      notShippedChecked,
+      delayedChecked,
+      notDelayedChecked,
+      quoteChecked,
     ];
-    const numberOfActiveFilters = filterStates.filter(state => state === true).length;
-    setNumberOfFilters(numberOfActiveFilters > 0 ? `(${numberOfActiveFilters})` : "");
-}
-
+    const numberOfActiveFilters = filterStates.filter(
+      (state) => state === true
+    ).length;
+    setNumberOfFilters(
+      numberOfActiveFilters > 0 ? `(${numberOfActiveFilters})` : ""
+    );
+  };
 
   const handleSortChange = (filterChoice) => {
     setCurrentPage(1);
     setCurrentView(filterChoice);
-    setURLCharacter("&");
     localStorage.setItem("currentView", JSON.stringify(filterChoice));
-
   };
 
   const handleSearchOrders = (query) => {
-    if (query === "") {
-      setSearchQuery("");
-      setSearchQueryFormatted("");
-      setCurrentView(currentView);
-      setURLCharacter("/?");
-    } else {
-      setCurrentPage(1);
-      setCurrentView(`all-orders-search`);
-      setSearchQueryFormatted(`/?search=${query}`);
-      setURLCharacter("&");
-    }
+    setCurrentPage(1);
+    setSearchQuery(query);
   };
 
   const editShipDate = async (order, date) => {
@@ -255,8 +252,8 @@ const AllOrders = () => {
           `http://127.0.0.1:8000/all-orders/${order.id}/`,
           updatedOrder
         );
-        setAllOrders((prevAllOrders) =>
-          prevAllOrders.map((o) => (o.id === currentOrderID ? updatedOrder : o))
+        setOrders((prevOrders) =>
+          prevOrders.map((o) => (o.id === currentOrderID ? updatedOrder : o))
         );
         setTimeout(() => {
           setFadingRows((prevFadingRows) =>
@@ -284,8 +281,8 @@ const AllOrders = () => {
           `http://127.0.0.1:8000/all-orders/${order.id}/`,
           updatedOrder
         );
-        setAllOrders((prevAllOrders) =>
-          prevAllOrders.map((o) => (o.id === currentOrderID ? updatedOrder : o))
+        setOrders((prevOrders) =>
+          prevOrders.map((o) => (o.id === currentOrderID ? updatedOrder : o))
         );
         setTimeout(() => {
           setFadingRows((prevFadingRows) =>
@@ -308,7 +305,7 @@ const AllOrders = () => {
 
   return (
     <div className="all-main-div">
-      <AllOrdersNav
+      <OrderNav
         handleSortChange={handleSortChange}
         handleSearchOrders={handleSearchOrders}
         currentView={currentView}
@@ -327,6 +324,8 @@ const AllOrders = () => {
         setNotReadyChecked={setNotReadyChecked}
         delayedChecked={delayedChecked}
         setDelayedChecked={setDelayedChecked}
+        notDelayedChecked={notDelayedChecked}
+        setNotDelayedChecked={setNotDelayedChecked}
         quoteChecked={quoteChecked}
         setQuoteChecked={setQuoteChecked}
         oldestChecked={oldestChecked}
@@ -351,14 +350,14 @@ const AllOrders = () => {
             </tr>
           </thead>
           <tbody>
-            {allOrders.length === 0 ? (
+            {orders.length === 0 ? (
               <tr>
                 <td colSpan="10" className="no-orders-message">
                   No orders to display
                 </td>
               </tr>
             ) : (
-              allOrders.map((order) => (
+              orders.map((order) => (
                 <tr
                   key={order.id}
                   className={`${
@@ -485,7 +484,7 @@ const AllOrders = () => {
                   <td id="delete-col">
                     <DeleteButton
                       order={order}
-                      setAllOrders={setAllOrders}
+                      setOrders={setOrders}
                       isRemoving={isRemoving}
                       setIsRemoving={setIsRemoving}
                     />

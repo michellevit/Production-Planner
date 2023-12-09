@@ -26,9 +26,22 @@ body {
   padding: 0;
 }
 
+a {
+  text-decoration: none;
+}
+
 .container {
   margin: 0 0 4em 0;
 }
+
+input:focus {
+  outline: none;
+}
+
+select:focus {
+  outline: none;
+}
+
 
 /* NAVBAR */
 
