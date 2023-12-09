@@ -1,24 +1,4 @@
-.all-orders-nav-container {
-  width: 100%;
-  background-color: rgb(182, 182, 182);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 3rem;
-  justify-content: center;
-  padding: 1rem 0.8rem;
-}
-
-.all-orders-nav-container .row1 {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 0.5rem;
-}
-
-.all-orders-nav-container .row2 {
+.row2 {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -28,18 +8,18 @@
   column-gap: 10px;
 }
 
-.all-orders-nav-container input#search {
+.row2 input#search {
   padding: 4px 8px;
   border: none;
   border-radius: 5px;
   width: 150px;
 }
 
-.all-orders-nav-container input:focus {
+.row2 input:focus {
   outline: none;
 }
 
-.all-orders-nav-container select {
+.row2 select {
   padding: 4px 8px;
   border: none;
   width: 150px;
@@ -47,32 +27,10 @@
   margin: 0 5px;
 }
 
-.all-orders-nav-container select:focus {
-  outline: none;
-}
-
-.no-results {
-  margin-top: 5%;
-  font-size: 1rem;
-  font-weight: 400;
-}
-
 /* Checkbox Dropdown Menu */
 
 .custom-dropdown button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: left;
-  font-size: smaller;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 4px 4px 4px 12px;
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   width: 150px;
-  margin: 0;
 }
 
 .custom-dropdown button .svg-inline--fa {
