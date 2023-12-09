@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import { parseISO } from "date-fns";
 import EditShipDateIcon from "./EditShipDateIcon";
 import EditShipDateModal from "./EditShipDateModal";
-import ErrorModal from "./ErrorModal";
+import ErrorModal from "../../components/ErrorModal";
 
 const EditShipDateButton = ({
   order,

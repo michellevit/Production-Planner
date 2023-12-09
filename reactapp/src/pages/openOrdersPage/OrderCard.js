@@ -27,12 +27,15 @@ const OrderCard = ({
   const [delayDate, setDelayDate] = useState();
   const [tbdStatus, setTBDStatus] = useState(false);
   const [boxes, setBoxes] = useState([]);
-  const [minimized, setMinimized] = useState(order.minimized_status);
   const [formDisplay, setFormDisplay] = useState([]);
   const [notes, setNotes] = useState([]);
   const [readyStatus, setReadyStatus] = useState(false);
   const [matchingDims, setMatchingDims] = useState("");
   const [suggestedBoxes, setSuggestedBoxes] = useState([]);
+  const [minimized, setMinimized] = useState(() => {
+    const minimizedStatus = localStorage.getItem(`order_minimized_${order.id}`);
+    return minimizedStatus ? JSON.parse(minimizedStatus) : true; 
+  });
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -48,7 +51,6 @@ const OrderCard = ({
             delay_tbd,
             packages_array,
             notes_array,
-            minimized_status,
             item_type_dict_hash,
           } = response.data;
           const updatedBoxes = Array.isArray(packages_array)
@@ -68,7 +70,7 @@ const OrderCard = ({
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);
-          setMinimized(minimized_status);
+          setMinimized(order.minimized_status);
           setShipDate(formatDate(ship_date));
           if (ship_date === null) {
             if (delay_date === null) {
@@ -77,7 +79,11 @@ const OrderCard = ({
               checkTBD(false);
             }
           }
-          if (packages_array.length === 0 && matchingDims !== false  && item_type_dict_hash !== "0") {
+          if (
+            packages_array.length === 0 &&
+            matchingDims !== false &&
+            item_type_dict_hash !== "0"
+          ) {
             axios
               .post("http://127.0.0.1:8000/fetch-matching-packages/", {
                 item_type_dict: order.item_type_dict,
@@ -86,8 +92,7 @@ const OrderCard = ({
                 if (response.data.success) {
                   setMatchingDims(true);
                   setSuggestedBoxes(response.data.packages_array);
-                }
-                else {
+                } else {
                   setMatchingDims(false);
                 }
               })
@@ -105,12 +110,12 @@ const OrderCard = ({
     fetchOrderDetails();
   }, [
     order.id,
-    order.minimized_status,
     order.confirmed,
     order.delay_tbd,
     order.delay_date,
     order.ship_date,
     order.packages_array,
+    order.minimized_status,
   ]);
 
   function formatDate(inputDate) {
@@ -141,7 +146,7 @@ const OrderCard = ({
 
   const readyHandler = async () => {
     setReadyStatus(true);
-    setConfirmedStatus(true)
+    setConfirmedStatus(true);
     boxFormHandler();
     setDelayDate(null);
     const updatedOrder = order;
@@ -195,6 +200,8 @@ const OrderCard = ({
         );
         setIsRemoving(false);
       }, 300);
+      // Remove minimized status from local storage
+      localStorage.removeItem(`order_minimized_${order.id}`);
     } catch (error) {
       console.error("Error updating order:", error);
     }
@@ -237,7 +244,7 @@ const OrderCard = ({
 
   const handleTBD = async () => {
     let newStatus = !tbdStatus;
-    setConfirmedStatus(false)
+    setConfirmedStatus(false);
     if (newStatus === false && order.ship_date === null) {
       newStatus = true;
     } else if (newStatus === false && order.ship_date !== null) {
@@ -307,20 +314,29 @@ const OrderCard = ({
     }
   };
 
-
+  const toggleMinimize = () => {
+    setMinimized((prevState) => {
+      const newState = !prevState;
+      localStorage.setItem(
+        `order_minimized_${order.id}`,
+        JSON.stringify(newState)
+      );
+      return newState;
+    });
+  };
 
 
   return (
     <div
-    className={`card-container ${
-      order.quote
-        ? "quoted-order-card"
-        : !order.quote && order.confirmed && !order.ready
-        ? "confirmed-order-card"
-        : !order.quote && confirmedStatus && readyStatus
-        ? "ready-order-card"
-        : ""
-    } ${isRemoving ? "card-container-fade-out" : ""} ${
+      className={`card-container ${
+        order.quote
+          ? "quoted-order-card"
+          : !order.quote && order.confirmed && !order.ready
+          ? "confirmed-order-card"
+          : !order.quote && confirmedStatus && readyStatus
+          ? "ready-order-card"
+          : ""
+      } ${isRemoving ? "card-container-fade-out" : ""} ${
         (delayDate !== null || tbdStatus === true) &&
         !readyStatus &&
         !order.quote
@@ -338,9 +354,8 @@ const OrderCard = ({
           </div>
           <div id="row1col3">
             <MinimizeCardButton
-              order={order}
               minimized={minimized}
-              setMinimized={setMinimized}
+              toggleMinimize={toggleMinimize}
             />
             <DeleteButton
               order={order}
@@ -370,7 +385,11 @@ const OrderCard = ({
               <tr className="order-data" id="ship-date">
                 <td className="row2col1">Ship Date:</td>
                 <td className="row2col2">{tbdStatus ? "TBD" : shipDate}</td>
-                <td className="row2col3">{!order.ready  && !order.quote && !tbdStatus && order.delay_date == null && (
+                <td className="row2col3">
+                  {!order.ready &&
+                    !order.quote &&
+                    !tbdStatus &&
+                    order.delay_date == null && (
                       <input
                         type="checkbox"
                         id="order-card-confirmed-checkbox"
@@ -378,7 +397,12 @@ const OrderCard = ({
                         onChange={handleConfirmed}
                       ></input>
                     )}
-                    {!order.ready && !order.quote && !tbdStatus && order.delay_date == null && "Confirmed"}</td>
+                  {!order.ready &&
+                    !order.quote &&
+                    !tbdStatus &&
+                    order.delay_date == null &&
+                    "Confirmed"}
+                </td>
               </tr>
               {!readyStatus && !order.quote && (
                 <tr className="order-data" id="delay-date">
