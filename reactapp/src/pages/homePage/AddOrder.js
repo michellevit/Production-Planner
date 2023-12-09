@@ -3,6 +3,7 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import AddLineItem from "./AddLineItem";
 import AddNoteItem from "./AddNoteItem";
+import ErrorModal from "../../components/ErrorModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
@@ -16,7 +17,7 @@ const AddOrder = () => {
   const [shipDate, setShipDate] = useState("");
   const [items, setItems] = useState({});
   const [notes, setNotes] = useState([]);
-  const [showHomeErrorModal, setShowHomeErrorModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [tbd, setTBD] = useState(false);
   const [matchingDims, setMatchingDims] = useState(false);
@@ -28,7 +29,7 @@ const AddOrder = () => {
     e.preventDefault();
     if (Object.keys(items).length === 0) {
       setErrorMessage("Please add at least one item.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
     try {
@@ -65,7 +66,7 @@ const AddOrder = () => {
             </div>
           </div>
         );
-        setShowHomeErrorModal(true);
+        setShowErrorModal(true);
         setSuggestedDims([]);
       }
     } catch (error) {
@@ -73,7 +74,7 @@ const AddOrder = () => {
       setErrorMessage(
         "An error occurred while trying to fetch a matching quote."
       );
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
     }
   };
 
@@ -82,7 +83,7 @@ const AddOrder = () => {
     const orderNumber = document.getElementById("add-order-so-number").value;
     if (orderNumber === "") {
       setErrorMessage("Please enter an order number.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
     const customerName = document.getElementById(
@@ -90,17 +91,17 @@ const AddOrder = () => {
     ).value;
     if (customerName === "") {
       setErrorMessage("Please enter a customer name.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
     if ((shipDate === "" || shipDate === null) && tbd === false) {
       setErrorMessage("Please enter a ship date or select the TBD checkbox.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
     if (Object.keys(items).length === 0) {
       setErrorMessage("Please add at least one item.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
     const quoteValue = document.getElementById(
@@ -131,7 +132,7 @@ const AddOrder = () => {
         setErrorMessage("Your order has been added.");
         setSuggestedDims([]);
       }
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       document.getElementById("add-order-form").reset();
       setShipDate("");
       setTBD(false);
@@ -141,7 +142,7 @@ const AddOrder = () => {
       setErrorMessage(
         "There was an error submitting your order.\nPlease ensure that all required fields have been completed."
       );
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
     }
   };
   const handleShowProductList = () => {
@@ -213,8 +214,8 @@ const AddOrder = () => {
                 <AddLineItem
                   items={items}
                   setItems={setItems}
-                  showHomeErrorModal={showHomeErrorModal}
-                  setShowHomeErrorModal={setShowHomeErrorModal}
+                  showErrorModal={showErrorModal}
+                  setShowErrorModal={setShowErrorModal}
                   errorMessage={errorMessage}
                   setErrorMessage={setErrorMessage}
                   setMatchingDims={setMatchingDims}
@@ -227,8 +228,8 @@ const AddOrder = () => {
                 <AddNoteItem
                   notes={notes}
                   setNotes={setNotes}
-                  showHomeErrorModal={showHomeErrorModal}
-                  setShowHomeErrorModal={setShowHomeErrorModal}
+                  showErrorModal={showErrorModal}
+                  setShowErrorModal={setShowErrorModal}
                   errorMessage={errorMessage}
                   setErrorMessage={setErrorMessage}
                 />

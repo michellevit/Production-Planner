@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import HomeErrorModal from "./HomeErrorModal";
+import ErrorModal from "../../components/ErrorModal";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import "./AddDimensions.css";
 import axios from "axios";
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faClose } from "@fortawesome/free-solid-svg-icons";
 
 const AddDimensions = () => {
-  const [showHomeErrorModal, setShowHomeErrorModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [dimensions, setDimensions] = useState([]);
   const [packageLength, setPackageLength] = useState("");
@@ -49,7 +49,7 @@ const AddDimensions = () => {
     );
     if (isDuplicate) {
       setErrorMessage("Dimension with the same values already exists.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
       return;
     }
 
@@ -69,7 +69,7 @@ const AddDimensions = () => {
     } catch (error) {
       console.error("Error adding dimension", error);
       setErrorMessage("Please add a length, width, and height.");
-      setShowHomeErrorModal(true);
+      setShowErrorModal(true);
     }
   };
 
@@ -108,9 +108,9 @@ const AddDimensions = () => {
       />
       <div className="add-dimensions-form"></div>
       <h2>Add Dimensions</h2>
-      <HomeErrorModal
-        showHomeErrorModal={showHomeErrorModal}
-        setShowHomeErrorModal={setShowHomeErrorModal}
+      <ErrorModal
+        showErrorModal={showErrorModal}
+        setShowErrorModal={setShowErrorModal}
         errorMessage={errorMessage}
         setErrorMessage={setErrorMessage}
       />

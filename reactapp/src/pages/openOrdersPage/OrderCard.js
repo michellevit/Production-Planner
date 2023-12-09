@@ -379,8 +379,7 @@ const OrderCard = ({
             <tbody>
               <tr className="order-data" id="customer-name">
                 <td className="row2col1">Customer:</td>
-                <td className="row2col2">{order.customer_name}</td>
-                <td className="row2col3"></td>
+                <td className="row2col2" colspan="2">{order.customer_name}</td>
               </tr>
               <tr className="order-data" id="ship-date">
                 <td className="row2col1">Ship Date:</td>
