@@ -53,6 +53,9 @@ const AllOrders = () => {
   const [quoteChecked, setQuoteChecked] = useState(
     JSON.parse(localStorage.getItem("allOrders_quoteChecked")) || false
   );
+  const [notQuoteChecked, setNotQuoteChecked] = useState(
+    JSON.parse(localStorage.getItem("allOrders_notQuoteChecked")) || false
+  );
   const [oldestChecked, setOldestChecked] = useState(
     JSON.parse(localStorage.getItem("allOrders_oldestChecked")) || false
   );
@@ -74,6 +77,7 @@ const AllOrders = () => {
           `delayed_checked=${delayedChecked}`,
           `not_delayed_checked=${notDelayedChecked}`,
           `quote_checked=${quoteChecked}`,
+          `not_quote_checked=${notQuoteChecked}`,
           `oldest_checked=${oldestChecked}`,
         ]
           .filter((param) => param.endsWith("_checked=true"))
@@ -88,6 +92,7 @@ const AllOrders = () => {
     };
 
     fetchOrders();
+    setRefreshOrders(false);
   }, [
     refreshOrders,
     currentView,
@@ -102,6 +107,7 @@ const AllOrders = () => {
     delayedChecked,
     notDelayedChecked,
     quoteChecked,
+    notQuoteChecked,
     oldestChecked,
   ]);
 
@@ -123,6 +129,7 @@ const AllOrders = () => {
     localStorage.setItem("allOrders_delayedChecked", JSON.stringify(delayedChecked));
     localStorage.setItem("allOrders_notDelayedChecked", JSON.stringify(notDelayedChecked));
     localStorage.setItem("allOrders_quoteChecked", JSON.stringify(quoteChecked));
+    localStorage.setItem("allOrders_notQuoteChecked", JSON.stringify(notQuoteChecked));
     localStorage.setItem("allOrders_oldestChecked", JSON.stringify(oldestChecked));
   }, [
     currentView,
@@ -135,6 +142,7 @@ const AllOrders = () => {
     delayedChecked,
     notDelayedChecked,
     quoteChecked,
+    notQuoteChecked,
     oldestChecked,
   ]);
 
@@ -149,6 +157,7 @@ const AllOrders = () => {
       delayedChecked,
       notDelayedChecked,
       quoteChecked,
+      notQuoteChecked,
     ];
     const numberOfActiveFilters = filterStates.filter(
       (state) => state === true
@@ -328,6 +337,8 @@ const AllOrders = () => {
         setNotDelayedChecked={setNotDelayedChecked}
         quoteChecked={quoteChecked}
         setQuoteChecked={setQuoteChecked}
+        notQuoteChecked={notQuoteChecked}
+        setNotQuoteChecked={setNotQuoteChecked}
         oldestChecked={oldestChecked}
         setOldestChecked={setOldestChecked}
         searchQuery={searchQuery}
