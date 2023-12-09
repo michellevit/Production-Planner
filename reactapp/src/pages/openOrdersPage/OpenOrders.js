@@ -12,39 +12,39 @@ const OpenOrders = () => {
   const [numberOfFilters, setNumberOfFilters] = useState("");
   // Sort Filters: Select + Search
   const [currentView, setCurrentView] = useState(
-    JSON.parse(localStorage.getItem("currentView")) || "all"
+    JSON.parse(localStorage.getItem("openOrders_currentView")) || "all"
   );
   const [searchQuery, setSearchQuery] = useState("");
   // Sort Filters: Checkboxes
   const [confirmedChecked, setConfirmedChecked] = useState(
-    JSON.parse(localStorage.getItem("confirmedChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_confirmedChecked")) || false
   );
   const [notConfirmedChecked, setNotConfirmedChecked] = useState(
-    JSON.parse(localStorage.getItem("notConfirmedChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_notConfirmedChecked")) || false
   );
   const [readyChecked, setReadyChecked] = useState(
-    JSON.parse(localStorage.getItem("readyChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_readyChecked")) || false
   );
   const [notReadyChecked, setNotReadyChecked] = useState(
-    JSON.parse(localStorage.getItem("notReadyChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_notReadyChecked")) || false
   );
   const [shippedChecked, setShippedChecked] = useState(
-    JSON.parse(localStorage.getItem("shippedChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_shippedChecked")) || false
   );
   const [notShippedChecked, setNotShippedChecked] = useState(
-    JSON.parse(localStorage.getItem("notShippedChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_notShippedChecked")) || false
   );
   const [delayedChecked, setDelayedChecked] = useState(
-    JSON.parse(localStorage.getItem("delayedChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_delayedChecked")) || false
   );
   const [notDelayedChecked, setNotDelayedChecked] = useState(
-    JSON.parse(localStorage.getItem("notDelayedChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_notDelayedChecked")) || false
   );
   const [quoteChecked, setQuoteChecked] = useState(
-    JSON.parse(localStorage.getItem("quoteChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_quoteChecked")) || false
   );
   const [oldestChecked, setOldestChecked] = useState(
-    JSON.parse(localStorage.getItem("oldestChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_oldestChecked")) || false
   );
   const page = "openOrdersPage";
 
@@ -90,23 +90,23 @@ const OpenOrders = () => {
   ]);
 
   useEffect(() => {
-    localStorage.setItem("currentView", JSON.stringify(currentView));
-    localStorage.setItem("confirmedChecked", JSON.stringify(confirmedChecked));
+    localStorage.setItem("openOrders_currentView", JSON.stringify(currentView));
+    localStorage.setItem("openOrders_confirmedChecked", JSON.stringify(confirmedChecked));
     localStorage.setItem(
-      "notConfirmedChecked",
+      "openOrders_notConfirmedChecked",
       JSON.stringify(notConfirmedChecked)
     );
-    localStorage.setItem("readyChecked", JSON.stringify(readyChecked));
-    localStorage.setItem("notReadyChecked", JSON.stringify(notReadyChecked));
-    localStorage.setItem("shippedChecked", JSON.stringify(shippedChecked));
+    localStorage.setItem("openOrders_readyChecked", JSON.stringify(readyChecked));
+    localStorage.setItem("openOrders_notReadyChecked", JSON.stringify(notReadyChecked));
+    localStorage.setItem("openOrders_shippedChecked", JSON.stringify(shippedChecked));
     localStorage.setItem(
-      "notShippedChecked",
+      "openOrders_notShippedChecked",
       JSON.stringify(notShippedChecked)
     );
-    localStorage.setItem("delayedChecked", JSON.stringify(delayedChecked));
-    localStorage.setItem("notDelayedChecked", JSON.stringify(notDelayedChecked));
-    localStorage.setItem("quoteChecked", JSON.stringify(quoteChecked));
-    localStorage.setItem("oldestChecked", JSON.stringify(oldestChecked));
+    localStorage.setItem("openOrders_delayedChecked", JSON.stringify(delayedChecked));
+    localStorage.setItem("openOrders_notDelayedChecked", JSON.stringify(notDelayedChecked));
+    localStorage.setItem("openOrders_quoteChecked", JSON.stringify(quoteChecked));
+    localStorage.setItem("openOrders_oldestChecked", JSON.stringify(oldestChecked));
   }, [
     currentView,
     confirmedChecked,
