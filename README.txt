@@ -208,7 +208,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - *To delete when using Docker/MySQL (works only in Production/MySQL)
   - Navigate to the project's root folder
   - Run: docker exec -it production-planner-db-1 bash
-  - Connect to mysql: mysql -u username -p
+  - Connect to mysql: 
     * Note: username/password is in the .env file
   - Select the database: USE Production_Planner_DB
   - List all the tables in the db: SHOW TABLES;
