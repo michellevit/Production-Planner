@@ -38,6 +38,7 @@
   border-radius: 5px;
   background-color: white;
   cursor: pointer;
+  color: black;
 }
 
 .home-page-nav-container .row2 li:hover {

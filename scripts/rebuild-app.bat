@@ -14,8 +14,20 @@ if %errorlevel% neq 0 (
 REM Change directory to where your docker-compose.yml file is located
 cd C:\Users\Michelle\Documents\Coding_Projects\Production-Planner
 
+REM Check if the Docker containers for the project are running
+docker-compose ps -q
+if not "%errorlevel%"=="0" (
+    REM Stop running containers
+    docker-compose down
+    REM Wait for containers to stop
+    timeout /t 10
+)
+
 REM Build or rebuild the Docker images
 docker-compose build
+
+REM Start the containers
+docker-compose up -d
 
 REM Execute any necessary migration or setup commands
 docker-compose exec backend python manage.py migrate
