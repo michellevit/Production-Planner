@@ -83,7 +83,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - Run: python manage.py import_dimensions_to_db
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the folder: Production-Planner/django
-  - Run: python manage.py import_dimensions_to_db
+  - Run: python manage.py import_products_to_db
 - Complete the 'Preparing To Run In Development' (step 4) instructions
 
 
@@ -122,7 +122,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - Run: docker-compose exec backend python manage.py import_dimensions_to_db
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the project root directory
-  - Run: docker-compose exec backend python manage.py import_dimensions_to_db
+  - Run: docker-compose exec backend python manage.py import_products_to_db
 - Complete the 'Preparing To Run In Development' (step 4) instructions
 
 
