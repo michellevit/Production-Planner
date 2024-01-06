@@ -20,6 +20,7 @@ const OrderCard = ({
   setOrders,
   setShowErrorModal,
   setErrorMessage,
+  minimizeMaximizeAction,
 }) => {
   const [isRemoving, setIsRemoving] = useState(false);
   const [shipDate, setShipDate] = useState("");
@@ -70,7 +71,8 @@ const OrderCard = ({
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);
-          setMinimized(order.minimized_status);
+          const minimizedStatus = localStorage.getItem(`order_minimized_${order.id}`);
+          setMinimized(minimizedStatus ? JSON.parse(minimizedStatus) : true);
           setShipDate(formatDate(ship_date));
           if (ship_date === null) {
             if (delay_date === null) {
@@ -116,6 +118,7 @@ const OrderCard = ({
     order.ship_date,
     order.packages_array,
     order.minimized_status,
+    minimizeMaximizeAction,
   ]);
 
   function formatDate(inputDate) {
