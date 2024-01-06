@@ -36,6 +36,12 @@
         "package_size": "12\" x 9\" x 6\""
     },
     {
+        "length": 12.0,
+        "width": 9.0,
+        "height": 9.0,
+        "package_size": "12\" x 9\" x 9\""
+    },
+    {
         "length": 12.25,
         "width": 9.25,
         "height": 12.0,

@@ -84,7 +84,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - Run: python manage.py import_dimensions_to_db
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the folder: Production-Planner/django
-  - Run: python manage.py import_dimensions_to_db
+  - Run: python manage.py import_products_to_db
 - Complete the 'Preparing To Run In Development' (step 4) instructions
 
 
@@ -123,7 +123,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - Run: docker-compose exec backend python manage.py import_dimensions_to_db
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the project root directory
-  - Run: docker-compose exec backend python manage.py import_dimensions_to_db
+  - Run: docker-compose exec backend python manage.py import_products_to_db
 - Complete the 'Preparing To Run In Development' (step 4) instructions
 
 
@@ -209,7 +209,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - *To delete when using Docker/MySQL (works only in Production/MySQL)
   - Navigate to the project's root folder
   - Run: docker exec -it production-planner-db-1 bash
-  - Connect to mysql: mysql -u username -p
+  - Connect to mysql: 
     * Note: username/password is in the .env file
   - Select the database: USE Production_Planner_DB
   - List all the tables in the db: SHOW TABLES;
