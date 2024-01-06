@@ -57,7 +57,8 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
     * Note: the env.txt file includes instructions to get new secret keys, etc
   - Change the file name from 'env.txt' to '.env'
 - Update the file paths for the .bat scripts
-
+- Install node:
+  - https://nodejs.org/en
 - Follow instructions for 'Preparing To Run In Development' (step 4) OR 'Preparing To Deploy In Production' (step 5)
 - Create a superuser to access Django admin site:
   - python manage.py createsuperuser

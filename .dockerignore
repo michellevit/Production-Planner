@@ -12,3 +12,7 @@ node_modules/
 
 # Ignore other non-essential files
 .DS_Store
+
+build/
+dist/
+.git/
