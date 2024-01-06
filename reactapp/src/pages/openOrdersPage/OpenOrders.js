@@ -11,6 +11,7 @@ const OpenOrders = () => {
   const [orders, setOrders] = useState([]);
   const [refreshOrders, setRefreshOrders] = useState(false);
   const [numberOfFilters, setNumberOfFilters] = useState("");
+  const [minimizeMaximizeAction, setMinimizeMaximizeAction] = useState(0);
   // Sort Filters: Select + Search
   const [currentView, setCurrentView] = useState(
     JSON.parse(localStorage.getItem("openOrders_currentView")) || "all"
@@ -209,6 +210,7 @@ const OpenOrders = () => {
     });
     setOrders(updatedOrders);
     setRefreshOrders(true);
+    setMinimizeMaximizeAction(prev => prev + 1);
   };
 
   const handleMinimizeAll = () => {
@@ -218,6 +220,7 @@ const OpenOrders = () => {
     });
     setOrders(updatedOrders);
     setRefreshOrders(true);
+    setMinimizeMaximizeAction(prev => prev + 1);
   };
 
   return (
@@ -275,6 +278,7 @@ const OpenOrders = () => {
               setShowErrorModal={setShowErrorModal}
               errorMessage={errorMessage}
               setErrorMessage={setErrorMessage}
+              minimizeMaximizeAction={minimizeMaximizeAction}
             />
           ))
         )
