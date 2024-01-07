@@ -3,6 +3,7 @@
 *.pyc
 .xlsx
 .bat
+venv/
 
 # Reactapp .gitignore Rules
 # dependencies
