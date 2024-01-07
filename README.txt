@@ -64,6 +64,13 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - python manage.py createsuperuser
   - Use credentials from the .env file
   - To access Django's admin interface - go to broswer url: http://localhost:8000/admin/login/?next=/admin/
+- Create a virtual environment in the main folder:
+  - cd into the project's main folder (i.e. Production-Planner)
+  - create the virtual environment - run: python -m venv venv
+  - install pyodbc by uncommenting line 8 from scripts/activate-virtual-env.bat
+  - run the batch file: activate-virtual-env.bat
+  - comment out line 8 (return to original)
+  - Note: the reason for this is because QODBC is difficult to install in the Docker container, so instead this script runs outside of Docker on the system on a schedule, and updates a json file that Docker can access.
 
 
 ----------
