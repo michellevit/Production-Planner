@@ -1,6 +1,6 @@
 @echo off
 REM Change directory to where your docker-compose.yml file is located
-cd C:\Users\Michelle\Documents\Coding_Projects\Production-Planner
+cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner
 
 REM Stop the Docker Compose application
 docker-compose down

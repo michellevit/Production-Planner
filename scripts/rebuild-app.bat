@@ -8,11 +8,11 @@ if %errorlevel% neq 0 (
     REM Start Docker Desktop
     start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
     REM Wait for Docker to initialize (adjust the sleep time if needed)
-    timeout /t 30
+    timeout /t 120
 )
 
 REM Change directory to where your docker-compose.yml file is located
-cd C:\Users\Michelle\Documents\Coding_Projects\Production-Planner
+cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner
 
 REM Check if the Docker containers for the project are running
 docker-compose ps -q
