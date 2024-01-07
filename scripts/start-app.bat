@@ -10,7 +10,7 @@ if %errorlevel% neq 0 (
 
 REM Change directory to where your docker-compose.yml file is located
 REM cd /path/to/your/docker-compose
-cd C:\Users\Michelle\Documents\Coding_Projects\Production-Planner
+cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner
 
 REM Start your Docker Compose application
 docker-compose up -d
