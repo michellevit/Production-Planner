@@ -7,6 +7,3 @@ call powershell -NoProfile -ExecutionPolicy Bypass -Command ".\venv\Scripts\Acti
 :: Run your Python script
 @REM for first time app deployment: pip install pyodbc
 python .\django\api\scripts\check_quickbooks.py
-
-:: Pause to see the output
-pause

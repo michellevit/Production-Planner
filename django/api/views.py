@@ -7,12 +7,10 @@ from django.utils import timezone
 from .models import * 
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.parsers import FileUploadParser
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from .scripts.check_order_report import process_uploaded_report
 from .serializers import *
 from .utils import sort_dict
 import logging
@@ -69,8 +67,8 @@ class OrderDetailView(APIView):
                 order.shipped = request.data['shipped']
             if 'quote' in request.data:
                 order.quote = request.data['quote']
-            if 'item_type_dict_hash' in request.data:
-                order.item_type_dict_hash = request.data['item_type_dict_hash']
+            if 'item_dict_hash' in request.data:
+                order.item_type_dict_hash = request.data['item_dict_hash']
             order.save()
             return Response({"message": "Ready status updated successfully."})
         except Order.DoesNotExist:
@@ -288,28 +286,6 @@ class FilteredOrdersListView(generics.ListAPIView):
         return queryset
 
 
- 
-#path('reports/', OrderReportUploadView.as_view(), name="reports")
-class OrderReportUploadView(APIView):
-    parser_class = (FileUploadParser,)
-    def get(self, request, *args, **kwargs):
-        last_5_entries = OrderReport.objects.order_by('-submitted_date')[:5]
-        serializer = OrderReportSerializer(last_5_entries, many=True)
-        return Response(serializer.data)
-    @transaction.atomic
-    def post(self, request, *args, **kwargs):
-        uploaded_file = request.FILES.get("file")        
-        if uploaded_file:
-            file_name = uploaded_file.name
-            process_uploaded_report(uploaded_file)      
-            order_report = OrderReport(file_name=file_name)
-            order_report.save()      
-            return Response({"message": "File processed successfully."}, status=status.HTTP_201_CREATED)
-        else:
-            logger.error("No file uploaded.")
-            return Response({"message": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)
-
-
 #path('dimensions/', DimensionView.as_view(), name="dimensions")
 #path('dimensions/<int:pk>/', DimensionView.as_view()),]
 class DimensionView(APIView):
@@ -337,13 +313,13 @@ class DimensionView(APIView):
 class FetchMatchingPackagesView(APIView):
     def post(self, request):
         data = request.data
-        item_type_dict = data.get('item_type_dict')
-        if not item_type_dict:
-            return JsonResponse({'success': False, 'message': 'item_type_dict not provided'})
-        sorted_dict = sort_dict(item_type_dict)
-        hash_value = hash_item_type_dict(sorted_dict)
+        item_dict = data.get('item_dict')
+        if not item_dict:
+            return JsonResponse({'success': False, 'message': 'item_dict not provided'})
+        sorted_dict = sort_dict(item_dict)
+        hash_value = hash_item_dict(sorted_dict)
         try:
-            matching_order = Order.objects.filter(shipped=True, item_type_dict_hash=hash_value).first()
+            matching_order = Order.objects.filter(shipped=True, item_dict_hash=hash_value).first()
             if matching_order:
                 return JsonResponse({'success': True, 'packages_array': matching_order.packages_array})
             else:

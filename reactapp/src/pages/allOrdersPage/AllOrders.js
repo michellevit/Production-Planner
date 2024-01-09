@@ -396,14 +396,14 @@ const AllOrders = () => {
                   <td id="items">
                     <table className="item-table">
                       <tbody>
-                        {Object.keys(order.item_subtype_dict).map(
+                        {Object.keys(order.item_dict).map(
                           (itemType, index) => (
                             <tr key={index}>
                               <td id="item">
                                 {extractTextBeforeParentheses(itemType)}
                               </td>
                               <td id="qty">
-                                {order.item_subtype_dict[itemType]}
+                                {order.item_dict[itemType]}
                               </td>
                             </tr>
                           )
