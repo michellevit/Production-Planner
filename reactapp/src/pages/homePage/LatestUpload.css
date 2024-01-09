@@ -1,0 +1,24 @@
+.latest-upload-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+  .latest-upload-table {
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+
+.no-data-message {
+    text-align: center;
+    width: 500px;
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 15px;
+}

@@ -8,51 +8,11 @@
         "quantity": "1"
     },
     {
-        "order_number": "29910",
-        "ship_date": "2024-01-08",
-        "customer_name": "Amco Auto Parts",
-        "item": "GTC505",
-        "description": "Engine Ignition Analyzer",
-        "quantity": "75"
-    },
-    {
-        "order_number": "29910",
-        "ship_date": "2024-01-08",
-        "customer_name": "Amco Auto Parts",
-        "item": "CM100",
-        "description": "100A AC/DC Clamp Meter",
-        "quantity": "75"
-    },
-    {
-        "order_number": "29910",
-        "ship_date": "2024-01-08",
-        "customer_name": "Amco Auto Parts",
-        "item": "CM100",
-        "description": "100A AC/DC Clamp Meter",
-        "quantity": "75"
-    },
-    {
-        "order_number": "29910",
-        "ship_date": "2024-01-08",
-        "customer_name": "Amco Auto Parts",
-        "item": "TA100",
-        "description": "TA100 Replacement",
-        "quantity": "1"
-    },
-    {
         "order_number": "30128",
         "ship_date": "2023-12-15",
         "customer_name": "C & K Enterprize LLC",
         "item": "GTC505m",
         "description": "Engine Ignition Analyzer + Spark Plug Wire Sensor Clip and Cable",
-        "quantity": "1"
-    },
-    {
-        "order_number": "30128",
-        "ship_date": "2023-12-15",
-        "customer_name": "C & K Enterprize LLC",
-        "item": "Shipping",
-        "description": null,
         "quantity": "1"
     },
     {
@@ -88,78 +48,6 @@
         "quantity": "5"
     },
     {
-        "order_number": "30170",
-        "ship_date": "2023-11-27",
-        "customer_name": "Igor Primisky",
-        "item": "Shipping",
-        "description": "Meest shipping charges",
-        "quantity": "1"
-    },
-    {
-        "order_number": "30170",
-        "ship_date": "2023-11-27",
-        "customer_name": "Igor Primisky",
-        "item": null,
-        "description": null,
-        "quantity": "None"
-    },
-    {
-        "order_number": "30170",
-        "ship_date": "2023-11-27",
-        "customer_name": "Igor Primisky",
-        "item": null,
-        "description": null,
-        "quantity": "None"
-    },
-    {
-        "order_number": "30170",
-        "ship_date": "2023-11-27",
-        "customer_name": "Igor Primisky",
-        "item": null,
-        "description": null,
-        "quantity": "None"
-    },
-    {
-        "order_number": "30170",
-        "ship_date": "2023-11-27",
-        "customer_name": "Igor Primisky",
-        "item": null,
-        "description": null,
-        "quantity": "None"
-    },
-    {
-        "order_number": "30170",
-        "ship_date": "2023-11-27",
-        "customer_name": "Igor Primisky",
-        "item": null,
-        "description": null,
-        "quantity": "None"
-    },
-    {
-        "order_number": "30170",
-        "ship_date": "2023-11-27",
-        "customer_name": "Igor Primisky",
-        "item": null,
-        "description": null,
-        "quantity": "None"
-    },
-    {
-        "order_number": "30230",
-        "ship_date": "2024-01-05",
-        "customer_name": "NA One Solution",
-        "item": "GTC505",
-        "description": "Engine Ignition Analyzer",
-        "quantity": "14"
-    },
-    {
-        "order_number": "30230",
-        "ship_date": "2024-01-05",
-        "customer_name": "NA One Solution",
-        "item": null,
-        "description": "*Include calibration certificates",
-        "quantity": "None"
-    },
-    {
         "order_number": "30231",
         "ship_date": "2023-12-13",
         "customer_name": "Aurora Supplies",
@@ -174,22 +62,6 @@
         "item": "PE350HR-RD",
         "description": "Holster for PE350 enclosure - Red",
         "quantity": "15"
-    },
-    {
-        "order_number": "30231",
-        "ship_date": "2023-12-13",
-        "customer_name": "Aurora Supplies",
-        "item": "Shipping",
-        "description": "TBD",
-        "quantity": "None"
-    },
-    {
-        "order_number": "30231",
-        "ship_date": "2023-12-13",
-        "customer_name": "Aurora Supplies",
-        "item": null,
-        "description": "*** Include certificate of calibration ***",
-        "quantity": "None"
     },
     {
         "order_number": "30241",
@@ -312,14 +184,6 @@
         "quantity": "60"
     },
     {
-        "order_number": "30261",
-        "ship_date": "2024-01-08",
-        "customer_name": "Yuriy Khalaniya",
-        "item": "TA303",
-        "description": "Universal Diesel & Gasoline Tachometer Kit",
-        "quantity": "10"
-    },
-    {
         "order_number": "30262",
         "ship_date": "2024-01-08",
         "customer_name": "M. Eagles Tool",
@@ -366,5 +230,605 @@
         "item": "GTC063",
         "description": "Fuse Socket Connector Set",
         "quantity": "3"
+    },
+    {
+        "order_number": "30264",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "3"
+    },
+    {
+        "order_number": "30264",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "TA500",
+        "description": "Smartach+COP Multisystem Ignition Analyzer",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30264",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM100",
+        "description": "100A AC/DC Clamp Meter",
+        "quantity": "3"
+    },
+    {
+        "order_number": "30264",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT8002",
+        "description": "Cordless Circuit Tester - Chrome",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30265",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC062",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "4"
+    },
+    {
+        "order_number": "30265",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30265",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM1000",
+        "description": "1000A AC/DC Clamp Meter",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30265",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT6100",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "12"
+    },
+    {
+        "order_number": "30265",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "TA500",
+        "description": "Smartach+COP Multisystem Ignition Analyzer",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30265",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM100",
+        "description": "100A AC/DC Clamp Meter",
+        "quantity": "2"
+    },
+    {
+        "order_number": "30265",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM600",
+        "description": "600A AC/DC Clamp Meter",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30265",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT8002",
+        "description": "Cordless Circuit Tester - Chrome",
+        "quantity": "2"
+    },
+    {
+        "order_number": "30266",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "2"
+    },
+    {
+        "order_number": "30266",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT6100",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "3"
+    },
+    {
+        "order_number": "30266",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "ST05",
+        "description": "Oxygen Sensor Tester/Simulator",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30266",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM100",
+        "description": "100A AC/DC Clamp Meter",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30266",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM600",
+        "description": "600A AC/DC Clamp Meter",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30266",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "FF310",
+        "description": "FaultFinder\u2122 Open and Short Circuit Finder and Tracer\n",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30267",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC063",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "20"
+    },
+    {
+        "order_number": "30267",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC062",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "4"
+    },
+    {
+        "order_number": "30267",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "3"
+    },
+    {
+        "order_number": "30267",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT6100",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "9"
+    },
+    {
+        "order_number": "30267",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "TA500",
+        "description": "Smartach+COP Multisystem Ignition Analyzer",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30267",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM100",
+        "description": "100A AC/DC Clamp Meter",
+        "quantity": "6"
+    },
+    {
+        "order_number": "30267",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "FF310",
+        "description": "FaultFinder\u2122 Open and Short Circuit Finder and Tracer\n",
+        "quantity": "2"
+    },
+    {
+        "order_number": "30268",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC063",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "20"
+    },
+    {
+        "order_number": "30268",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC062",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "4"
+    },
+    {
+        "order_number": "30268",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "15"
+    },
+    {
+        "order_number": "30268",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT6100",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "12"
+    },
+    {
+        "order_number": "30268",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM100",
+        "description": "100A AC/DC Clamp Meter",
+        "quantity": "6"
+    },
+    {
+        "order_number": "30268",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT8002",
+        "description": "Cordless Circuit Tester - Chrome",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30269",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC063",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "20"
+    },
+    {
+        "order_number": "30269",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC062",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "4"
+    },
+    {
+        "order_number": "30269",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT6100",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "9"
+    },
+    {
+        "order_number": "30269",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM100",
+        "description": "100A AC/DC Clamp Meter",
+        "quantity": "2"
+    },
+    {
+        "order_number": "30270",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "15"
+    },
+    {
+        "order_number": "30270",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT6100",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "6"
+    },
+    {
+        "order_number": "30270",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "TA500",
+        "description": "Smartach+COP Multisystem Ignition Analyzer",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30270",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM600",
+        "description": "600A AC/DC Clamp Meter",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30270",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "FF310",
+        "description": "FaultFinder\u2122 Open and Short Circuit Finder and Tracer\n",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30271",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "3"
+    },
+    {
+        "order_number": "30271",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "TA500",
+        "description": "Smartach+COP Multisystem Ignition Analyzer",
+        "quantity": "2"
+    },
+    {
+        "order_number": "30271",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "ST05",
+        "description": "Oxygen Sensor Tester/Simulator",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30271",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM100",
+        "description": "100A AC/DC Clamp Meter",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30271",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM600",
+        "description": "600A AC/DC Clamp Meter",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30272",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "2"
+    },
+    {
+        "order_number": "30272",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "TA500",
+        "description": "Smartach+COP Multisystem Ignition Analyzer",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30272",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM100",
+        "description": "100A AC/DC Clamp Meter",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30272",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM600",
+        "description": "600A AC/DC Clamp Meter",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30273",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "7"
+    },
+    {
+        "order_number": "30274",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "2"
+    },
+    {
+        "order_number": "30274",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT6100",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "12"
+    },
+    {
+        "order_number": "30274",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "TA500",
+        "description": "Smartach+COP Multisystem Ignition Analyzer",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30274",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM100",
+        "description": "100A AC/DC Clamp Meter",
+        "quantity": "5"
+    },
+    {
+        "order_number": "30274",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM600",
+        "description": "600A AC/DC Clamp Meter",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30274",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT8002",
+        "description": "Cordless Circuit Tester - Chrome",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30275",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "2"
+    },
+    {
+        "order_number": "30276",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC062",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "4"
+    },
+    {
+        "order_number": "30276",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT6100",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "6"
+    },
+    {
+        "order_number": "30276",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CM100",
+        "description": "100A AC/DC Clamp Meter",
+        "quantity": "4"
+    },
+    {
+        "order_number": "30276",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT8002",
+        "description": "Cordless Circuit Tester - Chrome",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30276",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "FF310",
+        "description": "FaultFinder\u2122 Open and Short Circuit Finder and Tracer\n",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30277",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "2"
+    },
+    {
+        "order_number": "30278",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC063",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "20"
+    },
+    {
+        "order_number": "30278",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "GTC062",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "4"
+    },
+    {
+        "order_number": "30278",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT6100",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "27"
+    },
+    {
+        "order_number": "30278",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon US",
+        "item": "CT8002",
+        "description": "Cordless Circuit Tester - Chrome",
+        "quantity": "6"
+    },
+    {
+        "order_number": "30279",
+        "ship_date": "2024-01-08",
+        "customer_name": "Amazon CA",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "5"
+    },
+    {
+        "order_number": "30280",
+        "ship_date": "2024-01-08",
+        "customer_name": "Mac Tools",
+        "item": "FF310:FF310-MAC",
+        "description": "Mac-Branded Short/Open Fault Finder 42V",
+        "quantity": "10"
+    },
+    {
+        "order_number": "30281",
+        "ship_date": "2024-01-08",
+        "customer_name": "Ivan Ivanov",
+        "item": "GTC505",
+        "description": "Engine Ignition Analyzer",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30282",
+        "ship_date": "2024-01-08",
+        "customer_name": "Josh's Tools",
+        "item": "CM600",
+        "description": "600A AC/DC Clamp Meter - Replacement for out of warranty broken unit",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30283",
+        "ship_date": "2024-01-08",
+        "customer_name": "Tecnomotor Argentina S.A.",
+        "item": "GTC605",
+        "description": "Fuel Injection Analyzer",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30284",
+        "ship_date": "2024-01-10",
+        "customer_name": "Cam Hadfield",
+        "item": "GTC505m",
+        "description": "Engine Ignition Analyzer + Spark Plug Wire Sensor Clip and Cable",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30284",
+        "ship_date": "2024-01-10",
+        "customer_name": "Cam Hadfield",
+        "item": "GTC062",
+        "description": "Fuse Socket Connector Set",
+        "quantity": "1"
+    },
+    {
+        "order_number": "30284",
+        "ship_date": "2024-01-10",
+        "customer_name": "Cam Hadfield",
+        "item": "CT8002",
+        "description": "Cordless Circuit Tester - Chrome",
+        "quantity": "1"
     }
 ]

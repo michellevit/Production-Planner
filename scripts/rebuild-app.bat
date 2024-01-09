@@ -1,6 +1,3 @@
-REM This script is meant for first-time deployment or when changes are made to the app.
-
-
 @echo off
 REM Check if Docker Desktop is running
 docker info >nul 2>&1
@@ -24,7 +21,7 @@ if not "%errorlevel%"=="0" (
 )
 
 REM Build or rebuild the Docker images
-docker-compose build
+docker-compose build --no-cache
 
 REM Start the containers
 docker-compose up -d
@@ -32,8 +29,14 @@ docker-compose up -d
 REM Execute any necessary migration or setup commands
 docker-compose exec backend python manage.py migrate
 
-REM Print a message indicating the build process is complete
-echo Build and migration complete.
+REM Remove dangling/unused Docker images
+docker image prune -f
 
-REM pause keeps the terminal window open after building the app (optional)
+REM Troubleshooting:
+REM You may need to manually stop + start the container after rebuild-app.bat is run
+REM Check if you need to apply migrations 
+REM -- In terminal - run: 
+REM ---- docker-compose exec backend python manage.py makemigrations
+REM ---- docker-compose exec backend python manage.py migrate
+
 pause

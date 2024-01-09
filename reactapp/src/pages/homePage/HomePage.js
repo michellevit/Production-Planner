@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import AddReport from "./AddReport";
+import LatestUpload from "./LatestUpload";
 import AddOrder from "./AddOrder";
 import AddDimensions from "./AddDimensions";
 import "./HomePage.css";
@@ -12,9 +12,9 @@ function HomePage() {
       <HomePageNav />
       <div className="container">
         <Routes>
-          <Route path="/" element={<AddReport />} />  
-          <Route path="/home" element={<AddReport />} />  
-          <Route path="/add-report" element={<AddReport />} />
+          <Route path="/" element={<LatestUpload />} />  
+          <Route path="/home" element={<LatestUpload />} />  
+          <Route path="/latest-upload" element={<LatestUpload />} />
           <Route path="/add-order" element={<AddOrder />} />
           <Route path="/add-dimensions" element={<AddDimensions />} />
         </Routes>

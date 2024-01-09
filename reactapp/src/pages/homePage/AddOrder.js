@@ -40,7 +40,7 @@ const AddOrder = () => {
       const response = await axios.post(
         "http://127.0.0.1:8000/fetch-matching-packages/",
         {
-          item_type_dict: items,
+          item_dict: items,
         }
       );
       if (response.data.success) {
@@ -50,7 +50,7 @@ const AddOrder = () => {
       } else {
         setErrorMessage({
           main: "There are no suggested dimensions available.",
-          note: "Note: please make sure to use the full part number as per the 'Products' list below (not customer specific).",
+          note: "Note: please make sure to use the full part number.",
         });
         setShowErrorModal(true);
         setSuggestedDims([]);
@@ -104,8 +104,7 @@ const AddOrder = () => {
       ship_date: formattedShipDate,
       delay_tbd: tbd,
       customer_name: customerName,
-      item_type_dict: items,
-      item_subtype_dict: items,
+      item_dict: items,
       notes_array: notes,
       quote: quoteValue,
     };

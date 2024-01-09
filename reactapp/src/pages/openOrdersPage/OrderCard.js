@@ -52,7 +52,7 @@ const OrderCard = ({
             delay_tbd,
             packages_array,
             notes_array,
-            item_type_dict_hash,
+            item_dict_hash,
           } = response.data;
           const updatedBoxes = Array.isArray(packages_array)
             ? packages_array.map((box) => {
@@ -84,11 +84,11 @@ const OrderCard = ({
           if (
             packages_array.length === 0 &&
             matchingDims !== false &&
-            item_type_dict_hash !== "0"
+            item_dict_hash !== "0"
           ) {
             axios
               .post("http://127.0.0.1:8000/fetch-matching-packages/", {
-                item_type_dict: order.item_type_dict,
+                item_dict: order.item_dict,
               })
               .then((response) => {
                 if (response.data.success) {
@@ -447,10 +447,10 @@ const OrderCard = ({
                 <th id="item">Item</th>
                 <th id="qty">Qty.</th>
               </tr>
-              {Object.keys(order.item_subtype_dict).map((itemType, index) => (
+              {Object.keys(order.item_dict).map((itemType, index) => (
                 <tr key={index}>
                   <td id="item">{itemType}</td>
-                  <td id="qty">{order.item_subtype_dict[itemType]}</td>
+                  <td id="qty">{order.item_dict[itemType]}</td>
                 </tr>
               ))}
             </tbody>
