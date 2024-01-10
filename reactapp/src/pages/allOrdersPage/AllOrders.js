@@ -114,23 +114,50 @@ const AllOrders = () => {
   useEffect(() => {
     setCurrentPage(1);
     localStorage.setItem("allOrders_currentView", JSON.stringify(currentView));
-    localStorage.setItem("allOrders_confirmedChecked", JSON.stringify(confirmedChecked));
+    localStorage.setItem(
+      "allOrders_confirmedChecked",
+      JSON.stringify(confirmedChecked)
+    );
     localStorage.setItem(
       "allOrders_notConfirmedChecked",
       JSON.stringify(notConfirmedChecked)
     );
-    localStorage.setItem("allOrders_readyChecked", JSON.stringify(readyChecked));
-    localStorage.setItem("allOrders_notReadyChecked", JSON.stringify(notReadyChecked));
-    localStorage.setItem("allOrders_shippedChecked", JSON.stringify(shippedChecked));
+    localStorage.setItem(
+      "allOrders_readyChecked",
+      JSON.stringify(readyChecked)
+    );
+    localStorage.setItem(
+      "allOrders_notReadyChecked",
+      JSON.stringify(notReadyChecked)
+    );
+    localStorage.setItem(
+      "allOrders_shippedChecked",
+      JSON.stringify(shippedChecked)
+    );
     localStorage.setItem(
       "allOrders_notShippedChecked",
       JSON.stringify(notShippedChecked)
     );
-    localStorage.setItem("allOrders_delayedChecked", JSON.stringify(delayedChecked));
-    localStorage.setItem("allOrders_notDelayedChecked", JSON.stringify(notDelayedChecked));
-    localStorage.setItem("allOrders_quoteChecked", JSON.stringify(quoteChecked));
-    localStorage.setItem("allOrders_notQuoteChecked", JSON.stringify(notQuoteChecked));
-    localStorage.setItem("allOrders_oldestChecked", JSON.stringify(oldestChecked));
+    localStorage.setItem(
+      "allOrders_delayedChecked",
+      JSON.stringify(delayedChecked)
+    );
+    localStorage.setItem(
+      "allOrders_notDelayedChecked",
+      JSON.stringify(notDelayedChecked)
+    );
+    localStorage.setItem(
+      "allOrders_quoteChecked",
+      JSON.stringify(quoteChecked)
+    );
+    localStorage.setItem(
+      "allOrders_notQuoteChecked",
+      JSON.stringify(notQuoteChecked)
+    );
+    localStorage.setItem(
+      "allOrders_oldestChecked",
+      JSON.stringify(oldestChecked)
+    );
   }, [
     currentView,
     confirmedChecked,
@@ -396,18 +423,14 @@ const AllOrders = () => {
                   <td id="items">
                     <table className="item-table">
                       <tbody>
-                        {Object.keys(order.item_dict).map(
-                          (itemType, index) => (
-                            <tr key={index}>
-                              <td id="item">
-                                {extractTextBeforeParentheses(itemType)}
-                              </td>
-                              <td id="qty">
-                                {order.item_dict[itemType]}
-                              </td>
-                            </tr>
-                          )
-                        )}
+                        {item_array.map((item, index) => (
+                          <tr key={index}>
+                            <td id="item">
+                              {extractTextBeforeParentheses(item.name)}
+                            </td>
+                            <td id="qty">{item.quantity}</td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </td>
