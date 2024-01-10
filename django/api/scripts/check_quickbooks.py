@@ -1,7 +1,6 @@
 import pyodbc
 import json
 import ctypes
-from datetime import datetime  # Add this import
 
 def main():
     try:
@@ -22,7 +21,7 @@ def main():
         for row in cursor:
             order = {
                 "order_number": row.RefNumber,
-                "time_modified": row.TimeModified.strftime("%Y-%m-%d %H:%M:%S"),  # Convert to string
+                "time_modified": row.TimeModified.strftime("%Y-%m-%d %H:%M:%S"),  
                 "ship_date": row.ShipDate.strftime("%Y-%m-%d") if row.ShipDate else None,
                 "customer_name": row.CustomerRefFullName,
                 "item": row.SalesOrderLineItemRefFullName,

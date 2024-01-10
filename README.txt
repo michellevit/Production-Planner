@@ -61,6 +61,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - https://nodejs.org/en
 - Follow instructions for 'Preparing To Run In Development' (step 4) OR 'Preparing To Deploy In Production' (step 5)
 - Create a superuser to access Django admin site:
+  - cd into the django folder
   - python manage.py createsuperuser
   - Use credentials from the .env file
   - To access Django's admin interface - go to broswer url: http://localhost:8000/admin/login/?next=/admin/
