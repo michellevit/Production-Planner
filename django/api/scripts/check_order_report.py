@@ -3,7 +3,7 @@ import django
 import json
 import openpyxl
 import os
-from api.models import Order, OrderReport
+from api.models import Order
 from api.utils import sort_dict, hash_item_type_dict
 from django.db.models import Q
 from django.db import models
