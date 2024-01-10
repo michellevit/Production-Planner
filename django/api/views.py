@@ -12,7 +12,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from .serializers import *
-from .utils import sort_dict
+from .utils import *
 import logging
 
 
@@ -313,13 +313,13 @@ class DimensionView(APIView):
 class FetchMatchingPackagesView(APIView):
     def post(self, request):
         data = request.data
-        item_dict = data.get('item_dict')
-        if not item_dict:
-            return JsonResponse({'success': False, 'message': 'item_dict not provided'})
-        sorted_dict = sort_dict(item_dict)
-        hash_value = hash_item_dict(sorted_dict)
+        item_array = data.get('item_array')
+        if not item_array:
+            return JsonResponse({'success': False, 'message': 'item_array not provided'})
+        sorted_item = sort_item(item_array)
+        hash_value = hash_item_array(sorted_item)
         try:
-            matching_order = Order.objects.filter(shipped=True, item_dict_hash=hash_value).first()
+            matching_order = Order.objects.filter(shipped=True, item_array_hash=hash_value).first()
             if matching_order:
                 return JsonResponse({'success': True, 'packages_array': matching_order.packages_array})
             else:

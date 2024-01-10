@@ -1,6 +1,7 @@
 import pyodbc
 import json
 import ctypes
+from datetime import datetime  # Add this import
 
 def main():
     try:
@@ -8,7 +9,7 @@ def main():
         connection = pyodbc.connect(conn_str, autocommit=True)
 
         query = """
-        SELECT RefNumber, ShipDate, CustomerRefFullName, SalesOrderLineItemRefFullName, SalesOrderLineDesc, SalesOrderLineQuantity 
+        SELECT RefNumber, TimeModified, ShipDate, CustomerRefFullName, SalesOrderLineItemRefFullName, SalesOrderLineDesc, SalesOrderLineQuantity, SalesOrderLineInvoiced, CustomFieldSalesOrderLineOther1, CustomFieldSalesOrderLineOther2 
         FROM SalesOrderLine
         WHERE IsFullyInvoiced = 0 AND IsManuallyClosed = 0 AND SalesOrderLineItemRefFullName IS NOT NULL AND SalesOrderLineItemRefFullName <> 'Shipping'
         ORDER BY RefNumber ASC
@@ -21,11 +22,15 @@ def main():
         for row in cursor:
             order = {
                 "order_number": row.RefNumber,
+                "time_modified": row.TimeModified.strftime("%Y-%m-%d %H:%M:%S"),  # Convert to string
                 "ship_date": row.ShipDate.strftime("%Y-%m-%d") if row.ShipDate else None,
                 "customer_name": row.CustomerRefFullName,
                 "item": row.SalesOrderLineItemRefFullName,
                 "description": row.SalesOrderLineDesc,
-                "quantity": str(row.SalesOrderLineQuantity)
+                "requested_qty": str(row.SalesOrderLineQuantity),
+                "ship_qty": str(row.CustomFieldSalesOrderLineOther1) if row.CustomFieldSalesOrderLineOther1 is not None else "0",
+                "backorder_qty": str(row.CustomFieldSalesOrderLineOther2) if row.CustomFieldSalesOrderLineOther2 is not None else "0",
+                "invoiced_qty": str(row.SalesOrderLineInvoiced)
             }
             orders.append(order)
 
@@ -34,14 +39,12 @@ def main():
 
         output_file_path = 'django/api/data/qb_order_data.json'
         
-        # Open the file in 'write' mode and truncate it to delete existing contents
         with open(output_file_path, 'w') as file:
             json.dump(orders, file, indent=4)
     except pyodbc.Error as e:
         error_message = (
             f"Error details: {str(e)}\n\n"
             "Note: Please make sure QuickBooks is open and you are logged in before running this script."
-
         )
         ctypes.windll.user32.MessageBoxW(0, error_message, "Error", 0x10)  # Show a message box with an error message
 

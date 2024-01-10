@@ -13,8 +13,8 @@ class Order(models.Model):
     delay_date = models.DateField(null=True, default=None)
     delay_tbd = models.BooleanField(null=True, default=False)
     customer_name = models.CharField(max_length=100)
-    item_dict = models.JSONField(default=dict)
-    item_dict_hash = models.CharField(max_length=32, db_index=True, blank=True, null=True)
+    item_array = models.JSONField(default=list)
+    item_array_hash = models.CharField(max_length=32, db_index=True, blank=True, null=True)
     packages_array = models.JSONField(default=list, null=True, blank=True)
     notes_array = models.JSONField(default=list, null=True, blank=True)
     quote = models.BooleanField(default=False)
@@ -23,8 +23,12 @@ class Order(models.Model):
     def __str__(self):
         return self.order_number[0:50]
     def save(self, *args, **kwargs):
-        sorted_item_dict = sort_dict(self.item_dict)
-        self.item_dict_hash = hash_item_dict(sorted_item_dict)
+        if self.pk is None:
+            sorted_item_array = sort_item(self.item_array)
+            self.item_array_hash = hash_item_array(sorted_item_array)
+        elif self.item_array != self._original_values['item_array']:
+            sorted_item_array = sort_item(self.item_array)
+            self.item_array_hash = hash_item_array(sorted_item_array)
         super(Order, self).save(*args, **kwargs)
     
 
