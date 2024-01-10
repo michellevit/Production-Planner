@@ -35,7 +35,7 @@ const OrderCard = ({
   const [suggestedBoxes, setSuggestedBoxes] = useState([]);
   const [minimized, setMinimized] = useState(() => {
     const minimizedStatus = localStorage.getItem(`order_minimized_${order.id}`);
-    return minimizedStatus ? JSON.parse(minimizedStatus) : true; 
+    return minimizedStatus ? JSON.parse(minimizedStatus) : true;
   });
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -71,7 +71,9 @@ const OrderCard = ({
           setBoxes(updatedBoxes);
           setNotes(notes_array);
           setReadyStatus(ready);
-          const minimizedStatus = localStorage.getItem(`order_minimized_${order.id}`);
+          const minimizedStatus = localStorage.getItem(
+            `order_minimized_${order.id}`
+          );
           setMinimized(minimizedStatus ? JSON.parse(minimizedStatus) : true);
           setShipDate(formatDate(ship_date));
           if (ship_date === null) {
@@ -328,7 +330,6 @@ const OrderCard = ({
     });
   };
 
-
   return (
     <div
       className={`card-container ${
@@ -382,7 +383,9 @@ const OrderCard = ({
             <tbody>
               <tr className="order-data" id="customer-name">
                 <td className="row2col1">Customer:</td>
-                <td className="row2col2" colSpan="2">{order.customer_name}</td>
+                <td className="row2col2" colSpan="2">
+                  {order.customer_name}
+                </td>
               </tr>
               <tr className="order-data" id="ship-date">
                 <td className="row2col1">Ship Date:</td>
@@ -447,10 +450,10 @@ const OrderCard = ({
                 <th id="item">Item</th>
                 <th id="qty">Qty.</th>
               </tr>
-              {Object.keys(order.item_dict).map((itemType, index) => (
+              {item_array.map((item, index) => (
                 <tr key={index}>
-                  <td id="item">{itemType}</td>
-                  <td id="qty">{order.item_dict[itemType]}</td>
+                  <td id="item">{item.name}</td>
+                  <td id="qty">{item.quantity}</td>
                 </tr>
               ))}
             </tbody>
