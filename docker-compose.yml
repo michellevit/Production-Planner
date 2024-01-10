@@ -13,6 +13,7 @@ services:
       - db
     environment:
       - DATABASE_URL=mysql://$DB_USER:$DB_PASSWORD@db:3306/$DB_NAME
+      - PYTHONPATH=/django
     env_file: .env
 
   frontend:
