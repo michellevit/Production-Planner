@@ -1,9 +1,9 @@
+:: add-data-to-db.bat
+
 @echo off
-cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner
 
-:: Activate the virtual environment
-call powershell -NoProfile -ExecutionPolicy Bypass -Command ".\venv\Scripts\Activate.ps1"
+:: Run qb_data_to_db.py inside Docker container
 
-python .\django\api\scripts\qb_data_to_db.py
+docker exec production-planner-backend-1 python /django/api/scripts/qb_data_to_db.py
 
 pause

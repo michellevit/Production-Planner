@@ -1,10 +1,17 @@
-import json
+# qb_data_to_db.py
+
+import django
 import os
+
+# Initialize Django environment
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Production_Planner.settings')
+django.setup()
+
 from api.models import Order
 
-
-
 def main():
+    print('hi')
+    return
     script_dir = os.path.dirname(os.path.realpath(__file__))
     qb_data_json_file_path = os.path.join(script_dir, '..', 'data', 'qb_order_data.json')
     current_open_orders_json_file_path = os.path.join(script_dir, '..', 'data', 'current_open_orders.json')
@@ -131,69 +138,3 @@ def update_current_open_orders_json_file(current_open_orders_json_file_path, ord
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-# Iterate through the queried orders: 
-# Save the data into orders_dict
-
-# check_if_order_new_or_modified()
-# -For each: is the order in the current_open_orders.json file?
-# --YES: Is the time modified the same?
-# ----YES: pass
-# ----NO: check_if_order_in_database()
-# --NO: check_if_order_in_database()
-
-# check_if_order_number_in_database()
-# --make a list of the instances that the order_number is already in the database + iterate
-# --IF NONE: create a new order
-# --ELSE IF: there is only 1 matching order_number in the db with the same number and shipped=false
-# ----> check if the new order has any items with a previously_invoiced_qty > 0
-# ------> IF YES: PASS
-# ------> IF NO: update the ship_date + item_array if they are different (+ if different then mark confirmed=false)
-# --ELSE IF: there is only 1 matching order_number in the db with the same number and shipped=true
-# ----> are there any items in the new order query with previously_invoiced_qty > 0?
-# ------> IF YES: Create new order w/ backorder# 1 
-# ------> IF NO: PASS 
-# # --ELSE IF: there are multiple orders in the db but one order is shipped=false
-# ----Check if the existing order total items' previously_invoiced_qty amount is less than the new order's total items' previously_invoiced_qty
-# ------YES: PASS
-# ------NO: update the ship_date + item_array if they are different (+ if different then mark confirmed=false)
-# --ELSE IF: there are multiple orders in the db but all are shipped=true
-# ----Check if all have a backorder_qty
-# ------YES: 
-# --------Check if the most recent one has the same previously_invoiced_qty for all items
-# ----------YES: PASS
-# ----------NO: Create a new order with backorder# = qty of orders in db
-# ------NO: PASS
-
-# wipe_and_add_data_to_current_open_orders_json_file():
-# -create a dictionary with orders array:
-# --key:order_number, value: time_modified
-# -add data to current_open_orders.json 
-
-
-
-
-
-
-# order_data = {
-#     "order_number"
-#     "ship_date"
-#     "customer_name"
-#     "item_array"
-# }
-
-# item_dict =  {
-#     "name"
-#     "subname"
-#     "description"
-#     "requested_qty"
-#     "ship_qty"
-#     "backorder_qty" 
-#     "previously_invoiced_qty"
-# }
-

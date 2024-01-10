@@ -450,7 +450,7 @@ const OrderCard = ({
                 <th id="item">Item</th>
                 <th id="qty">Qty.</th>
               </tr>
-              {item_array.map((item, index) => (
+              {order.item_array.map((item, index) => (
                 <tr key={index}>
                   <td id="item">{item.name}</td>
                   <td id="qty">{item.quantity}</td>
