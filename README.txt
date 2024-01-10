@@ -66,10 +66,8 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - To access Django's admin interface - go to broswer url: http://localhost:8000/admin/login/?next=/admin/
 - Create a virtual environment in the main folder:
   - cd into the project's main folder (i.e. Production-Planner)
-  - create the virtual environment - run: python -m venv venv
-  - install pyodbc by uncommenting line 8 from scripts/activate-virtual-env.bat
-  - run the batch file: activate-virtual-env.bat
-  - comment out line 8 (return to original)
+  - create the virtual environment:
+  - uncomment line 8-10 from scripts/get-qb-data.bat
   - Note: the reason for this is because QODBC is difficult to install in the Docker container, so instead this script runs outside of Docker on the system on a schedule, and updates a json file that Docker can access.
 
 
@@ -92,7 +90,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the folder: Production-Planner/django
   - Run: python manage.py import_products_to_db
-- Complete the 'Preparing To Run In Development' (step 4) instructions
+- Complete the 'Preparing To Run In Development' instructions (starting at 'Create a superuser to access Django admin site')
 
 
 ----------
@@ -121,6 +119,11 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - Run 'docker-compose build'
   - Then run 'docker-compose up'
   * Note: it may take ~5-8 minutes for the react server to start
+- Install MySQL client tools:
+  - In the terminal, run the following command to install the MySQL client (default-mysql-client): 
+    - docker exec -it production-planner-backend-1 bash
+    - apt-get update
+    - apt-get install default-mysql-client
 - Initialize the Database: 
   - Run migrations for the database:
     - In the terminal, navigate to the project root directory 
@@ -131,7 +134,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the project root directory
   - Run: docker-compose exec backend python manage.py import_products_to_db
-- Complete the 'Preparing To Run In Development' (step 4) instructions
+- Complete the 'Preparing To Run In Development' instructions (starting at 'Create a superuser to access Django admin site')
 
 
 ----------
