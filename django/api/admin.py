@@ -71,8 +71,17 @@ class ProductAdmin(admin.ModelAdmin):
         "item_name"
     ) 
 
+class LastUpdateAdmin(admin.ModelAdmin):
+    # Customize the display of the model in the admin interface
+    list_display = (
+        "id",
+        "last_updated"
+    ) 
+
+
 
 # Register the models with the admin site (note: each model must be registered individually)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Dimension, DimensionAdmin)
 admin.site.register(Product, ProductAdmin)
+admin.site.register(LastUpdate, LastUpdateAdmin)

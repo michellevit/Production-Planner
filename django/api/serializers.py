@@ -16,3 +16,8 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = "__all__"
 
+class LastUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LastUpdate
+        fields = "__all__"
+

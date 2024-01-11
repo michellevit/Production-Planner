@@ -14,6 +14,8 @@ urlpatterns = [
     path('dimensions/<int:pk>/', DimensionView.as_view()),
     path('fetch-matching-packages/', FetchMatchingPackagesView.as_view(), name='fetch-matching-packages'),
     path('products/', ProductView.as_view(), name='products'),
+    path('last-update/', LastUpdateView.as_view(), name='last-update'),
+
 ]
     
 

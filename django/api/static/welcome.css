@@ -73,3 +73,11 @@ button:hover {
 .products:hover {
     color: Thistle;
 }
+
+.update {
+    background: blue;
+}
+
+.update:hover {
+    color: blue;
+}
