@@ -12,8 +12,9 @@ Table of Contents:
 7. How To Use The Program
 8. How To Backup The Database + Restore (for Production mode)
 9. How To Clear The Database
-10. How To Fetch Updates
-11. Credits
+10. How To Fetch Updates from GitHub
+11. How to Update Docker Container / Database
+12. Credits
 
 
 ----------
@@ -230,7 +231,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 
 -----------
-10. How To Fetch Updates
+10. How To Fetch Updates from GitHub
 - Open a Terminal and navigate to the Production-Planner directory
 - Select the main branch: git checkout main
 - Run: git pull origin main
@@ -245,12 +246,16 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - To update affected services - run:
         docker-compose up --build [backend/frontend/db]
         (e.g. docker-compose up --build backend)
-- Cleanup (Optional):
-  - If you're certain that the changes are working as expected, you can remove any old or unused containers and images to save disk space:
-  - Run: docker-compose down --rmi local  
-  * Note: This removes containers and images not in use
 
 
 -----------
-11. Credits
+11. How to Update Docker Container / Database
+- If changes were made to a static file (e.g. django/api/static/welcome.css): 
+  - Delet all the welcome.css file versions in django/static
+  - CD into the project's main folder
+  - Run: docker exec -it production-planner-backend-1 python manage.py collectstatic --noinput
+
+
+-----------
+12. Credits
 Michelle Flandin
