@@ -21,7 +21,7 @@ echo Frontend started and running on http://localhost:3000/
 
 :: Automatically open the default web browser at localhost:3000
 start http://localhost:3000/
-:: start http://localhost:8000/
+start http://localhost:8000/
 
-:: pause keeps the terminal window open after deploying the app (optional)
+:: keep the terminal window open after deploying the app
 :: pause

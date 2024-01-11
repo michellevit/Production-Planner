@@ -43,7 +43,7 @@ const LatestUpload = () => {
         key={index}
         icon={faSquare}
         style={{
-          color: currentIndex === index ? "black" : "grey",
+          color: currentIndex === index ? "#004596" : "#77b2cf",
           margin: "5px",
         }}
       />
