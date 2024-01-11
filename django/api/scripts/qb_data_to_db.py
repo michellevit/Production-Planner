@@ -1,26 +1,27 @@
 # qb_data_to_db.py
 
 import django
+import json
 import os
+from django.utils import timezone
+import pytz
 
 # Initialize Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Production_Planner.settings')
 django.setup()
 
-from api.models import Order
+from api.models import Order, LastUpdate
 
 def main():
-    print('hi')
-    return
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    qb_data_json_file_path = os.path.join(script_dir, '..', 'data', 'qb_order_data.json')
-    current_open_orders_json_file_path = os.path.join(script_dir, '..', 'data', 'current_open_orders.json')
-    with open(qb_data_json_file_path, 'r') as json_file:
-        data = json.load(json_file)
-    orders_dict = iterate_through_queried_orders(data)
-    check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict)
-    update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict)
-
+    # script_dir = os.path.dirname(os.path.realpath(__file__))
+    # qb_data_json_file_path = os.path.join(script_dir, '..', 'data', 'qb_order_data.json')
+    # current_open_orders_json_file_path = os.path.join(script_dir, '..', 'data', 'current_open_orders.json')
+    # with open(qb_data_json_file_path, 'r') as json_file:
+    #     data = json.load(json_file)
+    # orders_dict = iterate_through_queried_orders(data)
+    # check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict)
+    # update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict)
+    update_last_update_timestamp()
 
 
 def iterate_through_queried_orders(data):
@@ -75,6 +76,9 @@ def iterate_through_queried_orders(data):
 
 
 def check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict):
+    if os.path.getsize(current_open_orders_json_file_path) == 0:
+        print(f"File {current_open_orders_json_file_path} is empty.")
+        return
     with open(current_open_orders_json_file_path, 'r') as current_orders_file:
         current_open_orders = json.load(current_orders_file)
     
@@ -108,18 +112,9 @@ def check_if_order_in_database(order_number, orders_dict):
             print(f"Backorder: {order.backorder}")
             print(f"Ship Date: {order.ship_date}")
             print(f"Customer Name: {order.customer_name}")
-            # Print other fields as needed
-
-            # Example of printing item_type_dict
             print("Item Type Dict:")
             for key, value in order.item_type_dict.items():
                 print(f"{key}: {value}")
-
-            # Example of printing item_subtype_dict
-            print("Item Subtype Dict:")
-            for key, value in order.item_subtype_dict.items():
-                print(f"{key}: {value}")
-            print("-------------------")
 
 
 
@@ -133,6 +128,14 @@ def update_current_open_orders_json_file(current_open_orders_json_file_path, ord
         updated_orders.append(updated_order)
     with open(current_open_orders_json_file_path, 'w') as current_orders_file:
         json.dump(updated_orders, current_orders_file, indent=4)
+
+
+
+def update_last_update_timestamp():
+    vancouver_tz = pytz.timezone('America/Vancouver')
+    last_update, created = LastUpdate.objects.get_or_create(id=1)
+    last_update.last_updated = timezone.now().astimezone(vancouver_tz)
+    last_update.save()
 
 
 

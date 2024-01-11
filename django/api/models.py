@@ -54,3 +54,8 @@ class Product(models.Model):
         ordering = ['item_name']
         
 
+class LastUpdate(models.Model):
+    last_updated = models.CharField(max_length=100)
+    def __str__(self):
+        return self.last_updated[0:100]
+

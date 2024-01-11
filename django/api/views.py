@@ -335,3 +335,12 @@ class ProductView(APIView):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
     
+    
+# path('last-update', LastUpdateView.as_view(), name='last-update'),
+class LastUpdateView(APIView):
+    def get(self, request):
+        last_update = LastUpdate.objects.first()
+        if last_update:
+            return Response({"last_updated": last_update.last_updated})
+        else:
+            return Response({"last_updated": "Never"})
