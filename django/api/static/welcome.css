@@ -75,9 +75,9 @@ button:hover {
 }
 
 .update {
-    background: blue;
+    background: rgb(206, 143, 231);
 }
 
 .update:hover {
-    color: blue;
+    color: rgb(206, 143, 231);
 }
