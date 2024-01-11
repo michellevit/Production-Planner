@@ -6,4 +6,3 @@
 
 docker exec production-planner-backend-1 python /django/api/scripts/qb_data_to_db.py
 
-pause

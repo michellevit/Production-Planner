@@ -5,7 +5,7 @@
     align-items: center;
 }
 
-  .latest-upload-table {
+  .latest-upload-message-container {
     width: 500px;
     display: flex;
     justify-content: center;
@@ -14,8 +14,7 @@
     text-align: left;
 }
 
-
-.no-data-message {
+.upload-data {
     text-align: center;
     width: 500px;
     background-color: white;
