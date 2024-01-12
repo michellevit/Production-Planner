@@ -107,6 +107,7 @@ def check_if_order_in_database(order_number, orders_dict):
     customer_name = order_data["customer_name"]
     item_array = sort_item(order_data["item_array"])
     item_array_hash = hash_item_array(item_array)
+    total_invoiced_qb = sum(item["invoiced_qty"] for item in item_array)
     # If the order is NOT in the database table 'Order'
     if count == 0:
         new_order = Order(
@@ -121,16 +122,54 @@ def check_if_order_in_database(order_number, orders_dict):
         if count == 1:
             db_order = existing_orders[0]
             if db_order.shipped == False:
-                total_invoiced = sum(item["previously_invoiced_qty"] for item in item_array)
-                if total_invoiced == 0: 
+                if total_invoiced_qb == 0: 
                     if db_order.ship_date != ship_date or db_order.item_array_hash != item_array_hash:
                         db_order.ship_date = ship_date
                         db_order.item_array = item_array
                         db_order.confirmed = False
                         db_order.save()
-                        print(order_number, "updated.")
             elif db_order.shipped == True:
-                print('hi')
+                if total_invoiced_qb > 0:
+                    new_order = Order(
+                    order_number=order_number,
+                    ship_date=ship_date,
+                    customer_name=customer_name,
+                    item_array=item_array,
+                    ) 
+                    new_order.save()
+        elif count > 0:
+            any_unshipped_orders = any(db_order.shipped is False for db_order in existing_orders)
+            if any_unshipped_orders:
+                total_invoiced_db = sum(db_order.item["invoiced_qty"] for db_order.item in item_array)
+                if total_invoiced_qb >= total_invoiced_db:
+                    if db_order.ship_date != ship_date or db_order.item_array_hash != item_array_hash:
+                        db_order.ship_date = ship_date
+                        db_order.item_array = item_array
+                        db_order.confirmed = False
+                        db_order.save()
+            else: 
+                total_invoiced_quantities = {}
+                for order in existing_orders: 
+                    total_invoiced_qty = sum(item["invoiced_qty"] for item in order.item_array)
+                    total_invoiced_quantities[order.order_number] = total_invoiced_qty
+                highest_invoiced_order_number = max(total_invoiced_quantities, key=total_invoiced_quantities.get)
+                highest_invoiced_order = existing_orders.filter(order_number=highest_invoiced_order_number).first()
+                highest_invoiced_order_total_backorder_quantity = sum(item["backorder_qty"] for item in highest_invoiced_order.item_array)
+                if highest_invoiced_order_total_backorder_quantity > 0:
+                    total_invoiced_highest_order = sum(item["invoiced_qty"] for item in highest_invoiced_order.item_array)
+                    if total_invoiced_highest_order < total_invoiced_db:
+                        current_backorder_number = highest_invoiced_order.backorder_number
+                        new_order = Order(
+                        order_number=order_number,
+                        backorder_number=current_backorder_number,
+                        ship_date=ship_date,
+                        customer_name=customer_name,
+                        item_array=item_array,
+                        ) 
+                        new_order.save()
+
+
+
 
 
 

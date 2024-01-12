@@ -6,7 +6,6 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     order_number = models.CharField(max_length=100, default="none")
-    backorder = models.BooleanField(default=False)
     backorder_number = models.IntegerField(default=0)
     ship_date = models.DateField(null=True, blank=True)
     confirmed = models.BooleanField(default=False)
