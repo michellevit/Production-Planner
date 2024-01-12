@@ -10,7 +10,7 @@ class Order(models.Model):
     backorder_number = models.IntegerField(default=0)
     ship_date = models.DateField(null=True, blank=True)
     confirmed = models.BooleanField(default=False)
-    delay_date = models.DateField(null=True, default=None)
+    delay_date = models.DateField(null=True, blank=True, default=None)
     delay_tbd = models.BooleanField(null=True, default=False)
     customer_name = models.CharField(max_length=100)
     item_array = models.JSONField(default=list)
@@ -26,9 +26,14 @@ class Order(models.Model):
         if self.pk is None:
             sorted_item_array = sort_item(self.item_array)
             self.item_array_hash = hash_item_array(sorted_item_array)
-        elif self.item_array != self._original_values['item_array']:
-            sorted_item_array = sort_item(self.item_array)
-            self.item_array_hash = hash_item_array(sorted_item_array)
+        else:
+            try:
+                original_item_array = Order.objects.get(pk=self.pk).item_array
+                if self.item_array != original_item_array:
+                    sorted_item_array = sort_item(self.item_array)
+                    self.item_array_hash = hash_item_array(sorted_item_array)
+            except Order.DoesNotExist:
+                pass 
         super(Order, self).save(*args, **kwargs)
     
 
