@@ -55,7 +55,7 @@ class Product(models.Model):
         
 
 class LastUpdate(models.Model):
-    last_updated = models.CharField(max_length=100)
+    last_updated = models.DateTimeField()
     def __str__(self):
-        return self.last_updated[0:100]
+        return str(self.last_updated)
 

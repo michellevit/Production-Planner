@@ -8,7 +8,7 @@
 **/__pycache__/
 
 # Ignore node modules (for Node.js projects)
-node_modules/
+# To ignore the node_modules directory inside the reactapp directory, you need to have a separate .dockerignore file within the reactapp 
 
 # Ignore other non-essential files
 .DS_Store

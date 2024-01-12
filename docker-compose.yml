@@ -22,7 +22,7 @@ services:
     ports:
       - "3000:3000" 
     volumes:
-      - ./reactapp:/reactapp  
+      - ./reactapp:/reactapp
     command: sh -c "npm install && npm start"
     environment:
       - CHOKIDAR_USEPOLLING=true
