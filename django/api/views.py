@@ -1,8 +1,7 @@
-from datetime import timedelta
-from django.db import transaction
+from datetime import datetime, timedelta
 from django.db.models import Q, Case, When, F, Value, IntegerField, DateField
 from django.db.models.functions import Coalesce
-from django.http import JsonResponse
+from django.http import JsonResponse, StreamingHttpResponse, HttpResponse
 from django.utils import timezone
 from .models import * 
 from rest_framework import status
@@ -13,7 +12,10 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from .serializers import *
 from .utils import *
+import json
 import logging
+import pytz
+import time
 
 
 
@@ -344,3 +346,27 @@ class LastUpdateView(APIView):
             return Response({"last_updated": last_update.last_updated})
         else:
             return Response({"last_updated": "Never"})
+        
+
+def event_stream(request):
+    print("Event stream initiated") 
+    response = HttpResponse(content_type='text/event-stream') 
+    response['Content-Type'] = 'text/event-stream'
+    response['Cache-Control'] = 'no-cache'
+    response['Connection'] = 'keep-alive'
+    last_updated_value = None
+    while True:
+        try:
+            new_data = LastUpdate.objects.first()
+            if new_data and new_data.last_updated != last_updated_value:
+                last_updated_value = new_data.last_updated
+                data = {'message': 'New update', 'last_updated': str(new_data.last_updated)}
+                yield f"data: {json.dumps(data)}\n\n"
+            time.sleep(20)
+        except Exception as e:
+            print(f"Error in event_stream: {str(e)}")
+
+# path('latest-upload-stream/', LatestUpload.as_view(), name='latest-upload-stream')
+def latest_upload(request):
+    response = StreamingHttpResponse(event_stream(request), content_type='text/event-stream')
+    return response

@@ -13,14 +13,14 @@ django.setup()
 from api.models import Order, LastUpdate
 
 def main():
-    # script_dir = os.path.dirname(os.path.realpath(__file__))
-    # qb_data_json_file_path = os.path.join(script_dir, '..', 'data', 'qb_order_data.json')
-    # current_open_orders_json_file_path = os.path.join(script_dir, '..', 'data', 'current_open_orders.json')
-    # with open(qb_data_json_file_path, 'r') as json_file:
-    #     data = json.load(json_file)
-    # orders_dict = iterate_through_queried_orders(data)
-    # check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict)
-    # update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict)
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    qb_data_json_file_path = os.path.join(script_dir, '..', 'data', 'qb_order_data.json')
+    current_open_orders_json_file_path = os.path.join(script_dir, '..', 'data', 'current_open_orders.json')
+    with open(qb_data_json_file_path, 'r') as json_file:
+        data = json.load(json_file)
+    orders_dict = iterate_through_queried_orders(data)
+    check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict)
+    update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict)
     update_last_update_timestamp()
 
 
@@ -101,8 +101,15 @@ def check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_
 def check_if_order_in_database(order_number, orders_dict):
     existing_orders = Order.objects.filter(order_number=order_number)
     count = existing_orders.count()
+    # If the order is NOT in the database table 'Order'
     if count == 0:
+        ## CREATE A NEW ORDER AND ADD IT TO DATABASE TABLE 'ORDER'
         print(f"Order {order_number} does not exist in the database.")
+        print(orders_dict[order_number]["order_number"])
+        print(orders_dict[order_number]["ship_date"])
+        print(orders_dict[order_number]["customer_name"])
+        print(orders_dict[order_number]["item_array"])
+    # If the order IS in the database table 'Order'
     else:
         print(f"Order {order_number} exists in the database {count} times.")
         print("Data for existing orders:")
