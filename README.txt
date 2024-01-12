@@ -250,11 +250,30 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 -----------
 11. How to Update Docker Container / Database
+- If changes were made to the models.py file:
+  - Make sure the Docker container is running
+  - CD into the project's root directory
+    - Run: docker exec -it production-planner-backend-1 python manage.py makemigrations
+    - Run: docker exec -it production-planner-backend-1 python manage.py migrate
 - If changes were made to a static file (e.g. django/api/static/welcome.css): 
-  - Delet all the welcome.css file versions in django/static
-  - CD into the project's main folder
+  - Delete all the welcome.css file versions in django/static
+  - CD into the project's root directory
   - Run: docker exec -it production-planner-backend-1 python manage.py collectstatic --noinput
+- If changes were made to the entire app in VSCode:
+  - docker-compose down
+  - docker-compose build
+    - Add '--no-cache' to build from scratch, ignoring previuous builds
+  - docker-compose up
+- If changes were just made to one image: 
+  - docker build -t your_image_name .
 
+
+-----------
+11. Troubleshooting
+- docker-compose build not working: 
+  - Make sure there is no node_modules folder accidentally in the root directory 
+- If running docker-compose build a lot:
+  - Make sure to delete dangling images in Docker occassionally
 
 -----------
 12. Credits

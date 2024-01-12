@@ -14,10 +14,10 @@
     {
         "order_number": "30160",
         "time_modified": "2023-11-21 12:16:20",
-        "ship_date": "2023-11-08",
+        "ship_date": "2023-11-10",
         "customer_name": "Matco",
         "item": "Return",
-        "description": "CM 600 AC/DC Clamp Meter",
+        "description": "CM600 AC/DC Clamp Meter",
         "requested_qty": "1",
         "ship_qty": "1",
         "backorder_qty": "0",
@@ -43,8 +43,8 @@
         "item": "FF310",
         "description": "FaultFinder\u2122 Open and Short Circuit Finder and Tracer\n",
         "requested_qty": "10",
-        "ship_qty": "0",
-        "backorder_qty": "10",
+        "ship_qty": "10",
+        "backorder_qty": "0",
         "invoiced_qty": "0"
     },
     {

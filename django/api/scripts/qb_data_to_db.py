@@ -4,6 +4,7 @@ import django
 import json
 import os
 from django.utils import timezone
+from api.utils import *
 import pytz
 
 # Initialize Django environment
@@ -13,20 +14,19 @@ django.setup()
 from api.models import Order, LastUpdate
 
 def main():
-    # script_dir = os.path.dirname(os.path.realpath(__file__))
-    # qb_data_json_file_path = os.path.join(script_dir, '..', 'data', 'qb_order_data.json')
-    # current_open_orders_json_file_path = os.path.join(script_dir, '..', 'data', 'current_open_orders.json')
-    # with open(qb_data_json_file_path, 'r') as json_file:
-    #     data = json.load(json_file)
-    # orders_dict = iterate_through_queried_orders(data)
-    # check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict)
-    # update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict)
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    qb_data_json_file_path = os.path.join(script_dir, '..', 'data', 'qb_order_data.json')
+    current_open_orders_json_file_path = os.path.join(script_dir, '..', 'data', 'current_open_orders.json')
+    with open(qb_data_json_file_path, 'r') as json_file:
+        data = json.load(json_file)
+    orders_dict = iterate_through_queried_orders(data)
+    check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict)
+    update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict)
     update_last_update_timestamp()
 
 
 def iterate_through_queried_orders(data):
     orders_dict = {}
-
     for order_json in data:
         order_number = order_json["order_number"]
         time_modified = order_json["time_modified"]
@@ -101,20 +101,37 @@ def check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_
 def check_if_order_in_database(order_number, orders_dict):
     existing_orders = Order.objects.filter(order_number=order_number)
     count = existing_orders.count()
+    order_data = orders_dict[order_number]
+    order_number = order_data["order_number"]
+    ship_date = order_data["ship_date"]
+    customer_name = order_data["customer_name"]
+    item_array = sort_item(order_data["item_array"])
+    item_array_hash = hash_item_array(item_array)
+    # If the order is NOT in the database table 'Order'
     if count == 0:
-        print(f"Order {order_number} does not exist in the database.")
+        new_order = Order(
+            order_number=order_number,
+            ship_date=ship_date,
+            customer_name=customer_name,
+            item_array=item_array,
+        ) 
+        new_order.save()
+    # If the order IS in the database table 'Order'
     else:
-        print(f"Order {order_number} exists in the database {count} times.")
-        print("Data for existing orders:")
-        for order in existing_orders:
-            print(f"Order ID: {order.id}")
-            print(f"Order Number: {order.order_number}")
-            print(f"Backorder: {order.backorder}")
-            print(f"Ship Date: {order.ship_date}")
-            print(f"Customer Name: {order.customer_name}")
-            print("Item Type Dict:")
-            for key, value in order.item_type_dict.items():
-                print(f"{key}: {value}")
+        if count == 1:
+            db_order = existing_orders[0]
+            if db_order.shipped == False:
+                total_invoiced = sum(item["previously_invoiced_qty"] for item in item_array)
+                if total_invoiced == 0: 
+                    if db_order.ship_date != ship_date or db_order.item_array_hash != item_array_hash:
+                        db_order.ship_date = ship_date
+                        db_order.item_array = item_array
+                        db_order.confirmed = False
+                        db_order.save()
+                        print(order_number, "updated.")
+            elif db_order.shipped == True:
+                print('hi')
+
 
 
 
