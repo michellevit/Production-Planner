@@ -452,8 +452,17 @@ const OrderCard = ({
               </tr>
               {order.item_array.map((item, index) => (
                 <tr key={index}>
-                  <td id="item">{item.name}</td>
-                  <td id="qty">{item.quantity}</td>
+                  <td id="item">
+                    {item.name} {item.description}
+                  </td>
+                  <td id="qty">
+                    {item.ship_qty}
+                    {item.backorder_qty > 0 && (
+                      <p id="backorder-text">
+                        B/O: {item.backorder_qty}
+                      </p>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>

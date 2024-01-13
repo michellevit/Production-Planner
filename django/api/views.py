@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.response import Response
 from .serializers import *
 from .utils import *
@@ -21,12 +21,12 @@ import time
 
 logger = logging.getLogger('file')
 # logger.error('EXAMPLE')
-#print('hi') -> this will show up in Docker container backend 'Logs' section
+# print('hi') -> this will show up in Docker container backend 'Logs' section
 
 class CustomPagination(PageNumberPagination):
     page_size = 20
 
-
+    
 
 #path('open-orders/', OpenOrdersListView.as_view(), name='open-orders')
 class OpenOrdersListView(APIView):
@@ -85,6 +85,7 @@ class OrderDetailView(APIView):
             raise NotFound(detail="Order not found")
 
 
+
 #path('all-orders/', OrderListView.as_view(), name='all-orders')
 class OrderListView(generics.ListAPIView):
     serializer_class = OrderSerializer
@@ -127,8 +128,8 @@ class CreateOrderView(APIView):
 class FilteredOrdersListView(generics.ListAPIView):
     serializer_class = OrderSerializer
     pagination_class = CustomPagination
-
     def get_queryset(self):
+        
         current_datetime_utc = timezone.now()
         current_datetime_vancouver = current_datetime_utc.astimezone(timezone.get_current_timezone())
         today = current_datetime_vancouver.date()
@@ -138,13 +139,11 @@ class FilteredOrdersListView(generics.ListAPIView):
         order_type = self.request.query_params.get('type', 'all')
 
         queryset = Order.objects.all()
-
         if order_type == 'open':
             queryset = queryset.filter(shipped=False)
-
         # DROPDOWN FILTERS
         if filter_choice == 'all':
-            queryset = Order.objects.all()
+            pass
         elif filter_choice == 'upcoming':
             queryset = queryset.filter(ship_date__gte=today)
         elif filter_choice == 'past':
@@ -259,7 +258,6 @@ class FilteredOrdersListView(generics.ListAPIView):
                 queryset = queryset.filter(quote=True)
             elif not_quote_checked:
                 queryset = queryset.filter(quote=False)
-        
         # Add a custom field for sorting
         queryset = queryset.annotate(
             custom_sort=Case(
@@ -284,8 +282,22 @@ class FilteredOrdersListView(generics.ListAPIView):
                 Q(order_number__icontains=search_query) |
                 Q(customer_name__icontains=search_query)
             )
-
         return queryset
+    def paginate_queryset(self, queryset):
+        order_type = self.request.query_params.get('type', 'all')
+        if order_type == 'open':
+            return None
+        else:
+            return super().paginate_queryset(queryset)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        paginated_queryset = self.paginate_queryset(queryset)
+        if paginated_queryset is not None:
+            serializer = self.get_serializer(paginated_queryset, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 
 #path('dimensions/', DimensionView.as_view(), name="dimensions")
@@ -311,7 +323,6 @@ class DimensionView(APIView):
         
 
 # path('fetch-matching-packages/', FetchMatchingPackagesView.as_view(), name='fetch-matching-packages')
-
 class FetchMatchingPackagesView(APIView):
     def post(self, request):
         data = request.data
@@ -349,7 +360,6 @@ class LastUpdateView(APIView):
         
 
 def event_stream(request):
-    print("Event stream initiated") 
     response = HttpResponse(content_type='text/event-stream') 
     response['Content-Type'] = 'text/event-stream'
     response['Cache-Control'] = 'no-cache'
@@ -370,3 +380,29 @@ def event_stream(request):
 def latest_upload(request):
     response = StreamingHttpResponse(event_stream(request), content_type='text/event-stream')
     return response
+
+
+# def order_event_stream(request):
+#     response = HttpResponse(content_type='text/event-stream')
+#     response['Cache-Control'] = 'no-cache'
+#     response['Connection'] = 'keep-alive'
+
+#     while True:
+#         try:
+#             # Here you should check for new updates in orders.
+#             # This could be based on a timestamp or any other logic.
+#             # For demonstration, let's assume we have a function
+#             # `get_latest_orders()` that returns new or updated orders.
+#             orders = get_latest_orders()
+#             if orders:
+#                 data = {'orders': orders}
+#                 yield f"data: {json.dumps(data)}\n\n"
+#             time.sleep(5)  # Polling interval
+#         except Exception as e:
+#             print(f"Error in order_event_stream: {str(e)}")
+#             break
+
+# # path('latest-order-stream/', LatestUpload.as_view(), name='latest-upload-stream')
+# def latest_order(request):
+#     response = StreamingHttpResponse(event_stream(request), content_type='text/event-stream')
+#     return response

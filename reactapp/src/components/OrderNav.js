@@ -44,7 +44,7 @@ const OrderNav = ({
     <div className="order-nav-container">
       <div className="row1">
         <header>
-          <h1>All Orders</h1>
+          <h1>Orders</h1>
         </header>
       </div>
       <div className="row2">

@@ -163,6 +163,13 @@
   vertical-align: top;
 }
 
+#backorder-text {
+  color: #B6B6B6;
+  font-weight: 500;
+  margin: 0;
+}
+
+
 .all-orders-table #packages {
   width: 20%;
   vertical-align: top;

@@ -426,9 +426,16 @@ const AllOrders = () => {
                         {order.item_array.map((item, index) => (
                           <tr key={index}>
                             <td id="item">
-                              {extractTextBeforeParentheses(item.name)}
+                              {item.name} {item.description}
                             </td>
-                            <td id="qty">{item.quantity}</td>
+                            <td id="qty">
+                              {item.ship_qty}
+                              {item.backorder_qty > 0 && (
+                                <p id="backorder-text">
+                                  B/O: {item.backorder_qty}
+                                </p>
+                              )}
+                            </td>
                           </tr>
                         ))}
                       </tbody>

@@ -273,7 +273,8 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - docker-compose build not working: 
   - Make sure there is no node_modules folder accidentally in the root directory 
 - If running docker-compose build a lot:
-  - Make sure to delete dangling images in Docker occassionally
+  - Make sure to delete dangling images in Docker occassionally:
+  - Run: docker image prune -f
 
 -----------
 12. Credits

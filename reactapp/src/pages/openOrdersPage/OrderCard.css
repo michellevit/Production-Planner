@@ -242,13 +242,19 @@
 
 #item {
   text-align: left;
-  width: 90%;
+  width: 80%;
 }
 
 #qty {
   text-align: center;
   font-weight: 700;
   margin: auto;
+}
+
+#backorder-text {
+  color: #B6B6B6;
+  font-weight: 500;
+  margin: 0;
 }
 
 .dimensions-container {
