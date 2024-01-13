@@ -55,6 +55,7 @@ const OpenOrders = () => {
 
   useEffect(() => {
     countNumberOfFilters();
+    
     const fetchOrders = async () => {
       try {
         const filterParams = [
@@ -74,15 +75,18 @@ const OpenOrders = () => {
           .join("&");
         const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=open&filter=${currentView}&search=${searchQuery}&${filterParams}`;
         const response = await axios.get(requestUrl);
-        const fetchedOrders = response.data.results.map((order) => {
-          const minimizedStatus = localStorage.getItem(
-            `order_minimized_${order.id}`
-          );
+        let fetchedOrders;
+        if (response.data.results) {
+          fetchedOrders = response.data.results;
+        } else {
+          // Direct array of orders for non-paginated response
+          fetchedOrders = response.data;
+        }
+        const processedOrders = fetchedOrders.map((order) => {
+          const minimizedStatus = localStorage.getItem(`order_minimized_${order.id}`);
           return {
             ...order,
-            minimized_status: minimizedStatus
-              ? JSON.parse(minimizedStatus)
-              : true,
+            minimized_status: minimizedStatus ? JSON.parse(minimizedStatus) : true,
           };
         });
         setOrders(fetchedOrders);
