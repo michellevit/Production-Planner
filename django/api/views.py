@@ -357,52 +357,32 @@ class LastUpdateView(APIView):
             return Response({"last_updated": last_update.last_updated})
         else:
             return Response({"last_updated": "Never"})
-        
-
-def event_stream(request):
-    response = HttpResponse(content_type='text/event-stream') 
-    response['Content-Type'] = 'text/event-stream'
-    response['Cache-Control'] = 'no-cache'
-    response['Connection'] = 'keep-alive'
-    last_updated_value = None
-    while True:
-        try:
-            new_data = LastUpdate.objects.first()
-            if new_data and new_data.last_updated != last_updated_value:
-                last_updated_value = new_data.last_updated
-                data = {'message': 'New update', 'last_updated': str(new_data.last_updated)}
-                yield f"data: {json.dumps(data)}\n\n"
-            time.sleep(20)
-        except Exception as e:
-            print(f"Error in event_stream: {str(e)}")
+     
 
 # path('latest-upload-stream/', LatestUpload.as_view(), name='latest-upload-stream')
-def latest_upload(request):
-    response = StreamingHttpResponse(event_stream(request), content_type='text/event-stream')
-    return response
-
-
-# def order_event_stream(request):
-#     response = HttpResponse(content_type='text/event-stream')
-#     response['Cache-Control'] = 'no-cache'
-#     response['Connection'] = 'keep-alive'
-
-#     while True:
-#         try:
-#             # Here you should check for new updates in orders.
-#             # This could be based on a timestamp or any other logic.
-#             # For demonstration, let's assume we have a function
-#             # `get_latest_orders()` that returns new or updated orders.
-#             orders = get_latest_orders()
-#             if orders:
-#                 data = {'orders': orders}
-#                 yield f"data: {json.dumps(data)}\n\n"
-#             time.sleep(5)  # Polling interval
-#         except Exception as e:
-#             print(f"Error in order_event_stream: {str(e)}")
-#             break
-
-# # path('latest-order-stream/', LatestUpload.as_view(), name='latest-upload-stream')
-# def latest_order(request):
-#     response = StreamingHttpResponse(event_stream(request), content_type='text/event-stream')
-#     return response
+def latest_upload_stream(request):
+    def latest_upload_event_stream():
+        response = HttpResponse(content_type='text/event-stream') 
+        response['Content-Type'] = 'text/event-stream'
+        response['Cache-Control'] = 'no-cache'
+        response['Connection'] = 'keep-alive'
+        last_updated_value = None
+        max_retries = 5  
+        retry_count = 0
+        while True:
+            try:
+                new_data = LastUpdate.objects.first()
+                if new_data and new_data.last_updated != last_updated_value:
+                    last_updated_value = new_data.last_updated
+                    data = {'message': 'New update', 'last_updated': str(new_data.last_updated)}
+                    yield f"data: {json.dumps(data)}\n\n"
+                    retry_count = 0  # Reset retry count on successful operation
+                time.sleep(20)
+            except Exception as e:
+                print(f"Error in event_stream: {str(e)}")
+                retry_count += 1
+                if retry_count >= max_retries:
+                    print("Maximum retries reached, stopping the event stream.")
+                    break  
+                time.sleep(120)  
+    return StreamingHttpResponse(latest_upload_event_stream(), content_type='text/event-stream')

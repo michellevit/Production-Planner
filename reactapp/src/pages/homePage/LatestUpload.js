@@ -7,21 +7,29 @@ const LatestUpload = () => {
   const [lastDate, setLastDate] = useState(null);
   const [weekDay, setWeekDay] = useState(null);
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const [eventSource, setEventSource] = useState(null);
 
-  useEffect(() => {
-    const eventSource = new EventSource(
-      "http://localhost:8000/latest-upload-stream/"
-    );
-    eventSource.onmessage = (event) => {
+  const connectEventSource = () => {
+    const newEventSource = new EventSource("http://localhost:8000/latest-upload-stream/");
+    newEventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
       formatDate(data.last_updated);
     };
-    eventSource.onerror = (error) => {
+
+    newEventSource.onerror = (error) => {
       console.error("EventSource failed:", error);
-      eventSource.close();
+      newEventSource.close();
+      // Retry connection after 120 seconds
+      setTimeout(() => connectEventSource(), 120000);
     };
+    setEventSource(newEventSource);
+  };
+  useEffect(() => {
+    connectEventSource();
     return () => {
-      eventSource.close();
+      if (eventSource) {
+        eventSource.close();
+      }
     };
   }, []);
 
