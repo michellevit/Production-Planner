@@ -26,11 +26,11 @@ def main():
                 "customer_name": row.CustomerRefFullName,
                 "item": row.SalesOrderLineItemRefFullName,
                 "description": row.SalesOrderLineDesc,
-                "requested_qty": str(row.SalesOrderLineQuantity),
-                "ship_qty": str(row.CustomFieldSalesOrderLineOther1) if row.CustomFieldSalesOrderLineOther1 is not None else "0",
-                "backorder_qty": str(row.CustomFieldSalesOrderLineOther2) if row.CustomFieldSalesOrderLineOther2 is not None else "0",
-                "invoiced_qty": str(row.SalesOrderLineInvoiced)
-            }
+                "requested_qty": int(row.SalesOrderLineQuantity) if row.SalesOrderLineQuantity is not None else 0,
+                "ship_qty": int(row.CustomFieldSalesOrderLineOther1) if row.CustomFieldSalesOrderLineOther1 is not None else 0,
+                "backorder_qty": int(row.CustomFieldSalesOrderLineOther2) if row.CustomFieldSalesOrderLineOther2 is not None else 0,
+                "previously_invoiced_qty": int(row.SalesOrderLineInvoiced) if row.SalesOrderLineInvoiced is not None else 0
+                }
             orders.append(order)
 
         cursor.close()

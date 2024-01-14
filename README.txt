@@ -208,24 +208,18 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - Go to the Django Admin interface (http://localhost:8000/admin) 
   - Manually delete entries
 - Option 2:
-  * To delete the Order table data only (works in both Production/MySQL or Development/SQLite)
-  - Open the django/api/script/check_order_report.py file
-  - Uncomment lines 161-167
-  - In the terminal, navigate to the django folder and run 'python manage.py check_order_report.py'
-  - Return to the check_order_report.py script and comment out lines 161-167
-- Option 3:
-  * To delete the database through the terminal (works only in Development/SQLite)
+  * To delete the entire database through the terminal (works only in Development/SQLite)
   - Open the terminal and navigate to the 'django' folder of the project
   - Run 'python manage.py flush' and confirm yes
-- Option 4: 
+- Option 3: 
   - *To delete when using Docker/MySQL (works only in Production/MySQL)
   - Navigate to the project's root folder
   - Run: docker exec -it production-planner-db-1 bash
-  - Connect to mysql: 
-    * Note: username/password is in the .env file
+  - mysql -u *username (in .env file)* -p
+  - Enter password (in .env file)
   - Select the database: USE Production_Planner_DB
-  - List all the tables in the db: SHOW TABLES;
-  - Delete data from each table: DELETE FROM table_name;
+    - To list all the tables in the db: SHOW TABLES;
+  - Delete data from each table (and reset index): TRUNCATE TABLE *table name (i.e. api_order)*;
   - Exit MySQL: EXIT;
   - Exit the container shell: exit
 
@@ -274,7 +268,12 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - Make sure there is no node_modules folder accidentally in the root directory 
 - If running docker-compose build a lot:
   - Make sure to delete dangling images in Docker occassionally:
-  - Run: docker image prune -f
+    - Run: docker image prune -f
+  - Build w/o cache to ensure all changes are implemented: 
+    - Run: docker-compose build --no-cache
+- If the welcome.css (or other static) file changes don't implement:
+  - Delete the welcome.css cached files in django/static:
+  - cd into the django folder and run: python manage.py collectstatic
 
 -----------
 12. Credits
