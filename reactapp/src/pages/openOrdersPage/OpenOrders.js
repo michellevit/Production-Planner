@@ -54,47 +54,22 @@ const OpenOrders = () => {
   const page = "openOrdersPage";
 
   useEffect(() => {
-    countNumberOfFilters();
-    
-    const fetchOrders = async () => {
-      try {
-        const filterParams = [
-          `confirmed_checked=${confirmedChecked}`,
-          `not_confirmed_checked=${notConfirmedChecked}`,
-          `ready_checked=${readyChecked}`,
-          `not_ready_checked=${notReadyChecked}`,
-          `shipped_checked=${shippedChecked}`,
-          `not_shipped_checked=${notShippedChecked}`,
-          `delayed_checked=${delayedChecked}`,
-          `not_delayed_checked=${notDelayedChecked}`,
-          `quote_checked=${quoteChecked}`,
-          `not_quote_checked=${notQuoteChecked}`,
-          `oldest_checked=${oldestChecked}`,
-        ]
-          .filter((param) => param.endsWith("_checked=true"))
-          .join("&");
-        const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=open&filter=${currentView}&search=${searchQuery}&${filterParams}`;
-        const response = await axios.get(requestUrl);
-        let fetchedOrders;
-        if (response.data.results) {
-          fetchedOrders = response.data.results;
-        } else {
-          // Direct array of orders for non-paginated response
-          fetchedOrders = response.data;
-        }
-        const processedOrders = fetchedOrders.map((order) => {
-          const minimizedStatus = localStorage.getItem(`order_minimized_${order.id}`);
-          return {
-            ...order,
-            minimized_status: minimizedStatus ? JSON.parse(minimizedStatus) : true,
-          };
-        });
-        setOrders(fetchedOrders);
-        setRefreshOrders(false);
-      } catch (error) {
-        console.error("Error getting data", error);
+    const eventSource = new EventSource(
+      "http://127.0.0.1:8000/latest-upload-stream/"
+    );
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data && data.message === "New update") {
+        fetchOrders(); 
       }
     };
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    countNumberOfFilters();
     fetchOrders();
   }, [
     currentView,
@@ -174,6 +149,50 @@ const OpenOrders = () => {
     refreshOrders,
   ]);
 
+  const fetchOrders = async () => {
+    try {
+      const filterParams = [
+        `confirmed_checked=${confirmedChecked}`,
+        `not_confirmed_checked=${notConfirmedChecked}`,
+        `ready_checked=${readyChecked}`,
+        `not_ready_checked=${notReadyChecked}`,
+        `shipped_checked=${shippedChecked}`,
+        `not_shipped_checked=${notShippedChecked}`,
+        `delayed_checked=${delayedChecked}`,
+        `not_delayed_checked=${notDelayedChecked}`,
+        `quote_checked=${quoteChecked}`,
+        `not_quote_checked=${notQuoteChecked}`,
+        `oldest_checked=${oldestChecked}`,
+      ]
+        .filter((param) => param.endsWith("_checked=true"))
+        .join("&");
+      const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=open&filter=${currentView}&search=${searchQuery}&${filterParams}`;
+      const response = await axios.get(requestUrl);
+      let fetchedOrders;
+      if (response.data.results) {
+        fetchedOrders = response.data.results;
+      } else {
+        // Direct array of orders for non-paginated response
+        fetchedOrders = response.data;
+      }
+      const processedOrders = fetchedOrders.map((order) => {
+        const minimizedStatus = localStorage.getItem(
+          `order_minimized_${order.id}`
+        );
+        return {
+          ...order,
+          minimized_status: minimizedStatus
+            ? JSON.parse(minimizedStatus)
+            : true,
+        };
+      });
+      setOrders(fetchedOrders);
+      setRefreshOrders(false);
+    } catch (error) {
+      console.error("Error getting data", error);
+    }
+  };
+
   const countNumberOfFilters = () => {
     const filterStates = [
       confirmedChecked,
@@ -214,7 +233,7 @@ const OpenOrders = () => {
     });
     setOrders(updatedOrders);
     setRefreshOrders(true);
-    setMinimizeMaximizeAction(prev => prev + 1);
+    setMinimizeMaximizeAction((prev) => prev + 1);
   };
 
   const handleMinimizeAll = () => {
@@ -224,7 +243,7 @@ const OpenOrders = () => {
     });
     setOrders(updatedOrders);
     setRefreshOrders(true);
-    setMinimizeMaximizeAction(prev => prev + 1);
+    setMinimizeMaximizeAction((prev) => prev + 1);
   };
 
   return (

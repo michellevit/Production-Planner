@@ -15,8 +15,7 @@ urlpatterns = [
     path('fetch-matching-packages/', FetchMatchingPackagesView.as_view(), name='fetch-matching-packages'),
     path('products/', ProductView.as_view(), name='products'),
     path('last-update/', LastUpdateView.as_view(), name='last-update'),
-    path('latest-upload-stream/', latest_upload, name='latest-upload-stream'),
-    # path('order-updates-stream/', order_event_stream, name='order-updates-stream'),
+    path('latest-upload-stream/', latest_upload_stream, name='latest-upload-stream'),
 ]
 
     
