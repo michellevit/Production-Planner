@@ -67,13 +67,6 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - python manage.py createsuperuser
   - Use credentials from the .env file
   - To access Django's admin interface - go to broswer url: http://localhost:8000/admin/login/?next=/admin/
-- Create a virtual environment in the main folder:
-  - cd into the project's main folder (i.e. Production-Planner)
-  - create the virtual environment:
-    - Open: scripts/create-virtual-env.bat
-    - Uncomment line 4-7 (commented out to prevent accidental deployment)
-    - Run: create-virtual-env.bat
-    - Note: the reason for this is because QODBC is difficult to install in the Docker container, so instead this script runs outside of Docker on the system on a schedule, and updates a json file that Docker can access.
 
 
 ----------
@@ -95,6 +88,13 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the folder: Production-Planner/django
   - Run: python manage.py import_products_to_db
+- Create a virtual environment in the main folder:
+  - cd into the project's main folder (i.e. Production-Planner)
+  - create the virtual environment:
+    - Open: scripts/create-virtual-env.bat
+    - Uncomment line 4-7 (commented out to prevent accidental deployment)
+    - Run: create-virtual-env.bat
+    - Note: the reason for this is because QODBC is difficult to install in the Docker container, so instead this script runs outside of Docker on the system on a schedule, and updates a json file that Docker can access.
 - Complete the 'Preparing To Run In Development' instructions (starting at 'Create a superuser to access Django admin site')
 
 
@@ -139,7 +139,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the project root directory
   - Run: docker-compose exec backend python manage.py import_products_to_db
-- Create a Task on Windows Task Scheduler to run 'get-qb-data.bat' periodically
+- Create a Task on Windows Task Scheduler to run 'get-qb-data.bat' periodically:
   - Click on the Start menu and type "Task Scheduler" in the search bar
   - Open the Task Scheduler application
   - In the Task Scheduler, go to the "Action" menu and select "Create Basic Task..."
@@ -193,7 +193,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
     - Run: npm start
     - Browser: http://localhost:3000/ OR http://aw1.gtc.local:3000/
   - To access django admin interface:
-     - Broswer: http://localhost:8000/admin/login/?next=/admin/
+     - Broswer: http://localhost:8000/admin/
 
 
 ----------

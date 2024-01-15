@@ -18,10 +18,14 @@ def main():
     qb_data_json_file_path = os.path.join(script_dir, '..', 'data', 'qb_order_data.json')
     current_open_orders_json_file_path = os.path.join(script_dir, '..', 'data', 'current_open_orders.json')
     with open(qb_data_json_file_path, 'r') as json_file:
-        data = json.load(json_file)
-    orders_dict = iterate_through_queried_orders(data)
-    check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict)
-    update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict)
+        try:
+            data = json.load(json_file)
+            orders_dict = iterate_through_queried_orders(data)
+        except json.JSONDecodeError: 
+            pass
+    if orders_dict:
+        check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict)
+        update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict)
     update_last_update_timestamp()
 
 
