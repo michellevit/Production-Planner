@@ -22,7 +22,8 @@ Table of Contents:
 
 Summary: To help coordinate the sales, production and shipping of orders.
 In-depth Overview: Every day new orders are entered into QuickBooks and the Production team must evaluate which orders are able to be shipped, and then prepare each order for shipping - this involves significant back-and-forth between the Administrator and Production team. Here is the sequence of events:
-- The Administrator enters new orders into QuickBooks in the morning, then creates an order report on QuickBooks, which is then uploaded to the Production Planner App.
+- The Administrator enters new orders into QuickBooks in the morning
+- The Production Planner app runs between 6AM-7PM weekdays and checks for updates to the open orders in QuickBooks, and if there are updates it adds them to the database
 - The Production Planner app displays each order, allowing the Production team to easily mark it as delayed or add the dimensions/weight for the prepared package when it is ready (or any notes).
 - The Administrator can see which orders are ready for the day, check the notes for issues, or go ahead and use the package information to create the waybills for the daily shipments.
 * Note: This app replaces the previous process, which consisted of a paper report being printed each day, causing the Production team to have to prepare all orders at once, and causing the Administrator to have to wait for all the daily orders to be prepared before knowing if an order could be shipped.
@@ -30,18 +31,18 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 ----------
 2. Technologies Used
-- Windows
 - Django Rest Framework
 - Python
 - JavaScript
 - React
-- HTML
-- CSS
+- HTML/CSS
 - JSON
-- SQLite
-- MySQL
+- Server-Sent Events (SSE)
+- SQLite (Development)
+- MySQL (Production)
 - Docker
-
+- Windows Batch Scripting (for scheduled tasks and automation)
+- Windows Task Scheduler (for automating script execution)
 
 ----------
 3. First-Time Setup
@@ -69,8 +70,10 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Create a virtual environment in the main folder:
   - cd into the project's main folder (i.e. Production-Planner)
   - create the virtual environment:
-  - uncomment line 8-10 from scripts/get-qb-data.bat
-  - Note: the reason for this is because QODBC is difficult to install in the Docker container, so instead this script runs outside of Docker on the system on a schedule, and updates a json file that Docker can access.
+    - Open: scripts/create-virtual-env.bat
+    - Uncomment line 4-7 (commented out to prevent accidental deployment)
+    - Run: create-virtual-env.bat
+    - Note: the reason for this is because QODBC is difficult to install in the Docker container, so instead this script runs outside of Docker on the system on a schedule, and updates a json file that Docker can access.
 
 
 ----------
@@ -136,7 +139,26 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the project root directory
   - Run: docker-compose exec backend python manage.py import_products_to_db
-- Complete the 'Preparing To Run In Development' instructions (starting at 'Create a superuser to access Django admin site')
+- Create a Task on Windows Task Scheduler to run 'get-qb-data.bat' periodically
+  - Click on the Start menu and type "Task Scheduler" in the search bar
+  - Open the Task Scheduler application
+  - In the Task Scheduler, go to the "Action" menu and select "Create Basic Task..."
+    - Name the task "Production-Planner-Batch-Script-Task"
+      - Note: it is important that this is the exact name of the task
+    - Choose "Daily"
+    - Set start date + time (6:00AM)
+    - Set frequency: repeat task every 2 minutes
+    - For the duration of: 12 hours
+    - Set the script: click browse and select the batch file + click open
+    - Review settings + click "Finish"
+    - Customize for Weekdays only: 
+      - In the Task Scheduler Library, find the task you just created and right-click on it.
+      - Select "Properties".
+      - Go to the "Triggers" tab and edit the trigger you created.
+      - Under "Advanced settings", click on "Weekly".
+      - Choose Monday, Tuesday, Wednesday, Thursday, and Friday.
+      - Click "OK" to save the changes.
+      - Complete the 'Preparing To Run In Development' instructions (starting at 'Create a superuser to access Django admin site')
 
 
 ----------
@@ -144,7 +166,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - In PRODUCTION:
   - Option 1 (via batch file):
     - Navigate to the project's 'scripts' folder
-    - Double-click the 'start-app.bat' file
+    - Double-click the 'qb-data-to-app.bat' file
   - Option 2 (via Docker): 
     - Open the app by double-clicking the 'start-app.bat' file 
     * Note: it may take several minutes for the frontend to boot up
@@ -178,10 +200,10 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 7. How To Use The Program
 - Production Team:
   - Navigate to the Open Orders page to add shipping details for the unshipped orders
-  - Navigate to the Home -> Add Report tab to see when the latest report was added
+  - Navigate to the Home -> Latest Upload tab to see when the latest report was added
   - Navigate to the Home -> Add Dimensions tab to add more dimensions to the open-orders order options
 - Administrator: 
-  - Navigate to the Home -> Add Report tab to upload the latest order report (only the last 5 are recorded in 'Previous Uploads' section)
+  - Navigate to the Home -> Latest Upload tab to upload the latest order report (only the last 5 are recorded in 'Previous Uploads' section)
   - Navigate to the Home -> Add Order tab to manually add an order/quote, or get a dimensions/weight quote for an order
   - Navigate to the All Orders page to review shipping details
 
@@ -204,8 +226,9 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 ----------
 9. How To Clear The Database
 - Option 1: 
-  * To delete one entry at a time (works in both Production/MySQL or Development/SQLite)
-  - Go to the Django Admin interface (http://localhost:8000/admin) 
+  * To delete entries via Django Admin Interface (works in both Production/MySQL or Development/SQLite)
+  - Go to http://localhost:8000/admin
+  - Login with credentials in .env file
   - Manually delete entries
 - Option 2:
   * To delete the entire database through the terminal (works only in Development/SQLite)
@@ -229,17 +252,9 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Open a Terminal and navigate to the Production-Planner directory
 - Select the main branch: git checkout main
 - Run: git pull origin main
-  - Option 1: 
-    - Go to the scripts folder and run 'rebuild-app.bat'
-  - Option 2:
-    - Run: docker-compose build
-- Start the Docker app again to see changes
-  - To update ALL services - run: 
-        docker-compose down
-        docker-compose up -d
-  - To update affected services - run:
-        docker-compose up --build [backend/frontend/db]
-        (e.g. docker-compose up --build backend)
+- Run: docker-compose down
+- Run: docker-compose build --no-cache
+- Run: docker-compose up
 
 
 -----------
@@ -266,13 +281,14 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 11. Troubleshooting
 - docker-compose build not working: 
   - Make sure there is no node_modules folder accidentally in the root directory 
+  - Make sure there is a .dockerignore file in the reactapp to ignore the node_momdules folder
 - If running docker-compose build a lot:
   - Make sure to delete dangling images in Docker occassionally:
     - Run: docker image prune -f
   - Build w/o cache to ensure all changes are implemented: 
     - Run: docker-compose build --no-cache
 - If the welcome.css (or other static) file changes don't implement:
-  - Delete the welcome.css cached files in django/static:
+  - Delete the multiple welcome.css files (+ cached variations - e.g. welcome.98433745.css) in django/static:
   - cd into the django folder and run: python manage.py collectstatic
 
 -----------

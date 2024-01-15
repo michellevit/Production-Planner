@@ -34,7 +34,16 @@ const AddLineItem = ({
   const handleAddOrderLineItem = (e) => {
     e.preventDefault();
     setMatchingDims(false);
-    const itemName = document.getElementById("add-line-item-name").value;
+    const fullValue = document.getElementById("add-line-item-name").value;
+    const firstSpaceIndex = fullValue.indexOf(' ');
+    let itemName, itemDescription;
+    if (firstSpaceIndex === -1) { 
+      itemName = fullValue;
+      itemDescription = fullValue; 
+    } else {
+      itemName = fullValue.substring(0, firstSpaceIndex);
+      itemDescription = fullValue; 
+    }
     const itemQty = document.getElementById("add-line-item-qty").value;
     if (itemName.trim() === "") {
       setErrorMessage("Please enter a valid item name.");
@@ -47,14 +56,17 @@ const AddLineItem = ({
       setShowErrorModal(true);
       return;
     }
-    const roundedItemQty =
-      parsedItemQty % 1 >= 0.5
-        ? Math.ceil(parsedItemQty)
-        : Math.floor(parsedItemQty);
-    setItems((prevItems) => ({
-      ...prevItems,
-      [itemName]: roundedItemQty,
-    }));
+    const newItem = {
+      name: itemName,
+      subname: itemName,
+      description: itemDescription,
+      requested_qty: parseFloat(itemQty),
+      ship_qty: parseFloat(itemQty),
+      backorder_qty: 0,
+      previously_invoiced_qty: 0
+    };
+  
+    setItems((prevItems) => [...prevItems, newItem]);
     document.getElementById("add-line-item-name").value = "";
     document.getElementById("add-line-item-qty").value = "";
   };

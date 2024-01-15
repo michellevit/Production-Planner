@@ -61,36 +61,25 @@ const AllOrders = () => {
   );
 
   useEffect(() => {
+    const eventSource = new EventSource(
+      "http://127.0.0.1:8000/latest-upload-stream/"
+    );
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data && data.message === "New update") {
+        fetchOrders(); 
+      }
+    };
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
+  useEffect(() => {
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
     countNumberOfFilters();
-    const fetchOrders = async () => {
-      try {
-        const filterParams = [
-          `confirmed_checked=${confirmedChecked}`,
-          `not_confirmed_checked=${notConfirmedChecked}`,
-          `ready_checked=${readyChecked}`,
-          `not_ready_checked=${notReadyChecked}`,
-          `shipped_checked=${shippedChecked}`,
-          `not_shipped_checked=${notShippedChecked}`,
-          `delayed_checked=${delayedChecked}`,
-          `not_delayed_checked=${notDelayedChecked}`,
-          `quote_checked=${quoteChecked}`,
-          `not_quote_checked=${notQuoteChecked}`,
-          `oldest_checked=${oldestChecked}`,
-        ]
-          .filter((param) => param.endsWith("_checked=true"))
-          .join("&");
-        const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=all&filter=${currentView}&search=${searchQuery}&page=${currentPage}&${filterParams}`;
-        const response = await axios.get(requestUrl);
-        setOrders(response.data.results);
-        setTotalPages(Math.ceil(response.data.count / ordersPerPage));
-      } catch (error) {
-        console.error("Error getting data", error);
-      }
-    };
-
     fetchOrders();
     setRefreshOrders(false);
   }, [
@@ -172,6 +161,32 @@ const AllOrders = () => {
     notQuoteChecked,
     oldestChecked,
   ]);
+
+  const fetchOrders = async () => {
+    try {
+      const filterParams = [
+        `confirmed_checked=${confirmedChecked}`,
+        `not_confirmed_checked=${notConfirmedChecked}`,
+        `ready_checked=${readyChecked}`,
+        `not_ready_checked=${notReadyChecked}`,
+        `shipped_checked=${shippedChecked}`,
+        `not_shipped_checked=${notShippedChecked}`,
+        `delayed_checked=${delayedChecked}`,
+        `not_delayed_checked=${notDelayedChecked}`,
+        `quote_checked=${quoteChecked}`,
+        `not_quote_checked=${notQuoteChecked}`,
+        `oldest_checked=${oldestChecked}`,
+      ]
+        .filter((param) => param.endsWith("_checked=true"))
+        .join("&");
+      const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=all&filter=${currentView}&search=${searchQuery}&page=${currentPage}&${filterParams}`;
+      const response = await axios.get(requestUrl);
+      setOrders(response.data.results);
+      setTotalPages(Math.ceil(response.data.count / ordersPerPage));
+    } catch (error) {
+      console.error("Error getting data", error);
+    }
+  };
 
   const countNumberOfFilters = () => {
     const filterStates = [
