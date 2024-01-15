@@ -6,8 +6,6 @@ import AddNoteItem from "./AddNoteItem";
 import ErrorModal from "../../components/ErrorModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCheck,
-  faClose,
   faAnglesUp,
   faAnglesDown,
 } from "@fortawesome/free-solid-svg-icons";
@@ -15,7 +13,7 @@ import "./AddOrder.css";
 
 const AddOrder = () => {
   const [shipDate, setShipDate] = useState("");
-  const [items, setItems] = useState({});
+  const [items, setItems] = useState([]);
   const [notes, setNotes] = useState([]);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -40,7 +38,7 @@ const AddOrder = () => {
       const response = await axios.post(
         "http://127.0.0.1:8000/fetch-matching-packages/",
         {
-          item_dict: items,
+          item_array: items,
         }
       );
       if (response.data.success) {
@@ -104,7 +102,7 @@ const AddOrder = () => {
       ship_date: formattedShipDate,
       delay_tbd: tbd,
       customer_name: customerName,
-      item_dict: items,
+      item_array: items,
       notes_array: notes,
       quote: quoteValue,
     };

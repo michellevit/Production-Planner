@@ -160,15 +160,14 @@
 .all-orders-table #qty {
   text-align: center;
   width: 30%;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 #backorder-text {
   color: #B6B6B6;
-  font-weight: 500;
+  font-weight: 400;
   margin: 0;
 }
-
 
 .all-orders-table #packages {
   width: 20%;
