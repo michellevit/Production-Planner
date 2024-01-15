@@ -241,13 +241,13 @@
     },
     {
         "order_number": "30259",
-        "time_modified": "2024-01-02 09:34:18",
+        "time_modified": "2024-01-02 09:34:11",
         "ship_date": "2024-01-31",
         "customer_name": "Matco",
         "item": "FF310:FF310-MAT",
         "description": "Matco-Branded Short/Open Circuit Tester",
-        "requested_qty": 62,
-        "ship_qty": 62,
+        "requested_qty": 60,
+        "ship_qty": 60,
         "backorder_qty": 0,
         "previously_invoiced_qty": 0
     },
