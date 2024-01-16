@@ -27,10 +27,10 @@ const AllOrders = () => {
   const [searchQuery, setSearchQuery] = useState("");
   // Sort Filters: Checkboxes
   const [confirmedChecked, setConfirmedChecked] = useState(
-    JSON.parse(localStorage.getItem("allOrders_confirmedChecked")) || false
+    JSON.parse(localStorage.getItem("allOrders_confirmedChecked")) || true
   );
   const [notConfirmedChecked, setNotConfirmedChecked] = useState(
-    JSON.parse(localStorage.getItem("allOrders_notConfirmedChecked")) || false
+    JSON.parse(localStorage.getItem("allOrders_notConfirmedChecked")) || true
   );
   const [readyChecked, setReadyChecked] = useState(
     JSON.parse(localStorage.getItem("allOrders_readyChecked")) || false

@@ -81,7 +81,7 @@ const LastUpdate = () => {
               ))}
             </div>
             {!lastDate ? (
-              "No data has been fetched from QuickBooks yet."
+              "Connection to QuickBooks is closed - no current data."
             ) : (
               <>
                 {lastDate}

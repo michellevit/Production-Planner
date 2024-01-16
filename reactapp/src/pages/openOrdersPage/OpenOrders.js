@@ -19,10 +19,10 @@ const OpenOrders = () => {
   const [searchQuery, setSearchQuery] = useState("");
   // Sort Filters: Checkboxes
   const [confirmedChecked, setConfirmedChecked] = useState(
-    JSON.parse(localStorage.getItem("openOrders_confirmedChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_confirmedChecked")) || true
   );
   const [notConfirmedChecked, setNotConfirmedChecked] = useState(
-    JSON.parse(localStorage.getItem("openOrders_notConfirmedChecked")) || false
+    JSON.parse(localStorage.getItem("openOrders_notConfirmedChecked")) || true
   );
   const [readyChecked, setReadyChecked] = useState(
     JSON.parse(localStorage.getItem("openOrders_readyChecked")) || false
@@ -148,7 +148,7 @@ const OpenOrders = () => {
     oldestChecked,
     refreshOrders,
   ]);
-
+  
   const fetchOrders = async () => {
     try {
       const filterParams = [
@@ -186,7 +186,7 @@ const OpenOrders = () => {
             : true,
         };
       });
-      setOrders(fetchedOrders);
+      setOrders(processedOrders);
       setRefreshOrders(false);
     } catch (error) {
       console.error("Error getting data", error);

@@ -1,5 +1,9 @@
 :: This .bat file will resume the scheduled task after it has been disabled (by stop-scheduled-task.bat)
 
+:: NOTE: Make sure to run this as an administrator
+:: i.e. right-click the file and click 'Run as administrator'
+
+
 @echo off
 
 :: Enabling Production-Planner-Batch-Script-Task...
@@ -18,4 +22,12 @@ if %errorlevel% neq 0 (
     exit /b %errorlevel%
 )
 
+pause
+
 :: Task enabled and started successfully.
+
+
+:: To manually enable:
+:: Go to Task Scheduler (program in Windows)
+:: Find the scheduled task name
+:: Right click and enable
