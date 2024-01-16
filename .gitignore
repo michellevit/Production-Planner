@@ -5,6 +5,7 @@
 .xlsx
 .bat
 venv/
+.sql
 
 # Reactapp .gitignore Rules
 # dependencies
