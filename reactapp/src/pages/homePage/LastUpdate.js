@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import "./LatestUpload.css";
+import "./LastUpdate.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquare } from "@fortawesome/free-solid-svg-icons";
 
-const LatestUpload = () => {
+const LastUpdate = () => {
   const [lastDate, setLastDate] = useState(null);
   const [weekDay, setWeekDay] = useState(null);
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
   const [eventSource, setEventSource] = useState(null);
 
   const connectEventSource = () => {
-    const newEventSource = new EventSource(`${process.env.REACT_APP_BACKEND_URL}/latest-upload-stream/`);
+    const newEventSource = new EventSource(`${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`);
     newEventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
       formatDate(data.last_updated);
@@ -64,9 +64,9 @@ const LatestUpload = () => {
     };
 
     return (
-      <div className="latest-upload-container">
-        <div className="latest-upload-message-container">
-          <h2>Most Recent Update</h2>
+      <div className="last-update-container">
+        <div className="last-update-message-container">
+          <h2>Last Update</h2>
           <div className="upload-data">
             <div className="day-of-week-icons">
               {days.map((day, index) => (
@@ -94,10 +94,10 @@ const LatestUpload = () => {
   };
 
   return (
-    <div className="latest-upload-container">
+    <div className="last-update-container">
       {renderDayOfWeekIcons()}
     </div>
   );
 };
 
-export default LatestUpload;
+export default LastUpdate;

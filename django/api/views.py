@@ -360,8 +360,8 @@ class LastUpdateView(APIView):
      
 
 # path('latest-upload-stream/', LatestUpload.as_view(), name='latest-upload-stream')
-def latest_upload_stream(request):
-    def latest_upload_event_stream():
+def last_update_stream(request):
+    def last_update_event_stream():
         response = HttpResponse(content_type='text/event-stream') 
         response['Content-Type'] = 'text/event-stream'
         response['Cache-Control'] = 'no-cache'
@@ -385,4 +385,4 @@ def latest_upload_stream(request):
                     print("Maximum retries reached, stopping the event stream.")
                     break  
                 time.sleep(120)  
-    return StreamingHttpResponse(latest_upload_event_stream(), content_type='text/event-stream')
+    return StreamingHttpResponse(last_update_event_stream(), content_type='text/event-stream')

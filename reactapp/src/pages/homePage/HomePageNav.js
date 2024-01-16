@@ -7,7 +7,7 @@ const HomePageNav = () => {
     <div className="home-page-nav-container">
       <div className="row2">
         <ul>
-          <CustomLink to="/latest-upload">Latest Upload</CustomLink>
+          <CustomLink to="/last-update">Last Update</CustomLink>
           <CustomLink to="/add-order">Add Order</CustomLink>
           <CustomLink to="/add-dimensions">Add Dimensions</CustomLink>
         </ul>
