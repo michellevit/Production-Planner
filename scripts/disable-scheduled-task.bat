@@ -11,3 +11,9 @@ if %errorlevel% neq 0 (
 )
 
 :: Task enabled and started successfully.
+
+
+:: To manually disable:
+:: Go to Task Scheduler (program in Windows)
+:: Find the scheduled task name
+:: Right click and disable
