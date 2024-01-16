@@ -44,6 +44,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Windows Batch Scripting (for scheduled tasks and automation)
 - Windows Task Scheduler (for automating script execution)
 
+
 ----------
 3. First-Time Setup
 - Install Git: 
@@ -61,12 +62,15 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Update the file paths for the .bat scripts
 - Install node:
   - https://nodejs.org/en
+- Create a virtual environment in the main folder:
+  - Run: cd C:\path\to\project\Production-Planner 
+  - Run: python -m venv venv
+  - Run: cd C:\path\to\project\Production-Planner 
+  - Run: pip install -r requirements.txt
+- Update the file paths for the scripts:
+  - Go to the main folder, and open the scripts folder
+  - Go through each file (including files in the error_scripts subfolder) and update the file paths
 - Follow instructions for 'Preparing To Run In Development' (step 4) OR 'Preparing To Deploy In Production' (step 5)
-- Create a superuser to access Django admin site:
-  - cd into the django folder
-  - python manage.py createsuperuser
-  - Use credentials from the .env file
-  - To access Django's admin interface - go to broswer url: http://localhost:8000/admin/login/?next=/admin/
 
 
 ----------
@@ -78,7 +82,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
     - Now print statements (in the backend) will output in the terminal where the server is running
 - Activate the virtual environment: 
   - Open terminal and navigate/cd to the project's root folder
-  - Use the command: # C:/Users/path/to/virtualenv/Scripts/Activate.ps1
+  - Use the command: # C:/path/to/project/Production-Planner/venv/Scripts/Activate.ps1
 - Initialize the Database: 
   - In the terminal, navigate to the django folder and run: python manage.py makemigrations
   - Then run: python manage.py migrate
@@ -88,14 +92,11 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the folder: Production-Planner/django
   - Run: python manage.py import_products_to_db
-- Create a virtual environment in the main folder:
-  - cd into the project's main folder (i.e. Production-Planner)
-  - create the virtual environment:
-    - Open: scripts/create-virtual-env.bat
-    - Uncomment line 4-7 (commented out to prevent accidental deployment)
-    - Run: create-virtual-env.bat
-    - Note: the reason for this is because QODBC is difficult to install in the Docker container, so instead this script runs outside of Docker on the system on a schedule, and updates a json file that Docker can access.
-- Complete the 'Preparing To Run In Development' instructions (starting at 'Create a superuser to access Django admin site')
+- Create a superuser to access Django admin site:
+  - cd into the django folder
+  - python manage.py createsuperuser
+  - Use credentials from the .env file
+  - To access Django's admin interface - go to broswer url: http://localhost:8000/admin
 
 
 ----------
@@ -139,7 +140,12 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Populate the 'Product' DB Table:
   - In the terminal, navigate to the project root directory
   - Run: docker-compose exec backend python manage.py import_products_to_db
-- Create a Task on Windows Task Scheduler to run 'get-qb-data.bat' periodically:
+- Create a superuser to access Django admin site:
+  - cd into the django folder
+  - python manage.py createsuperuser
+  - Use credentials from the .env file
+  - To access Django's admin interface - go to broswer url: http://localhost:8000/admin
+- Create a Task on Windows Task Scheduler to run 'run-app.bat' periodically:
   - Click on the Start menu and type "Task Scheduler" in the search bar
   - Open the Task Scheduler application
   - In the Task Scheduler, go to the "Action" menu and select "Create Basic Task..."
@@ -149,7 +155,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
     - Set start date + time (6:00AM)
     - Set frequency: repeat task every 2 minutes
     - For the duration of: 12 hours
-    - Set the script: click browse and select the batch file + click open
+    - Set the script: click browse and select the batch file (in the scripts folder) + click open
     - Review settings + click "Finish"
     - Customize for Weekdays only: 
       - In the Task Scheduler Library, find the task you just created and right-click on it.
@@ -158,7 +164,24 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
       - Under "Advanced settings", click on "Weekly".
       - Choose Monday, Tuesday, Wednesday, Thursday, and Friday.
       - Click "OK" to save the changes.
-      - Complete the 'Preparing To Run In Development' instructions (starting at 'Create a superuser to access Django admin site')
+- Create a Task on Windows Task Scheduler to run 'backup-database.bat' periodically:
+- Click on the Start menu and type "Task Scheduler" in the search bar
+  - Open the Task Scheduler application
+  - In the Task Scheduler, go to the "Action" menu and select "Create Basic Task..."
+    - Name the task "Backup-Database-Batch-Task"
+      - Note: it is important that this is the exact name of the task
+    - Choose "Daily"
+    - Set start date + time (6:15AM)
+    - Set frequency: repeat task every day
+    - Set the script: click browse and select the batch file (in the scripts folder) + click open
+    - Review settings + click "Finish"
+    - Customize for Weekdays only: 
+      - In the Task Scheduler Library, find the task you just created and right-click on it.
+      - Select "Properties".
+      - Go to the "Triggers" tab and edit the trigger you created.
+      - Under "Advanced settings", click on "Weekly".
+      - Choose Monday, Tuesday, Wednesday, Thursday, and Friday.
+      - Click "OK" to save the changes.
 
 
 ----------
@@ -211,17 +234,16 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 ----------
 8. How To Backup The Database + Restore (for Production mode)
  * Note: The backup-database.bat script will delete old backups, keeping only the 10 most recent backups
+ * Note: the backup-database.bat file is scheduled to run at 6AM each week day
 - To backup the database:
   - In the project's root directory, double click the 'backup-database.bat' file
   - The backup will be saved in the 'db-backups' folder
-- To restore from a backup:
-  - Access the Docker container running the MySQL db:  docker exec -it production-planner-db-1 bash
-    * Note: username/password is in the .env file
-  - Copy the backup file into the Docker container - run: docker cp "C:\Users\Michelle\Documents\Coding_Projects\Production-Planner\db-backups\20231115_backup.sql" production-planner-db-1:/db_backups/20231115_backup.sql
-  - Enter the following command in the bash-4.4# prompt: mysql -u [username] -p[password] Production_Planner_DB < /db-backups/[YYYYMMMDD]_backup.sql
-    * Note: replace the [username] and [password] with data from the .env file, and [YYYYMMDD] with the backup date you want to restore to
-  - Enter: exit;
-
+- To restore from the most recent backup:
+  - Go to the scripts/error_scripts folder
+  - Double-click the 'restore-database-from-latest-backup.bat' 
+  - A command prompt will appear with the name/date of the latest backup and ask if you are sure you want to restore
+    - Type "Y" and press enter (to confirm and restore the database)
+    - Close the prompt
 
 ----------
 9. How To Clear The Database
@@ -290,6 +312,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - If the welcome.css (or other static) file changes don't implement:
   - Delete the multiple welcome.css files (+ cached variations - e.g. welcome.98433745.css) in django/static:
   - cd into the django folder and run: python manage.py collectstatic
+
 
 -----------
 12. Credits
