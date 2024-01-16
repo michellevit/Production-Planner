@@ -8,7 +8,9 @@ import ssl
 from datetime import datetime
 import pytz
 
+
 load_dotenv()
+
 
 def get_current_date_in_vancouver_timezone():
     vancouver_timezone = pytz.timezone('America/Vancouver')
@@ -29,6 +31,7 @@ def set_custom_message(error_source):
             error_log_contents = log_file.read()
         return "An unknown error has occurred with the Production Planner backup and/or Application run process.\n\nError Log:\n{error_log_contents}"
 
+
 def send_email(custom_message):
     context = ssl.create_default_context()
     port = int(os.getenv('ERROR_ALERT_EMAIL_SMTP_PORT'))
@@ -36,21 +39,22 @@ def send_email(custom_message):
     sender_email = os.getenv('ERROR_ALERT_FROM_EMAIL')
     receiver_email = os.getenv('ERROR_ALERT_TO_EMAIL')
     password = os.getenv('ERROR_ALERT_EMAIL_PASSWORD')
-    # msg = MIMEMultipart()
-    # msg['From'] = sender_email
-    # msg['To'] = receiver_email
-    # msg['Subject'] = 'Production Planner - Error Alert' 
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+    msg['Subject'] = 'Production Planner - Error Alert' 
 
-    # msg.attach(MIMEText(custom_message, 'plain'))
+    msg.attach(MIMEText(custom_message, 'plain'))
 
-    # try:
-    #     with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-    #         server.login(sender_email, password)
-    #         result = server.sendmail(sender_email, receiver_email, msg.as_string())
-    #         if result:
-    #             print(f"Failed to send email to: {result}")
-    # except Exception as e:
-    #     print(f"An error occurred: {e}")
+    try:
+        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            server.login(sender_email, password)
+            result = server.sendmail(sender_email, receiver_email, msg.as_string())
+            if result:
+                print(f"Failed to send email to: {result}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
