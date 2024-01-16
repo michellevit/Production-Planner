@@ -62,7 +62,7 @@ const AllOrders = () => {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      `${process.env.REACT_APP_BACKEND_URL}/latest-upload-stream/`
+      `${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`
     );
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);

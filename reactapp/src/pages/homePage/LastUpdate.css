@@ -1,11 +1,11 @@
-.latest-upload-container {
+.last-update-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-  .latest-upload-message-container {
+  .last-update-message-container {
     width: 500px;
     display: flex;
     justify-content: center;
