@@ -57,7 +57,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - ROOT DIRECTORY .env FILE: 
     - Create a new file, in the project's root directory, named '.env'
     - Copy-paste the data from the existing 'env.txt' file into the new '.env' file
-    - Replace the 'xyz' placeholders with real values
+    - Replace the placeholder data with real values
       * Note: the env.txt file includes instructions to get new secret keys, etc
     - Change the file name from 'env.txt' to '.env'
   - REACTAPP .env FILE: 
@@ -287,6 +287,13 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 -----------
 11. How to Update Docker Container / Database
+- If changes were made to the entire app in VSCode:
+  - docker-compose down
+  - docker-compose build
+    - Add '--no-cache' to build from scratch, ignoring previuous builds
+  - docker-compose up
+- If changes were just made to one image: 
+  - docker build -t your_image_name .
 - If changes were made to the models.py file:
   - Make sure the Docker container is running
   - CD into the project's root directory
@@ -296,13 +303,6 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - Delete all the welcome.css file versions in django/static
   - CD into the project's root directory
   - Run: docker exec -it production-planner-backend-1 python manage.py collectstatic --noinput
-- If changes were made to the entire app in VSCode:
-  - docker-compose down
-  - docker-compose build
-    - Add '--no-cache' to build from scratch, ignoring previuous builds
-  - docker-compose up
-- If changes were just made to one image: 
-  - docker build -t your_image_name .
 
 
 -----------

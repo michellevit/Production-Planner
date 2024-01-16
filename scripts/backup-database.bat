@@ -6,6 +6,7 @@ for /f "tokens=1* delims== " %%a in ('type "C:\Users\Michelle Flandin\Documents\
     set %%a=%%b
 )
 
+
 :: Remove quotes from environment variables
 for %%i in (DB_USER DB_PASSWORD DB_NAME) do (
     set %%i=!%%i:'=!
@@ -27,11 +28,11 @@ docker exec production-planner-db-1 mysqldump -u %DB_USER% -p%DB_PASSWORD% %DB_N
 
 :: Check if mysqldump command was successful
 if %ERRORLEVEL% neq 0 (
-    echo ERROR: Database backup failed
+    call "C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\venv\Scripts\activate.bat"
+    cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\scripts\error_scripts
+    python send_critical_error_email.py "Backup"
     goto end_script
-) else (
-    echo Database backup completed successfully: %BACKUP_FILE%
-)
+) 
 
 :: Check the number of backup files. If more than 10, delete the oldest ones.
 cd %BACKUP_DIR%
@@ -40,6 +41,7 @@ for %%x in (*.sql) do set /a filecount+=1
 if %filecount% GTR 10 (
     for /f "skip=10 delims=" %%F in ('dir /b /o-d *.sql') do del "%%F"
 ) 
+
 
 :end_script
 endlocal
