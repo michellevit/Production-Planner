@@ -54,11 +54,18 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - Open a Terminal and navigate to the folder you want to save the Production Planner app to
   - In the terminal, run: git clone https://github.com/michellevit/Production-Planner.git
  - Set the environment variables:
-  - Create a new file, in the project's root directory, named '.env'
-  - Copy-paste the data from the existing 'env.txt' file into the new '.env' file
-  - Replace the 'xyz' placeholders with real values
-    * Note: the env.txt file includes instructions to get new secret keys, etc
-  - Change the file name from 'env.txt' to '.env'
+  - ROOT DIRECTORY .env FILE: 
+    - Create a new file, in the project's root directory, named '.env'
+    - Copy-paste the data from the existing 'env.txt' file into the new '.env' file
+    - Replace the 'xyz' placeholders with real values
+      * Note: the env.txt file includes instructions to get new secret keys, etc
+    - Change the file name from 'env.txt' to '.env'
+  - REACTAPP .env FILE: 
+    - Create a new file, in the project's reactapp folder, named '.env'
+    - Copy-paste the data from the existing 'env.txt' file into the new '.env' file
+    - Replace the x's in the URLs with 'localhost' or your network's IP address
+      * Note: this can be found by opening a command prompt on your computer and run: 'ipconfig' and the IPv4 Address should be the address you need
+    - Change the file name from 'env.txt' to '.env'
 - Update the file paths for the .bat scripts
 - Install node:
   - https://nodejs.org/en
@@ -168,8 +175,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Click on the Start menu and type "Task Scheduler" in the search bar
   - Open the Task Scheduler application
   - In the Task Scheduler, go to the "Action" menu and select "Create Basic Task..."
-    - Name the task "Backup-Database-Batch-Task"
-      - Note: it is important that this is the exact name of the task
+    - Name the task "Production-Planner-Backup-Database-Batch-Task"
     - Choose "Daily"
     - Set start date + time (6:15AM)
     - Set frequency: repeat task every day

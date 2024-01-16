@@ -20,7 +20,7 @@ const AddDimensions = () => {
   useEffect(() => {
     const fetchDimensions = () => {
       axios
-        .get("http://127.0.0.1:8000/dimensions/")
+        .get("${process.env.REACT_APP_BACKEND_URL}/dimensions/")
         .then((response) => {
           setDimensions(response.data);
         })
@@ -59,7 +59,7 @@ const AddDimensions = () => {
     setPackageWidth("");
     setPackageHeight("");
     try {
-      await axios.post("http://127.0.0.1:8000/dimensions/", {
+      await axios.post("${process.env.REACT_APP_BACKEND_URL}/dimensions/", {
         length: parseFloat(packageLength),
         width: parseFloat(packageWidth),
         height: parseFloat(packageHeight),
@@ -76,7 +76,7 @@ const AddDimensions = () => {
   const handleDeleteDimension = async () => {
     try {
       await axios.delete(
-        `http://127.0.0.1:8000/dimensions/${currentDimension.id}/`
+        `${process.env.REACT_APP_BACKEND_URL}/dimensions/${currentDimension.id}/`
       );
       setRefreshDimensions(true);
     } catch (error) {

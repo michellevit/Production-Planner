@@ -7,7 +7,7 @@ call "C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\ven
 
 
 :: Check error log for critical errors
-cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\scripts
+cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\scripts\error_scripts
 set logFile=error-log-file.txt
 :: Call PowerShell to clean up old log entries
 powershell -NoProfile -ExecutionPolicy Bypass -File "cleanup_logs.ps1"
@@ -27,7 +27,7 @@ if %errorlevel% neq 0 (
     timeout /t 20 
     docker info >nul 2>&1
     if %errorlevel% neq 0 (
-        echo %DATE% %TIME% ERROR: Attempted to start Docker- but Docker could not be started. >> %logFile%
+        echo %DATE% %TIME% ERROR: Attempted to start Docker - but Docker could not be started within 20 second window. >> %logFile%
         exit /b 1
     )
 )
@@ -47,3 +47,9 @@ for %%c in (!containers!) do (
         )
     )
 )
+
+
+::  Fetch data from QB and add to database
+cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner
+python .\django\api\scripts\check_quickbooks.py
+docker exec production-planner-backend-1 python /django/api/scripts/qb_data_to_db.py

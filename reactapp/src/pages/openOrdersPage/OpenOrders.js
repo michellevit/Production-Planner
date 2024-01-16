@@ -55,7 +55,7 @@ const OpenOrders = () => {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      "http://127.0.0.1:8000/latest-upload-stream/"
+      `${process.env.REACT_APP_BACKEND_URL}/latest-upload-stream/`
     );
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -166,7 +166,7 @@ const OpenOrders = () => {
       ]
         .filter((param) => param.endsWith("_checked=true"))
         .join("&");
-      const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=open&filter=${currentView}&search=${searchQuery}&${filterParams}`;
+      const requestUrl = `${process.env.REACT_APP_BACKEND_URL}/orders-filtered/?type=open&filter=${currentView}&search=${searchQuery}&${filterParams}`;
       const response = await axios.get(requestUrl);
       let fetchedOrders;
       if (response.data.results) {

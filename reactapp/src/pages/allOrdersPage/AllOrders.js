@@ -62,12 +62,12 @@ const AllOrders = () => {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      "http://127.0.0.1:8000/latest-upload-stream/"
+      `${process.env.REACT_APP_BACKEND_URL}/latest-upload-stream/`
     );
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data && data.message === "New update") {
-        fetchOrders(); 
+        fetchOrders();
       }
     };
     return () => {
@@ -179,7 +179,7 @@ const AllOrders = () => {
       ]
         .filter((param) => param.endsWith("_checked=true"))
         .join("&");
-      const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=all&filter=${currentView}&search=${searchQuery}&page=${currentPage}&${filterParams}`;
+      const requestUrl = `${process.env.REACT_APP_BACKEND_URL}/orders-filtered/?type=all&filter=${currentView}&search=${searchQuery}&page=${currentPage}&${filterParams}`;
       const response = await axios.get(requestUrl);
       setOrders(response.data.results);
       setTotalPages(Math.ceil(response.data.count / ordersPerPage));
@@ -230,7 +230,7 @@ const AllOrders = () => {
       updatedOrder.delay_tbd = false;
       setTimeout(async () => {
         await axios.put(
-          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/all-orders/${order.id}/`,
           updatedOrder
         );
         setTimeout(() => {
@@ -254,7 +254,7 @@ const AllOrders = () => {
       updatedOrder.delay_tbd = false;
       setTimeout(async () => {
         await axios.put(
-          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/all-orders/${order.id}/`,
           updatedOrder
         );
         setTimeout(() => {
@@ -277,7 +277,7 @@ const AllOrders = () => {
       updatedOrder.delay_date = null;
       setTimeout(async () => {
         await axios.put(
-          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/all-orders/${order.id}/`,
           updatedOrder
         );
         setTimeout(() => {
@@ -300,7 +300,7 @@ const AllOrders = () => {
       updatedOrder.ready = true;
       setTimeout(async () => {
         await axios.put(
-          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/${order.id}/`,
           updatedOrder
         );
         setOrders((prevOrders) =>
@@ -329,7 +329,7 @@ const AllOrders = () => {
       updatedOrder.ready = false;
       setTimeout(async () => {
         await axios.put(
-          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/${order.id}/`,
           updatedOrder
         );
         setOrders((prevOrders) =>
