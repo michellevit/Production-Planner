@@ -10,7 +10,7 @@ const LatestUpload = () => {
   const [eventSource, setEventSource] = useState(null);
 
   const connectEventSource = () => {
-    const newEventSource = new EventSource("http://localhost:8000/latest-upload-stream/");
+    const newEventSource = new EventSource(`${process.env.REACT_APP_BACKEND_URL}/latest-upload-stream/`);
     newEventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
       formatDate(data.last_updated);

@@ -36,7 +36,7 @@ const AddOrder = () => {
     }
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/fetch-matching-packages/",
+        "${process.env.REACT_APP_BACKEND_URL}/fetch-matching-packages/",
         {
           item_array: items,
         }
@@ -107,7 +107,7 @@ const AddOrder = () => {
       quote: quoteValue,
     };
     try {
-      await axios.post("http://127.0.0.1:8000/all-orders-create/", orderData);
+      await axios.post("${process.env.REACT_APP_BACKEND_URL}/all-orders-create/", orderData);
       if (quoteValue === true) {
         setErrorMessage("Your quote has been added.");
         setSuggestedDims([]);
@@ -130,7 +130,7 @@ const AddOrder = () => {
   };
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/products/");
+      const response = await axios.get("${process.env.REACT_APP_BACKEND_URL}/products/");
       setProductList(response.data.map((product) => product.item_name));
     } catch (error) {
       console.error("Error fetching products:", error);

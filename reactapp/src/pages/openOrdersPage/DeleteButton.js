@@ -14,7 +14,7 @@ const DeleteButton = ({ order, orders, setOrders, setIsRemoving }) => {
     setShowConfirmModal(false);
     const deletedOrderID = order.id
     axios
-      .delete(`http://127.0.0.1:8000/open-orders/${deletedOrderID}/`)
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/open-orders/${deletedOrderID}/`)
       .catch((error) => {
         console.error(
           "Error deleting the order. Server responded with:",

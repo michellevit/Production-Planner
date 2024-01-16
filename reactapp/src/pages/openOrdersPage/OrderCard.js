@@ -41,7 +41,7 @@ const OrderCard = ({
     const fetchOrderDetails = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/open-orders/${order.id}/`
+          `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`
         );
         if (response.data) {
           const {
@@ -89,7 +89,7 @@ const OrderCard = ({
             item_dict_hash !== "0"
           ) {
             axios
-              .post("http://127.0.0.1:8000/fetch-matching-packages/", {
+              .post("${process.env.REACT_APP_BACKEND_URL}/fetch-matching-packages/", {
                 item_dict: order.item_dict,
               })
               .then((response) => {
@@ -160,7 +160,7 @@ const OrderCard = ({
     updatedOrder.delay_date = null;
     try {
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
     } catch (error) {
@@ -174,7 +174,7 @@ const OrderCard = ({
     updatedOrder.ready = false;
     try {
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
     } catch (error) {
@@ -195,7 +195,7 @@ const OrderCard = ({
     updatedOrder.minimized = true;
     try {
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
       setIsRemoving(true);
@@ -224,7 +224,7 @@ const OrderCard = ({
       updatedOrder.delay_tbd = false;
       updatedOrder.confirmed = false;
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
     } catch (error) {
@@ -239,7 +239,7 @@ const OrderCard = ({
     updatedOrder.delay_tbd = tbdBoolean;
     try {
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
     } catch (error) {
@@ -263,7 +263,7 @@ const OrderCard = ({
     updatedOrder.confirmed = false;
     try {
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
     } catch (error) {
@@ -278,7 +278,7 @@ const OrderCard = ({
     setConfirmedStatus(newStatus);
     try {
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
     } catch (error) {
@@ -299,7 +299,7 @@ const OrderCard = ({
       const updatedOrder = order;
       updatedOrder.packages_array = boxes;
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
     } catch (error) {
@@ -311,7 +311,7 @@ const OrderCard = ({
       const updatedOrder = order;
       updatedOrder.notes_array = newNotes;
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
     } catch (error) {

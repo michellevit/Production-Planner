@@ -9,7 +9,7 @@ const SuggestedDims = ({ suggestedBoxes, setBoxes, setMatchingDims, order }) => 
     const updatedOrder = { ...order, packages_array: suggestedBoxes };
     try {
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
     } catch (error) {
@@ -21,7 +21,7 @@ const SuggestedDims = ({ suggestedBoxes, setBoxes, setMatchingDims, order }) => 
     const updatedOrder = { ...order, packages_array: "TBD" };
     try {
       await axios.put(
-        `http://127.0.0.1:8000/open-orders/${order.id}/`,
+        `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         updatedOrder
       );
     } catch (error) {
