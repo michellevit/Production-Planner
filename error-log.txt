@@ -1,0 +1,7 @@
+Python Executable: C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\venv\Scripts\python.exe
+Error details: ('00000', '[00000] [QODBC] QuickBooks Begin Session Failed. Error = 80040408, Could not start QuickBooks.\n Computer Name: AW1, Windows Username: Michelle Flandin. For more details please visit: qodbc.com/links/2529 (10041) (SQLDriverConnect); [00000] [QODBC] QuickBooks Begin Session Failed. Error = 80040408, Could not start QuickBooks.\n Computer Name: AW1, Windows Username: Michelle Flandin. For more details please visit: qodbc.com/links/2529 (10041)')
+
+Note: Please make sure QuickBooks is open and you are logged in before running this script.
+Error details: ('00000', '[00000] [QODBC] QuickBooks Begin Session Failed. Error = 80040408, Could not start QuickBooks.\n Computer Name: AW1, Windows Username: Michelle Flandin. For more details please visit: qodbc.com/links/2529 (10041) (SQLDriverConnect); [00000] [QODBC] QuickBooks Begin Session Failed. Error = 80040408, Could not start QuickBooks.\n Computer Name: AW1, Windows Username: Michelle Flandin. For more details please visit: qodbc.com/links/2529 (10041)')
+
+check_quickbooks = failedNote: Please make sure QuickBooks is open and you are logged in before running this script.

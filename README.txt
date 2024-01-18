@@ -14,7 +14,9 @@ Table of Contents:
 9. How To Clear The Database
 10. How To Fetch Updates from GitHub
 11. How to Update Docker Container / Database
-12. Credits
+12. Decoding the Error Log
+13. General Troubleshooting
+14. Credits
 
 
 ----------
@@ -72,7 +74,8 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Create a virtual environment in the main folder:
   - Run: cd C:\path\to\project\Production-Planner 
   - Run: python -m venv venv
-  - Run: cd C:\path\to\project\Production-Planner 
+  - Run: cd C:\path\to\project\Production-Planner
+  - Run: .\venv\Scripts\activate
   - Run: pip install -r requirements.txt
 - Update the file paths for the scripts:
   - Go to the main folder, and open the scripts folder
@@ -250,6 +253,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - A command prompt will appear with the name/date of the latest backup and ask if you are sure you want to restore
     - Type "Y" and press enter (to confirm and restore the database)
     - Close the prompt
+  -NOTE: If there is an issue with getting data the next time, it may have something to do with django/api/data/current_open_orders.json (you may need to clear this file)  
 
 ----------
 9. How To Clear The Database
@@ -306,7 +310,16 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 
 -----------
-11. Troubleshooting
+12. Decoding the Error Log
+- If a critical error email was received:
+  - Open the scripts/error_scripts/error-log-file.txt + read / delete it's Contents
+  - Check the Task Scheduler application:
+    - Make sure the script is enabled
+    - check the error log history
+
+
+-----------
+13. Troubleshooting
 - docker-compose build not working: 
   - Make sure there is no node_modules folder accidentally in the root directory 
   - Make sure there is a .dockerignore file in the reactapp to ignore the node_momdules folder
@@ -321,5 +334,5 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 
 -----------
-12. Credits
+14. Credits
 Michelle Flandin

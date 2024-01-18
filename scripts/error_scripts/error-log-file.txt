@@ -1,3 +1,6 @@
-01/16/24 16:46:33.44 CRITICAL ERROR: QuickBooks is not running. Please start QuickBooks and login. 
-Good - 2
-01/16/24 16:46:36.93 Error notification email sent. 
+A 
+B 
+C 
+D 
+E 
+check_quickbooks.py = SUCCESS

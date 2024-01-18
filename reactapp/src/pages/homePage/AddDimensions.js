@@ -20,7 +20,7 @@ const AddDimensions = () => {
   useEffect(() => {
     const fetchDimensions = () => {
       axios
-        .get("${process.env.REACT_APP_BACKEND_URL}/dimensions/")
+        .get(`${process.env.REACT_APP_BACKEND_URL}/dimensions/`)
         .then((response) => {
           setDimensions(response.data);
         })
@@ -59,7 +59,7 @@ const AddDimensions = () => {
     setPackageWidth("");
     setPackageHeight("");
     try {
-      await axios.post("${process.env.REACT_APP_BACKEND_URL}/dimensions/", {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/dimensions/`, {
         length: parseFloat(packageLength),
         width: parseFloat(packageWidth),
         height: parseFloat(packageHeight),

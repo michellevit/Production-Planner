@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.db.models import Q, Case, When, F, Value, IntegerField, DateField
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse, StreamingHttpResponse, HttpResponse
@@ -14,9 +14,7 @@ from .serializers import *
 from .utils import *
 import json
 import logging
-import pytz
 import time
-
 
 
 logger = logging.getLogger('file')
@@ -129,15 +127,12 @@ class FilteredOrdersListView(generics.ListAPIView):
     serializer_class = OrderSerializer
     pagination_class = CustomPagination
     def get_queryset(self):
-        
         current_datetime_utc = timezone.now()
         current_datetime_vancouver = current_datetime_utc.astimezone(timezone.get_current_timezone())
         today = current_datetime_vancouver.date()
-
         filter_choice = self.request.query_params.get('filter', 'all')
         search_query = self.request.query_params.get('search', None)
         order_type = self.request.query_params.get('type', 'all')
-
         queryset = Order.objects.all()
         if order_type == 'open':
             queryset = queryset.filter(shipped=False)
@@ -326,6 +321,7 @@ class DimensionView(APIView):
 class FetchMatchingPackagesView(APIView):
     def post(self, request):
         data = request.data
+        print("DATA: ", data)
         item_array = data.get('item_array')
         if not item_array:
             return JsonResponse({'success': False, 'message': 'item_array not provided'})
@@ -362,12 +358,12 @@ class LastUpdateView(APIView):
 # path('latest-upload-stream/', LatestUpload.as_view(), name='latest-upload-stream')
 def last_update_stream(request):
     def last_update_event_stream():
-        response = HttpResponse(content_type='text/event-stream') 
+        response = HttpResponse(content_type='text/event-stream')
         response['Content-Type'] = 'text/event-stream'
         response['Cache-Control'] = 'no-cache'
         response['Connection'] = 'keep-alive'
         last_updated_value = None
-        max_retries = 5  
+        max_retries = 5
         retry_count = 0
         while True:
             try:
@@ -376,13 +372,13 @@ def last_update_stream(request):
                     last_updated_value = new_data.last_updated
                     data = {'message': 'New update', 'last_updated': str(new_data.last_updated)}
                     yield f"data: {json.dumps(data)}\n\n"
-                    retry_count = 0  # Reset retry count on successful operation
-                time.sleep(20)
+                    retry_count = 0
+                    time.sleep(150)
             except Exception as e:
                 print(f"Error in event_stream: {str(e)}")
                 retry_count += 1
                 if retry_count >= max_retries:
                     print("Maximum retries reached, stopping the event stream.")
-                    break  
-                time.sleep(120)  
+                    break
+                time.sleep(300)
     return StreamingHttpResponse(last_update_event_stream(), content_type='text/event-stream')

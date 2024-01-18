@@ -52,7 +52,7 @@ const OrderCard = ({
             delay_tbd,
             packages_array,
             notes_array,
-            item_dict_hash,
+            item_array_hash,
           } = response.data;
           const updatedBoxes = Array.isArray(packages_array)
             ? packages_array.map((box) => {
@@ -86,12 +86,15 @@ const OrderCard = ({
           if (
             packages_array.length === 0 &&
             matchingDims !== false &&
-            item_dict_hash !== "0"
+            item_array_hash !== "0"
           ) {
             axios
-              .post("${process.env.REACT_APP_BACKEND_URL}/fetch-matching-packages/", {
-                item_dict: order.item_dict,
-              })
+              .post(
+                `${process.env.REACT_APP_BACKEND_URL}/fetch-matching-packages/`,
+                {
+                  item_array: order.item_array,
+                }
+              )
               .then((response) => {
                 if (response.data.success) {
                   setMatchingDims(true);
@@ -458,9 +461,7 @@ const OrderCard = ({
                   <td id="qty">
                     {item.ship_qty}
                     {item.backorder_qty > 0 && (
-                      <p id="backorder-text">
-                        B/O: {item.backorder_qty}
-                      </p>
+                      <p id="backorder-text">B/O: {item.backorder_qty}</p>
                     )}
                   </td>
                 </tr>

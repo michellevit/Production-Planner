@@ -7,7 +7,6 @@ from email.mime.multipart import MIMEMultipart
 import ssl
 from datetime import datetime
 import pytz
-import time
 
 
 load_dotenv()
@@ -20,16 +19,13 @@ def get_current_date_in_vancouver_timezone():
 
 
 def set_custom_message(error_source):
+    with open('error-log-file.txt', 'r') as log_file:
+        error_log_contents = log_file.read()
     if error_source == "Backup":
-        current_date = get_current_date_in_vancouver_timezone()
-        return f"The Production Planner automated database backup has failed for {current_date}."
+        return f"The Production Planner automated database backup has failed.\n\nError Log:\n{error_log_contents}."
     elif error_source == "Application":
-        with open('error-log-file.txt', 'r') as log_file:
-            error_log_contents = log_file.read()
-        return f"The Production Planner application has failed to run.\n\nError Log:\n{error_log_contents}"
+        return f"The Production Planner application has failed to run - please make sure you are logged in. \n\nError Log:\n{error_log_contents}"
     elif error_source == "Unknown":
-        with open('error-log-file.txt', 'r') as log_file:
-            error_log_contents = log_file.read()
         return f"An unknown error has occurred with the Production Planner backup and/or Application run process.\n\nError Log:\n{error_log_contents}"
 
 
