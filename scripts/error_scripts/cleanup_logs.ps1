@@ -1,4 +1,4 @@
-$logFile = "error-log-file.txt"
+$logFile = "error-log.txt"
 $daysToKeep = 3
 $today = Get-Date
 

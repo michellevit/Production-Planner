@@ -60,6 +60,7 @@ class Product(models.Model):
 
 class LastUpdate(models.Model):
     last_updated = models.DateTimeField()
+    last_active = models.DateTimeField(null=True, blank=True)
     def __str__(self):
         return str(self.last_updated)
 

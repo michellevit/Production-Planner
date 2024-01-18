@@ -1,6 +1,6 @@
 import sys
 
-log_file_path = 'error-log-file.txt'
+log_file_path = 'error-log.txt'
 email_sent = False
 
 try:

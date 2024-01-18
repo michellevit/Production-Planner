@@ -350,12 +350,26 @@ class LastUpdateView(APIView):
     def get(self, request):
         last_update = LastUpdate.objects.first()
         if last_update:
-            return Response({"last_updated": last_update.last_updated})
+            last_updated = last_update.last_updated
+            last_active = last_update.last_active
+            if last_active:
+                response_data = {
+                    "last_updated": last_updated,
+                    "last_active": last_active,
+                }
+            else:
+                response_data = {
+                    "last_updated": last_updated,
+                    "last_active": "Not available",
+                }
+            return Response(response_data)
         else:
-            return Response({"last_updated": "Never"})
-     
+            return Response({
+                "last_updated": "Never",
+                "last_active": "Not available",
+            })
 
-# path('latest-upload-stream/', LatestUpload.as_view(), name='latest-upload-stream')
+# path('last-update-stream/', LastUpdate.as_view(), name='last-update-stream')
 def last_update_stream(request):
     def last_update_event_stream():
         response = HttpResponse(content_type='text/event-stream')
@@ -363,16 +377,37 @@ def last_update_stream(request):
         response['Cache-Control'] = 'no-cache'
         response['Connection'] = 'keep-alive'
         last_updated_value = None
+        last_active_value = None
         max_retries = 5
         retry_count = 0
         while True:
             try:
                 new_data = LastUpdate.objects.first()
-                if new_data and new_data.last_updated != last_updated_value:
-                    last_updated_value = new_data.last_updated
-                    data = {'message': 'New update', 'last_updated': str(new_data.last_updated)}
-                    yield f"data: {json.dumps(data)}\n\n"
-                    retry_count = 0
+                if new_data:
+                    if (new_data.last_updated != last_updated_value or
+                        new_data.last_active != last_active_value):
+                        last_updated_value = new_data.last_updated
+                        last_active_value = new_data.last_active
+                        data = {
+                            'message': 'New update',
+                            'last_updated': str(new_data.last_updated),
+                            'last_active': str(new_data.last_active)
+                        }
+                        yield f"data: {json.dumps(data)}\n\n"
+                    else:
+                        current_time = time.time()
+                        last_active_time = time.mktime(new_data.last_active.timetuple())
+                        time_difference = current_time - last_active_time
+                        if time_difference > 300:  # 300 seconds = 5 minutes
+                            no_update_data = {
+                                'message': 'No update in over 5 minutes',
+                                'last_active': str(new_data.last_active)
+                            }
+                            yield f"data: {json.dumps(no_update_data)}\n\n"
+                        else:
+                            time.sleep(150)  # Sleep for 150 seconds
+                else:
+                    yield "data: No LastUpdate record found\n\n"
                     time.sleep(150)
             except Exception as e:
                 print(f"Error in event_stream: {str(e)}")
@@ -380,5 +415,5 @@ def last_update_stream(request):
                 if retry_count >= max_retries:
                     print("Maximum retries reached, stopping the event stream.")
                     break
-                time.sleep(300)
+                time.sleep(300)  # 300 seconds = 5 minutes
     return StreamingHttpResponse(last_update_event_stream(), content_type='text/event-stream')

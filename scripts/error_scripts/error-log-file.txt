@@ -1,6 +1,0 @@
-A 
-B 
-C 
-D 
-E 
-check_quickbooks.py = SUCCESS

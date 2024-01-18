@@ -44,7 +44,6 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - MySQL (Production)
 - Docker
 - Windows Batch Scripting (for scheduled tasks and automation)
-- Windows Task Scheduler (for automating script execution)
 
 
 ----------
@@ -155,27 +154,23 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - python manage.py createsuperuser
   - Use credentials from the .env file
   - To access Django's admin interface - go to broswer url: http://localhost:8000/admin
-- Create a Task on Windows Task Scheduler to run 'run-app.bat' periodically:
+- Setup QODBC DSN Connection 
+  - Install QODBC (link at bottom of webpage): https://qodbc.com/what-is-qodbc/
+  - Search for "QODBC" in Windows search bar and right-click 'Open file location'
+  - Open file 'Configure 64-Bit QODBC Driver'
+    - Select 'System DSN' tab
+    - Click Add
+    - Select QODBC Driver for QuickBooks
+    - Click Finish
+    - Locate the company file (open QuickBooks, login, click F2, file location will appear here)
+    - Data Source Name: 'Production-Planner-DSN'
+      - Note: it is important to use this exact data source name
+    - Select 'Multi-user Mode'
+    - Test Connection to QuickBooks (make sure it's successful)
+    - Click OK
+    - Click OK
+- Create a Task on Windows Task Scheduler to run 'backup-database.bat' every morning at 6:15 AM:
   - Click on the Start menu and type "Task Scheduler" in the search bar
-  - Open the Task Scheduler application
-  - In the Task Scheduler, go to the "Action" menu and select "Create Basic Task..."
-    - Name the task "Production-Planner-Batch-Script-Task"
-      - Note: it is important that this is the exact name of the task
-    - Choose "Daily"
-    - Set start date + time (6:00AM)
-    - Set frequency: repeat task every 2 minutes
-    - For the duration of: 12 hours
-    - Set the script: click browse and select the batch file (in the scripts folder) + click open
-    - Review settings + click "Finish"
-    - Customize for Weekdays only: 
-      - In the Task Scheduler Library, find the task you just created and right-click on it.
-      - Select "Properties".
-      - Go to the "Triggers" tab and edit the trigger you created.
-      - Under "Advanced settings", click on "Weekly".
-      - Choose Monday, Tuesday, Wednesday, Thursday, and Friday.
-      - Click "OK" to save the changes.
-- Create a Task on Windows Task Scheduler to run 'backup-database.bat' periodically:
-- Click on the Start menu and type "Task Scheduler" in the search bar
   - Open the Task Scheduler application
   - In the Task Scheduler, go to the "Action" menu and select "Create Basic Task..."
     - Name the task "Production-Planner-Backup-Database-Batch-Task"
@@ -191,6 +186,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
       - Under "Advanced settings", click on "Weekly".
       - Choose Monday, Tuesday, Wednesday, Thursday, and Friday.
       - Click "OK" to save the changes.
+- NOTE: the start-scheduled-task.bat does not run via Windows Task Scheduler because to run QODBC via the Task Scheduler requires the (paid) QODBC Remote version
 
 
 ----------
@@ -198,7 +194,12 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - In PRODUCTION:
   - Option 1 (via batch file):
     - Navigate to the project's 'scripts' folder
-    - Double-click the 'qb-data-to-app.bat' file
+    - Double-click the 'start-scheduled-task.bat' file
+    - This script will run until:
+      - stop-scheduled-task.bat runs 
+      - this command prompt is closed
+      - this computer shuts down
+
   - Option 2 (via Docker): 
     - Open the app by double-clicking the 'start-app.bat' file 
     * Note: it may take several minutes for the frontend to boot up
@@ -255,6 +256,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
     - Close the prompt
   -NOTE: If there is an issue with getting data the next time, it may have something to do with django/api/data/current_open_orders.json (you may need to clear this file)  
 
+
 ----------
 9. How To Clear The Database
 - Option 1: 
@@ -292,15 +294,23 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 -----------
 11. How to Update Docker Container / Database
 - If changes were made to the entire app in VSCode:
-  - docker-compose down
-  - docker-compose build
-    - Add '--no-cache' to build from scratch, ignoring previuous builds
-  - docker-compose up
+  -Automated way:
+    - Go to scripts/docker_scripts
+    - Run docker-migrate.bat
+  - Manual way:
+    - docker-compose down
+    - docker-compose build
+      - Add '--no-cache' to build from scratch, ignoring previuous builds
+    - docker-compose up
 - If changes were just made to one image: 
   - docker build -t your_image_name .
 - If changes were made to the models.py file:
   - Make sure the Docker container is running
-  - CD into the project's root directory
+  -Automated way:
+    - Go to scripts/docker_scripts
+    - Run docker-migrate.bat
+  - Manual way:
+    - CD into the project's root directory
     - Run: docker exec -it production-planner-backend-1 python manage.py makemigrations
     - Run: docker exec -it production-planner-backend-1 python manage.py migrate
 - If changes were made to a static file (e.g. django/api/static/welcome.css): 
@@ -313,9 +323,6 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 12. Decoding the Error Log
 - If a critical error email was received:
   - Open the scripts/error_scripts/error-log-file.txt + read / delete it's Contents
-  - Check the Task Scheduler application:
-    - Make sure the script is enabled
-    - check the error log history
 
 
 -----------
@@ -331,6 +338,12 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - If the welcome.css (or other static) file changes don't implement:
   - Delete the multiple welcome.css files (+ cached variations - e.g. welcome.98433745.css) in django/static:
   - cd into the django folder and run: python manage.py collectstatic
+- If the start-scheduled-task.bat stops working: 
+  - Make sure there isn't a stale script.lock or stop.flag file in the scripts folder
+  - This can occur if: 
+    - The computer unexpectedly shuts down (power outtage)
+    - The command prompt, running start-scheduled-task.bat is unexepectedly closed
+    - An unexpected error occurs in the code
 
 
 -----------

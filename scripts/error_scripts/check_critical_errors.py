@@ -1,6 +1,6 @@
 import sys
 
-log_file_path = 'error-log-file.txt'
+log_file_path = 'error-log.txt'
 critical_error_found = False
 line_count = 0
 threshold = 8

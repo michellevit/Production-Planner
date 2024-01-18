@@ -11,7 +11,7 @@ call "C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\ven
 
 :: Load error log file
 cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\scripts\error_scripts
-set logFile=error-log-file.txt
+set logFile=error-log.txt
 
 
 :: Load .env file

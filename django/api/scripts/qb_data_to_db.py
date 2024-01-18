@@ -14,6 +14,7 @@ django.setup()
 from api.models import Order, LastUpdate
 
 def main():
+    orders_updated_flag = False
     script_dir = os.path.dirname(os.path.realpath(__file__))
     qb_data_json_file_path = os.path.join(script_dir, '..', 'data', 'qb_order_data.json')
     current_open_orders_json_file_path = os.path.join(script_dir, '..', 'data', 'current_open_orders.json')
@@ -24,9 +25,10 @@ def main():
         except json.JSONDecodeError: 
             pass
     if orders_dict:
-        check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict)
+        orders_updated_flag = check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict, orders_updated_flag)
         update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict)
-    update_last_update_timestamp()
+    if orders_updated_flag:
+        update_last_update_timestamp()
 
 
 def iterate_through_queried_orders(data):
@@ -79,7 +81,7 @@ def iterate_through_queried_orders(data):
 
 
 
-def check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict):
+def check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict, orders_updated_flag):
     if os.path.getsize(current_open_orders_json_file_path) == 0:
         if not Order.objects.exists():
             for order_number, order_data in orders_dict.items():
@@ -90,6 +92,7 @@ def check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_
                     item_array=order_data["item_array"]
                 )
                 new_order.save()
+                orders_updated_flag = True
         else:
             return
     else:
@@ -108,14 +111,14 @@ def check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_
                         continue
                     # If the order HAS been modified since the last check...
                     else:
-                        check_if_order_in_database(order_number, orders_dict)
+                        orders_updated_flag = check_if_order_in_database(order_number, orders_dict, orders_updated_flag)
                 # If the order_number is not in the file...
                 else:
-                    check_if_order_in_database(order_number, orders_dict)
+                    orders_updated_flag = check_if_order_in_database(order_number, orders_dict, orders_updated_flag)
+    return orders_updated_flag
 
 
-
-def check_if_order_in_database(order_number, orders_dict):
+def check_if_order_in_database(order_number, orders_dict, orders_updated_flag):
     existing_orders = Order.objects.filter(order_number=order_number)
     count = existing_orders.count()
     order_data = orders_dict[order_number]
@@ -134,6 +137,7 @@ def check_if_order_in_database(order_number, orders_dict):
             item_array=item_array,
         ) 
         new_order.save()
+        orders_updated_flag = True
     # If the order IS in the database table 'Order'
     else:
         if count == 1:
@@ -145,6 +149,7 @@ def check_if_order_in_database(order_number, orders_dict):
                         db_order.item_array = item_array
                         db_order.confirmed = False
                         db_order.save()
+                        orders_updated_flag = True
             elif db_order.shipped == True:
                 if total_previously_invoiced_qb > 0:
                     new_order = Order(
@@ -154,6 +159,7 @@ def check_if_order_in_database(order_number, orders_dict):
                     item_array=item_array,
                     ) 
                     new_order.save()
+                    orders_updated_flag = True
         elif count > 0:
             any_unshipped_orders = any(db_order.shipped is False for db_order in existing_orders)
             # check if there are any non-shipped orders with the same order_number in existing_orders
@@ -167,6 +173,7 @@ def check_if_order_in_database(order_number, orders_dict):
                                 db_order.item_array = item_array
                                 db_order.confirmed = False
                                 db_order.save()
+                                orders_updated_flag = True
             # else - if all the orders in existing_orders have been shipped
             else: 
                 total_previously_invoiced_quantities = {}
@@ -188,6 +195,9 @@ def check_if_order_in_database(order_number, orders_dict):
                         item_array=item_array,
                         ) 
                         new_order.save()
+                        orders_updated_flag = True
+    return orders_updated_flag
+    
 
 
 
