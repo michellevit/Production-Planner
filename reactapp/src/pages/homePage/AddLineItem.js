@@ -35,14 +35,14 @@ const AddLineItem = ({
     e.preventDefault();
     setMatchingDims(false);
     const fullValue = document.getElementById("add-line-item-name").value;
-    const firstSpaceIndex = fullValue.indexOf(' ');
+    const firstSpaceIndex = fullValue.indexOf(" ");
     let itemName, itemDescription;
-    if (firstSpaceIndex === -1) { 
+    if (firstSpaceIndex === -1) {
       itemName = fullValue;
-      itemDescription = fullValue; 
+      itemDescription = fullValue;
     } else {
       itemName = fullValue.substring(0, firstSpaceIndex);
-      itemDescription = fullValue; 
+      itemDescription = fullValue;
     }
     const itemQty = document.getElementById("add-line-item-qty").value;
     if (itemName.trim() === "") {
@@ -63,9 +63,9 @@ const AddLineItem = ({
       requested_qty: parseFloat(itemQty),
       ship_qty: parseFloat(itemQty),
       backorder_qty: 0,
-      previously_invoiced_qty: 0
+      previously_invoiced_qty: 0,
     };
-  
+
     setItems((prevItems) => [...prevItems, newItem]);
     document.getElementById("add-line-item-name").value = "";
     document.getElementById("add-line-item-qty").value = "";
@@ -118,19 +118,22 @@ const AddLineItem = ({
       </div>
       <div id="line-item-list">
         <ul>
-          {Object.keys(items).map((itemName) => (
-            <li key={itemName}>
-              <div className="line-item-info">
-                {itemName} - {items[itemName]}
-              </div>
-              <button
-                className="delete-line-item-button"
-                onClick={() => handleDeleteItem(itemName)}
-              >
-                <FontAwesomeIcon icon={faClose} />
-              </button>
-            </li>
-          ))}
+          {Object.keys(items).map((id) => {
+            const item = items[id];
+            return (
+              <li key={id}>
+                <div className="line-item-info">
+                {item.name} {item.description} - Qty: {item.requested_qty}
+                </div>
+                <button
+                  className="delete-line-item-button"
+                  onClick={() => handleDeleteItem(id)}
+                >
+                  <FontAwesomeIcon icon={faClose} />
+                </button>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

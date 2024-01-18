@@ -1,22 +1,23 @@
 import pyodbc
 import json
 import ctypes
+import sys
+import os
 
 def main():
     try:
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        error_log = os.path.join(current_dir, '..', '..', '..', 'scripts', 'error_scripts', 'error-log.txt')
         conn_str = 'DSN=Production-Planner-DSN;'
         connection = pyodbc.connect(conn_str, autocommit=True)
-
         query = """
         SELECT RefNumber, TimeModified, ShipDate, CustomerRefFullName, SalesOrderLineItemRefFullName, SalesOrderLineDesc, SalesOrderLineQuantity, SalesOrderLineInvoiced, CustomFieldSalesOrderLineOther1, CustomFieldSalesOrderLineOther2 
         FROM SalesOrderLine
         WHERE IsFullyInvoiced = 0 AND IsManuallyClosed = 0 AND SalesOrderLineItemRefFullName IS NOT NULL AND SalesOrderLineItemRefFullName <> 'Shipping'
         ORDER BY RefNumber ASC
         """
-
         cursor = connection.cursor()
         cursor.execute(query)
-
         orders = []
         for row in cursor:
             order = {
@@ -32,20 +33,22 @@ def main():
                 "previously_invoiced_qty": int(row.SalesOrderLineInvoiced) if row.SalesOrderLineInvoiced is not None else 0
                 }
             orders.append(order)
-
         cursor.close()
         connection.close()
-
-        output_file_path = 'django/api/data/qb_order_data.json'
-        
-        with open(output_file_path, 'w') as file:
+        output_file = os.path.join(current_dir, '..', 'data', 'qb_order_data.json')     
+        with open(output_file, 'w') as file:
             json.dump(orders, file, indent=4)
     except pyodbc.Error as e:
         error_message = (
-            f"Error details: {str(e)}\n\n"
+            f"Error details: {str(e)}\n\ncheck_quickbooks = failed"
             "Note: Please make sure QuickBooks is open and you are logged in before running this script."
         )
-        ctypes.windll.user32.MessageBoxW(0, error_message, "Error", 0x10)  # Show a message box with an error message
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        error_log = os.path.join(current_dir, '..', '..', '..', 'scripts', 'error_scripts', 'error-log-file.txt')
+        with open(error_log, 'a') as f:
+            print(error_message, file=f)
+        ctypes.windll.user32.MessageBoxW(0, error_message, "Error", 0x10) 
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

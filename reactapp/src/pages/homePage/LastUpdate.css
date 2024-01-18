@@ -20,4 +20,10 @@
     background-color: white;
     padding: 30px 40px;
     border-radius: 15px;
+
 }
+
+.circle-icon {
+    font-size: 10px; 
+    margin-bottom: 2px;
+  }

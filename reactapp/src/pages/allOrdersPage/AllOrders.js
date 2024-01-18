@@ -19,6 +19,7 @@ const AllOrders = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [numberOfFilters, setNumberOfFilters] = useState("");
+  const [lastUpdated, setLastUpdated] = useState(null); 
   const ordersPerPage = 20;
   // Sort Filters: Select + Search
   const [currentView, setCurrentView] = useState(
@@ -61,19 +62,20 @@ const AllOrders = () => {
   );
 
   useEffect(() => {
-    const eventSource = new EventSource(
-      `${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`
-    );
+    const eventSource = new EventSource(`${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`);
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data && data.message === "New update") {
-        fetchOrders();
+        if (data.last_updated !== lastUpdated) {
+          setLastUpdated(data.last_updated); 
+          fetchOrders();
+        }
       }
     };
     return () => {
       eventSource.close();
     };
-  }, []);
+  }, [lastUpdated]);
 
   useEffect(() => {
     const formattedDate = new Date();

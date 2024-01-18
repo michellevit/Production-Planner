@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.db.models import Q, Case, When, F, Value, IntegerField, DateField
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse, StreamingHttpResponse, HttpResponse
@@ -14,9 +14,7 @@ from .serializers import *
 from .utils import *
 import json
 import logging
-import pytz
 import time
-
 
 
 logger = logging.getLogger('file')
@@ -129,15 +127,12 @@ class FilteredOrdersListView(generics.ListAPIView):
     serializer_class = OrderSerializer
     pagination_class = CustomPagination
     def get_queryset(self):
-        
         current_datetime_utc = timezone.now()
         current_datetime_vancouver = current_datetime_utc.astimezone(timezone.get_current_timezone())
         today = current_datetime_vancouver.date()
-
         filter_choice = self.request.query_params.get('filter', 'all')
         search_query = self.request.query_params.get('search', None)
         order_type = self.request.query_params.get('type', 'all')
-
         queryset = Order.objects.all()
         if order_type == 'open':
             queryset = queryset.filter(shipped=False)
@@ -326,6 +321,7 @@ class DimensionView(APIView):
 class FetchMatchingPackagesView(APIView):
     def post(self, request):
         data = request.data
+        print("DATA: ", data)
         item_array = data.get('item_array')
         if not item_array:
             return JsonResponse({'success': False, 'message': 'item_array not provided'})
@@ -354,35 +350,70 @@ class LastUpdateView(APIView):
     def get(self, request):
         last_update = LastUpdate.objects.first()
         if last_update:
-            return Response({"last_updated": last_update.last_updated})
+            last_updated = last_update.last_updated
+            last_active = last_update.last_active
+            if last_active:
+                response_data = {
+                    "last_updated": last_updated,
+                    "last_active": last_active,
+                }
+            else:
+                response_data = {
+                    "last_updated": last_updated,
+                    "last_active": "Not available",
+                }
+            return Response(response_data)
         else:
-            return Response({"last_updated": "Never"})
-     
+            return Response({
+                "last_updated": "Never",
+                "last_active": "Not available",
+            })
 
-# path('latest-upload-stream/', LatestUpload.as_view(), name='latest-upload-stream')
+# path('last-update-stream/', LastUpdate.as_view(), name='last-update-stream')
 def last_update_stream(request):
     def last_update_event_stream():
-        response = HttpResponse(content_type='text/event-stream') 
+        response = HttpResponse(content_type='text/event-stream')
         response['Content-Type'] = 'text/event-stream'
         response['Cache-Control'] = 'no-cache'
         response['Connection'] = 'keep-alive'
         last_updated_value = None
-        max_retries = 5  
+        last_active_value = None
+        max_retries = 5
         retry_count = 0
         while True:
             try:
                 new_data = LastUpdate.objects.first()
-                if new_data and new_data.last_updated != last_updated_value:
-                    last_updated_value = new_data.last_updated
-                    data = {'message': 'New update', 'last_updated': str(new_data.last_updated)}
-                    yield f"data: {json.dumps(data)}\n\n"
-                    retry_count = 0  # Reset retry count on successful operation
-                time.sleep(20)
+                if new_data:
+                    if (new_data.last_updated != last_updated_value or
+                        new_data.last_active != last_active_value):
+                        last_updated_value = new_data.last_updated
+                        last_active_value = new_data.last_active
+                        data = {
+                            'message': 'New update',
+                            'last_updated': str(new_data.last_updated),
+                            'last_active': str(new_data.last_active)
+                        }
+                        yield f"data: {json.dumps(data)}\n\n"
+                    else:
+                        current_time = time.time()
+                        last_active_time = time.mktime(new_data.last_active.timetuple())
+                        time_difference = current_time - last_active_time
+                        if time_difference > 300:  # 300 seconds = 5 minutes
+                            no_update_data = {
+                                'message': 'No update in over 5 minutes',
+                                'last_active': str(new_data.last_active)
+                            }
+                            yield f"data: {json.dumps(no_update_data)}\n\n"
+                        else:
+                            time.sleep(150)  # Sleep for 150 seconds
+                else:
+                    yield "data: No LastUpdate record found\n\n"
+                    time.sleep(150)
             except Exception as e:
                 print(f"Error in event_stream: {str(e)}")
                 retry_count += 1
                 if retry_count >= max_retries:
                     print("Maximum retries reached, stopping the event stream.")
-                    break  
-                time.sleep(120)  
+                    break
+                time.sleep(300)  # 300 seconds = 5 minutes
     return StreamingHttpResponse(last_update_event_stream(), content_type='text/event-stream')

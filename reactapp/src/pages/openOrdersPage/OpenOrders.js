@@ -12,6 +12,7 @@ const OpenOrders = () => {
   const [refreshOrders, setRefreshOrders] = useState(false);
   const [numberOfFilters, setNumberOfFilters] = useState("");
   const [minimizeMaximizeAction, setMinimizeMaximizeAction] = useState(0);
+  const [lastUpdated, setLastUpdated] = useState(null);
   // Sort Filters: Select + Search
   const [currentView, setCurrentView] = useState(
     JSON.parse(localStorage.getItem("openOrders_currentView")) || "all"
@@ -54,19 +55,20 @@ const OpenOrders = () => {
   const page = "openOrdersPage";
 
   useEffect(() => {
-    const eventSource = new EventSource(
-      `${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`
-    );
+    const eventSource = new EventSource(`${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`);
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data && data.message === "New update") {
-        fetchOrders(); 
+        if (data.last_updated !== lastUpdated) {
+          setLastUpdated(data.last_updated); 
+          fetchOrders();
+        }
       }
     };
     return () => {
       eventSource.close();
     };
-  }, []);
+  }, [lastUpdated]);
 
   useEffect(() => {
     countNumberOfFilters();

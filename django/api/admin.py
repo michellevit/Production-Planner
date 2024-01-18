@@ -75,7 +75,8 @@ class LastUpdateAdmin(admin.ModelAdmin):
     # Customize the display of the model in the admin interface
     list_display = (
         "id",
-        "last_updated"
+        "last_updated",
+        "last_active"
     ) 
 
 
