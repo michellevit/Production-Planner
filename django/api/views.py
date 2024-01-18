@@ -405,10 +405,10 @@ def last_update_stream(request):
                             }
                             yield f"data: {json.dumps(no_update_data)}\n\n"
                         else:
-                            time.sleep(150)  # Sleep for 150 seconds
+                            time.sleep(120)  # Sleep for 150 seconds
                 else:
                     yield "data: No LastUpdate record found\n\n"
-                    time.sleep(150)
+                    time.sleep(120)
             except Exception as e:
                 print(f"Error in event_stream: {str(e)}")
                 retry_count += 1
