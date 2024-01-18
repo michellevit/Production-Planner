@@ -6,69 +6,67 @@ import { faSquare, faCircle } from "@fortawesome/free-solid-svg-icons";
 
 const LastUpdate = () => {
   // States to manage last update data and icon color
-  const [lastDate, setLastDate] = useState("Fetching last update..."); 
+  const [lastDate, setLastDate] = useState("Fetching last update...");
   const [weekDay, setWeekDay] = useState(null);
   const [isActive, setIsActive] = useState(true);
 
   // Days of the week
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-  
   useEffect(() => {
+    let eventSource;
+
     const fetchLastUpdate = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/last-update`);
         if (response.data && response.data.last_updated) {
           formatDate(response.data.last_updated);
         } else {
-          // Set "No data available" if last_updated field is missing or null
           setLastDate("No data available");
-          setIsActive(false); // Set icon color to grey
+          setIsActive(false);
         }
       } catch (error) {
         console.error("Failed to fetch last update:", error);
-        // If the fetch fails due to a network error
         setLastDate("Fetching last update failed");
         setIsActive(false);
       }
     };
+
     fetchLastUpdate();
-    const eventSource = connectEventSource();
-    const interval = setInterval(() => {
-      checkIfActive();
-    }, 60000); 
+
+    const connectEventSource = () => {
+      eventSource = new EventSource(`${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`);
+
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        formatDate(data.last_updated);
+        checkLastActiveChange(data.last_active);
+        if (data.message === "No update in over 5 minutes") {
+          setIsActive(false);
+        }
+      };
+
+      eventSource.onerror = (error) => {
+        console.error("EventSource failed:", error);
+        eventSource.close();
+        setIsActive(false);
+        setTimeout(connectEventSource, 120000);
+      };
+
+      return eventSource;
+    };
+
+    eventSource = connectEventSource();
+
+    const interval = setInterval(checkIfActive, 60000);
 
     return () => {
-      eventSource.close();
-      clearInterval(interval); 
+      if (eventSource) {
+        eventSource.close();
+      }
+      clearInterval(interval);
     };
   }, []);
-
-  
-  // Function to connect to the event source
-  const connectEventSource = () => {
-    const newEventSource = new EventSource(
-      `${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`
-    );
-
-    // Handle incoming messages from the event source
-    newEventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      // Update last update date and icon color
-      formatDate(data.last_updated);
-      checkLastActiveChange(data.last_active);
-      // Handle "No update in over 5 minutes" message
-      if (data.message === "No update in over 5 minutes") {
-        setIsActive(false); // Set icon color to grey
-      }
-    };
-    newEventSource.onerror = (error) => {
-      console.error("EventSource failed:", error);
-      newEventSource.close();
-      setIsActive(false); // Set icon color to grey
-      setTimeout(() => connectEventSource(), 120000);
-    };
-  }
 
   const checkIfActive = () => {
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/last-update`)
@@ -83,7 +81,6 @@ const LastUpdate = () => {
       });
   };
 
-  // Function to format the date and update state
   const formatDate = (formatted_date) => {
     if (formatted_date) {
       const date = new Date(formatted_date);
@@ -103,29 +100,16 @@ const LastUpdate = () => {
     }
   };
 
-  // Function to check last active change and update icon color
   const checkLastActiveChange = (lastActive) => {
     if (lastActive) {
       const lastActiveDate = new Date(lastActive);
-      const options = {
-        timeZone: "America/Vancouver",
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      };
-      const lastActiveDateFormatted = lastActiveDate.toLocaleDateString("en-US", options);
       const currentDateTime = new Date();
-      const currentDateTimeFormatted = currentDateTime.toLocaleDateString("en-US", options);
-      const timeDifference = currentDateTimeFormatted - lastActiveDateFormatted;
+      const timeDifference = currentDateTime - lastActiveDate;
       const timeDifferenceMinutes = timeDifference / (1000 * 60);
-      setIsActive(timeDifferenceMinutes <= 5);
+      setIsActive(timeDifferenceMinutes <= 2);
     }
   };
 
-  // Function to style the square icons based on the current day
   const squareStyle = (index) => {
     if (weekDay === "Saturday" || weekDay === "Sunday") {
       return { color: "#b9d2dd" };

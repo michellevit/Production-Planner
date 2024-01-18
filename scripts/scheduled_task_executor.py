@@ -33,10 +33,8 @@ def main():
         subprocess.run(['python', error_script_path, 'Scheduled'])
         sys.exit(1)
     
-
 # Path to the lock file used to ensure the script only runs once
 lock_file_path = os.path.join(os.path.dirname(__file__), 'script.lock')
-
 
 # Check if another instance of this script is already running
 if os.path.exists(lock_file_path):
@@ -59,7 +57,6 @@ def check_for_exit_flag():
         delete_lock_file()
         sys.exit(0)
 
-
 # Function that defines the job to be scheduled
 def job():
     bat_file = os.path.join(os.path.dirname(__file__), 'run-app.bat')
@@ -73,7 +70,9 @@ def run_job():
         job()
 
 # Schedule the job to run every 10 seconds
-schedule.every(150).seconds.do(run_job)
+schedule.every(1).minutes.do(run_job)
+# schedule.every(20).seconds.do(run_job) 
+
 
 # Run the main function if this script is executed directly
 if __name__ == "__main__":
