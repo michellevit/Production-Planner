@@ -21,7 +21,9 @@ def get_current_date_in_vancouver_timezone():
 
 
 def set_custom_message(error_source):
-    with open('error-log.txt', 'r') as log_file:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    error_log_path = os.path.join(current_dir, 'error-log.txt')
+    with open(error_log_path, 'r') as log_file:
         error_log_contents = log_file.read()
     if error_source == "Backup":
         return f"The Production Planner automated database backup has failed.\n\nError Log:\n{error_log_contents}."
@@ -29,7 +31,9 @@ def set_custom_message(error_source):
         return f"The Production Planner application has failed to run - please make sure you are logged in. \n\nError Log:\n{error_log_contents}"
     elif error_source == "Scheduled":
         return f"The Production Planner scheduled_task_executor has stopped unexepectedly.\n\nError Log:\n{error_log_contents}"
-    elif error_source == "Unknown":
+    elif error_source == "Code":
+        return f"The Production Planner scheduled_task_executor has stopped due to a code error.\n\nError Log:\n{error_log_contents}"
+    else:
         return f"An unknown error has occurred with the Production Planner backup and/or Application run process.\n\nError Log:\n{error_log_contents}"
 
 

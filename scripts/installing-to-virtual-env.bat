@@ -1,25 +1,32 @@
 @echo off
 
-:: For first time app deployment
-:: cd "C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner"
+
+:: For first time app deployment (create venv in project's root directory)
+:: cd "%~dp0\.."
 :: python -m venv venv
 
 
 :: Activate Virtual Environment
-call "C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\venv\Scripts\activate.bat"
+:: cd "%~dp0"
+::  "..\venv\Scripts"
+:: activate.bat
+:: "%~dp0"
 
 
 :: For first time app deployment
-:: cd "C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner"
+:: cd "%~dp0\.."
+
 :: pip install -r requirements.txt
 
 
 :: For single module installation
 :: pip install *module_name_here*
 
-pause
-
 
 :: to keep requirements.txt up to date: 
-:: cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner
+:: cd "%~dp0\.."
 :: pip freeze > requirements.txt
+
+
+
+pause
