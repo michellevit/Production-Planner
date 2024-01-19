@@ -3,15 +3,21 @@
 import django
 import json
 import os
-from django.utils import timezone
-from api.utils import *
-import pytz
 
+
+# THIS LINE MUST BE AT THE THIS LOCATION IN THE SCRIPT - DO NOT MOVE
 # Initialize Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Production_Planner.settings')
 django.setup()
+# -------------------------------------------------------------------
 
+
+from django.utils import timezone
+from api.utils import *
 from api.models import Order, LastUpdate
+import os
+
+
 
 def main():
     orders_updated_flag = False
@@ -217,13 +223,10 @@ def update_current_open_orders_json_file(current_open_orders_json_file_path, ord
         json.dump(updated_orders, current_orders_file, indent=4)
 
 
-
 def update_last_update_timestamp():
-    vancouver_tz = pytz.timezone('America/Vancouver')
     last_update, created = LastUpdate.objects.get_or_create(id=1)
-    last_update.last_updated = timezone.now().astimezone(vancouver_tz)
+    last_update.last_updated = timezone.now()  
     last_update.save()
-
 
 
 if __name__ == "__main__":
@@ -235,8 +238,8 @@ if __name__ == "__main__":
 # LOGIC OVERVIEW: 
     
     
-# Iterate through the queried orders: 
-# Save the data into orders_dict
+# iterate_through_queried_orders()  
+# - Save the data into orders_dict
 
 # check_if_order_new_or_modified()
 # -For each: is the order in the current_open_orders.json file?

@@ -1,13 +1,11 @@
 import pyodbc
 import json
-import ctypes
 import sys
 import os
 
 def main():
+    current_dir = os.path.dirname(os.path.realpath(__file__))
     try:
-        current_dir = os.path.dirname(os.path.realpath(__file__))
-        error_log = os.path.join(current_dir, '..', '..', '..', 'scripts', 'error_scripts', 'error-log.txt')
         conn_str = 'DSN=Production-Planner-DSN;'
         connection = pyodbc.connect(conn_str, autocommit=True)
         query = """
@@ -39,16 +37,13 @@ def main():
         with open(output_file, 'w') as file:
             json.dump(orders, file, indent=4)
     except pyodbc.Error as e:
-        error_message = (
-            f"Error details: {str(e)}\n\ncheck_quickbooks = failed"
-            "Note: Please make sure QuickBooks is open and you are logged in before running this script."
-        )
-        current_dir = os.path.dirname(os.path.realpath(__file__))
-        error_log = os.path.join(current_dir, '..', '..', '..', 'scripts', 'error_scripts', 'error-log-file.txt')
-        with open(error_log, 'a') as f:
-            print(error_message, file=f)
-        ctypes.windll.user32.MessageBoxW(0, error_message, "Error", 0x10) 
+        print(f"An error occurred: {e}", file=sys.stderr)
         sys.exit(1)
+    except Exception as e:
+        print(f"An error occurred: {e}", file=sys.stderr)
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
+

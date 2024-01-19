@@ -71,15 +71,13 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 - Install node:
   - https://nodejs.org/en
 - Create a virtual environment in the main folder:
+  * Note: you can instead open 'scripts/installing-to-vritual-env.bat', uncomment the relative lines + run it
   - Run: cd C:\path\to\project\Production-Planner 
   - Run: python -m venv venv
   - Run: cd C:\path\to\project\Production-Planner
   - Run: .\venv\Scripts\activate
   - Run: pip install -r requirements.txt
-- Update the file paths for the scripts:
-  - Go to the main folder, and open the scripts folder
-  - Go through each file (including files in the error_scripts subfolder) and update the file paths
-- Follow instructions for 'Preparing To Run In Development' (step 4) OR 'Preparing To Deploy In Production' (step 5)
+ Follow instructions for 'Preparing To Run In Development' OR 'Preparing To Deploy In Production'
 
 
 ----------
@@ -192,20 +190,28 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 ----------
 6. How To Start The Program
 - In PRODUCTION:
-  - Option 1 (via batch file):
-    - Navigate to the project's 'scripts' folder
-    - Double-click the 'start-scheduled-task.bat' file
+  - Option 1 (via batch file - scheduled updates every 2 mins, Mon-Fri 6AM-6PM):
+    - Open QuickBooks and logged in
+    - Open a command prompt + navigate to the project's 'scripts' folder
+    - Run: start-scheduled-task.bat
     - This script will run until:
       - stop-scheduled-task.bat runs 
       - this command prompt is closed
       - this computer shuts down
-
-  - Option 2 (via Docker): 
+  - Option 2 (via batch file - manual one-time sync from QB to database):
+    - Open QuickBooks and logged in
+    - Open a command prompt + navigate to the project's 'scripts' folder
+    - Run: manually_fetch_data.bat
+    - This script will run until:
+      - stop-scheduled-task.bat runs 
+      - this command prompt is closed
+      - this computer shuts down
+  - Option 3 (via Docker): 
     - Open the app by double-clicking the 'start-app.bat' file 
     * Note: it may take several minutes for the frontend to boot up
     - The frontend browser url should automatically open:  http://localhost:3000/
         - Open the backend using the browser url: http://localhost:8000/
-  - Option 3 (via Terminal):
+  - Option 4 (via Terminal):
     - In the terminal, navigate to the project's root directory
     - Run: docker-compose up
   - To stop the Docker container: 
@@ -322,20 +328,16 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 -----------
 12. Decoding the Error Log
 - If a critical error email was received:
-  - Open the scripts/error_scripts/error-log-file.txt + read / delete it's Contents
+  - Open the scripts/error_scripts/error-log.txt  
+  - Read/delete the error-log.txt contents
 
 
 -----------
 13. Troubleshooting
-- docker-compose build not working: 
+- If docker-compose build not working: 
   - Make sure there is no node_modules folder accidentally in the root directory 
   - Make sure there is a .dockerignore file in the reactapp to ignore the node_momdules folder
-- If running docker-compose build a lot:
-  - Make sure to delete dangling images in Docker occassionally:
-    - Run: docker image prune -f
-  - Build w/o cache to ensure all changes are implemented: 
-    - Run: docker-compose build --no-cache
-- If the welcome.css (or other static) file changes don't implement:
+- If welcome.css (or other static) file changes don't implement:
   - Delete the multiple welcome.css files (+ cached variations - e.g. welcome.98433745.css) in django/static:
   - cd into the django folder and run: python manage.py collectstatic
 - If the start-scheduled-task.bat stops working: 
@@ -344,6 +346,20 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
     - The computer unexpectedly shuts down (power outtage)
     - The command prompt, running start-scheduled-task.bat is unexepectedly closed
     - An unexpected error occurs in the code
+- If worried that multiple instances of scheduled_task_executor.py are running: 
+  - Automated: 
+    - Go to scripts/error-scripts
+    - Run: stop-all-instances-of-tasks.bat
+  - Manual check:
+    - Open the Task Manager
+    - Go to the "Details" tab
+    - Look for python.exe or python3.10.exe 
+    - Check the command line column (you might need to add this column if it's not visible)
+    - If the path matches the below details, then it is running: 
+      - Name: python.exe or cmd.exe
+      - CPU: 00
+      - Status: Running
+      - Command Line: python -u scheduled_task_executor.py
 
 
 -----------

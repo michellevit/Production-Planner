@@ -1,20 +1,20 @@
 :: scripts/run-app.bat
 
+
 @echo off
 setlocal EnableDelayedExpansion
 
 
-:: Get Error Log
-cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\scripts\error_scripts
-set logFile=error-log.txt
+:: set file paths
+set errorLog="%~dp0\error_scripts\terror-log.txt"
+set checkLog="%~dp0\error_scripts\check-log.txt"
+set sendErrorEmail="%~dp0\error_scripts\send_critical_error_email.py"
+set stopExistingTasks="%~dp0\error_scripts\stop-all-instances-of-task.bat"
+set checkEmailSent="%~dp0\error_scripts\check_email_sent.py"
+set checkCriticalErrors="%~dp0\error_scripts\check_critical_errors.py"
+set checkQodbcConnection="%~dp0\error_scripts\check_qodbc_connection.py"
+set cleanupLogsScript="%~dp0\error_scripts\cleanup_logs.ps1"
 
-
-:: Activate the virtual environment (for pyodbc / check_quickbooks.py / check_qodbc_connection.py)
-call "C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\venv\Scripts\activate.bat"
-if not defined VIRTUAL_ENV (
-    echo %DATE% %TIME% ERROR: Virtual environment was not properly activated. >> %logFile%
-    exit /b 1
-)
 
 :: Format the Date/Time
 for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do set datetime=%%I
@@ -25,71 +25,104 @@ set MIN=!datetime:~10,2!
 set TIME=!HOUR!:!MIN!
 
 
-:: Call PowerShell to clean up old log entries
-powershell -NoProfile -ExecutionPolicy Bypass -File "cleanup_logs.ps1"
-:: Call Python script to check for critical errors
-"C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\venv\Scripts\python.exe" check_critical_errors.py
+echo %DATE% %TIME% run-app - Started >> %checkLog%
+
+
+:: Activate the virtual environment
+cd "%~dp0"
+cd "..\venv\Scripts"
+call activate.bat
+if not defined VIRTUAL_ENV (
+    cd "%~dp0\error_scripts"
+    echo %DATE% %TIME% ERROR: run-app - Virtual environment was not properly activated. >> %errorLog%
+    exit /b 1
+)
+
+
+:: Call Python script to send an email if there is a critical error
+set critical_exit=False
+python %checkCriticalErrors% 
 if !ERRORLEVEL! equ 1 (
-    python check_email_sent.py
+    set critical_exit=True
+    python %checkEmailSent%
     if !ERRORLEVEL! equ 1 (
-        python send_critical_error_email.py "Application" >> %logFile% 2>&1
+        python %sendErrorEmail% Application
         if !ERRORLEVEL! equ 1 (
-            echo %DATE% %TIME% ERROR: Application error notification email FAILED to send. >> %logFile%
+            echo %DATE% %TIME% ERROR: run-app - Application error notification email FAILED to send. >> %errorLog%
         )
         else (
-            echo %DATE% %TIME% ERROR: Application error notification email sent. >> %logFile%
+            echo %DATE% %TIME% ERROR: run-app - Application error notification email sent. >> %errorLog%
         )     
     )
+)
+
+
+:: Exit script if critical error has been detected
+if "%critical_exit%"=="True" (
+    exit /b 1
 )
 
 
 :: Check if QuickBooks is running 
 tasklist /FI "IMAGENAME eq QBW.EXE" 2>NUL | find /I /N "QBW.EXE" >NUL
 if not "%ERRORLEVEL%"=="0" (
-    echo %DATE% %TIME% CRITICAL ERROR: QuickBooks is not running. Please start QuickBooks and login. >> %logFile%
+    echo %DATE% %TIME% CRITICAL ERROR: run-app - QuickBooks is not running. Please start QuickBooks and login. >> %errorLog%
     exit /b 0
 )
+
+
 
 :: Check if QODBC is able to connect
-cd C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\scripts\error_scripts
-"C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\venv\Scripts\python.exe" check_qodbc_connection.py
+python %checkQodbcConnection% 
 if %ERRORLEVEL% equ 1 (
-    echo %DATE% %TIME% ERROR: QODBC connection failed. Please login to QuickBooks. >> %logFile%
+    echo %DATE% %TIME% ERROR: run-app - QODBC connection failed. Please login to QuickBooks. >> %errorLog%
     exit /b 0
 )
 
 
-:: Check if scheduled task is enabled
-schtasks /query /tn "Production-Planner-Batch-Script-Task" /fo list | find "Status:"
-:: Check if scheduled task is enabled
-set "taskDisabled=0"
-for /f "tokens=*" %%a in ('schtasks /query /tn "Production-Planner-Batch-Script-Task" /fo list ^| find "Status:"') do (
-echo %%a | find "Disabled" > nul
-if not errorlevel 1 set "taskDisabled=1"
-)
-if "!taskDisabled!"=="1" (
-    echo %DATE% %TIME% CRITICAL ERROR: Production-Planner-Batch-Script-Task is disabled. Enable it to continue. >> %logFile%
-    exit /b 0
-)
+:: Navigate to the correct directory
+cd "%~dp0..\django\api\scripts"
 
 
-for /f "tokens=*" %%v in ('where python 2^>^&1') do (
-    set "pythonPath=%%v"
-)
 :: Run script to get data from QuickBooks
-"C:\Users\Michelle Flandin\Documents\Coding_Projects\Production-Planner\venv\Scripts\python.exe" "..\..\django\api\scripts\check_quickbooks.py"
-if %errorlevel% neq 0 (
-    echo %DATE% %TIME% ERROR: Could not execute check_quickbooks.py successfully. >> %logFile%
-    exit /b 0
+python check_quickbooks.py >> %errorLog% 2>&1
+if %ERRORLEVEL% neq 0 (
+    echo %DATE% %TIME% ERROR: run-app - check_quickbooks.py - Failed to get data from QuickBooks, make sure QB is open/logged-in. >> %errorLog%
 )
+
+
+:: Navigate to the root directory
+cd "%~dp0.."
 
 
 :: Run script to add QB data to DB
-docker exec production-planner-backend-1 python /django/api/scripts/qb_data_to_db.py
+docker exec -it production-planner-backend-1 python /django/api/scripts/qb_data_to_db.py >> %errorLog% 2>&1
+if %ERRORLEVEL% neq 0 (
+    echo %DATE% %TIME% ERROR: run-app - Failed to add QB data to DB - qb_data_to_db.py >> %errorLog%
+)
+echo %DATE% %TIME% run-app - qb_data_to_db.py  executed >> %checkLog%
+exit /b
 
 
 :: Run script to update last_active field in LastUpdate model instance
-docker exec production-planner-backend-1 python /django/api/scripts/initiate_last_active_command.py
+docker exec production-planner-backend-1 python /django/api/scripts/initiate_last_active_command.py >> %errorLog% 2>&1
+if %ERRORLEVEL% neq 0 (
+    echo %DATE% %TIME% ERROR: run-app - Failed to update last_active field - initiate_last_active_command.py >> %errorLog%
+)
+echo %DATE% %TIME% run-app - initiate_last_active_command.py executed >> %checkLog%
+
+
+
+:: Call PowerShell to clean up old log entries (at the end so there are no filee access conflicts)
+cd "%~dp0\error_scripts"
+powershell -NoProfile -ExecutionPolicy Bypass -File cleanup_logs.ps1 >> %errorLog% 2>&1
+if %ERRORLEVEL% neq 0 (
+    echo %DATE% %TIME% ERROR: run-app - cleanupLogs.ps1 encountered an error. >> %errorLog%
+) 
+echo %DATE% %TIME% run-app - cleanup_logs.ps1 executed >> %checkLog%
+
+
+echo %DATE% %TIME%  run-app - Made it to the end >> %checkLog%
 
 
 exit /b
