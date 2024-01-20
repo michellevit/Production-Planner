@@ -63,3 +63,4 @@ if %ERRORLEVEL% neq 0 (
 :end_script
 endlocal
 pause
+exit /b 0

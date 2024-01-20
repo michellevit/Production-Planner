@@ -27,4 +27,4 @@ if exist stop.flag del stop.flag
 if exist script.lock del script.lock
 
 
-exit /b
+exit /b 0

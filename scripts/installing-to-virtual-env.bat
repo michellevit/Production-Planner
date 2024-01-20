@@ -30,3 +30,5 @@
 
 
 pause
+
+exit /b 0
