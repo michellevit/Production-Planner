@@ -1,23 +1,13 @@
-01/19/24 20:45 error-checks.bat - logs cleaned. 
-01/19/24 20:45 error-checks.bat - complete, no errors detected. 
-01/19/24 20:45 start-app.bat - stopped via stop-all-instances-of-task.bat 
-01/19/24 20:45 start-app.bat - Started 
-01/19/24 20:45 error-checks.bat - Started 
-01/19/24 20:45 error-checks.bat - virtual environment activated 
-01/19/24 20:45 error-checks.bat - Docker is running. 
-01/19/24 20:45 error-checks.bat -  Docker containers are running 
-01/19/24 20:45 error-checks.bat -  QuickBooks is running
-01/19/24 20:45 error-checks.bat - QODBC is connected 
-01/19/24 20:45 error-checks.bat - logs cleaned. 
-01/19/24 20:45 error-checks.bat - complete, no errors detected. 
-01/19/24 20:45 start-app.bat - stopped via stop-all-instances-of-task.bat 
-01/19/24 20:49 start-app.bat - Started 
-01/19/24 20:49 error-checks.bat - Started 
-01/19/24 20:49 error-checks.bat - virtual environment activated 
-01/19/24 20:49 error-checks.bat - Docker is running. 
-01/19/24 20:49 error-checks.bat -  Docker containers are running 
-01/19/24 20:49 error-checks.bat -  QuickBooks is running
-01/19/24 20:49 error-checks.bat - QODBC is connected 
-01/19/24 20:49 error-checks.bat - logs cleaned. 
-01/19/24 20:49 error-checks.bat - complete, no errors detected. 
-01/19/24 20:49 start-app.bat - stopped via stop-all-instances-of-task.bat 
+01/19/24 21:41 scheduled_task_executor.py - Job executed
+01/19/24 21:42 sync-data.bat - started 
+01/19/24 21:42 sync-data.bat - logs cleaned. 
+01/19/24 21:42  sync-data.bat - complete, no errors detected. 
+01/19/24 21:42 scheduled_task_executor.py - Job executed
+01/19/24 21:43 sync-data.bat - started 
+01/19/24 21:43 sync-data.bat - logs cleaned. 
+01/19/24 21:43  sync-data.bat - complete, no errors detected. 
+01/19/24 21:43 scheduled_task_executor.py - Job executed
+01/19/24 21:44 sync-data.bat - started 
+01/19/24 21:44 sync-data.bat - logs cleaned. 
+01/19/24 21:44  sync-data.bat - complete, no errors detected. 
+01/19/24 21:44 scheduled_task_executor.py - Job executed

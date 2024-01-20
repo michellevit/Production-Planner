@@ -17,5 +17,7 @@ call %stopExistingTasks%
 set processLog=process-log.txt
 echo %DATE% %TIME% stop-app.bat - executed >> %processLog%
 
+echo THE PRODUCTION PLANNER SYNC HAS STOPPED
 
+pause
 exit /b 0

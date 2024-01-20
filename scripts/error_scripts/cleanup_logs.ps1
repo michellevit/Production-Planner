@@ -37,8 +37,8 @@ function CleanErrorLog {
 function CleanProcessLog {
     $lines = Get-Content $processLog
     $linesCount = $lines.Count
-    if ($linesCount -gt 20) {
-        $lines = $lines[-20..-1]
+    if ($linesCount -gt 10) {
+        $lines = $lines[-10..-1]
     }
     Set-Content $processLog -Value $lines
 }

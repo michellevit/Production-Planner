@@ -19,7 +19,7 @@ set MIN=!datetime:~10,2!
 set TIME=!HOUR!:!MIN!
 
 
-echo %DATE% %TIME% error-checks.bat - started >> %processLog%
+echo %DATE% %TIME% sync-data.bat - started >> %processLog%
 
 
 :: Activate the virtual environment
@@ -64,7 +64,7 @@ if %errorlevel% neq 0 (
     echo %DATE% %TIME% ERROR: sync-data.bat - cleanupLogs.ps1 encountered an error. >> %errorLog%
     exit /b 1
 ) 
-echo %DATE% %TIME% error-checks.bat - logs cleaned. >> %processLog%
+echo %DATE% %TIME% sync-data.bat - logs cleaned. >> %processLog%
 
 
 echo %DATE% %TIME%  sync-data.bat - complete, no errors detected. >> %processLog%

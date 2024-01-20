@@ -10,7 +10,7 @@ import subprocess
 
 # Global Variables
 current_dir = os.path.dirname(os.path.abspath(__file__))
-error_checks_bat = os.path.join(current_dir, 'error_scripts', 'error-checks.bat')
+error_checks_bat = os.path.join(current_dir, 'error_scripts', 'check-for-errors.bat')
 sync_data_bat = os.path.join(current_dir, 'sync-data.bat')
 lock_file = os.path.join(current_dir, 'script.lock')
 error_log_file = os.path.join(current_dir, 'error_scripts', 'error-log.txt')
@@ -46,13 +46,13 @@ def create_lock_file():
     with open(lock_file, 'w') as f:
         f.write("")
     with open(process_log_file, 'a') as f:
-        f.write(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - Lock file created.\n")
+        f.write(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - lock file created.\n")
 
 def delete_lock_file():
     if os.path.exists(lock_file):
         os.remove(lock_file)
         with open(process_log_file, 'a') as f:
-            f.write(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - Lock file deleted.\n")
+            f.write(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - lock file deleted.\n")
             
 
 # Function to check for the existence of stop.flag file
@@ -61,8 +61,8 @@ def check_for_exit_flag():
         os.remove("stop.flag") 
         delete_lock_file()
         with open(process_log_file, 'a') as f:
-            print(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - Stop flag found, script has stopped.\n", file=f)
-        sys.exit(0)
+            print(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - stop flag found, script has stopped.\n", file=f)
+        sys.exit(1)
 
 
 # Function that defines the job to be scheduled
@@ -84,17 +84,17 @@ def run_job():
     if now.weekday() < 5 and 6 <= now.hour < 23: # Monday = 0, Sunday = 7
         job()
         with open(process_log_file, 'a') as f:
-            print(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - Job executed\n", file=f)
+            print(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - job executed", file=f)
     else:
         with open(process_log_file, 'a') as f:
-            print(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - Job not executed - not working hours (Mon-Fri / 6AM-6PM)\n", file=f)
+            print(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - job not executed - not working hours (Mon-Fri / 6AM-6PM)\n", file=f)
 
 
 def run_error_check():
     if datetime.now().weekday() < 5:
         result = subprocess.run(error_checks_bat, shell=True)
         if result.returncode != 0:
-            error_message = f"{datetime.now().strftime('%m/%d/%y %H:%M')} ERROR: scheduled_task_executor.py - error-checks.bat exited with return code {result.returncode}\n"
+            error_message = f"{datetime.now().strftime('%m/%d/%y %H:%M')} ERROR: scheduled_task_executor.py - check-for-errors.bat exited with return code {result.returncode}\n"
             with open(error_log_file, 'a') as f:
                 f.write(error_message)
             sys.exit(1)
@@ -102,13 +102,13 @@ def run_error_check():
 
 # Run the main function if this script is executed directly
 if __name__ == "__main__":
-    run_error_check()
     check_for_exit_flag()
     # Check if another instance of this script is already running
     if os.path.exists(lock_file):
         with open(process_log_file, 'a') as f:
-            f.write(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - Existing lock file found. Exiting.\n")
+            f.write(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - existing lock file found. Exiting.\n")
         sys.exit(1)
     else:
         create_lock_file()
+    run_error_check()
     main()

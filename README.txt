@@ -404,6 +404,9 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
       - Command Line: python -u scheduled_task_executor.py
 - If there is an issue getting data after wiping the database:
     -check django/api/data/current_open_orders.json (you may need to clear this file)  
+- General:
+  - Check the Docker logs
+  - Try to rebuild/up the container: scripts/docker-scripts/docker-compose-reset-container.bat
 
 
 -----------

@@ -54,7 +54,7 @@ set TIME=!HOUR!:!MIN!
 
 
 :: Log a start message
-echo %DATE% %TIME% start-app.bat - Started >> %processLog%
+echo %DATE% %TIME% start-app.bat - started >> %processLog%
 
 
 :: Activate the virtual environment

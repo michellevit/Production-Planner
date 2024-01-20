@@ -1,4 +1,4 @@
-:: scripts/error-checks.bateck
+:: scripts/check-for-errors.bat
 
 
 :: Notes for manual debugging: 
@@ -30,17 +30,17 @@ set MIN=!datetime:~10,2!
 set TIME=!HOUR!:!MIN!
 
 
-echo %DATE% %TIME% error-checks.bat - started >> %processLog%
+echo %DATE% %TIME% check-for-errors.bat - started >> %processLog%
 
 
 :: Activate the virtual environment
 cd "%~dp0..\..\venv\Scripts"
 call activate.bat
 if not defined VIRTUAL_ENV (
-    echo %DATE% %TIME% ERROR: error-checks.bat - virtual environment was not properly activated. >> %errorLog%
+    echo %DATE% %TIME% ERROR: check-for-errors.bat - virtual environment was not properly activated. >> %errorLog%
     exit /b 1
 )
-echo %DATE% %TIME% error-checks.bat - virtual environment activated >> %processLog%
+echo %DATE% %TIME% check-for-errors.bat - virtual environment activated >> %processLog%
 
 
 :: Check if Docker is running
@@ -55,10 +55,10 @@ if %errorlevel% neq 0 (
 :: Check if Docker is running again
 docker info >nul 2>&1
 if %errorlevel% neq 0 (
-    echo %DATE% %TIME% ERROR: error-checks.bat - attempted to start Docker, but Docker could not be started. >> %errorLog%
+    echo %DATE% %TIME% ERROR: check-for-errors.bat - attempted to start Docker, but Docker could not be started. >> %errorLog%
     exit /b 1
 )
-echo %DATE% %TIME% error-checks.bat - Docker is running. >> %processLog%
+echo %DATE% %TIME% check-for-errors.bat - Docker is running. >> %processLog%
 
 
 :: Check if all the Docker containers are running
@@ -75,28 +75,28 @@ for %%c in (%containers%) do (
         ) 
     ) 
 )
-echo %DATE% %TIME% error-checks.bat -  Docker containers are running >> %processLog%
+echo %DATE% %TIME% check-for-errors.bat - Docker containers are running >> %processLog%
 
 
 :: Check if QuickBooks is running 
 tasklist /FI "IMAGENAME eq QBW.EXE" 2>NUL | find /I /N "QBW.EXE" >NUL
 if %errorlevel% neq 0 (
-    echo %DATE% %TIME% ERROR: error-checks.bat - QuickBooks is not running. Please start QuickBooks and login. >> %errorLog%
+    echo %DATE% %TIME% ERROR: check-for-errors.bat - QuickBooks is not running. Please start QuickBooks and login. >> %errorLog%
     exit /b 1
 )
-echo %DATE% %TIME% error-checks.bat -  QuickBooks is running>> %processLog%
+echo %DATE% %TIME% check-for-errors.bat - QuickBooks is running>> %processLog%
 
 
 :: Check if QODBC is able to connect
 python %checkQodbcConnection% 
 if %errorlevel% neq 0 (
-    echo %DATE% %TIME% ERROR: error-checks.bat - QODBC connection failed. Please login to QuickBooks. >> %errorLog%
+    echo %DATE% %TIME% ERROR: check-for-errors.bat - QODBC connection failed. Please login to QuickBooks. >> %errorLog%
     exit /b 1
 )
-echo %DATE% %TIME% error-checks.bat - QODBC is connected >> %processLog%
+echo %DATE% %TIME% check-for-errors.bat - QODBC is connected >> %processLog%
 
 
-echo %DATE% %TIME% error-checks.bat - complete, no errors detected. >> %processLog%
+echo %DATE% %TIME% check-for-errors.bat - complete, no errors detected. >> %processLog%
 
 
 exit /b 0
