@@ -1,20 +1,27 @@
-:: start-scheduled-task.bat
+:: start-app.bat
+
+
+:: Notes for manual debugging: 
+:: Add " >> %errorLog% 2>&1" after python commands to get more error details
+:: e.g. python check_quickbooks.py >> %errorLog% 2>&1
+:: Causes write-failures to error-log.txt if used too often, so only use if debugging specific features
 
 
 @echo off
 setlocal EnableDelayedExpansion
 
 
-:: set file paths
+:: Set file paths
 set errorLog="%~dp0\error_scripts\error-log.txt"
-set checkLog="%~dp0\error_scripts\check-log.txt"
-set sendErrorEmail="%~dp0\error_scripts\send_critical_error_email.py"
+set processLog="%~dp0\error_scripts\process-log.txt"
+set sendErrorEmail="%~dp0\error_scripts\send_error_email.py"
 set stopExistingTasks="%~dp0\error_scripts\stop-all-instances-of-task.bat"
 set scheduledTaskExecutor="%~dp0\scheduled_task_executor.py"
 
 
 :: Stop all prior instances of app + check if stop.flag or script.lock exists and delete them
 call %stopExistingTasks%
+cls
 echo Starting...
 echo :____
 timeout /t 1 /nobreak > NUL
@@ -47,7 +54,7 @@ set TIME=!HOUR!:!MIN!
 
 
 :: Log a start message
-echo %DATE% %TIME% start-scheduled-task.bat - Started >> %checkLog%
+echo %DATE% %TIME% start-app.bat - Started >> %processLog%
 
 
 :: Activate the virtual environment
@@ -55,7 +62,7 @@ cd "%~dp0"
 cd "..\venv\Scripts"
 call activate.bat
 if not defined VIRTUAL_ENV (
-    echo %DATE% %TIME% ERROR: start-scheduled-task.bat - virtual environment was not properly activated. >> %errorLog%
+    echo %DATE% %TIME% ERROR: start-app.bat - virtual environment was not properly activated. >> %errorLog%
     exit /b 1
 )
 
@@ -68,54 +75,63 @@ echo **WARNING**
 echo If you close this window, the Production Planner sync with QuickBooks will be closed too.
 echo This script will run until:
 echo --1. this command prompt is closed
-echo --2. stop-scheduled-task.bat runs
-echo --3. this computer shuts down
+echo --2. a critical error occurs
+echo --3. stop-scheduled-task.bat runs
+echo --4. this computer shuts down
 echo -------------------------------
 echo -------------------------------
-
 
 
 :: Directly use the Python executable from the virtual environment
-python -u %scheduledTaskExecutor% >> %errorLog% 2>&1
+python -u %scheduledTaskExecutor%
 set exitStatus=%errorlevel%
 
 
 :: Check the exit status of the Python script
 if %exitStatus% neq 0 (
-    cd "%~dp0\error_scripts"
-    echo %DATE% %TIME% ERROR: scheduled_task_executor.py - Stopped with error. >> %errorLog%
+    echo %DATE% %TIME% ERROR: start-app.bat - scheduled_task_executor.py stopped with error. >> %errorLog%
     cd "%~dp0"
-    goto sendEmail
-)
-
-
-:sendEmail
-python %sendErrorEmail% Scheduled >> %errorLog% 2>&1
-if !ERRORLEVEL! equ 1 (
-    echo %DATE% %TIME% ERROR: start-scheduled-task.bat - Scheduled Task error notification email FAILED to send. >> %errorLog%
 )
 
 
 if %exitStatus% neq 0 (
-    echo STOPPED:
+    python %sendErrorEmail%
+    if !ERRORLEVEL! equ 1 (
+        echo %DATE% %TIME% ERROR: start-app.bat - error notification email FAILED to send. >> %errorLog%
+    )
+)
+
+
+if %exitStatus% neq 0 (
+    echo **APPLICATION HAS STOPPED**
     echo A critical error occurred and the scheduled task has been stopped. 
-    echo An 'Error' notification email has been sent to the administrator. 
-    echo %DATE% %TIME% ERROR: start-scheduled-task.bat - Scheduled Task error notification email sent. >> %errorLog%
+    echo %DATE% %TIME% ALERT: error notification email sent.
     echo -------------------------------
     echo -------------------------------
-    echo Error Log:
+    echo ERROR LOG:
     type %errorLog%
     echo -------------------------------
     echo -------------------------------
-) 
+    echo PROCESS LOG:
+    type %processLog%
+    echo -------------------------------
+    echo -------------------------------
+)     
 
 
-:: Stop all instances of task + delete stop.flag + lock.file
-call %stopExistingTasks% 
-echo %DATE% %TIME% start-scheduled-task.bat - stopped via stop-all-instances-of-task.bat >> %checkLog%
-echo STOPPED:
-echo Production Planner is no longer synced with QuickBooks.
-echo All instances of scheduled_task_executor.py have been terminated.
+if %exitStatus% neq 1 (
+    :: Stop all instances of task + delete stop.flag + lock.file
+    call %stopExistingTasks% 
+    echo %DATE% %TIME% start-app.bat - stopped via stop-all-instances-of-task.bat >> %processLog%
+    echo **APPLICATION HAS STOPPED**
+    echo The sync was stopped intentionally, with no error.
+    echo Production Planner is no longer synced with QuickBooks.
+    echo All instances of scheduled_task_executor.py have been terminated.
+    echo -------------------------------
+    echo -------------------------------
+)
 
 
 pause
+
+exit /b

@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 
 :: set file paths
 set errorLog="%~dp0\error_scripts\error-log.txt"
-set sendErrorEmail="%~dp0\error_scripts\send_critical_error_email.py"
+set sendErrorEmail="%~dp0\error_scripts\send_error_email.py"
 
 
 :: Initialize error flag
@@ -119,3 +119,4 @@ if !errorOccurred! equ 1 (
 
 :end_script
 endlocal
+exit /b 0

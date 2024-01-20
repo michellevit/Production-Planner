@@ -1,5 +1,18 @@
-The process cannot access the file because it is being used by another process.
-The process cannot access the file because it is being used by another process.
-The process cannot access the file because it is being used by another process.
-The process cannot access the file because it is being used by another process.
-^C
+01/10/24 20:32 TEST 
+01/11/24 20:32 TEST 
+01/12/24 20:36 ERROR: sync-data.bat - cleanupLogs.ps1 encountered an error. 
+01/13/24 20:36 ERROR: error-checks.bat - attempt to send error email failed. 
+01/14/24 20:36 ERROR: scheduled_task_executor.py - error-check.bat exited with return code 1
+01/15/24 20:36 ERROR: start-app.bat - scheduled_task_executor.py stopped with error. 
+01/19/24 20:42 ERROR: sync-data.bat - cleanupLogs.ps1 encountered an error. 
+01/19/24 20:42 ERROR: scheduled_task_executor.py - error-check.bat exited with return code 1
+01/19/24 20:42 ERROR: start-app.bat - scheduled_task_executor.py stopped with error. 
+01/19/24 20:45 TEST 
+01/19/24 20:45 TEST 
+01/19/24 20:45 TEST 
+01/19/24 20:45 TEST 
+01/19/24 20:45 TEST 
+01/19/24 20:45 TEST 
+01/19/24 20:49 TEST 
+01/19/24 20:49 TEST 
+01/19/24 20:49 TEST 

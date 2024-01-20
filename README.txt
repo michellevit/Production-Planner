@@ -4,50 +4,90 @@ Project Title: Production Planner
 ----------
 Table of Contents: 
 1. Project Description
-2. Technologies Used
-3. First-Time Setup
-4. Preparing To Run In Development
-5. Preparing To Deploy In Production
-6. How To Start The Program
-7. How To Use The Program
-8. How To Backup The Database + Restore (for Production mode)
-9. How To Clear The Database
-10. How To Fetch Updates from GitHub
-11. How to Update Docker Container / Database
-12. Decoding the Error Log
+2. Features
+3. Technologies Used
+4. First-Time Setup
+5. Preparing To Run In Development
+6. Preparing To Deploy In Production
+7. How To Start The Program
+8. How To Use The Program
+9. How To Backup The Database + Restore (for Production mode)
+10. How To Clear The Database
+11. How To Fetch Updates from GitHub
+12. How to Update Docker Container / Database
 13. General Troubleshooting
 14. Credits
 
 
 ----------
 1. Project Description
-
-Summary: To help coordinate the sales, production and shipping of orders.
-In-depth Overview: Every day new orders are entered into QuickBooks and the Production team must evaluate which orders are able to be shipped, and then prepare each order for shipping - this involves significant back-and-forth between the Administrator and Production team. Here is the sequence of events:
-- The Administrator enters new orders into QuickBooks in the morning
-- The Production Planner app runs between 6AM-7PM weekdays and checks for updates to the open orders in QuickBooks, and if there are updates it adds them to the database
-- The Production Planner app displays each order, allowing the Production team to easily mark it as delayed or add the dimensions/weight for the prepared package when it is ready (or any notes).
-- The Administrator can see which orders are ready for the day, check the notes for issues, or go ahead and use the package information to create the waybills for the daily shipments.
-* Note: This app replaces the previous process, which consisted of a paper report being printed each day, causing the Production team to have to prepare all orders at once, and causing the Administrator to have to wait for all the daily orders to be prepared before knowing if an order could be shipped.
+Summary: To help coordinate the sales-production-shipping process for orders (in a manufacturing environment).
+- Overview: 
+  - Every day new orders are entered into QuickBooks and (typically) must be shipped ASAP 
+  - This involves significant back-and-forth between the Sales Team and Production Team, and Shipping Team
+  - Here is the workflow sequence when using the Production Planner:
+    - The Sales Team enters new orders into QuickBooks as they are received throughout the day
+    - The Production Planner continuously checks for updates to the Open Orders in QuickBooks
+    - The Production Planner displays the Open Orders via the browser, and updates as orders are added or changes are made to the Orders in QuickBooks
+    - The Production Team can filter the orders by date/status and plan production tasks accordingly
+    - The Sales Team can immediately see which orders are confirmed/delayed, and update customers if necessary
+    - The Production team can add shipping information as orders become ready (i.e. package dimensions/weight, notes, etc)
+    - The Shipping Team can see when an order is ready, and use the added package information to prepare shipments accordingly (waybills, documents, freight-forwarding)
+- Original Problem:
+  - The original sales-to-shipping process involved several periods of waiting for information and then rushing to complete the task once the information became available
+  - Here is the workflow sequence when NOT using the Production Planner:
+    - The Sales Team receives orders (throughout the day) and enters them into QuickBooks
+    - The Sales Team prints a daily 'Open Order' Report for the Production Team 
+    - The Production Team reviews the orders and the current inventory, then decides which can be shipped 
+    - The Production Team prepares the orders which can be shipped
+    - The Production Team writes the dimensions/weight of each package on the printed Order Report
+    - The Production Team scans the Order Report to a shared folder for the Shipping Team
+    - The Shipping Team prepares each shipment (labels and documents)
+    - The courier pickup occurs in the afternoon - any order not ready before the pickup is delayed
+- App's Benefits: 
+  - A continuous flow of information 
+  - Smoother working pace
+  - Better communication between teams
+  - Sales Team Benefits:
+    - Improved customer service due to faster notice of order delays
+    - No need to create and physically print the order report everyday (less work, less paper, less printer issues)
+  - Production Team benefits:
+    - Access to the current Open Order information continuously
+    - More efficient batching of production tasks
+    - Less manual quoting of orders (dimensions/weights can be predicted based on previous database entries)
+  -Shipping Team Benefits:
+    - No mistakes due to misinterpretation of handwritten package dimensions
+    - Package information can be copy-pasted into QuickBooks Sales Order notes
+    - More time to prepare orders before courier pickup
+    - Less costly mistakes due to rushing (shipping requires meticulous data entry)
 
 
 ----------
-2. Technologies Used
+2. Features
+- Batch file to start the application
+- In-process scheduler (Python) for continuous data retrieval from QuickBooks to Production-Planner database
+- Windows Task Scheduler for automatic daily backups
+- Instant error notification emails for critical application/backup errors
+- Server-Sent Events (SSE) for continuous updates between database and frontend
+- Database indexing and backend Pagination for quick order filtering
+- Hashing of order items for quick package dimensions/weight quotes (when available)
+
+
+----------
+3. Technologies Used
 - Django Rest Framework
 - Python
 - JavaScript
 - React
 - HTML/CSS
 - JSON
-- Server-Sent Events (SSE)
-- SQLite (Development)
 - MySQL (Production)
+- SQLite (Development)
 - Docker
-- Windows Batch Scripting (for scheduled tasks and automation)
 
 
 ----------
-3. First-Time Setup
+4. First-Time Setup
 - Install Git: 
   - Download the Git installer for Windows: https://git-scm.com/download/win
 - Open a PowerShell Terminal (if using VSCode make sure to close + open VSCode after installing Git to apply path changes)
@@ -68,7 +108,7 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
       * Note: this can be found by opening a command prompt on your computer and run: 'ipconfig' and the IPv4 Address should be the address you need
     - Change the file name from 'env.txt' to '.env'
 - Update the file paths for the .bat scripts
-- Install node:
+- Install node.js:
   - https://nodejs.org/en
 - Create a virtual environment in the main folder:
   * Note: you can instead open 'scripts/installing-to-vritual-env.bat', uncomment the relative lines + run it
@@ -81,11 +121,11 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 
 ----------
-4. Preparing To Run In Development
+5. Preparing To Run In Development
 - Go to the file django/Production_Planner/settings.py:
-  - Change the 'DEVELOPMENT_MODE' var to True
+  - Change 'DEVELOPMENT_MODE' to True
     - This will switch the database to SQLite (unlike MySQL which requires Docker container to run)
-  - Change the 'DEBUG' to True
+  - Change 'DEBUG' to True
     - Now print statements (in the backend) will output in the terminal where the server is running
 - Activate the virtual environment: 
   - Open terminal and navigate/cd to the project's root folder
@@ -107,11 +147,11 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 
 ----------
-5. Preparing To Deploy In Production
+6. Preparing To Deploy In Production
 - Go to the file django/Production_Planner/settings.py
-  - Change the 'DEVELOPMENT_MODE' var to False
+  - Change 'DEVELOPMENT_MODE' to False
     - This will switch the database to MySQL (unlike SQLite which does not require Docker, but is less robust for production)
-  - Change the 'DEBUG' var to False
+  - Change 'DEBUG' to False
     - Now print statements (in the backend) will output in the Docker 'backend' image logs
 - Download Docker
 - Enable Virtual Machine Platform on Windows
@@ -188,69 +228,59 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 
 ----------
-6. How To Start The Program
+7. How To Start/Stop The Program
+  * Note: it may take several minutes for the frontend to load (approx. 6 minutes)
 - In PRODUCTION:
   - Option 1 (via batch file - scheduled updates every 2 mins, Mon-Fri 6AM-6PM):
-    - Open QuickBooks and logged in
-    - Open a command prompt + navigate to the project's 'scripts' folder
-    - Run: start-scheduled-task.bat
-    - This script will run until:
-      - stop-scheduled-task.bat runs 
-      - this command prompt is closed
-      - this computer shuts down
+    - Open QuickBooks and log in
+    - Navigate to the project's 'scripts' folder + run start-app.bat
+    - Stopping instructions: Navigate to the project's 'scripts' folder + run stop-app.bat
   - Option 2 (via batch file - manual one-time sync from QB to database):
     - Open QuickBooks and logged in
     - Open a command prompt + navigate to the project's 'scripts' folder
     - Run: manually_fetch_data.bat
-    - This script will run until:
-      - stop-scheduled-task.bat runs 
-      - this command prompt is closed
-      - this computer shuts down
-  - Option 3 (via Docker): 
-    - Open the app by double-clicking the 'start-app.bat' file 
-    * Note: it may take several minutes for the frontend to boot up
-    - The frontend browser url should automatically open:  http://localhost:3000/
-        - Open the backend using the browser url: http://localhost:8000/
+    - Stopping instructions: stop the docker by running scripts/docker_scripts/docker-stop.bat
+  - Option 3 (via Docker - with no sync to QuickBooks): 
+    - Open Docker and click to run the Production-Planner container
+    - Note: if the container is not built in Docker then you cannot use this method
   - Option 4 (via Terminal):
     - In the terminal, navigate to the project's root directory
     - Run: docker-compose up
-  - To stop the Docker container: 
-    - Option 1 (via Docker): 
-      - In the Docker application, click the stop button
-    - Option 2  (via Terminal):
-      - In the PowerShell where Docker was started: execute ctrl-c
-        - To clean/reset the Docker environment:
-        - In the PowerShell where Docker was started: execute ctrl-c then run 'docker-compose down'
-      - After updating static files, navigate to the root directory and run: docker-compose exec backend python manage.py collectstatic --no-input
-- In DEVELOPMENT:
+    - Stopping instructions: cd to the project directory and run docker-compose down
+ - In DEVELOPMENT:
   - Start the server:
     - Navigate to the django folder (in the terminal) 
     - Run: python manage.py runserver
-    - Browser: http://localhost:8000/ OR http://aw1.gtc.local:8000/
   - Start the reactapp:
     - Navigate to the reactapp folder (in the terminal)
     - Run: npm start
-    - Browser: http://localhost:3000/ OR http://aw1.gtc.local:3000/
-  - To access django admin interface:
-     - Broswer: http://localhost:8000/admin/
 
 
 ----------
-7. How To Use The Program
-- Production Team:
-  - Navigate to the Open Orders page to add shipping details for the unshipped orders
-  - Navigate to the Home -> Latest Upload tab to see when the latest report was added
-  - Navigate to the Home -> Add Dimensions tab to add more dimensions to the open-orders order options
-- Administrator: 
-  - Navigate to the Home -> Latest Upload tab to upload the latest order report (only the last 5 are recorded in 'Previous Uploads' section)
-  - Navigate to the Home -> Add Order tab to manually add an order/quote, or get a dimensions/weight quote for an order
-  - Navigate to the All Orders page to review shipping details
+8. How To Use The Program
+- Open the browser:
+  - Frontend: open the browser to http://000:000:0:000/3000/ (use IP address set in .env file or 'localhost' instead of '0:0:0:0')
+  - Backend: open the browser to http://000:000:0:000/8000/ (use IP address set in .env file or 'localhost' instead of '0:0:0:0')
+  - Backend Admin Page: open the browser to http://000:000:0:000/admin/ (use IP address set in .env file or 'localhost' instead of '0:0:0:0')
+  - Production Team:
+    - Navigate to the 'Open Orders' page to add shipping details for the unshipped orders
+    - Navigate to the Home -> 'Last Update' tab to see if the connection is active and data is current (if the dot is green the QuickBooks connection is active and data is up-to-date)
+    - Navigate to the Home -> 'Add Dimensions' tab to add more dimensions to the open-orders package options
+  - Sales/Shipping Team: 
+    - Navigate to the Home -> 'Add Order' tab to manually add an order/quote, or get a dimensions/weight quote for an order
+    - Navigate to the 'All Orders' page to review shipping details
+- Notes:
+  - This app (when running) is scheduled to continuously sync to QuickBooks betwen 6AM-6PM, Monday-Friday
+  - To fetch data after this period: 
+    - For one time data retrieval: run scripts/sync-data.bat
+    - For continuous data retrieval outside of working hours: go to scripts/scheduled_task_executor.py file + adjust the run_job function (under # SET OPERATIONAL HOURS)
 
 
 ----------
-8. How To Backup The Database + Restore (for Production mode)
+9. How To Backup The Database + Restore (for Production mode)
  * Note: The backup-database.bat script will delete old backups, keeping only the 10 most recent backups
- * Note: the backup-database.bat file is scheduled to run at 6AM each week day
+ * Note: The backup-database.bat file is scheduled to run at 6AM each week day
+ * Note: the Docker container must be running to backup and/or restore
 - To backup the database:
   - In the project's root directory, double click the 'backup-database.bat' file
   - The backup will be saved in the 'db-backups' folder
@@ -260,11 +290,17 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - A command prompt will appear with the name/date of the latest backup and ask if you are sure you want to restore
     - Type "Y" and press enter (to confirm and restore the database)
     - Close the prompt
-  -NOTE: If there is an issue with getting data the next time, it may have something to do with django/api/data/current_open_orders.json (you may need to clear this file)  
+- To disable the automated backup
+  - Open Windows' Task Scheduler program (on the computer running the app)
+  - Highlight the Task named "Production-Planner-Backup-Database-Batch-Task"
+  - Under the 'Action' tab on the right, select Disable
+  - To change the action trigger time:
+    - Under actions, select 'Properties' (or right-click the task and select proeprties)
+    - Go to the Triggers tab, select the trigger and select the 'Edit..' button 
 
 
 ----------
-9. How To Clear The Database
+10. How To Clear The Database
 - Option 1: 
   * To delete entries via Django Admin Interface (works in both Production/MySQL or Development/SQLite)
   - Go to http://localhost:8000/admin
@@ -288,17 +324,22 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 
 -----------
-10. How To Fetch Updates from GitHub
+11. How To Fetch Updates from GitHub
 - Open a Terminal and navigate to the Production-Planner directory
 - Select the main branch: git checkout main
 - Run: git pull origin main
-- Run: docker-compose down
-- Run: docker-compose build --no-cache
-- Run: docker-compose up
+- Rebuild Docker container:
+  - One-Click:
+    - Go to scripts/docker_scripts + run docker-compose-reset-container.bat
+  - Manually: 
+    - Run: docker-compose down
+    - Run: docker-compose build --no-cache
+    - Run: docker-compose up
+    - Run: docker image prune -f
 
 
 -----------
-11. How to Update Docker Container / Database
+12. How to Update Docker Container / Database
 - If changes were made to the entire app in VSCode:
   -Automated way:
     - Go to scripts/docker_scripts
@@ -312,10 +353,9 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
   - docker build -t your_image_name .
 - If changes were made to the models.py file:
   - Make sure the Docker container is running
-  -Automated way:
-    - Go to scripts/docker_scripts
-    - Run docker-migrate.bat
-  - Manual way:
+  - One-click:
+    - Go to scripts/docker_scripts + run docker-migrate.bat (runs makemigrations + migrate)
+  - Manually:
     - CD into the project's root directory
     - Run: docker exec -it production-planner-backend-1 python manage.py makemigrations
     - Run: docker exec -it production-planner-backend-1 python manage.py migrate
@@ -326,14 +366,16 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
 
 
 -----------
-12. Decoding the Error Log
-- If a critical error email was received:
-  - Open the scripts/error_scripts/error-log.txt  
-  - Read/delete the error-log.txt contents
-
-
------------
 13. Troubleshooting
+  - If a critical error email was received:
+    - Open the scripts/error_scripts/error-log.txt  
+    - Read the error-log.txt contents
+    - Delete the error-log once the problem is solved (manually or run script/error_scripts/clear-error-log.bat)
+- If batch file debugging: 
+  - Add " >> %errorLog% 2>&1" after python commands to get more error details
+    - Example: python check_quickbooks.py >> %errorLog% 2>&1
+    * Note: can cause write-failures to error-log.txt, so only use for debugging specific scripts one-at-a-time
+  - Make sure you are in the correct directory for -everything-
 - If docker-compose build not working: 
   - Make sure there is no node_modules folder accidentally in the root directory 
   - Make sure there is a .dockerignore file in the reactapp to ignore the node_momdules folder
@@ -360,6 +402,8 @@ In-depth Overview: Every day new orders are entered into QuickBooks and the Prod
       - CPU: 00
       - Status: Running
       - Command Line: python -u scheduled_task_executor.py
+- If there is an issue getting data after wiping the database:
+    -check django/api/data/current_open_orders.json (you may need to clear this file)  
 
 
 -----------
