@@ -12,7 +12,7 @@ const AddLineItem = ({
   setShowErrorModal,
   errorMessage,
   setErrorMessage,
-  setMatchingDims,
+  setDisplayQuoteModal,
 }) => {
   const [filteredProductNames, setFilteredProductNames] = useState([]);
   const handleInputChange = (e) => {
@@ -33,7 +33,7 @@ const AddLineItem = ({
   };
   const handleAddOrderLineItem = (e) => {
     e.preventDefault();
-    setMatchingDims(false);
+    setDisplayQuoteModal(false);
     const fullValue = document.getElementById("add-line-item-name").value;
     const firstSpaceIndex = fullValue.indexOf(" ");
     let itemName, itemDescription;
@@ -42,7 +42,7 @@ const AddLineItem = ({
       itemDescription = fullValue;
     } else {
       itemName = fullValue.substring(0, firstSpaceIndex);
-      itemDescription = fullValue;
+      itemDescription = fullValue.substring(firstSpaceIndex + 1);
     }
     const itemQty = document.getElementById("add-line-item-qty").value;
     if (itemName.trim() === "") {
@@ -70,10 +70,12 @@ const AddLineItem = ({
     document.getElementById("add-line-item-name").value = "";
     document.getElementById("add-line-item-qty").value = "";
   };
-  const handleDeleteItem = (itemNameToDelete) => {
-    const updatedItems = { ...items };
-    delete updatedItems[itemNameToDelete];
-    setItems(updatedItems);
+  const handleDeleteItem = (itemNameToDelete, e) => {
+    e.stopPropagation();
+    setItems((prevItems) =>
+      prevItems.filter((item) => item.name !== itemNameToDelete)
+    );
+    setDisplayQuoteModal(false);
   };
   return (
     <div className="add-line-item-container">
@@ -118,22 +120,20 @@ const AddLineItem = ({
       </div>
       <div id="line-item-list">
         <ul>
-          {Object.keys(items).map((id) => {
-            const item = items[id];
-            return (
-              <li key={id}>
-                <div className="line-item-info">
+          {items.map((item, index) => (
+            <li key={index}>
+              <div className="line-item-info">
                 {item.name} {item.description} - Qty: {item.requested_qty}
-                </div>
-                <button
-                  className="delete-line-item-button"
-                  onClick={() => handleDeleteItem(id)}
-                >
-                  <FontAwesomeIcon icon={faClose} />
-                </button>
-              </li>
-            );
-          })}
+              </div>
+              <button
+                type="button"
+                className="delete-line-item-button"
+                onClick={(e) => handleDeleteItem(item.name, e)}
+              >
+                <FontAwesomeIcon icon={faClose} />
+              </button>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

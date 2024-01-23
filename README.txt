@@ -107,7 +107,6 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
     - Replace the x's in the URLs with 'localhost' or your network's IP address
       * Note: this can be found by opening a command prompt on your computer and run: 'ipconfig' and the IPv4 Address should be the address you need
     - Change the file name from 'env.txt' to '.env'
-- Update the file paths for the .bat scripts
 - Install node.js:
   - https://nodejs.org/en
 - Create a virtual environment in the main folder:
@@ -273,7 +272,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
   - This app (when running) is scheduled to continuously sync to QuickBooks betwen 6AM-6PM, Monday-Friday
   - To fetch data after this period: 
     - For one time data retrieval: run scripts/sync-data.bat
-    - For continuous data retrieval outside of working hours: go to scripts/scheduled_task_executor.py file + adjust the run_job function (under # SET OPERATIONAL HOURS)
+    - To modify working hours period: go to scripts/scheduled_task_executor.py file + adjust the 'Schedule Global Variables'
 
 
 ----------
@@ -404,6 +403,8 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
       - Command Line: python -u scheduled_task_executor.py
 - If there is an issue getting data after wiping the database:
     -check django/api/data/current_open_orders.json (you may need to clear this file)  
+- If you wipe the Order table: 
+  - Make sure to also delete the django/api/data/current_open_orders.json
 - General:
   - Check the Docker logs
   - Try to rebuild/up the container: scripts/docker-scripts/docker-compose-reset-container.bat

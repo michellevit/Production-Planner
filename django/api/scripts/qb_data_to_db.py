@@ -23,7 +23,7 @@ def main():
     orders_updated_flag = False
     script_dir = os.path.dirname(os.path.realpath(__file__))
     qb_data_json_file_path = os.path.join(script_dir, '..', 'data', 'qb_order_data.json')
-    current_open_orders_json_file_path = os.path.join(script_dir, '..', 'data', 'current_open_orders.json')
+    orders_last_modified_json = os.path.join(script_dir, '..', 'data', 'orders_last_modified.json')
     with open(qb_data_json_file_path, 'r') as json_file:
         try:
             data = json.load(json_file)
@@ -31,8 +31,8 @@ def main():
         except json.JSONDecodeError: 
             pass
     if orders_dict:
-        orders_updated_flag = check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict, orders_updated_flag)
-        update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict)
+        orders_updated_flag = check_for_new_or_modified_orders(orders_last_modified_json, orders_dict, orders_updated_flag)
+        update_orders_last_modified_json_file(orders_last_modified_json, orders_dict)
     if orders_updated_flag:
         update_last_update_timestamp()
 
@@ -44,7 +44,7 @@ def iterate_through_queried_orders(data):
         time_modified = order_json["time_modified"]
         ship_date = order_json["ship_date"]
         customer_name = order_json["customer_name"]
-        item_name = order_json["item"]
+        item_name = order_json["name"]
         if ":" in item_name:
             item_name, item_subname = item_name.split(":", 1)
         else:
@@ -56,8 +56,8 @@ def iterate_through_queried_orders(data):
         item_previously_invoiced_qty = int(order_json["previously_invoiced_qty"])
         if order_number in orders_dict:
             existing_order = orders_dict[order_number]
-            if existing_order["time_modified"] != time_modified:
-                existing_order["time_modified"] = time_modified
+            # if existing_order["time_modified"] != time_modified:
+            #     existing_order["time_modified"] = time_modified
             existing_order["item_array"].append({
                 "name": item_name,
                 "subname": item_subname,
@@ -87,47 +87,46 @@ def iterate_through_queried_orders(data):
 
 
 
-def check_for_new_or_modified_orders(current_open_orders_json_file_path, orders_dict, orders_updated_flag):
-    if os.path.getsize(current_open_orders_json_file_path) == 0:
-        if not Order.objects.exists():
+def check_for_new_or_modified_orders(orders_last_modified_json, orders_dict, orders_updated_flag):
+    if not Order.objects.exists():
+        for order_number, order_data in orders_dict.items():
+            new_order = Order(
+                order_number=order_data["order_number"],
+                ship_date=order_data["ship_date"],
+                customer_name=order_data["customer_name"],
+                item_array=order_data["item_array"]
+            )
+            new_order.save()
+            orders_updated_flag = True
+    elif os.path.getsize(orders_last_modified_json) == 0:
             for order_number, order_data in orders_dict.items():
-                new_order = Order(
-                    order_number=order_data["order_number"],
-                    ship_date=order_data["ship_date"],
-                    customer_name=order_data["customer_name"],
-                    item_array=order_data["item_array"]
-                )
-                new_order.save()
-                orders_updated_flag = True
-        else:
-            return
+                orders_updated_flag = check_if_order_in_database(order_number, order_data, orders_updated_flag)       
     else:
-       with open(current_open_orders_json_file_path, 'r') as current_orders_file:
+       with open(orders_last_modified_json, 'r') as current_orders_file:
             try:
-                current_open_orders = json.load(current_orders_file)
+                orders_last_modified = json.load(current_orders_file)
             except json.JSONDecodeError:
                 print("Error: JSON file is not in the correct format.")
                 return
             for order_number, order_data in orders_dict.items():
-                order_exists = any(json_order['order_number'] == order_number for json_order in current_open_orders)
+                order_exists = any(json_order['order_number'] == order_number for json_order in orders_last_modified)
                 if order_exists:
-                    existing_order = next(json_order for json_order in current_open_orders if json_order['order_number'] == order_number)
+                    existing_order = next(json_order for json_order in orders_last_modified if json_order['order_number'] == order_number)
                     # If the order has NOT been modified since the last check...
                     if existing_order['time_modified'] == order_data['time_modified']:
                         continue
                     # If the order HAS been modified since the last check...
                     else:
-                        orders_updated_flag = check_if_order_in_database(order_number, orders_dict, orders_updated_flag)
+                        orders_updated_flag = check_if_order_in_database(order_number, order_data, orders_updated_flag)
                 # If the order_number is not in the file...
                 else:
-                    orders_updated_flag = check_if_order_in_database(order_number, orders_dict, orders_updated_flag)
+                    orders_updated_flag = check_if_order_in_database(order_number, order_data, orders_updated_flag)
     return orders_updated_flag
 
 
-def check_if_order_in_database(order_number, orders_dict, orders_updated_flag):
+def check_if_order_in_database(order_number, order_data, orders_updated_flag):
     existing_orders = Order.objects.filter(order_number=order_number)
     count = existing_orders.count()
-    order_data = orders_dict[order_number]
     order_number = order_data["order_number"]
     ship_date = order_data["ship_date"]
     customer_name = order_data["customer_name"]
@@ -154,6 +153,7 @@ def check_if_order_in_database(order_number, orders_dict, orders_updated_flag):
                         db_order.ship_date = ship_date
                         db_order.item_array = item_array
                         db_order.confirmed = False
+                        db_order.ready = False
                         db_order.save()
                         orders_updated_flag = True
             elif db_order.shipped == True:
@@ -163,6 +163,7 @@ def check_if_order_in_database(order_number, orders_dict, orders_updated_flag):
                     ship_date=ship_date,
                     customer_name=customer_name,
                     item_array=item_array,
+                    backorder_number=1,
                     ) 
                     new_order.save()
                     orders_updated_flag = True
@@ -173,11 +174,12 @@ def check_if_order_in_database(order_number, orders_dict, orders_updated_flag):
                 for db_order in existing_orders: 
                     if not db_order.shipped:
                         total_previously_invoiced_db = sum(item["previously_invoiced_qty"] for item in db_order.item_array)
-                        if total_previously_invoiced_qb >= total_previously_invoiced_db:
+                        if total_previously_invoiced_qb == total_previously_invoiced_db:
                             if db_order.ship_date != ship_date or db_order.item_array_hash != item_array_hash:
                                 db_order.ship_date = ship_date
                                 db_order.item_array = item_array
                                 db_order.confirmed = False
+                                db_order.ready = False
                                 db_order.save()
                                 orders_updated_flag = True
             # else - if all the orders in existing_orders have been shipped
@@ -211,7 +213,7 @@ def check_if_order_in_database(order_number, orders_dict, orders_updated_flag):
 
 
 
-def update_current_open_orders_json_file(current_open_orders_json_file_path, orders_dict):
+def update_orders_last_modified_json_file(orders_last_modified_json, orders_dict):
     updated_orders = []
     for order_number, order_data in orders_dict.items():
         updated_order = {
@@ -219,7 +221,7 @@ def update_current_open_orders_json_file(current_open_orders_json_file_path, ord
             "time_modified": order_data["time_modified"]
         }
         updated_orders.append(updated_order)
-    with open(current_open_orders_json_file_path, 'w') as current_orders_file:
+    with open(orders_last_modified_json, 'w') as current_orders_file:
         json.dump(updated_orders, current_orders_file, indent=4)
 
 
@@ -242,7 +244,7 @@ if __name__ == "__main__":
 # - Save the data into orders_dict
 
 # check_if_order_new_or_modified()
-# -For each: is the order in the current_open_orders.json file?
+# -For each: is the order in the orders_last_modified.json file?
 # --YES: Is the time modified the same?
 # ----YES: pass
 # ----NO: check_if_order_in_database()

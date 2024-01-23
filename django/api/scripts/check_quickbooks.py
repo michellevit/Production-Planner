@@ -23,7 +23,7 @@ def main():
                 "time_modified": row.TimeModified.strftime("%Y-%m-%d %H:%M:%S"),  
                 "ship_date": row.ShipDate.strftime("%Y-%m-%d") if row.ShipDate else None,
                 "customer_name": row.CustomerRefFullName,
-                "item": row.SalesOrderLineItemRefFullName,
+                "name": row.SalesOrderLineItemRefFullName,
                 "description": row.SalesOrderLineDesc,
                 "requested_qty": int(row.SalesOrderLineQuantity) if row.SalesOrderLineQuantity is not None else 0,
                 "ship_qty": int(row.CustomFieldSalesOrderLineOther1) if row.CustomFieldSalesOrderLineOther1 is not None else 0,

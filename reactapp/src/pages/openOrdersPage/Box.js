@@ -12,23 +12,22 @@ const Box = ({ box, boxes, setBoxes, readyStatus, updatePackages }) => {
   const upHandler = () => {
     const index = boxes.indexOf(box);
     if (index !== 0) {
-      let temp = boxes[index - 1];
-      boxes[index - 1] = boxes[index];
-      boxes[index] = temp;
-      setBoxes(boxes.map((box) => box));
+      const newBoxes = [...boxes];
+      [newBoxes[index - 1], newBoxes[index]] = [newBoxes[index], newBoxes[index - 1]];
+      setBoxes(newBoxes);
+      updatePackages(newBoxes);
     }
-    updatePackages(boxes);
   };
   const downHandler = () => {
     const index = boxes.indexOf(box);
-    if (index !== boxes.length - 1) {
-      let temp = boxes[index + 1];
-      boxes[index + 1] = boxes[index];
-      boxes[index] = temp;
-      setBoxes(boxes.map((box) => box));
+    if (index < boxes.length - 1) {
+      const newBoxes = [...boxes];
+      [newBoxes[index], newBoxes[index + 1]] = [newBoxes[index + 1], newBoxes[index]];
+      setBoxes(newBoxes);
+      updatePackages(newBoxes);
     }
-    updatePackages(boxes);
   };
+  
   const uniqueId = () => {
     const dateString = Date.now().toString(36);
     const randomness = Math.random().toString(36).substring(2);
