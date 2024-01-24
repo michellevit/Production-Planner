@@ -16,7 +16,8 @@ Table of Contents:
 11. How To Fetch Updates from GitHub
 12. How to Update Docker Container / Database
 13. General Troubleshooting
-14. Credits
+14. To Do
+15. Credits
 
 
 ----------
@@ -107,7 +108,6 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
     - Replace the x's in the URLs with 'localhost' or your network's IP address
       * Note: this can be found by opening a command prompt on your computer and run: 'ipconfig' and the IPv4 Address should be the address you need
     - Change the file name from 'env.txt' to '.env'
-- Update the file paths for the .bat scripts
 - Install node.js:
   - https://nodejs.org/en
 - Create a virtual environment in the main folder:
@@ -273,7 +273,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
   - This app (when running) is scheduled to continuously sync to QuickBooks betwen 6AM-6PM, Monday-Friday
   - To fetch data after this period: 
     - For one time data retrieval: run scripts/sync-data.bat
-    - For continuous data retrieval outside of working hours: go to scripts/scheduled_task_executor.py file + adjust the run_job function (under # SET OPERATIONAL HOURS)
+    - To modify working hours period: go to scripts/scheduled_task_executor.py file + adjust the 'Schedule Global Variables'
 
 
 ----------
@@ -404,11 +404,52 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
       - Command Line: python -u scheduled_task_executor.py
 - If there is an issue getting data after wiping the database:
     -check django/api/data/current_open_orders.json (you may need to clear this file)  
+- If you wipe the Order table: 
+  - Make sure to also delete the django/api/data/current_open_orders.json
 - General:
   - Check the Docker logs
   - Try to rebuild/up the container: scripts/docker-scripts/docker-compose-reset-container.bat
 
 
 -----------
-14. Credits
+14. To Do
+-Add more edit options on All Orders page (e.g. add note, add dimensions)
+-Add option to specify who wrote the note + if it was acknowledged
+-Handle error: someone inputs same item in 2 diff line items (give item dicts an id field)
+-Deleted order functionality (change customer name to DELETED and then delete from db after 2 weeks?)
+-Don't hardcode PST -> change UTC and then page to specify timezone in frontend (e.g. Django settings, python scheduler, models, views, error scripts, etc)
+-Handle backorders solely with previously_invoiced_items field (current way is specific to GTC custom QB template)
+-Allow users to choose which backup to restore to
+-Automatic backup should occur with Python, not Windows Task Scheduler
+-Make program run on it's own, instead of browser - e.g. Electron or NW.js
+-- Fix how filters are saved instead of saving in chrome memory
+-Create an installer package (Inno Setup or Advanced Installer)
+-New 'Settings' page: 
+-- Set environment variables
+-- Set administrator email (for error notifications)
+-- Turn on/off sync
+-- Set sync hours
+-- Set automatic database backup time
+-- Option to create a backup
+-- Option to restore from backup (+ select which backup to restore to)
+-- Display error/process log
+-- Page to map custom fields (backorders, etc)
+-Figure out how to push updates to separate users 
+-Secure data (+ keep data local)
+-Integrate shipping UPS/FedEx, and options for USMCA forms, B13, etc
+-Integrate products from QB directly to software (so you can map items per box)
+-Add tracking number to orders + automaticcally add dimensions/weight/tracking no./arrival, etc to orders (QODBC paid version for write capabilities)
+-Make it so tracking data can easily get added to invoice emails
+-Licesnse key for software licensing
+-Trial period
+-Website with user authentification (login) for subscription management
+-Payment processing integration
+-Customer support
+-Legal policy
+-Divide OrderCard into more components (for readability)
+-Rewrite all error/confirmation handling into consistent system wide singular Modal
+
+
+-----------
+15. Credits
 Michelle Flandin

@@ -302,7 +302,7 @@ const AllOrders = () => {
       updatedOrder.ready = true;
       setTimeout(async () => {
         await axios.put(
-          `${process.env.REACT_APP_BACKEND_URL}/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/all-orders/${order.id}/`,
           updatedOrder
         );
         setOrders((prevOrders) =>
@@ -312,6 +312,7 @@ const AllOrders = () => {
           setFadingRows((prevFadingRows) =>
             prevFadingRows.filter((id) => id !== order.id)
           );
+          setRefreshOrders(true);
         }, 400);
       }, 400);
     } catch (error) {
@@ -331,7 +332,7 @@ const AllOrders = () => {
       updatedOrder.ready = false;
       setTimeout(async () => {
         await axios.put(
-          `${process.env.REACT_APP_BACKEND_URL}/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/all-orders/${order.id}/`,
           updatedOrder
         );
         setOrders((prevOrders) =>
@@ -341,6 +342,7 @@ const AllOrders = () => {
           setFadingRows((prevFadingRows) =>
             prevFadingRows.filter((id) => id !== order.id)
           );
+          setRefreshOrders(true);
         }, 400);
       }, 400);
     } catch (error) {
@@ -351,10 +353,6 @@ const AllOrders = () => {
     }
   };
 
-  const extractTextBeforeParentheses = (text) => {
-    const splitText = text.split(" (");
-    return splitText[0];
-  };
 
   return (
     <div className="all-main-div">
@@ -543,8 +541,6 @@ const AllOrders = () => {
                     <DeleteButton
                       order={order}
                       setOrders={setOrders}
-                      isRemoving={isRemoving}
-                      setIsRemoving={setIsRemoving}
                     />
                   </td>
                 </tr>

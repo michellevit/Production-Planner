@@ -47,3 +47,9 @@
     background-color: #777777;
   }
   
+.all-orders-delete-div #delete-order-button {
+    background: transparent;
+    border: none;
+    color:  white;
+  }
+  

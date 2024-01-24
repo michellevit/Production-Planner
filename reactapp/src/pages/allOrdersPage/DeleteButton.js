@@ -4,7 +4,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "./DeleteModal";
 import axios from "axios";
 
-const DeleteButton = ({ order, setAllOrders, isRemoving, setIsRemoving }) => {
+const DeleteButton = ({ order, setOrders }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const handleClickDeleteButton = () => {
     setShowConfirmModal(true);
@@ -12,7 +12,7 @@ const DeleteButton = ({ order, setAllOrders, isRemoving, setIsRemoving }) => {
   const handleConfirmDelete = () => {
     setShowConfirmModal(false);
     const deletedOrderID = order.id;
-    setAllOrders((prevOrders) =>
+    setOrders((prevOrders) =>
       prevOrders.map((orderItem) =>
         orderItem.id === deletedOrderID
           ? { ...orderItem, isRemoving: true }
@@ -20,7 +20,9 @@ const DeleteButton = ({ order, setAllOrders, isRemoving, setIsRemoving }) => {
       )
     );
     axios
-      .delete(`${process.env.REACT_APP_BACKEND_URL}/all-orders/${deletedOrderID}/`)
+      .delete(
+        `${process.env.REACT_APP_BACKEND_URL}/all-orders/${deletedOrderID}/`
+      )
       .catch((error) => {
         console.error(
           "Error deleting the order. Server responded with:",
@@ -28,7 +30,7 @@ const DeleteButton = ({ order, setAllOrders, isRemoving, setIsRemoving }) => {
         );
       });
     setTimeout(() => {
-      setAllOrders((prevOrders) =>
+      setOrders((prevOrders) =>
         prevOrders.filter((orderItem) => orderItem.id !== deletedOrderID)
       );
     }, 500);

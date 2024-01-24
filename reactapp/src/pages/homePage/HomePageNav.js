@@ -18,7 +18,9 @@ const HomePageNav = () => {
 
 function CustomLink({ to, children, ...props }) {
   const resolvedPath = useResolvedPath(to);
-  const isActive = useMatch({ path: resolvedPath.pathname, end: true });
+  const matchPath = useMatch({ path: resolvedPath.pathname, end: true });
+  const isHomePath = window.location.pathname === '/home' && to === '/last-update';
+    const isActive = matchPath || isHomePath;
   return (
     <Link to={to} {...props}>
       <li className={isActive ? "active" : ""}>{children}</li>

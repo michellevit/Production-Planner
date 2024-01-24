@@ -4,11 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 const NoteItem = ({ note, notes, setNotes, updateNotes, readyStatus }) => {
-  const deleteHandler = (e) => {
-    let newNotes = notes.filter((el) => el.id !== note.id);
+  const deleteHandler = async () => {
+    const newNotes = notes.filter((el) => el.id !== note.id);
     setNotes(newNotes);
-    updateNotes(newNotes);
-  };
+    try {
+      await updateNotes(newNotes);
+    } catch (error) {
+      console.error("Error updating notes:", error);
+      setNotes(notes);
+  }
+};
   return (
     <div className="noteitem">
       <div className={readyStatus ? "noteitem-info-ready" : "noteitem-info-notready"}>

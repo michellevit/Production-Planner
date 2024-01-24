@@ -1,5 +1,5 @@
 import hashlib
-import json
+
 
 def sort_item(item_array):
     sorted_item = sorted(item_array, key=lambda x: x['name'])
