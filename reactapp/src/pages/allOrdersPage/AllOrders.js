@@ -352,6 +352,12 @@ const AllOrders = () => {
       );
     }
   };
+  const formatWeight = (weight) => {
+    const num = parseFloat(weight);
+    if (isNaN(num)) return weight; 
+    return num.toFixed(2).replace(/\.?0+$/, "");
+};
+
 
 
   return (
@@ -481,7 +487,7 @@ const AllOrders = () => {
                                   packageItem.weight === "TBD" && <span></span>}
                                 {packageItem.weight !== "TBD" &&
                                   packageItem.weight !== "" &&
-                                  packageItem.weight + " lb"}
+                                  formatWeight(packageItem.weight) + " lb"}
                               </td>
                             </tr>
                           ))}

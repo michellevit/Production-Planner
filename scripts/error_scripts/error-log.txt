@@ -1,3 +1,4 @@
 ^C
 01/23/24 12:30 ERROR: sync-data.bat - initiate_last_active_command.py failed. 
 01/23/24 12:31 ERROR: scheduled_task_executor.py - issue with job execution01/23/24 11:33 ERROR: start-app.bat - scheduled_task_executor.py stopped with error. 
+^C01/24/24 12:56 ERROR: scheduled_task_executor.py - issue with job execution
