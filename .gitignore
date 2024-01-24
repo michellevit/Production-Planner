@@ -29,5 +29,5 @@ reactapp/npm-debug.log*
 reactapp/yarn-debug.log*
 reactapp/yarn-error.log*
 
-django/api/data/current_open_orders.json
+django/api/data/orders_last_modified.json
 django/api/data/qb_order_data.json

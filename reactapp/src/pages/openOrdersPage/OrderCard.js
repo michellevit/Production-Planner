@@ -22,16 +22,16 @@ const OrderCard = ({
   setErrorMessage,
   minimizeMaximizeAction,
 }) => {
-  const [isRemoving, setIsRemoving] = useState(false);
   const [shipDate, setShipDate] = useState("");
-  const [isQuote, setIsQuote] = useState()
   const [confirmedStatus, setConfirmedStatus] = useState(false);
   const [delayDate, setDelayDate] = useState();
   const [tbdStatus, setTBDStatus] = useState(false);
   const [boxes, setBoxes] = useState([]);
-  const [formDisplay, setFormDisplay] = useState([]);
   const [notes, setNotes] = useState([]);
+  const [isQuote, setIsQuote] = useState();
   const [readyStatus, setReadyStatus] = useState(false);
+  const [formDisplay, setFormDisplay] = useState([]);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [matchingDims, setMatchingDims] = useState("");
   const [suggestedBoxes, setSuggestedBoxes] = useState([]);
   const [orderCardBackground, setOrderCardBackground] = useState("");
@@ -44,12 +44,12 @@ const OrderCard = ({
     getOrderCardBackground();
   }, [
     order.id,
+    shipDate,
     confirmedStatus,
-    readyStatus,
     tbdStatus,
     delayDate,
-    shipDate,
     isQuote,
+    readyStatus,
     minimizeMaximizeAction,
   ]);
 
@@ -70,21 +70,11 @@ const OrderCard = ({
           notes_array,
           item_array_hash,
         } = response.data;
-        const updatedBoxes = Array.isArray(packages_array)
-          ? packages_array.map((box) => {
-              if (typeof box.ready === true) {
-                setFormDisplay(false);
-              } else if (box.ready === false) {
-                setFormDisplay(true);
-              }
-              return box;
-            })
-          : [];
         setConfirmedStatus(confirmed);
         const formattedDelayDate = delay_date ? parseISO(delay_date) : null;
         setDelayDate(formattedDelayDate);
         setTBDStatus(delay_tbd);
-        setBoxes(updatedBoxes);
+        setBoxes(boxes);
         setNotes(notes_array);
         setReadyStatus(ready);
         setIsQuote(quote);
@@ -177,6 +167,7 @@ const OrderCard = ({
     boxFormHandler();
     setDelayDate(null);
     setTBDStatus(false);
+    console.log("readyHandler - boxes: ", boxes);
     try {
       await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
@@ -186,6 +177,7 @@ const OrderCard = ({
           confirmed: true,
           delay_date: null,
           delay_tbd: false,
+          packages_array: boxes,
         }
       );
     } catch (error) {
@@ -195,12 +187,15 @@ const OrderCard = ({
 
   const editHandler = async () => {
     setReadyStatus(false);
+    setConfirmedStatus(true);
     try {
       await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         {
           ...order,
           ready: false,
+          confirmed: true,
+          packages_array: boxes,
         }
       );
     } catch (error) {
@@ -375,14 +370,14 @@ const OrderCard = ({
           <div id="row1col1"></div>
           <div className="order-number-container" id="row1col2">
             <div className="order-number-text">
-              {order.quote ? "Quote#" : `SO#`} {order.order_number}
-            </div>
-          </div>
-          <div id="row1col3">
-            <MinimizeCardButton
+              {order.quote ? "Quote#" : ``} {order.order_number}
+              <MinimizeCardButton
               minimized={minimized}
               toggleMinimize={toggleMinimize}
             />
+            </div>
+          </div>
+          <div id="row1col3">
             <DeleteButton
               order={order}
               orders={orders}

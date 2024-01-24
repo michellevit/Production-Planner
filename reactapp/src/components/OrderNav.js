@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import "./OrderNav.css";
 import OrderNavFilter from "./OrderNavFilter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,6 +5,8 @@ import {
   faUpRightAndDownLeftFromCenter,
   faDownLeftAndUpRightToCenter,
 } from "@fortawesome/free-solid-svg-icons";
+import { useLocation } from 'react-router-dom';
+
 
 const OrderNav = ({
   handleSortChange,
@@ -40,11 +41,22 @@ const OrderNav = ({
   handleMinimizeAll,
   page,
 }) => {
+  const location = useLocation();
+  const getPageTitle = () => {
+    switch (location.pathname) {
+      case '/open-orders':
+        return 'Open Orders';
+      case '/all-orders':
+        return 'All Orders';
+      default:
+        return 'Orders';
+    }
+  };
   return (
     <div className="order-nav-container">
       <div className="row1">
         <header>
-          <h1>Orders</h1>
+          <h1>{getPageTitle()}</h1>
         </header>
       </div>
       <div className="row2">

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./DeleteButton.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "./DeleteModal";
@@ -49,8 +48,8 @@ const DeleteButton = ({ order, orders, setOrders, setIsRemoving }) => {
     setShowConfirmModal(false);
   };
   return (
-    <div>
-      <button id="delete-order-button" onClick={handleClickDeleteButton}>
+    <div id="delete-order-button">
+      <button onClick={handleClickDeleteButton}>
         <FontAwesomeIcon icon={faClose} />
       </button>
       <DeleteModal

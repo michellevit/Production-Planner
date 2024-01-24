@@ -16,7 +16,8 @@ Table of Contents:
 11. How To Fetch Updates from GitHub
 12. How to Update Docker Container / Database
 13. General Troubleshooting
-14. Credits
+14. To Do
+15. Credits
 
 
 ----------
@@ -411,5 +412,44 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
 
 
 -----------
-14. Credits
+14. To Do
+-Add more edit options on All Orders page (e.g. add note, add dimensions)
+-Add option to specify who wrote the note + if it was acknowledged
+-Handle error: someone inputs same item in 2 diff line items (give item dicts an id field)
+-Deleted order functionality (change customer name to DELETED and then delete from db after 2 weeks?)
+-Don't hardcode PST -> change UTC and then page to specify timezone in frontend (e.g. Django settings, python scheduler, models, views, error scripts, etc)
+-Handle backorders solely with previously_invoiced_items field (current way is specific to GTC custom QB template)
+-Allow users to choose which backup to restore to
+-Automatic backup should occur with Python, not Windows Task Scheduler
+-Make program run on it's own, instead of browser - e.g. Electron or NW.js
+-- Fix how filters are saved instead of saving in chrome memory
+-Create an installer package (Inno Setup or Advanced Installer)
+-New 'Settings' page: 
+-- Set environment variables
+-- Set administrator email (for error notifications)
+-- Turn on/off sync
+-- Set sync hours
+-- Set automatic database backup time
+-- Option to create a backup
+-- Option to restore from backup (+ select which backup to restore to)
+-- Display error/process log
+-- Page to map custom fields (backorders, etc)
+-Figure out how to push updates to separate users 
+-Secure data (+ keep data local)
+-Integrate shipping UPS/FedEx, and options for USMCA forms, B13, etc
+-Integrate products from QB directly to software (so you can map items per box)
+-Add tracking number to orders + automaticcally add dimensions/weight/tracking no./arrival, etc to orders (QODBC paid version for write capabilities)
+-Make it so tracking data can easily get added to invoice emails
+-Licesnse key for software licensing
+-Trial period
+-Website with user authentification (login) for subscription management
+-Payment processing integration
+-Customer support
+-Legal policy
+-Divide OrderCard into more components (for readability)
+-Rewrite all error/confirmation handling into consistent system wide singular Modal
+
+
+-----------
+15. Credits
 Michelle Flandin

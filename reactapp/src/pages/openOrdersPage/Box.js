@@ -54,7 +54,7 @@ const Box = ({ box, boxes, setBoxes, readyStatus, updatePackages }) => {
       <div className={readyStatus ? "box-info-ready" : "box-info-notready"}>
         <b>Box {boxes.indexOf(box) + 1}: </b>
         {box.dimensions}
-        {Number.isFinite(box.weight) && <span> - {box.weight} lb</span>}
+        {Number.isFinite(parseFloat(box.weight)) && <span> - {formatWeight(box.weight)} lb</span>}
         {((box.weight === "TBD") && (box.dimensions === "TBD")) && <span></span>}
         {((box.weight === "TBD") && (box.dimensions !== "TBD")) && <span>- TBD</span>}
         {(box.weight === "") && <span></span>}
@@ -81,3 +81,10 @@ const Box = ({ box, boxes, setBoxes, readyStatus, updatePackages }) => {
   );
 };
 export default Box;
+
+
+function formatWeight(weight) {
+  const num = parseFloat(weight);
+  if (isNaN(num)) return weight; 
+  return num.toFixed(2).replace(/\.?0+$/, "");
+}
