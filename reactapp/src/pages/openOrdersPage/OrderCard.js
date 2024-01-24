@@ -370,7 +370,7 @@ const OrderCard = ({
           <div id="row1col1"></div>
           <div className="order-number-container" id="row1col2">
             <div className="order-number-text">
-              {order.quote ? "Quote#" : ``} {order.order_number}
+              {order.quote ? "Quote#" : <span>&nbsp;&nbsp;&nbsp;</span>} {order.order_number}
               <MinimizeCardButton
               minimized={minimized}
               toggleMinimize={toggleMinimize}

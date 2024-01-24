@@ -413,10 +413,13 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
 
 -----------
 14. To Do
+-Redesign navigation (left sidebar)
+-Redesign 'Open Orders' + 'All Orders' (inspiration from SR)
+-Add 'invoiced' field/icon
 -Add more edit options on All Orders page (e.g. add note, add dimensions)
 -Add option to specify who wrote the note + if it was acknowledged
 -Handle error: someone inputs same item in 2 diff line items (give item dicts an id field)
--Deleted order functionality (change customer name to DELETED and then delete from db after 2 weeks?)
+-Deleted order functionality (Recycle Bin tab w/ recently deleted orders + auto delete after 1 month)
 -Don't hardcode PST -> change UTC and then page to specify timezone in frontend (e.g. Django settings, python scheduler, models, views, error scripts, etc)
 -Handle backorders solely with previously_invoiced_items field (current way is specific to GTC custom QB template)
 -Allow users to choose which backup to restore to
@@ -434,6 +437,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
 -- Option to restore from backup (+ select which backup to restore to)
 -- Display error/process log
 -- Page to map custom fields (backorders, etc)
+-- SHipping account details
 -Figure out how to push updates to separate users 
 -Secure data (+ keep data local)
 -Integrate shipping UPS/FedEx, and options for USMCA forms, B13, etc

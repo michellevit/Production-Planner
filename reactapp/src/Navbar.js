@@ -1,7 +1,24 @@
 import React from "react";
-import { Link, useMatch, useResolvedPath } from "react-router-dom"
+import { Link, useResolvedPath } from "react-router-dom"
 import "./styles.css";
 
+
+function CustomLink({ to, children, activeWhen, ...props }) {
+    const resolvedPath = useResolvedPath(to);
+    let isActive = window.location.pathname === resolvedPath.pathname;
+
+    if (!isActive && activeWhen) {
+        isActive = activeWhen.includes(window.location.pathname);
+    }
+
+    return (
+        <li className={isActive ? "active" : ""}>
+            <Link to={to} {...props}>
+                {children}
+            </Link>
+        </li>
+    );
+}
 
 function Navbar() {
     return (
@@ -10,24 +27,17 @@ function Navbar() {
                 Production Planner
             </div>
             <ul>
-                <CustomLink to="/home">Home</CustomLink>
+                <CustomLink 
+                    to="/home"
+                    activeWhen={["/last-update", "/add-order", "/add-dimensions"]}
+                >
+                    Home
+                </CustomLink>
                 <CustomLink to="/open-orders">Open Orders</CustomLink>
                 <CustomLink to="/all-orders">All Orders</CustomLink>
             </ul>
         </nav>
     );
-}
-
-function CustomLink({to, children, ...props}) {
-    const resolvedPath = useResolvedPath(to)
-    const isActive = useMatch({ path: resolvedPath.pathname, end: true })
-    return (
-        <li className={isActive ? "active" : ""}>
-            <Link to={to} {...props}>
-                {children}
-            </Link>
-        </li>
-    )
 }
 
 export default Navbar;
