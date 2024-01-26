@@ -1,32 +1,30 @@
 from datetime import timedelta
-from django.db import transaction
 from django.db.models import Q, Case, When, F, Value, IntegerField, DateField
 from django.db.models.functions import Coalesce
-from django.http import JsonResponse
+from django.http import JsonResponse, StreamingHttpResponse, HttpResponse
 from django.utils import timezone
 from .models import * 
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.parsers import FileUploadParser
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.response import Response
-from .scripts.check_order_report import process_uploaded_report
 from .serializers import *
-from .utils import sort_dict
+from .utils import *
+import json
 import logging
-
+import time
 
 
 logger = logging.getLogger('file')
 # logger.error('EXAMPLE')
-#print('hi') -> this will show up in Docker container backend 'Logs' section
+# print('hi') -> this will show up in Docker container backend 'Logs' section
 
 class CustomPagination(PageNumberPagination):
     page_size = 20
 
-
+    
 
 #path('open-orders/', OpenOrdersListView.as_view(), name='open-orders')
 class OpenOrdersListView(APIView):
@@ -69,8 +67,8 @@ class OrderDetailView(APIView):
                 order.shipped = request.data['shipped']
             if 'quote' in request.data:
                 order.quote = request.data['quote']
-            if 'item_type_dict_hash' in request.data:
-                order.item_type_dict_hash = request.data['item_type_dict_hash']
+            if 'item_dict_hash' in request.data:
+                order.item_type_dict_hash = request.data['item_dict_hash']
             order.save()
             return Response({"message": "Ready status updated successfully."})
         except Order.DoesNotExist:
@@ -83,6 +81,7 @@ class OrderDetailView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Order.DoesNotExist:
             raise NotFound(detail="Order not found")
+
 
 
 #path('all-orders/', OrderListView.as_view(), name='all-orders')
@@ -127,24 +126,19 @@ class CreateOrderView(APIView):
 class FilteredOrdersListView(generics.ListAPIView):
     serializer_class = OrderSerializer
     pagination_class = CustomPagination
-
     def get_queryset(self):
         current_datetime_utc = timezone.now()
         current_datetime_vancouver = current_datetime_utc.astimezone(timezone.get_current_timezone())
         today = current_datetime_vancouver.date()
-
         filter_choice = self.request.query_params.get('filter', 'all')
         search_query = self.request.query_params.get('search', None)
         order_type = self.request.query_params.get('type', 'all')
-
         queryset = Order.objects.all()
-
         if order_type == 'open':
             queryset = queryset.filter(shipped=False)
-
         # DROPDOWN FILTERS
         if filter_choice == 'all':
-            queryset = Order.objects.all()
+            pass
         elif filter_choice == 'upcoming':
             queryset = queryset.filter(ship_date__gte=today)
         elif filter_choice == 'past':
@@ -259,7 +253,6 @@ class FilteredOrdersListView(generics.ListAPIView):
                 queryset = queryset.filter(quote=True)
             elif not_quote_checked:
                 queryset = queryset.filter(quote=False)
-        
         # Add a custom field for sorting
         queryset = queryset.annotate(
             custom_sort=Case(
@@ -284,30 +277,22 @@ class FilteredOrdersListView(generics.ListAPIView):
                 Q(order_number__icontains=search_query) |
                 Q(customer_name__icontains=search_query)
             )
-
         return queryset
-
-
- 
-#path('reports/', OrderReportUploadView.as_view(), name="reports")
-class OrderReportUploadView(APIView):
-    parser_class = (FileUploadParser,)
-    def get(self, request, *args, **kwargs):
-        last_5_entries = OrderReport.objects.order_by('-submitted_date')[:5]
-        serializer = OrderReportSerializer(last_5_entries, many=True)
-        return Response(serializer.data)
-    @transaction.atomic
-    def post(self, request, *args, **kwargs):
-        uploaded_file = request.FILES.get("file")        
-        if uploaded_file:
-            file_name = uploaded_file.name
-            process_uploaded_report(uploaded_file)      
-            order_report = OrderReport(file_name=file_name)
-            order_report.save()      
-            return Response({"message": "File processed successfully."}, status=status.HTTP_201_CREATED)
+    def paginate_queryset(self, queryset):
+        order_type = self.request.query_params.get('type', 'all')
+        if order_type == 'open':
+            return None
         else:
-            logger.error("No file uploaded.")
-            return Response({"message": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST)
+            return super().paginate_queryset(queryset)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        paginated_queryset = self.paginate_queryset(queryset)
+        if paginated_queryset is not None:
+            serializer = self.get_serializer(paginated_queryset, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 
 #path('dimensions/', DimensionView.as_view(), name="dimensions")
@@ -333,17 +318,17 @@ class DimensionView(APIView):
         
 
 # path('fetch-matching-packages/', FetchMatchingPackagesView.as_view(), name='fetch-matching-packages')
-
 class FetchMatchingPackagesView(APIView):
     def post(self, request):
         data = request.data
-        item_type_dict = data.get('item_type_dict')
-        if not item_type_dict:
-            return JsonResponse({'success': False, 'message': 'item_type_dict not provided'})
-        sorted_dict = sort_dict(item_type_dict)
-        hash_value = hash_item_type_dict(sorted_dict)
+        print("DATA: ", data)
+        item_array = data.get('item_array')
+        if not item_array:
+            return JsonResponse({'success': False, 'message': 'item_array not provided'})
+        sorted_item = sort_item(item_array)
+        hash_value = hash_item_array(sorted_item)
         try:
-            matching_order = Order.objects.filter(shipped=True, item_type_dict_hash=hash_value).first()
+            matching_order = Order.objects.filter(shipped=True, item_array_hash=hash_value).first()
             if matching_order:
                 return JsonResponse({'success': True, 'packages_array': matching_order.packages_array})
             else:
@@ -359,3 +344,76 @@ class ProductView(APIView):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
     
+    
+# path('last-update', LastUpdateView.as_view(), name='last-update'),
+class LastUpdateView(APIView):
+    def get(self, request):
+        last_update = LastUpdate.objects.first()
+        if last_update:
+            last_updated = last_update.last_updated
+            last_active = last_update.last_active
+            if last_active:
+                response_data = {
+                    "last_updated": last_updated,
+                    "last_active": last_active,
+                }
+            else:
+                response_data = {
+                    "last_updated": last_updated,
+                    "last_active": "Not available",
+                }
+            return Response(response_data)
+        else:
+            return Response({
+                "last_updated": "Never",
+                "last_active": "Not available",
+            })
+
+# path('last-update-stream/', LastUpdate.as_view(), name='last-update-stream')
+def last_update_stream(request):
+    def last_update_event_stream():
+        response = HttpResponse(content_type='text/event-stream')
+        response['Content-Type'] = 'text/event-stream'
+        response['Cache-Control'] = 'no-cache'
+        response['Connection'] = 'keep-alive'
+        last_updated_value = None
+        last_active_value = None
+        max_retries = 5
+        retry_count = 0
+        while True:
+            try:
+                new_data = LastUpdate.objects.first()
+                if new_data:
+                    if (new_data.last_updated != last_updated_value or
+                        new_data.last_active != last_active_value):
+                        last_updated_value = new_data.last_updated
+                        last_active_value = new_data.last_active
+                        data = {
+                            'message': 'New update',
+                            'last_updated': str(new_data.last_updated),
+                            'last_active': str(new_data.last_active)
+                        }
+                        yield f"data: {json.dumps(data)}\n\n"
+                    else:
+                        current_time = time.time()
+                        last_active_time = time.mktime(new_data.last_active.timetuple())
+                        time_difference = current_time - last_active_time
+                        if time_difference > 300:  # 300 seconds = 5 minutes
+                            no_update_data = {
+                                'message': 'No update in over 5 minutes',
+                                'last_active': str(new_data.last_active)
+                            }
+                            yield f"data: {json.dumps(no_update_data)}\n\n"
+                        else:
+                            time.sleep(120)  # Sleep for 150 seconds
+                else:
+                    yield "data: No LastUpdate record found\n\n"
+                    time.sleep(120)
+            except Exception as e:
+                print(f"Error in event_stream: {str(e)}")
+                retry_count += 1
+                if retry_count >= max_retries:
+                    print("Maximum retries reached, stopping the event stream.")
+                    break
+                time.sleep(300)  # 300 seconds = 5 minutes
+    return StreamingHttpResponse(last_update_event_stream(), content_type='text/event-stream')

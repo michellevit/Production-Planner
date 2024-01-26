@@ -6,12 +6,6 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = "__all__"
 
-class OrderReportSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderReport
-        fields = "__all__"
-
-
 class DimensionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dimension
@@ -20,5 +14,10 @@ class DimensionSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
+        fields = "__all__"
+
+class LastUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LastUpdate
         fields = "__all__"
 

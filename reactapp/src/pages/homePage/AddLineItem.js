@@ -12,7 +12,7 @@ const AddLineItem = ({
   setShowErrorModal,
   errorMessage,
   setErrorMessage,
-  setMatchingDims,
+  setDisplayQuoteModal,
 }) => {
   const [filteredProductNames, setFilteredProductNames] = useState([]);
   const handleInputChange = (e) => {
@@ -33,8 +33,17 @@ const AddLineItem = ({
   };
   const handleAddOrderLineItem = (e) => {
     e.preventDefault();
-    setMatchingDims(false);
-    const itemName = document.getElementById("add-line-item-name").value;
+    setDisplayQuoteModal(false);
+    const fullValue = document.getElementById("add-line-item-name").value;
+    const firstSpaceIndex = fullValue.indexOf(" ");
+    let itemName, itemDescription;
+    if (firstSpaceIndex === -1) {
+      itemName = fullValue;
+      itemDescription = fullValue;
+    } else {
+      itemName = fullValue.substring(0, firstSpaceIndex);
+      itemDescription = fullValue.substring(firstSpaceIndex + 1);
+    }
     const itemQty = document.getElementById("add-line-item-qty").value;
     if (itemName.trim() === "") {
       setErrorMessage("Please enter a valid item name.");
@@ -47,21 +56,26 @@ const AddLineItem = ({
       setShowErrorModal(true);
       return;
     }
-    const roundedItemQty =
-      parsedItemQty % 1 >= 0.5
-        ? Math.ceil(parsedItemQty)
-        : Math.floor(parsedItemQty);
-    setItems((prevItems) => ({
-      ...prevItems,
-      [itemName]: roundedItemQty,
-    }));
+    const newItem = {
+      name: itemName,
+      subname: itemName,
+      description: itemDescription,
+      requested_qty: parseFloat(itemQty),
+      ship_qty: parseFloat(itemQty),
+      backorder_qty: 0,
+      previously_invoiced_qty: 0,
+    };
+
+    setItems((prevItems) => [...prevItems, newItem]);
     document.getElementById("add-line-item-name").value = "";
     document.getElementById("add-line-item-qty").value = "";
   };
-  const handleDeleteItem = (itemNameToDelete) => {
-    const updatedItems = { ...items };
-    delete updatedItems[itemNameToDelete];
-    setItems(updatedItems);
+  const handleDeleteItem = (itemNameToDelete, e) => {
+    e.stopPropagation();
+    setItems((prevItems) =>
+      prevItems.filter((item) => item.name !== itemNameToDelete)
+    );
+    setDisplayQuoteModal(false);
   };
   return (
     <div className="add-line-item-container">
@@ -106,14 +120,15 @@ const AddLineItem = ({
       </div>
       <div id="line-item-list">
         <ul>
-          {Object.keys(items).map((itemName) => (
-            <li key={itemName}>
+          {items.map((item, index) => (
+            <li key={index}>
               <div className="line-item-info">
-                {itemName} - {items[itemName]}
+                {item.name} {item.description} - Qty: {item.requested_qty}
               </div>
               <button
+                type="button"
                 className="delete-line-item-button"
-                onClick={() => handleDeleteItem(itemName)}
+                onClick={(e) => handleDeleteItem(item.name, e)}
               >
                 <FontAwesomeIcon icon={faClose} />
               </button>

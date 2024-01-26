@@ -19,6 +19,7 @@ const AllOrders = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [numberOfFilters, setNumberOfFilters] = useState("");
+  const [lastUpdated, setLastUpdated] = useState(null); 
   const ordersPerPage = 20;
   // Sort Filters: Select + Search
   const [currentView, setCurrentView] = useState(
@@ -27,10 +28,10 @@ const AllOrders = () => {
   const [searchQuery, setSearchQuery] = useState("");
   // Sort Filters: Checkboxes
   const [confirmedChecked, setConfirmedChecked] = useState(
-    JSON.parse(localStorage.getItem("allOrders_confirmedChecked")) || false
+    JSON.parse(localStorage.getItem("allOrders_confirmedChecked")) || true
   );
   const [notConfirmedChecked, setNotConfirmedChecked] = useState(
-    JSON.parse(localStorage.getItem("allOrders_notConfirmedChecked")) || false
+    JSON.parse(localStorage.getItem("allOrders_notConfirmedChecked")) || true
   );
   const [readyChecked, setReadyChecked] = useState(
     JSON.parse(localStorage.getItem("allOrders_readyChecked")) || false
@@ -61,36 +62,26 @@ const AllOrders = () => {
   );
 
   useEffect(() => {
+    const eventSource = new EventSource(`${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`);
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data && data.message === "New update") {
+        if (data.last_updated !== lastUpdated) {
+          setLastUpdated(data.last_updated); 
+          fetchOrders();
+        }
+      }
+    };
+    return () => {
+      eventSource.close();
+    };
+  }, [lastUpdated]);
+
+  useEffect(() => {
     const formattedDate = new Date();
     formattedDate.setHours(0, 0, 0, 1);
     setCurrentDate(formattedDate);
     countNumberOfFilters();
-    const fetchOrders = async () => {
-      try {
-        const filterParams = [
-          `confirmed_checked=${confirmedChecked}`,
-          `not_confirmed_checked=${notConfirmedChecked}`,
-          `ready_checked=${readyChecked}`,
-          `not_ready_checked=${notReadyChecked}`,
-          `shipped_checked=${shippedChecked}`,
-          `not_shipped_checked=${notShippedChecked}`,
-          `delayed_checked=${delayedChecked}`,
-          `not_delayed_checked=${notDelayedChecked}`,
-          `quote_checked=${quoteChecked}`,
-          `not_quote_checked=${notQuoteChecked}`,
-          `oldest_checked=${oldestChecked}`,
-        ]
-          .filter((param) => param.endsWith("_checked=true"))
-          .join("&");
-        const requestUrl = `http://127.0.0.1:8000/orders-filtered/?type=all&filter=${currentView}&search=${searchQuery}&page=${currentPage}&${filterParams}`;
-        const response = await axios.get(requestUrl);
-        setOrders(response.data.results);
-        setTotalPages(Math.ceil(response.data.count / ordersPerPage));
-      } catch (error) {
-        console.error("Error getting data", error);
-      }
-    };
-
     fetchOrders();
     setRefreshOrders(false);
   }, [
@@ -114,23 +105,50 @@ const AllOrders = () => {
   useEffect(() => {
     setCurrentPage(1);
     localStorage.setItem("allOrders_currentView", JSON.stringify(currentView));
-    localStorage.setItem("allOrders_confirmedChecked", JSON.stringify(confirmedChecked));
+    localStorage.setItem(
+      "allOrders_confirmedChecked",
+      JSON.stringify(confirmedChecked)
+    );
     localStorage.setItem(
       "allOrders_notConfirmedChecked",
       JSON.stringify(notConfirmedChecked)
     );
-    localStorage.setItem("allOrders_readyChecked", JSON.stringify(readyChecked));
-    localStorage.setItem("allOrders_notReadyChecked", JSON.stringify(notReadyChecked));
-    localStorage.setItem("allOrders_shippedChecked", JSON.stringify(shippedChecked));
+    localStorage.setItem(
+      "allOrders_readyChecked",
+      JSON.stringify(readyChecked)
+    );
+    localStorage.setItem(
+      "allOrders_notReadyChecked",
+      JSON.stringify(notReadyChecked)
+    );
+    localStorage.setItem(
+      "allOrders_shippedChecked",
+      JSON.stringify(shippedChecked)
+    );
     localStorage.setItem(
       "allOrders_notShippedChecked",
       JSON.stringify(notShippedChecked)
     );
-    localStorage.setItem("allOrders_delayedChecked", JSON.stringify(delayedChecked));
-    localStorage.setItem("allOrders_notDelayedChecked", JSON.stringify(notDelayedChecked));
-    localStorage.setItem("allOrders_quoteChecked", JSON.stringify(quoteChecked));
-    localStorage.setItem("allOrders_notQuoteChecked", JSON.stringify(notQuoteChecked));
-    localStorage.setItem("allOrders_oldestChecked", JSON.stringify(oldestChecked));
+    localStorage.setItem(
+      "allOrders_delayedChecked",
+      JSON.stringify(delayedChecked)
+    );
+    localStorage.setItem(
+      "allOrders_notDelayedChecked",
+      JSON.stringify(notDelayedChecked)
+    );
+    localStorage.setItem(
+      "allOrders_quoteChecked",
+      JSON.stringify(quoteChecked)
+    );
+    localStorage.setItem(
+      "allOrders_notQuoteChecked",
+      JSON.stringify(notQuoteChecked)
+    );
+    localStorage.setItem(
+      "allOrders_oldestChecked",
+      JSON.stringify(oldestChecked)
+    );
   }, [
     currentView,
     confirmedChecked,
@@ -145,6 +163,32 @@ const AllOrders = () => {
     notQuoteChecked,
     oldestChecked,
   ]);
+
+  const fetchOrders = async () => {
+    try {
+      const filterParams = [
+        `confirmed_checked=${confirmedChecked}`,
+        `not_confirmed_checked=${notConfirmedChecked}`,
+        `ready_checked=${readyChecked}`,
+        `not_ready_checked=${notReadyChecked}`,
+        `shipped_checked=${shippedChecked}`,
+        `not_shipped_checked=${notShippedChecked}`,
+        `delayed_checked=${delayedChecked}`,
+        `not_delayed_checked=${notDelayedChecked}`,
+        `quote_checked=${quoteChecked}`,
+        `not_quote_checked=${notQuoteChecked}`,
+        `oldest_checked=${oldestChecked}`,
+      ]
+        .filter((param) => param.endsWith("_checked=true"))
+        .join("&");
+      const requestUrl = `${process.env.REACT_APP_BACKEND_URL}/orders-filtered/?type=all&filter=${currentView}&search=${searchQuery}&page=${currentPage}&${filterParams}`;
+      const response = await axios.get(requestUrl);
+      setOrders(response.data.results);
+      setTotalPages(Math.ceil(response.data.count / ordersPerPage));
+    } catch (error) {
+      console.error("Error getting data", error);
+    }
+  };
 
   const countNumberOfFilters = () => {
     const filterStates = [
@@ -188,7 +232,7 @@ const AllOrders = () => {
       updatedOrder.delay_tbd = false;
       setTimeout(async () => {
         await axios.put(
-          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/all-orders/${order.id}/`,
           updatedOrder
         );
         setTimeout(() => {
@@ -212,7 +256,7 @@ const AllOrders = () => {
       updatedOrder.delay_tbd = false;
       setTimeout(async () => {
         await axios.put(
-          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/all-orders/${order.id}/`,
           updatedOrder
         );
         setTimeout(() => {
@@ -235,7 +279,7 @@ const AllOrders = () => {
       updatedOrder.delay_date = null;
       setTimeout(async () => {
         await axios.put(
-          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/all-orders/${order.id}/`,
           updatedOrder
         );
         setTimeout(() => {
@@ -258,7 +302,7 @@ const AllOrders = () => {
       updatedOrder.ready = true;
       setTimeout(async () => {
         await axios.put(
-          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/all-orders/${order.id}/`,
           updatedOrder
         );
         setOrders((prevOrders) =>
@@ -268,6 +312,7 @@ const AllOrders = () => {
           setFadingRows((prevFadingRows) =>
             prevFadingRows.filter((id) => id !== order.id)
           );
+          setRefreshOrders(true);
         }, 400);
       }, 400);
     } catch (error) {
@@ -287,7 +332,7 @@ const AllOrders = () => {
       updatedOrder.ready = false;
       setTimeout(async () => {
         await axios.put(
-          `http://127.0.0.1:8000/all-orders/${order.id}/`,
+          `${process.env.REACT_APP_BACKEND_URL}/all-orders/${order.id}/`,
           updatedOrder
         );
         setOrders((prevOrders) =>
@@ -297,6 +342,7 @@ const AllOrders = () => {
           setFadingRows((prevFadingRows) =>
             prevFadingRows.filter((id) => id !== order.id)
           );
+          setRefreshOrders(true);
         }, 400);
       }, 400);
     } catch (error) {
@@ -306,11 +352,13 @@ const AllOrders = () => {
       );
     }
   };
+  const formatWeight = (weight) => {
+    const num = parseFloat(weight);
+    if (isNaN(num)) return weight; 
+    return num.toFixed(2).replace(/\.?0+$/, "");
+};
 
-  const extractTextBeforeParentheses = (text) => {
-    const splitText = text.split(" (");
-    return splitText[0];
-  };
+
 
   return (
     <div className="all-main-div">
@@ -396,18 +444,21 @@ const AllOrders = () => {
                   <td id="items">
                     <table className="item-table">
                       <tbody>
-                        {Object.keys(order.item_subtype_dict).map(
-                          (itemType, index) => (
-                            <tr key={index}>
-                              <td id="item">
-                                {extractTextBeforeParentheses(itemType)}
-                              </td>
-                              <td id="qty">
-                                {order.item_subtype_dict[itemType]}
-                              </td>
-                            </tr>
-                          )
-                        )}
+                        {order.item_array.map((item, index) => (
+                          <tr key={index}>
+                            <td id="item">
+                              {item.name} {item.description}
+                            </td>
+                            <td id="qty">
+                              {item.ship_qty}
+                              {item.backorder_qty > 0 && (
+                                <p id="backorder-text">
+                                  B/O: {item.backorder_qty}
+                                </p>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </td>
@@ -436,7 +487,7 @@ const AllOrders = () => {
                                   packageItem.weight === "TBD" && <span></span>}
                                 {packageItem.weight !== "TBD" &&
                                   packageItem.weight !== "" &&
-                                  packageItem.weight + " lb"}
+                                  formatWeight(packageItem.weight) + " lb"}
                               </td>
                             </tr>
                           ))}
@@ -496,8 +547,6 @@ const AllOrders = () => {
                     <DeleteButton
                       order={order}
                       setOrders={setOrders}
-                      isRemoving={isRemoving}
-                      setIsRemoving={setIsRemoving}
                     />
                   </td>
                 </tr>

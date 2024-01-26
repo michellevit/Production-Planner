@@ -58,20 +58,12 @@ button:hover {
     color: CadetBlue;
 }
 
-.reports {
+.dimensions {
     background: grey;
 }
 
-.reports:hover {
-    color: grey;
-}
-
-.dimensions {
-    background: Pink;
-}
-
 .dimensions:hover {
-    color: Pink;
+    color: grey;
 }
 
 .products {
@@ -80,4 +72,12 @@ button:hover {
 
 .products:hover {
     color: Thistle;
+}
+
+.update {
+    background: #E3E4FA;
+}
+
+.update:hover {
+    color: #E3E4FA;
 }

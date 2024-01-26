@@ -5,17 +5,15 @@ from .utils import *
 class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    order_number = models.CharField(max_length=100, default="none")
-    backorder = models.BooleanField(default=False)
+    order_number = models.CharField(max_length=100, db_index=True, default="none")
     backorder_number = models.IntegerField(default=0)
     ship_date = models.DateField(null=True, blank=True)
     confirmed = models.BooleanField(default=False)
-    delay_date = models.DateField(null=True, default=None)
+    delay_date = models.DateField(null=True, blank=True, default=None)
     delay_tbd = models.BooleanField(null=True, default=False)
     customer_name = models.CharField(max_length=100)
-    item_type_dict = models.JSONField(default=dict)
-    item_type_dict_hash = models.CharField(max_length=32, db_index=True, blank=True, null=True)
-    item_subtype_dict = models.JSONField(default=dict)
+    item_array = models.JSONField(default=list)
+    item_array_hash = models.CharField(max_length=32, db_index=True, blank=True, null=True)
     packages_array = models.JSONField(default=list, null=True, blank=True)
     notes_array = models.JSONField(default=list, null=True, blank=True)
     quote = models.BooleanField(default=False)
@@ -24,24 +22,19 @@ class Order(models.Model):
     def __str__(self):
         return self.order_number[0:50]
     def save(self, *args, **kwargs):
-        sorted_item_type_dict = sort_dict(self.item_type_dict)
-        self.item_type_dict_hash = hash_item_type_dict(sorted_item_type_dict)
+        if self.pk is None:
+            sorted_item_array = sort_item(self.item_array)
+            self.item_array_hash = hash_item_array(sorted_item_array)
+        else:
+            try:
+                original_item_array = Order.objects.get(pk=self.pk).item_array
+                if self.item_array != original_item_array:
+                    sorted_item_array = sort_item(self.item_array)
+                    self.item_array_hash = hash_item_array(sorted_item_array)
+            except Order.DoesNotExist:
+                pass 
         super(Order, self).save(*args, **kwargs)
     
-
-class OrderReport(models.Model):
-    submitted_date = models.DateTimeField(auto_now=True)
-    file_name = models.CharField(max_length=255)
-    def __str__(self):
-        return self.file_name[:50]
-    class Meta:
-        verbose_name_plural = "Order Reports"
-    def save(self, *args, **kwargs):
-        if OrderReport.objects.count() >= 10:
-            oldest_entry = OrderReport.objects.order_by('submitted_date').first()
-            oldest_entry.delete()
-        super(OrderReport, self).save(*args, **kwargs)
-
 
 class Dimension(models.Model):
     length = models.FloatField()
@@ -55,6 +48,7 @@ class Dimension(models.Model):
         unique_together = [['length', 'width', 'height', 'package_size']]
         ordering = ['length', 'width', 'height']
 
+
 class Product(models.Model):
     item_name = models.CharField(max_length=100, unique=True)
     def __str__(self):
@@ -63,4 +57,10 @@ class Product(models.Model):
         verbose_name_plural = "Products"
         ordering = ['item_name']
         
+
+class LastUpdate(models.Model):
+    last_updated = models.DateTimeField()
+    last_active = models.DateTimeField(null=True, blank=True)
+    def __str__(self):
+        return str(self.last_updated)
 

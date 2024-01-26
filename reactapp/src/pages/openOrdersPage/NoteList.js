@@ -17,20 +17,25 @@ const NoteList = ({ readyStatus, notes, setNotes, updateNotes }) => {
     setNote(e.target.value);
   };
 
-  const submitNoteHandler = (e) => {
+  const submitNoteHandler = async (e) => {
     e.preventDefault();
     if (note === "") {
-      return false;
+      return;
     }
-    const updatedNotes = [
-      ...(Array.isArray(notes) ? notes : []),
-      {
-        id: Date.now(),
-        noteText: note,
-      },
-    ];
+    const newNote = {
+      id: Date.now(),
+      noteText: note,
+    };
+    const updatedNotes = [...notes, newNote];
     setNotes(updatedNotes);
-    updateNotes(updatedNotes);
+
+    try {
+      await updateNotes(updatedNotes);
+    } catch (error) {
+      console.error("Error adding note:", error);
+      setNotes(notes);
+    }
+
     setNote("");
   };
 
@@ -51,10 +56,10 @@ const NoteList = ({ readyStatus, notes, setNotes, updateNotes }) => {
         </form>
       )}
       <div className="notelist-container">
-        <ul className="notelist">
+      <ul className="notelist">
           {Array.isArray(notes) &&
-            notes.map((note, index) => (
-              <div key={index} className="noteitem-container">
+            notes.map((note) => (
+              <div key={note.id} className="noteitem-container">
                 <NoteItem
                   note={note}
                   notes={notes}

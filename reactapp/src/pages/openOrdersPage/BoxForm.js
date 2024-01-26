@@ -50,11 +50,9 @@ const BoxForm = ({
       inputValue.toLowerCase() === "tbd"
     ) {
       setWeight(inputValue.toUpperCase());
-    }
-    else if (isPositiveNumberOrFloat(inputValue)) {
+    } else if (isPositiveNumberOrFloat(inputValue)) {
       setWeight(inputValue);
-    }
-    else if (inputValue === "") {
+    } else if (inputValue === "") {
       setWeight("");
     }
   };
@@ -68,10 +66,14 @@ const BoxForm = ({
     e.preventDefault();
     setFormDisplay(true);
 
-    if (dimensions === "") {
-      setErrorMessage("Please enter a package size.");
+    if (dimensions === "" || (weight === "" && dimensions !== "TBD")) {
+      setErrorMessage(
+        dimensions === ""
+          ? "Please enter a package size."
+          : "Please enter a package weight."
+      );
       setShowErrorModal(true);
-      return false;
+      return;
     }
 
     if (weight === "") {
@@ -83,23 +85,27 @@ const BoxForm = ({
     }
     let finalWeight = weight;
     if (weight !== "TBD" && weight !== "") {
-      const formattedWeight = parseFloat(weight).toFixed(2);
-      finalWeight = parseFloat(formattedWeight);
+      finalWeight = parseFloat(weight).toFixed(2);
     }
     const newBox = {
       dimensions: dimensions,
       weight: finalWeight,
       id: uniqueId(),
     };
-    setBoxes((prevBoxes) => [...prevBoxes, newBox]);
-    updatePackages([...boxes, newBox]);
-    setDimensions("");
-    setWeight("");
+    setBoxes((prevBoxes) => {
+      const updatedBoxes = [...prevBoxes, newBox];
+      updatePackages(updatedBoxes);
+      setDimensions("");
+      setWeight("");
+      return updatedBoxes;
+    });
   };
 
   const fetchDimensions = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/dimensions/");
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/dimensions/`
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching dimensions", error);

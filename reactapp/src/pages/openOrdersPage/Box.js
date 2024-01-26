@@ -12,23 +12,22 @@ const Box = ({ box, boxes, setBoxes, readyStatus, updatePackages }) => {
   const upHandler = () => {
     const index = boxes.indexOf(box);
     if (index !== 0) {
-      let temp = boxes[index - 1];
-      boxes[index - 1] = boxes[index];
-      boxes[index] = temp;
-      setBoxes(boxes.map((box) => box));
+      const newBoxes = [...boxes];
+      [newBoxes[index - 1], newBoxes[index]] = [newBoxes[index], newBoxes[index - 1]];
+      setBoxes(newBoxes);
+      updatePackages(newBoxes);
     }
-    updatePackages(boxes);
   };
   const downHandler = () => {
     const index = boxes.indexOf(box);
-    if (index !== boxes.length - 1) {
-      let temp = boxes[index + 1];
-      boxes[index + 1] = boxes[index];
-      boxes[index] = temp;
-      setBoxes(boxes.map((box) => box));
+    if (index < boxes.length - 1) {
+      const newBoxes = [...boxes];
+      [newBoxes[index], newBoxes[index + 1]] = [newBoxes[index + 1], newBoxes[index]];
+      setBoxes(newBoxes);
+      updatePackages(newBoxes);
     }
-    updatePackages(boxes);
   };
+  
   const uniqueId = () => {
     const dateString = Date.now().toString(36);
     const randomness = Math.random().toString(36).substring(2);
@@ -55,7 +54,7 @@ const Box = ({ box, boxes, setBoxes, readyStatus, updatePackages }) => {
       <div className={readyStatus ? "box-info-ready" : "box-info-notready"}>
         <b>Box {boxes.indexOf(box) + 1}: </b>
         {box.dimensions}
-        {Number.isFinite(box.weight) && <span> - {box.weight} lb</span>}
+        {Number.isFinite(parseFloat(box.weight)) && <span> - {formatWeight(box.weight)} lb</span>}
         {((box.weight === "TBD") && (box.dimensions === "TBD")) && <span></span>}
         {((box.weight === "TBD") && (box.dimensions !== "TBD")) && <span>- TBD</span>}
         {(box.weight === "") && <span></span>}
@@ -82,3 +81,10 @@ const Box = ({ box, boxes, setBoxes, readyStatus, updatePackages }) => {
   );
 };
 export default Box;
+
+
+function formatWeight(weight) {
+  const num = parseFloat(weight);
+  if (isNaN(num)) return weight; 
+  return num.toFixed(2).replace(/\.?0+$/, "");
+}

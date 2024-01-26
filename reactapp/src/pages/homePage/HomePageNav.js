@@ -5,14 +5,9 @@ import "./HomePageNav.css";
 const HomePageNav = () => {
   return (
     <div className="home-page-nav-container">
-      <div className="row1">
-        <header>
-          <h1>HomePage</h1>
-        </header>
-      </div>
       <div className="row2">
         <ul>
-          <CustomLink to="/add-report">Add Report</CustomLink>
+          <CustomLink to="/last-update">Last Update</CustomLink>
           <CustomLink to="/add-order">Add Order</CustomLink>
           <CustomLink to="/add-dimensions">Add Dimensions</CustomLink>
         </ul>
@@ -23,7 +18,9 @@ const HomePageNav = () => {
 
 function CustomLink({ to, children, ...props }) {
   const resolvedPath = useResolvedPath(to);
-  const isActive = useMatch({ path: resolvedPath.pathname, end: true });
+  const matchPath = useMatch({ path: resolvedPath.pathname, end: true });
+  const isHomePath = window.location.pathname === '/home' && to === '/last-update';
+    const isActive = matchPath || isHomePath;
   return (
     <Link to={to} {...props}>
       <li className={isActive ? "active" : ""}>{children}</li>

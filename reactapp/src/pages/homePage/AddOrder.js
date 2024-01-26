@@ -5,22 +5,17 @@ import AddLineItem from "./AddLineItem";
 import AddNoteItem from "./AddNoteItem";
 import ErrorModal from "../../components/ErrorModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheck,
-  faClose,
-  faAnglesUp,
-  faAnglesDown,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAnglesUp, faAnglesDown } from "@fortawesome/free-solid-svg-icons";
 import "./AddOrder.css";
 
 const AddOrder = () => {
   const [shipDate, setShipDate] = useState("");
-  const [items, setItems] = useState({});
+  const [items, setItems] = useState([]);
   const [notes, setNotes] = useState([]);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [tbd, setTBD] = useState(false);
-  const [matchingDims, setMatchingDims] = useState(false);
+  const [displayQuoteModal, setDisplayQuoteModal] = useState(false);
   const [suggestedDims, setSuggestedDims] = useState([]);
   const [showProductList, setShowProductList] = useState(false);
   const [productList, setProductList] = useState([]);
@@ -31,29 +26,35 @@ const AddOrder = () => {
 
   const handleGetQuote = async (e) => {
     e.preventDefault();
-    if (Object.keys(items).length === 0) {
+    if (items.length === 0) {
       setErrorMessage("Please add at least one item.");
       setShowErrorModal(true);
       return;
     }
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/fetch-matching-packages/",
+        `${process.env.REACT_APP_BACKEND_URL}/fetch-matching-packages/`,
         {
-          item_type_dict: items,
+          item_array: items,
         }
       );
       if (response.data.success) {
-        setMatchingDims(true);
+        setDisplayQuoteModal(true);
         const packagesArray = response.data.packages_array;
-        setSuggestedDims(packagesArray);
-      } else {
-        setErrorMessage({
-          main: "There are no suggested dimensions available.",
-          note: "Note: please make sure to use the full part number as per the 'Products' list below (not customer specific).",
+        const formattedPackagesArray = [];
+        packagesArray.forEach(function (item, index) {
+          formattedPackagesArray.push(
+            `Box ${index + 1}: ${item.dimensions} - ${item.weight} lb`
+          );
         });
-        setShowErrorModal(true);
-        setSuggestedDims([]);
+        setSuggestedDims(formattedPackagesArray);
+      } else {
+        setDisplayQuoteModal(true);
+        const noDimensionsMessage = [
+          "There are no suggested dimensions available.",
+          "Note: please make sure to use the full part number.",
+        ];
+        setSuggestedDims(noDimensionsMessage);
       }
     } catch (error) {
       console.error("Error fetching matching packages:", error);
@@ -85,7 +86,7 @@ const AddOrder = () => {
       setShowErrorModal(true);
       return;
     }
-    if (Object.keys(items).length === 0) {
+    if (items.length === 0) {
       setErrorMessage("Please add at least one item.");
       setShowErrorModal(true);
       return;
@@ -104,13 +105,15 @@ const AddOrder = () => {
       ship_date: formattedShipDate,
       delay_tbd: tbd,
       customer_name: customerName,
-      item_type_dict: items,
-      item_subtype_dict: items,
+      item_array: items,
       notes_array: notes,
       quote: quoteValue,
     };
     try {
-      await axios.post("http://127.0.0.1:8000/all-orders-create/", orderData);
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/all-orders-create/`,
+        orderData
+      );
       if (quoteValue === true) {
         setErrorMessage("Your quote has been added.");
         setSuggestedDims([]);
@@ -122,7 +125,7 @@ const AddOrder = () => {
       document.getElementById("add-order-form").reset();
       setShipDate("");
       setTBD(false);
-      setItems({});
+      setItems([]);
       setNotes([]);
     } catch (error) {
       setErrorMessage(
@@ -130,10 +133,13 @@ const AddOrder = () => {
       );
       setShowErrorModal(true);
     }
+    setDisplayQuoteModal(false);
   };
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/products/");
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/products/`
+      );
       setProductList(response.data.map((product) => product.item_name));
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -206,7 +212,7 @@ const AddOrder = () => {
                   setShowErrorModal={setShowErrorModal}
                   errorMessage={errorMessage}
                   setErrorMessage={setErrorMessage}
-                  setMatchingDims={setMatchingDims}
+                  setDisplayQuoteModal={setDisplayQuoteModal}
                 />
               </td>
             </tr>
@@ -240,15 +246,15 @@ const AddOrder = () => {
           </button>
         </div>
       </form>
-      {matchingDims && (
+      {displayQuoteModal && (
         <div className="suggested-dims-div">
           <h3>Suggested Dimensions</h3>
           <div id="line-item-quoted">
             <ul>
-              {Object.keys(items).map((itemName) => (
-                <li key={itemName}>
+              {items.map((item, index) => (
+                <li key={index}>
                   <div className="line-item-info">
-                    {itemName} - {items[itemName]}
+                    {item.name} {item.description} - Qty: {item.requested_qty}
                   </div>
                 </li>
               ))}
@@ -257,8 +263,8 @@ const AddOrder = () => {
           <table>
             <tbody>
               {suggestedDims.map((item, index) => (
-                <tr>
-                  Box {index + 1}: {item.dimensions} - {item.weight} lb
+                <tr key={index}>
+                  <td>{item}</td>
                 </tr>
               ))}
             </tbody>
@@ -288,6 +294,12 @@ const AddOrder = () => {
           </table>
         )}
       </div>
+      <ErrorModal
+        showErrorModal={showErrorModal}
+        setShowErrorModal={setShowErrorModal}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
