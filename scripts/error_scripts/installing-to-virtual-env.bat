@@ -8,10 +8,10 @@
 
 
 :: Activate Virtual Environment
-:: cd "%~dp0\.."
-:: cd  "..\venv\Scripts"
-:: activate.bat
-:: "%~dp0"
+@REM :: cd "%~dp0\.."
+@REM :: cd  "..\venv\Scripts"
+@REM :: activate.bat
+@REM :: "%~dp0"
 
 
 :: For first time app deployment
