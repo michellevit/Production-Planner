@@ -452,6 +452,8 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
 -Legal policy
 -Divide OrderCard into more components (for readability)
 -Rewrite all error/confirmation handling into consistent system wide singular Modal
+-Review Cors origins in settings.py
+-Separate frontend/backend in Heroku app demo (easier to update)
 
 
 -----------
