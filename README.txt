@@ -367,10 +367,12 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
 
 -----------
 13. Troubleshooting
-  - If a critical error email was received:
-    - Open the scripts/error_scripts/error-log.txt  
-    - Read the error-log.txt contents
-    - Delete the error-log once the problem is solved (manually or run script/error_scripts/clear-error-log.bat)
+- CORs / https issues? 
+  - Clear browser history + cache
+- If a critical error email was received:
+  - Open the scripts/error_scripts/error-log.txt  
+  - Read the error-log.txt contents
+  - Delete the error-log once the problem is solved (manually or run script/error_scripts/clear-error-log.bat)
 - If batch file debugging: 
   - Add " >> %errorLog% 2>&1" after python commands to get more error details
     - Example: python check_quickbooks.py >> %errorLog% 2>&1
