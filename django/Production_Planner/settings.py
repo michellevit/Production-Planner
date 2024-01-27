@@ -18,11 +18,6 @@ load_dotenv(find_dotenv())
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = ["*"]
-CORS_ALLOW_ALL_ORIGINS = True
-
-CORS_ALLOWED_ORIGINS = [
-    os.getenv("FRONTEND_URL"),  
-]
 
 # Application definition
 INSTALLED_APPS = [
@@ -39,14 +34,15 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
 
@@ -56,7 +52,7 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 20,
 }
 
-
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = "Production_Planner.urls"
 
@@ -99,6 +95,7 @@ else:
             "PORT": "3306",
         }
     }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -145,6 +142,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 LOGGING = {

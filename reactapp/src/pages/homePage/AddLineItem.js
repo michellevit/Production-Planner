@@ -39,7 +39,7 @@ const AddLineItem = ({
     let itemName, itemDescription;
     if (firstSpaceIndex === -1) {
       itemName = fullValue;
-      itemDescription = fullValue;
+      itemDescription = "";
     } else {
       itemName = fullValue.substring(0, firstSpaceIndex);
       itemDescription = fullValue.substring(firstSpaceIndex + 1);
