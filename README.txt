@@ -416,6 +416,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
 -----------
 14. To Do
 -Heroku: can't refresh on frontend pages (other than index.html)
+-Add page for Reports - Open Orders by Item/Customer
 -Redesign navigation (left sidebar)
 -Redesign 'Open Orders' + 'All Orders' (inspiration from SR)
 -Add 'invoiced' field/icon

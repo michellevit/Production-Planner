@@ -36,10 +36,14 @@ const AddDimensions = () => {
 
   const handleSubmitDimensions = async (event) => {
     event.preventDefault();
+    const roundedLength = parseFloat(parseFloat(packageLength).toFixed(3));
+    const roundedWidth = parseFloat(parseFloat(packageWidth).toFixed(3));
+    const roundedHeight = parseFloat(parseFloat(packageHeight).toFixed(3));
+
     const newDimension = {
-      length: parseFloat(packageLength),
-      width: parseFloat(packageWidth),
-      height: parseFloat(packageHeight),
+      length: roundedLength,
+      width: roundedWidth,
+      height: roundedHeight,
     };
     const isDuplicate = dimensions.some(
       (dimension) =>
@@ -53,16 +57,15 @@ const AddDimensions = () => {
       return;
     }
 
-
-    const formattedDimensions = `${packageLength}" x ${packageWidth}" x ${packageHeight}"`;
+    const formattedDimensions = `${roundedLength}" x ${roundedWidth}" x ${roundedHeight}"`;
     setPackageLength("");
     setPackageWidth("");
     setPackageHeight("");
     try {
       await axios.post(`${process.env.REACT_APP_BACKEND_URL}/dimensions/`, {
-        length: parseFloat(packageLength),
-        width: parseFloat(packageWidth),
-        height: parseFloat(packageHeight),
+        length: parseFloat(roundedLength),
+        width: parseFloat(roundedWidth),
+        height: parseFloat(roundedHeight),
         package_size: formattedDimensions,
       });
       setRefreshDimensions(true);
