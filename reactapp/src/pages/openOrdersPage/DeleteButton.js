@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import DeleteModal from "./DeleteModal";
@@ -6,10 +6,10 @@ import axios from "axios";
 
 const DeleteButton = ({ order, orders, setOrders, setIsRemoving }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  let isMounted = true;
+  const isMounted = useRef(true);
   useEffect(() => {
     return () => {
-      isMounted = false;
+      isMounted.current = false;
     };
   }, []);
 
@@ -48,8 +48,8 @@ const DeleteButton = ({ order, orders, setOrders, setIsRemoving }) => {
     setShowConfirmModal(false);
   };
   return (
-    <div id="delete-order-button">
-      <button onClick={handleClickDeleteButton}>
+    <div>
+      <button  id="delete-order-button" onClick={handleClickDeleteButton}>
         <FontAwesomeIcon icon={faClose} />
       </button>
       <DeleteModal

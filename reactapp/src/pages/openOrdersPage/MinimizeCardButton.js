@@ -4,8 +4,8 @@ import { faAnglesUp, faAnglesDown } from "@fortawesome/free-solid-svg-icons";
 
 const MinimizeCardButton = ({ minimized, toggleMinimize }) => {
   return (
-    <div id="minmax-button">
-        <button onClick={toggleMinimize}>
+    <div>
+        <button id="minmax-button" onClick={toggleMinimize}>
           <FontAwesomeIcon icon={minimized ? faAnglesDown : faAnglesUp} />
         </button>
     </div>

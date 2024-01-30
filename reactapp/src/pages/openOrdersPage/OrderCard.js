@@ -22,6 +22,7 @@ const OrderCard = ({
   setErrorMessage,
   minimizeMaximizeAction,
 }) => {
+  const [refreshOrders, setRefreshOrders] = useState(false);
   const [shipDate, setShipDate] = useState("");
   const [confirmedStatus, setConfirmedStatus] = useState(false);
   const [delayDate, setDelayDate] = useState();
@@ -42,16 +43,8 @@ const OrderCard = ({
   useEffect(() => {
     fetchOrderDetails();
     getOrderCardBackground();
-  }, [
-    order.id,
-    shipDate,
-    confirmedStatus,
-    tbdStatus,
-    delayDate,
-    isQuote,
-    readyStatus,
-    minimizeMaximizeAction,
-  ]);
+    setRefreshOrders(false);
+  }, [order.id, shipDate, refreshOrders, isQuote, minimizeMaximizeAction]);
 
   const fetchOrderDetails = async () => {
     try {
@@ -60,24 +53,24 @@ const OrderCard = ({
       );
       if (response.data) {
         const {
-          ready,
-          quote,
           ship_date,
           confirmed,
           delay_date,
           delay_tbd,
           packages_array,
           notes_array,
+          quote,
+          ready,
           item_array_hash,
         } = response.data;
         setConfirmedStatus(confirmed);
         const formattedDelayDate = delay_date ? parseISO(delay_date) : null;
         setDelayDate(formattedDelayDate);
         setTBDStatus(delay_tbd);
-        setBoxes(boxes);
+        setBoxes(packages_array);
         setNotes(notes_array);
-        setReadyStatus(ready);
         setIsQuote(quote);
+        setReadyStatus(ready);
         const minimizedStatus = localStorage.getItem(
           `order_minimized_${order.id}`
         );
@@ -124,6 +117,8 @@ const OrderCard = ({
   const getOrderCardBackground = () => {
     if (order.quote) {
       setOrderCardBackground("quoted-order-card");
+    } else if (delayDate !== null && confirmedStatus) {
+      setOrderCardBackground("confirmed-order-card");
     } else if (delayDate !== null || tbdStatus) {
       setOrderCardBackground("delayed-order-card");
     } else if (readyStatus) {
@@ -183,6 +178,7 @@ const OrderCard = ({
     } catch (error) {
       console.error("Error updating order:", error);
     }
+    setRefreshOrders(true);
   };
 
   const editHandler = async () => {
@@ -193,14 +189,17 @@ const OrderCard = ({
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         {
           ...order,
-          ready: false,
+          ready: true,
           confirmed: true,
+          delay_date: null,
+          delay_tbd: false,
           packages_array: boxes,
         }
       );
     } catch (error) {
       console.error("Error updating order:", error);
     }
+    setRefreshOrders(true);
   };
 
   const shippedHandler = async () => {
@@ -210,6 +209,7 @@ const OrderCard = ({
     const month = String(currentDate.getMonth() + 1).padStart(2, "0");
     const day = String(currentDate.getDate()).padStart(2, "0");
     const formattedCurrentDate = `${year}-${month}-${day}`;
+    setIsRemoving(true);
     try {
       await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
@@ -230,6 +230,7 @@ const OrderCard = ({
     } catch (error) {
       console.error("Error updating order:", error);
     }
+    setRefreshOrders(true);
   };
 
   const updateDelayDate = async (date) => {
@@ -251,6 +252,7 @@ const OrderCard = ({
     } catch (error) {
       console.error("Error updating order:", error);
     }
+    setRefreshOrders(true);
   };
 
   const checkTBD = async (tbdBoolean) => {
@@ -268,6 +270,7 @@ const OrderCard = ({
     } catch (error) {
       console.error("Error updating order:", error);
     }
+    setRefreshOrders(true);
   };
 
   const handleTBD = async () => {
@@ -293,26 +296,24 @@ const OrderCard = ({
     } catch (error) {
       console.error("Error updating order:", error);
     }
+    setRefreshOrders(true);
   };
 
   const handleConfirmed = async () => {
     let newStatus = !confirmedStatus;
     setConfirmedStatus(newStatus);
-    setDelayDate(null);
-    setTBDStatus(false);
     try {
       await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         {
           ...order,
           confirmed: newStatus,
-          delay_tbd: false,
-          delay_date: null,
         }
       );
     } catch (error) {
       console.error("Error updating order:", error);
     }
+    setRefreshOrders(true);
   };
 
   const boxFormHandler = () => {
@@ -364,17 +365,22 @@ const OrderCard = ({
   };
 
   return (
-    <div className={`card-container ${orderCardBackground}`}>
+    <div
+      className={`card-container ${orderCardBackground} ${
+        isRemoving ? "card-container-fade-out" : ""
+      }`}
+    >
       <div className="row" id="row1">
         <div id="row1-row1">
           <div id="row1col1"></div>
           <div className="order-number-container" id="row1col2">
             <div className="order-number-text">
-              {order.quote ? "Quote#" : <span>&nbsp;&nbsp;&nbsp;</span>} {order.order_number}
+              {order.quote ? "Quote#" : <span>&nbsp;&nbsp;&nbsp;</span>}{" "}
+              {order.order_number}
               <MinimizeCardButton
-              minimized={minimized}
-              toggleMinimize={toggleMinimize}
-            />
+                minimized={minimized}
+                toggleMinimize={toggleMinimize}
+              />
             </div>
           </div>
           <div id="row1col3">

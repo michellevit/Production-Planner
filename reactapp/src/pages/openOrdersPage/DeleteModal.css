@@ -25,12 +25,13 @@
     text-align: center;
   }
   
-  .modal-buttons {
+  .delete-modal-buttons {
     margin-top: 20px;
+
   }
   
-  .confirm-button,
-  .cancel-button {
+  .delete-modal-confirm-button,
+  .delete-modal-cancel-button {
     margin: 0 10px;
     padding: 8px 16px;
     border: none;
@@ -38,13 +39,19 @@
     cursor: pointer;
   }
   
-  .confirm-button {
+  .delete-modal-confirm-button {
     background-color: #ff5555;
     color: white;
   }
   
-  .cancel-button {
+  .delete-modal-cancel-button {
     background-color: #777777;
     color: white;
   }
   
+
+
+
+
+
+
