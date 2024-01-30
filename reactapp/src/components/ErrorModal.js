@@ -10,10 +10,6 @@ const ErrorModal = ({
   if (!showErrorModal) {
     return null;
   }
-  const formattedErrorMessage =
-    typeof errorMessage === "string"
-      ? errorMessage
-      : JSON.stringify(errorMessage);
   const handleClickOK = () => {
     setShowErrorModal(false);
     setErrorMessage("");

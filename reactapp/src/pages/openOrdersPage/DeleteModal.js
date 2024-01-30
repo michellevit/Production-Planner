@@ -14,11 +14,11 @@ const DeleteModal = ({ show, handleConfirmDelete, handleCancelDelete, order }) =
               ? `Are you sure you want to delete SO#${order.order_number}?`
               : "Are you sure you want to delete this order?"}
           </p>
-          <div className="modal-buttons">
-            <button className="confirm-button" onClick={handleConfirmDelete}>
+          <div className="delete-modal-buttons">
+            <button className="delete-modal-confirm-button" onClick={handleConfirmDelete}>
               Yes
             </button>
-            <button className="cancel-button" onClick={handleCancelDelete}>
+            <button className="delete-modal-cancel-button" onClick={handleCancelDelete}>
               No
             </button>
           </div>
@@ -29,3 +29,5 @@ const DeleteModal = ({ show, handleConfirmDelete, handleCancelDelete, order }) =
 };
 
 export default DeleteModal;
+
+
