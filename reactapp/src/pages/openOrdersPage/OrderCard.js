@@ -117,8 +117,6 @@ const OrderCard = ({
   const getOrderCardBackground = () => {
     if (order.quote) {
       setOrderCardBackground("quoted-order-card");
-    } else if (delayDate !== null && confirmedStatus) {
-      setOrderCardBackground("confirmed-order-card");
     } else if (delayDate !== null || tbdStatus) {
       setOrderCardBackground("delayed-order-card");
     } else if (readyStatus) {
@@ -189,7 +187,7 @@ const OrderCard = ({
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         {
           ...order,
-          ready: true,
+          ready: false,
           confirmed: true,
           delay_date: null,
           delay_tbd: false,
@@ -257,14 +255,12 @@ const OrderCard = ({
 
   const checkTBD = async (tbdBoolean) => {
     setTBDStatus(tbdBoolean);
-    setConfirmedStatus(false);
     try {
       await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         {
           ...order,
           delay_tbd: tbdBoolean,
-          confirmed: false,
         }
       );
     } catch (error) {
@@ -275,11 +271,12 @@ const OrderCard = ({
 
   const handleTBD = async () => {
     let newStatus = !tbdStatus;
-    setConfirmedStatus(false);
     if (newStatus === false && order.ship_date === null) {
       newStatus = true;
+      setConfirmedStatus(false);
     } else if (newStatus === false && order.ship_date !== null) {
       newStatus = false;
+      setConfirmedStatus(false);
     }
     setTBDStatus(newStatus);
     setDelayDate(null);
@@ -302,12 +299,18 @@ const OrderCard = ({
   const handleConfirmed = async () => {
     let newStatus = !confirmedStatus;
     setConfirmedStatus(newStatus);
+    if (newStatus === true) {
+      setDelayDate(null);
+      setTBDStatus(false);
+    }
     try {
       await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         {
           ...order,
           confirmed: newStatus,
+          delay_date: null,
+          delay_tbd: false,
         }
       );
     } catch (error) {
