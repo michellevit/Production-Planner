@@ -40,11 +40,51 @@ const OrderCard = ({
     const minimizedStatus = localStorage.getItem(`order_minimized_${order.id}`);
     return minimizedStatus ? JSON.parse(minimizedStatus) : true;
   });
-  useEffect(() => {
-    fetchOrderDetails();
-    getOrderCardBackground();
-    setRefreshOrders(false);
-  }, [order.id, shipDate, refreshOrders, isQuote, minimizeMaximizeAction]);
+
+  const getOrderCardBackground = () => {
+    const fShipDate = new Date(shipDate);
+    const fDelayDate = new Date(delayDate);
+    if (isQuote) {
+      setOrderCardBackground("quoted-order-card");
+    } else if (delayDate !== null && fShipDate > fDelayDate) {
+      setOrderCardBackground("delayed-order-card");
+    } else if (tbdStatus) {
+      setOrderCardBackground("delayed-order-card");
+    } else if (readyStatus) {
+      setOrderCardBackground("ready-order-card");
+    } else if (confirmedStatus) {
+      setOrderCardBackground("confirmed-order-card");
+    } else {
+      setOrderCardBackground("default-order-card");
+    }
+  };
+
+  function formatDate(inputDate) {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const dateParts = inputDate.split("-");
+    const year = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10) - 1;
+    const day = parseInt(dateParts[2], 10);
+    const dateObj = new Date(Date.UTC(year, month, day));
+    const formattedDate = `${
+      months[dateObj.getUTCMonth()]
+    } ${dateObj.getUTCDate()}, ${dateObj.getUTCFullYear()}`;
+    return formattedDate;
+  }
+
 
   const fetchOrderDetails = async () => {
     try {
@@ -114,45 +154,21 @@ const OrderCard = ({
     }
   };
 
-  const getOrderCardBackground = () => {
-    if (order.quote) {
-      setOrderCardBackground("quoted-order-card");
-    } else if (delayDate !== null || tbdStatus) {
-      setOrderCardBackground("delayed-order-card");
-    } else if (readyStatus) {
-      setOrderCardBackground("ready-order-card");
-    } else if (confirmedStatus) {
-      setOrderCardBackground("confirmed-order-card");
-    } else {
-      setOrderCardBackground("default-order-card");
-    }
-  };
 
-  function formatDate(inputDate) {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const dateParts = inputDate.split("-");
-    const year = parseInt(dateParts[0], 10);
-    const month = parseInt(dateParts[1], 10) - 1;
-    const day = parseInt(dateParts[2], 10);
-    const dateObj = new Date(Date.UTC(year, month, day));
-    const formattedDate = `${
-      months[dateObj.getUTCMonth()]
-    } ${dateObj.getUTCDate()}, ${dateObj.getUTCFullYear()}`;
-    return formattedDate;
-  }
+
+
+  useEffect(() => {
+    fetchOrderDetails();
+    setRefreshOrders(false);
+  }, [order.id, refreshOrders, minimizeMaximizeAction]);
+
+
+  useEffect(() => {
+    getOrderCardBackground();
+  }, [isQuote, delayDate, shipDate, tbdStatus, readyStatus, confirmedStatus]);
+  
+
+
 
   const readyHandler = async () => {
     setReadyStatus(true);
