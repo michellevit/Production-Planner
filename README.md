@@ -22,11 +22,11 @@ A web application intended to streamline the sales-shipping process in a manufac
 - [First-Time Setup](#first-time-setup)
 - [First-Time Setup - Development](#setup-development)
 - [First-Time Setup - Production](#setup-production)
-- [How To Start The App](#how-to-start-app)
-- [How To Use The App](#how-to-use-app)
+- [How To Start the App](#how-to-start-app)
+- [How To Use the App](#how-to-use-app)
 - [How To Backup the Database](#backup-database)
 - [How To Restore the Database](#restore-database)
-- [How To Clear The Database](#clear-database)
+- [How To Clear the Database](#clear-database)
 - [How To Fetch Updates from GitHub](#fetch-updates)
 - [How to Update Docker](#how-to-update-docker)
 - [Troubleshooting](#troubleshooting)
@@ -208,7 +208,7 @@ A web application intended to streamline the sales-shipping process in a manufac
 - NOTE: the start-scheduled-task.bat does not run via Windows Task Scheduler because to run QODBC via the Task Scheduler requires the (paid) QODBC Remote version
 
 
-## How To Start The App<a name="how-to-start-app"></a>
+## How To Start the App<a name="how-to-start-app"></a>
   * Note: it may take several minutes for the frontend to load (approx. 6 minutes)
 - In PRODUCTION:
   - Option 1 (via batch file - scheduled updates every 2 mins, Mon-Fri 6AM-6PM):
@@ -236,7 +236,7 @@ A web application intended to streamline the sales-shipping process in a manufac
     - Run: npm start
 
 
-## How To Use The App<a name="how-to-use-app"></a>
+## How To Use the App<a name="how-to-use-app"></a>
 - Open the browser:
   - Frontend: open the browser to http://000:000:0:000/3000/ (use IP address set in .env file or 'localhost' instead of '0:0:0:0')
   - Backend: open the browser to http://000:000:0:000/8000/ (use IP address set in .env file or 'localhost' instead of '0:0:0:0')
@@ -255,20 +255,13 @@ A web application intended to streamline the sales-shipping process in a manufac
     - To modify working hours period: go to scripts/scheduled_task_executor.py file + adjust the 'Schedule Global Variables'
 
 
-----------
-9. How To Backup The Database + Restore (for Production mode)
+## How To Backup the Database<a name="backup-database"></a>
  * Note: The backup-database.bat script will delete old backups, keeping only the 10 most recent backups
  * Note: The backup-database.bat file is scheduled to run at 6AM each week day
  * Note: the Docker container must be running to backup and/or restore
 - To backup the database:
   - In the project's root directory, double click the 'backup-database.bat' file
   - The backup will be saved in the 'db-backups' folder
-- To restore from the most recent backup:
-  - Go to the scripts/error_scripts folder
-  - Double-click the 'restore-database-from-latest-backup.bat' 
-  - A command prompt will appear with the name/date of the latest backup and ask if you are sure you want to restore
-    - Type "Y" and press enter (to confirm and restore the database)
-    - Close the prompt
 - To disable the automated backup
   - Open Windows' Task Scheduler program (on the computer running the app)
   - Highlight the Task named "Production-Planner-Backup-Database-Batch-Task"
@@ -278,8 +271,16 @@ A web application intended to streamline the sales-shipping process in a manufac
     - Go to the Triggers tab, select the trigger and select the 'Edit..' button 
 
 
-----------
-10. How To Clear The Database
+## How To Restore the Database<a name="restore-database"></a>
+- To restore to the most recent backup:
+  - Go to the scripts/error_scripts folder
+  - Double-click the 'restore-database-from-latest-backup.bat' 
+  - A command prompt will appear with the name/date of the latest backup and ask if you are sure you want to restore
+    - Type "Y" and press enter (to confirm and restore the database)
+    - Close the prompt
+
+
+## How To Clear the Database<a name="clear-database"></a>
 - Option 1: 
   * To delete entries via Django Admin Interface (works in both Production/MySQL or Development/SQLite)
   - Go to http://localhost:8000/admin
@@ -302,8 +303,7 @@ A web application intended to streamline the sales-shipping process in a manufac
   - Exit the container shell: exit
 
 
------------
-11. How To Fetch Updates from GitHub
+## How To Fetch Updates from GitHub<a name="fetch-updates"></a>
 - Open a Terminal and navigate to the Production-Planner directory
 - Select the main branch: git checkout main
 - Run: git pull origin main
@@ -317,8 +317,7 @@ A web application intended to streamline the sales-shipping process in a manufac
     - Run: docker image prune -f
 
 
------------
-12. How to Update Docker Container / Database
+## How To Update Docker<a name="how-to-update-docker"></a>
 - If changes were made to the entire app in VSCode:
   -Automated way:
     - Go to scripts/docker_scripts
@@ -344,8 +343,7 @@ A web application intended to streamline the sales-shipping process in a manufac
   - Run: docker exec -it production-planner-backend-1 python manage.py collectstatic --noinput
 
 
------------
-13. Troubleshooting
+## Troubleshooting<a name="troubleshooting"></a>
 - CORs / https issues? 
   - Clear browser history + cache
 - If a critical error email was received:
@@ -392,52 +390,50 @@ A web application intended to streamline the sales-shipping process in a manufac
   - Try to rebuild/up the container: scripts/docker-scripts/docker-compose-reset-container.bat
 
 
------------
-14. To Do
--Heroku: can't refresh on frontend pages (other than index.html)
--Redesign navigation (left sidebar)
--Redesign 'Open Orders' + 'All Orders' (inspiration from SR)
--Add 'invoiced' field/icon
--Add more edit options on All Orders page (e.g. add note, add dimensions)
--Add option to specify who wrote the note + if it was acknowledged
--Handle error: someone inputs same item in 2 diff line items (give item dicts an id field)
--Deleted order functionality (Recycle Bin tab w/ recently deleted orders + auto delete after 1 month)
--Don't hardcode PST -> change UTC and then page to specify timezone in frontend (e.g. Django settings, python scheduler, models, views, error scripts, etc)
--Handle backorders solely with previously_invoiced_items field (current way is specific to GTC custom QB template)
--Allow users to choose which backup to restore to
--Automatic backup should occur with Python, not Windows Task Scheduler
--Make program run on it's own, instead of browser - e.g. Electron or NW.js
--- Fix how filters are saved instead of saving in chrome memory
--Create an installer package (Inno Setup or Advanced Installer)
--New 'Settings' page: 
--- Set environment variables
--- Set administrator email (for error notifications)
--- Turn on/off sync
--- Set sync hours
--- Set automatic database backup time
--- Option to create a backup
--- Option to restore from backup (+ select which backup to restore to)
--- Display error/process log
--- Page to map custom fields (backorders, etc)
--- Shipping account details
--Figure out how to push updates to separate users 
--Secure data (+ keep data local)
--Integrate shipping UPS/FedEx, and options for USMCA forms, B13, etc
--Integrate products from QB directly to software (so you can map items per box)
--Add tracking number to orders + automaticcally add dimensions/weight/tracking no./arrival, etc to orders (QODBC paid version for write capabilities)
--Make it so tracking data can easily get added to invoice emails
--Licesnse key for software licensing
--Trial period
--Website with user authentification (login) for subscription management
--Payment processing integration
--Customer support
--Legal policy
--Divide OrderCard into more components (for readability)
--Rewrite all error/confirmation handling into consistent system wide singular Modal
--Review Cors origins in settings.py
--Separate frontend/backend in Heroku app demo (easier to update)
+## To Do<a name="to-do"></a>
+- Heroku: can't refresh on frontend pages (other than index.html)
+- Redesign navigation (left sidebar)
+- Redesign 'Open Orders' + 'All Orders' (inspiration from SR)
+- Add 'invoiced' field/icon
+- Add more edit options on All Orders page (e.g. add note, add dimensions)
+- Add option to specify who wrote the note + if it was acknowledged
+- Handle error: someone inputs same item in 2 diff line items (give item dicts an id field)
+- Deleted order functionality (Recycle Bin tab w/ recently deleted orders + auto delete after 1 month)
+- Don't hardcode PST -> change UTC and then page to specify timezone in frontend (e.g. Django settings, p python scheduler, models, views, error scripts, etc)
+- Handle backorders solely with previously_invoiced_items field (current way is specific to GTC custom QB template)
+- Allow users to choose which backup to restore to
+- Automatic backup should occur with Python, not Windows Task Scheduler
+- Make program run on it's own, instead of browser - e.g. Electron or NW.js
+  - Fix how filters are saved instead of saving in chrome memory
+- Create an installer package (Inno Setup or Advanced Installer)
+- New 'Settings' page: 
+  - Set environment variables
+  - Set administrator email (for error notifications)
+  - Turn on/off sync
+  - Set sync hours
+  - Set automatic database backup time
+  - Option to create a backup
+  - Option to restore from backup (+ select which backup to restore to)
+  - Display error/process log
+  - Page to map custom fields (backorders, etc)
+  - Shipping account details
+- Figure out how to push updates to separate users 
+- Secure data (+ keep data local)
+- Integrate shipping UPS/FedEx, and options for USMCA forms, B13, etc
+- Integrate products from QB directly to software (so you can map items per box)
+- Add tracking number to orders + automaticcally add dimensions/weight/tracking no./arrival, etc to orders (QODBC paid version for write capabilities)
+- Make it so tracking data can easily get added to invoice emails
+- Licesnse key for software licensing
+- Trial period
+- Website with user authentification (login) for subscription management
+- Payment processing integration
+- Customer support
+- Legal policy
+- Divide OrderCard into more components (for readability)
+- Rewrite all error/confirmation handling into consistent system wide singular Modal
+- Review Cors origins in settings.py
+- Separate frontend/backend in Heroku app demo (easier to update)
 
 
------------
-15. Credits
+## Credits<a name="credits"></a>
 Michelle Flandin
