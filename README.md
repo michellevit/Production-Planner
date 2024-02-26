@@ -1,8 +1,8 @@
 # Production Planner
 
 
-![Python Version](https://img.shields.io/badge/python-3.10.4-blue.svg)
 ![Django Version](https://img.shields.io/badge/django-4.0.3-green.svg)
+![Python Version](https://img.shields.io/badge/python-3.10.4-blue.svg)
 ![React Version](https://img.shields.io/badge/react-18.2.0-blue.svg)
 ![MySQL](https://img.shields.io/badge/Database-MySQL-blue.svg)
 ![Docker](https://img.shields.io/badge/Platform-Docker-blue.svg)
@@ -10,7 +10,7 @@
 
 This project is a web application intended to streamline the sales-shipping process in a manufacturing setting.
 
-<a href="https://production-planner.michellef.dev/api" target="_blank"><img src="https://img.shields.io/badge/Demo-Backend-red?style=for-the-badge&logo=ruby"></a>
+<a href="https://production-planner.michellef.dev/api" target="_blank"><img src="https://img.shields.io/badge/Demo-red?style=for-the-badge&logo=ruby"></a>
 
 
 ## Table of Contents
