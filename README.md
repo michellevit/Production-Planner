@@ -27,7 +27,7 @@ A web application intended to streamline the sales-shipping process in a manufac
 - [How To Backup the Database](#backup-database)
 - [How To Restore the Database](#restore-database)
 - [How To Clear the Database](#clear-database)
-- [How To Fetch Updates from GitHub](#fetch-updates)
+- [How To Fetch Updates From GitHub](#fetch-updates)
 - [How to Update Docker](#how-to-update-docker)
 - [Troubleshooting](#troubleshooting)
 - [To Do](#to-do)
@@ -70,7 +70,6 @@ A web application intended to streamline the sales-shipping process in a manufac
 - **Invest in Automated Testing from the Start:** While tests were added progressively, having a comprehensive test suite from the beginning would have reduced bugs in production and facilitated refactoring and feature additions.
 
 
-----------
 ## First-Time Setup<a name="first-time-setup"></a>
 - Install Git: 
   - Download the Git installer for Windows: https://git-scm.com/download/win
@@ -303,7 +302,7 @@ A web application intended to streamline the sales-shipping process in a manufac
   - Exit the container shell: exit
 
 
-## How To Fetch Updates from GitHub<a name="fetch-updates"></a>
+## How To Fetch Updates From GitHub<a name="fetch-updates"></a>
 - Open a Terminal and navigate to the Production-Planner directory
 - Select the main branch: git checkout main
 - Run: git pull origin main
