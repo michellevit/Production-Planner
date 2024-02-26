@@ -8,7 +8,7 @@
 ![Docker](https://img.shields.io/badge/Platform-Docker-blue.svg)
 
 
-This project is a web application intended to streamline the sales-shipping process in a manufacturing setting.
+A web application intended to streamline the sales-shipping process in a manufacturing setting.
 
 <a href="https://production-planner-demo.michellef.dev" target="_blank"><img src="https://img.shields.io/badge/Demo-red?style=for-the-badge"></a>
 
@@ -53,10 +53,25 @@ This project is a web application intended to streamline the sales-shipping proc
 
 
 ## Architectural Decisions<a name="architectural-decisions"></a>
+- **Django and Django Rest Framework for the Backend:** Given Django's robust security features and the Django Rest Framework's powerful serialization capabilities, this combination was chosen to expedite API development and ensure data integrity.
+- **React for the Frontend:** React's component-based architecture enhances the user interface's responsiveness and facilitates the development of a dynamic, single-page application.
+- **Docker for Containerization:** To simplify deployment and ensure consistency across development, testing, and production environments, Docker was chosen. It allows for easy setup and scalability of the application.
+- **MySQL and SQLite:** MySQL is used in production for its scalability and reliability. For development, SQLite is used for its simplicity and ease of configuration, speeding up the initial setup and testing phases.
+
+
+## What I Learned<a name="what-i-learned"></a>
+- **The Importance of Database Design:** Proper normalization and indexing strategies in MySQL significantly improved query performance, especially when handling complex joins and aggregations necessary for production planning.
+- **Efficient Error Handling:** Implementing centralized error handling and logging mechanisms has streamlined troubleshooting and monitoring, making the application more robust against failures.
+- **The Power of Continuous Integration/Continuous Deployment (CI/CD):** Automating the build, test, and deployment processes with Docker and GitHub Actions has reduced manual errors and sped up the release cycle.
+
+
+## What I Would Do Differently<a name="what-i-would-do-differently"></a>
+- **Start with a Comprehensive Requirement Analysis:** Initially, some user requirements were not fully understood, leading to feature adjustments late in the development process. A more thorough upfront requirement gathering could have mitigated this.
+- **Invest in Automated Testing from the Start:** While tests were added progressively, having a comprehensive test suite from the beginning would have reduced bugs in production and facilitated refactoring and feature additions.
 
 
 ----------
-4. First-Time Setup
+## First-Time Setup<a name="first-time-setup"></a>
 - Install Git: 
   - Download the Git installer for Windows: https://git-scm.com/download/win
 - Open a PowerShell Terminal (if using VSCode make sure to close + open VSCode after installing Git to apply path changes)
@@ -85,11 +100,10 @@ This project is a web application intended to streamline the sales-shipping proc
   - Run: cd C:\path\to\project\Production-Planner
   - Run: .\venv\Scripts\activate
   - Run: pip install -r requirements.txt
- Follow instructions for 'Preparing To Run In Development' OR 'Preparing To Deploy In Production'
+ Follow instructions for 'First-Time Setup - Development' OR 'First-Time Setup - Production'
 
 
-----------
-5. Preparing To Run In Development
+## First-Time Setup - Devlopment<a name="setup-development"></a>
 - Go to the file django/Production_Planner/settings.py:
   - Change 'DEVELOPMENT_MODE' to True
     - This will switch the database to SQLite (unlike MySQL which requires Docker container to run)
@@ -114,8 +128,7 @@ This project is a web application intended to streamline the sales-shipping proc
   - To access Django's admin interface - go to broswer url: http://localhost:8000/admin
 
 
-----------
-6. Preparing To Deploy In Production
+## First-Time Setup - Production<a name="setup-production"></a>
 - Go to the file django/Production_Planner/settings.py
   - Change 'DEVELOPMENT_MODE' to False
     - This will switch the database to MySQL (unlike SQLite which does not require Docker, but is less robust for production)
@@ -195,8 +208,7 @@ This project is a web application intended to streamline the sales-shipping proc
 - NOTE: the start-scheduled-task.bat does not run via Windows Task Scheduler because to run QODBC via the Task Scheduler requires the (paid) QODBC Remote version
 
 
-----------
-7. How To Start/Stop The Program
+## How To Start The App<a name="how-to-start-app"></a>
   * Note: it may take several minutes for the frontend to load (approx. 6 minutes)
 - In PRODUCTION:
   - Option 1 (via batch file - scheduled updates every 2 mins, Mon-Fri 6AM-6PM):
@@ -224,8 +236,7 @@ This project is a web application intended to streamline the sales-shipping proc
     - Run: npm start
 
 
-----------
-8. How To Use The Program
+## How To Use The App<a name="how-to-use-app"></a>
 - Open the browser:
   - Frontend: open the browser to http://000:000:0:000/3000/ (use IP address set in .env file or 'localhost' instead of '0:0:0:0')
   - Backend: open the browser to http://000:000:0:000/8000/ (use IP address set in .env file or 'localhost' instead of '0:0:0:0')
