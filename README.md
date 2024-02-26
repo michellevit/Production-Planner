@@ -1,90 +1,58 @@
-Project Title: Production Planner
+# Production Planner
 
 
-----------
-Table of Contents: 
-1. Project Description
-2. Features
-3. Technologies Used
-4. First-Time Setup
-5. Preparing To Run In Development
-6. Preparing To Deploy In Production
-7. How To Start The Program
-8. How To Use The Program
-9. How To Backup The Database + Restore (for Production mode)
-10. How To Clear The Database
-11. How To Fetch Updates from GitHub
-12. How to Update Docker Container / Database
-13. General Troubleshooting
-14. To Do
-15. Credits
+![Python Version](https://img.shields.io/badge/python-3.10.4-blue.svg)
+![Django Version](https://img.shields.io/badge/django-4.0.3-green.svg)
+![React Version](https://img.shields.io/badge/react-18.2.0-blue.svg)
+![MySQL](https://img.shields.io/badge/Database-MySQL-blue.svg)
+![Docker](https://img.shields.io/badge/Platform-Docker-blue.svg)
 
 
-----------
-1. Project Description
-Summary: To help coordinate the sales-production-shipping process for orders (in a manufacturing environment).
-- Overview: 
-  - Every day new orders are entered into QuickBooks and (typically) must be shipped ASAP 
-  - This involves significant back-and-forth between the Sales Team and Production Team, and Shipping Team
-  - Here is the workflow sequence when using the Production Planner:
-    - The Sales Team enters new orders into QuickBooks as they are received throughout the day
-    - The Production Planner continuously checks for updates to the Open Orders in QuickBooks
-    - The Production Planner displays the Open Orders via the browser, and updates as orders are added or changes are made to the Orders in QuickBooks
-    - The Production Team can filter the orders by date/status and plan production tasks accordingly
-    - The Sales Team can immediately see which orders are confirmed/delayed, and update customers if necessary
-    - The Production team can add shipping information as orders become ready (i.e. package dimensions/weight, notes, etc)
-    - The Shipping Team can see when an order is ready, and use the added package information to prepare shipments accordingly (waybills, documents, freight-forwarding)
-- Original Problem:
-  - The original sales-to-shipping process involved several periods of waiting for information and then rushing to complete the task once the information became available
-  - Here is the workflow sequence when NOT using the Production Planner:
-    - The Sales Team receives orders (throughout the day) and enters them into QuickBooks
-    - The Sales Team prints a daily 'Open Order' Report for the Production Team 
-    - The Production Team reviews the orders and the current inventory, then decides which can be shipped 
-    - The Production Team prepares the orders which can be shipped
-    - The Production Team writes the dimensions/weight of each package on the printed Order Report
-    - The Production Team scans the Order Report to a shared folder for the Shipping Team
-    - The Shipping Team prepares each shipment (labels and documents)
-    - The courier pickup occurs in the afternoon - any order not ready before the pickup is delayed
-- App's Benefits: 
-  - A continuous flow of information 
-  - Smoother working pace
-  - Better communication between teams
-  - Sales Team Benefits:
-    - Improved customer service due to faster notice of order delays
-    - No need to create and physically print the order report everyday (less work, less paper, less printer issues)
-  - Production Team benefits:
-    - Access to the current Open Order information continuously
-    - More efficient batching of production tasks
-    - Less manual quoting of orders (dimensions/weights can be predicted based on previous database entries)
-  -Shipping Team Benefits:
-    - No mistakes due to misinterpretation of handwritten package dimensions
-    - Package information can be copy-pasted into QuickBooks Sales Order notes
-    - More time to prepare orders before courier pickup
-    - Less costly mistakes due to rushing (shipping requires meticulous data entry)
+This project is a web application intended to streamline the sales-shipping process in a manufacturing setting.
+
+<a href="https://production-planner.michellef.dev/api" target="_blank"><img src="https://img.shields.io/badge/Demo-Backend-red?style=for-the-badge&logo=ruby"></a>
 
 
-----------
-2. Features
-- Batch file to start the application
-- In-process scheduler (Python) for continuous data retrieval from QuickBooks to Production-Planner database
-- Windows Task Scheduler for automatic daily backups
+## Table of Contents
+- [Technologies Used](#technologies-used)
+- [Features](#features)
+- [Architectural Decisions](#architectural-decisions)
+- [What I Learned](#what-i-learned)
+- [What I Would Do Differently](#what-i-would-do-differently)
+- [First-Time Setup](#first-time-setup)
+- [First-Time Setup - Development](#setup-development)
+- [First-Time Setup - Production](#setup-production)
+- [How To Start The App](#how-to-start-app)
+- [How To Use The App](#how-to-use-app)
+- [How To Backup the Database](#backup-database)
+- [How To Restore the Database](#restore-database)
+- [How To Clear The Database](#clear-database)
+- [How To Fetch Updates from GitHub](#fetch-updates)
+- [How to Update Docker](#how-to-update-docker)
+- [Troubleshooting](#troubleshooting)
+- [To Do](#to-do)
+- [Credits](#credits)
+
+
+## Technologies Used<a name="technologies-used"></a>
+- Python
+- Django
+- React
+- MySQL (Production)
+- SQLite (Development)
+- Docker
+
+
+## Features<a name="features"></a>
+- In-process scheduling (Python) for continuous data retrieval from QuickBooks (via QODBC) to Production-Planner database
 - Instant error notification emails for critical application/backup errors
+- Stored package data for instant new order dimension/weight estimates
 - Server-Sent Events (SSE) for continuous updates between database and frontend
 - Database indexing and backend Pagination for quick order filtering
 - Hashing of order items for quick package dimensions/weight quotes (when available)
 
 
-----------
-3. Technologies Used
-- Django Rest Framework
-- Python
-- JavaScript
-- React
-- HTML/CSS
-- JSON
-- MySQL (Production)
-- SQLite (Development)
-- Docker
+## Architectural Decisions<a name="architectural-decisions"></a>
 
 
 ----------
