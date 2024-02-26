@@ -140,7 +140,7 @@
   flex-direction: row;
 }
 
-.card-container #minmax-button button, .card-container #delete-order-button button {
+.card-container #minmax-button, .card-container #delete-order-button {
   background: transparent;
   border: none;
   color:  white;

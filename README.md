@@ -335,10 +335,12 @@ This project is a web application intended to streamline the sales-shipping proc
 
 -----------
 13. Troubleshooting
-  - If a critical error email was received:
-    - Open the scripts/error_scripts/error-log.txt  
-    - Read the error-log.txt contents
-    - Delete the error-log once the problem is solved (manually or run script/error_scripts/clear-error-log.bat)
+- CORs / https issues? 
+  - Clear browser history + cache
+- If a critical error email was received:
+  - Open the scripts/error_scripts/error-log.txt  
+  - Read the error-log.txt contents
+  - Delete the error-log once the problem is solved (manually or run script/error_scripts/clear-error-log.bat)
 - If batch file debugging: 
   - Add " >> %errorLog% 2>&1" after python commands to get more error details
     - Example: python check_quickbooks.py >> %errorLog% 2>&1
@@ -381,6 +383,7 @@ This project is a web application intended to streamline the sales-shipping proc
 
 -----------
 14. To Do
+-Heroku: can't refresh on frontend pages (other than index.html)
 -Redesign navigation (left sidebar)
 -Redesign 'Open Orders' + 'All Orders' (inspiration from SR)
 -Add 'invoiced' field/icon
@@ -405,7 +408,7 @@ This project is a web application intended to streamline the sales-shipping proc
 -- Option to restore from backup (+ select which backup to restore to)
 -- Display error/process log
 -- Page to map custom fields (backorders, etc)
--- SHipping account details
+-- Shipping account details
 -Figure out how to push updates to separate users 
 -Secure data (+ keep data local)
 -Integrate shipping UPS/FedEx, and options for USMCA forms, B13, etc
@@ -420,6 +423,8 @@ This project is a web application intended to streamline the sales-shipping proc
 -Legal policy
 -Divide OrderCard into more components (for readability)
 -Rewrite all error/confirmation handling into consistent system wide singular Modal
+-Review Cors origins in settings.py
+-Separate frontend/backend in Heroku app demo (easier to update)
 
 
 -----------

@@ -15,8 +15,9 @@ const AddLineItem = ({
   setDisplayQuoteModal,
 }) => {
   const [filteredProductNames, setFilteredProductNames] = useState([]);
-  const handleInputChange = (e) => {
-    const input = e.target.value.toLowerCase();
+  const [inputValue, setInputValue] = useState("");
+
+  const updateFilteredProducts = (input) => {
     if (input) {
       const startsWithInput = productNames.filter((name) =>
         name.toLowerCase().startsWith(input)
@@ -31,6 +32,23 @@ const AddLineItem = ({
       setFilteredProductNames([]);
     }
   };
+
+  const handleInputChange = (e) => {
+    const input = e.target.value.toLowerCase();
+    setInputValue(e.target.value);
+    updateFilteredProducts(input);
+  };
+
+  const handleSuggestionClick = (name) => {
+    setInputValue(name);
+    setFilteredProductNames([]);
+  };
+
+  const handleInputBlur = () => {
+    setTimeout(() => {
+      setFilteredProductNames([]);
+    }, 100);
+  };
   const handleAddOrderLineItem = (e) => {
     e.preventDefault();
     setDisplayQuoteModal(false);
@@ -39,7 +57,7 @@ const AddLineItem = ({
     let itemName, itemDescription;
     if (firstSpaceIndex === -1) {
       itemName = fullValue;
-      itemDescription = fullValue;
+      itemDescription = "";
     } else {
       itemName = fullValue.substring(0, firstSpaceIndex);
       itemDescription = fullValue.substring(firstSpaceIndex + 1);
@@ -67,8 +85,9 @@ const AddLineItem = ({
     };
 
     setItems((prevItems) => [...prevItems, newItem]);
-    document.getElementById("add-line-item-name").value = "";
+    setInputValue("");
     document.getElementById("add-line-item-qty").value = "";
+    setFilteredProductNames([]);
   };
   const handleDeleteItem = (itemNameToDelete, e) => {
     e.stopPropagation();
@@ -89,7 +108,9 @@ const AddLineItem = ({
         <input
           id="add-line-item-name"
           type="text"
+          value={inputValue}
           onChange={handleInputChange}
+          onBlur={handleInputBlur}
           autoComplete="off"
         />
         {filteredProductNames.length > 0 && (
@@ -98,10 +119,7 @@ const AddLineItem = ({
               <div
                 key={index}
                 className="suggestion-item"
-                onClick={() => {
-                  document.getElementById("add-line-item-name").value = name;
-                  setFilteredProductNames([]);
-                }}
+                onMouseDown={() => handleSuggestionClick(name)}
               >
                 {name}
               </div>
