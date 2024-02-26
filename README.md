@@ -10,7 +10,7 @@
 
 This project is a web application intended to streamline the sales-shipping process in a manufacturing setting.
 
-<a href="https://production-planner.michellef.dev" target="_blank"><img src="https://img.shields.io/badge/Demo-red?style=for-the-badge"></a>
+<a href="https://production-planner-demo.michellef.dev" target="_blank"><img src="https://img.shields.io/badge/Demo-red?style=for-the-badge"></a>
 
 
 ## Table of Contents
