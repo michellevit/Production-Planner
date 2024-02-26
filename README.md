@@ -50,6 +50,10 @@ A web application intended to streamline the sales-shipping process in a manufac
 - Server-Sent Events (SSE) for continuous updates between database and frontend
 - Database indexing and backend Pagination for quick order filtering
 - Hashing of order items for quick package dimensions/weight quotes (when available)
+<div style="display: flex; justify-content: space-between;">
+  <img src="screenshots/screenshot-open-orders.png" style="width: 45%; margin-right: 10px;" alt="Discover Page Screenshot" />
+  <img src="screenshots/screenshot-all-orders.png" style="width: 45%;" alt="Product Page Screenshot" />
+</div>
 
 
 ## Architectural Decisions<a name="architectural-decisions"></a>
