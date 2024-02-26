@@ -90,8 +90,7 @@ A web application intended to streamline the sales-shipping process in a manufac
     - Replace the x's in the URLs with 'localhost' or your network's IP address
       * Note: this can be found by opening a command prompt on your computer and run: 'ipconfig' and the IPv4 Address should be the address you need
     - Change the file name from 'env.txt' to '.env'
-- Install node.js:
-  - https://nodejs.org/en
+- Install node.js: https://nodejs.org/en
 - Create a virtual environment in the main folder:
   * Note: you can instead open 'scripts/installing-to-vritual-env.bat', uncomment the relative lines + run it
   - Run: cd C:\path\to\project\Production-Planner 
