@@ -1,9 +1,9 @@
 # Production Planner
 
 
-![Django Version](https://img.shields.io/badge/django-4.0.3-green.svg)
-![Python Version](https://img.shields.io/badge/python-3.10.4-blue.svg)
-![React Version](https://img.shields.io/badge/react-18.2.0-blue.svg)
+![Django Version](https://img.shields.io/badge/Django-4.0.3-green.svg)
+![Python Version](https://img.shields.io/badge/Python-3.10.4-blue.svg)
+![React Version](https://img.shields.io/badge/React-18.2.0-blue.svg)
 ![MySQL](https://img.shields.io/badge/Database-MySQL-blue.svg)
 ![Docker](https://img.shields.io/badge/Platform-Docker-blue.svg)
 
