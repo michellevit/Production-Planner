@@ -38,13 +38,6 @@ def start_job_execution():
         f.write(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - schedule / recurring task restarted")
 
 
-def create_lock_file():
-    with open(lock_file, 'w') as f:
-        f.write("")
-    with open(process_log_file, 'a') as f:
-        f.write(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - lock file created")
-
-
 def delete_lock_file():
     if os.path.exists(lock_file):
         os.remove(lock_file)
@@ -87,6 +80,11 @@ def run_job():
             with open(process_log_file, 'a') as f:
                 f.write(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - job not executed - outside scheduled hours")
 
+def create_lock_file():
+    with open(lock_file, 'w') as f:
+        f.write("")
+    with open(process_log_file, 'a') as f:
+        f.write(f"{datetime.now().strftime('%m/%d/%y %H:%M')} scheduled_task_executor.py - lock file created")
 
 
 def run_error_check():
