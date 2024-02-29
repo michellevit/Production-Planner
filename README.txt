@@ -1,94 +1,80 @@
-Project Title: Production Planner
+# Production Planner
 
 
-----------
-Table of Contents: 
-1. Project Description
-2. Features
-3. Technologies Used
-4. First-Time Setup
-5. Preparing To Run In Development
-6. Preparing To Deploy In Production
-7. How To Start The Program
-8. How To Use The Program
-9. How To Backup The Database + Restore (for Production mode)
-10. How To Clear The Database
-11. How To Fetch Updates from GitHub
-12. How to Update Docker Container / Database
-13. General Troubleshooting
-14. To Do
-15. Credits
+![Django Version](https://img.shields.io/badge/Django-4.0.3-green.svg)
+![Python Version](https://img.shields.io/badge/Python-3.10.4-blue.svg)
+![React Version](https://img.shields.io/badge/React-18.2.0-blue.svg)
+![MySQL](https://img.shields.io/badge/Database-MySQL-blue.svg)
+![Docker](https://img.shields.io/badge/Platform-Docker-blue.svg)
 
 
-----------
-1. Project Description
-Summary: To help coordinate the sales-production-shipping process for orders (in a manufacturing environment).
-- Overview: 
-  - Every day new orders are entered into QuickBooks and (typically) must be shipped ASAP 
-  - This involves significant back-and-forth between the Sales Team and Production Team, and Shipping Team
-  - Here is the workflow sequence when using the Production Planner:
-    - The Sales Team enters new orders into QuickBooks as they are received throughout the day
-    - The Production Planner continuously checks for updates to the Open Orders in QuickBooks
-    - The Production Planner displays the Open Orders via the browser, and updates as orders are added or changes are made to the Orders in QuickBooks
-    - The Production Team can filter the orders by date/status and plan production tasks accordingly
-    - The Sales Team can immediately see which orders are confirmed/delayed, and update customers if necessary
-    - The Production team can add shipping information as orders become ready (i.e. package dimensions/weight, notes, etc)
-    - The Shipping Team can see when an order is ready, and use the added package information to prepare shipments accordingly (waybills, documents, freight-forwarding)
-- Original Problem:
-  - The original sales-to-shipping process involved several periods of waiting for information and then rushing to complete the task once the information became available
-  - Here is the workflow sequence when NOT using the Production Planner:
-    - The Sales Team receives orders (throughout the day) and enters them into QuickBooks
-    - The Sales Team prints a daily 'Open Order' Report for the Production Team 
-    - The Production Team reviews the orders and the current inventory, then decides which can be shipped 
-    - The Production Team prepares the orders which can be shipped
-    - The Production Team writes the dimensions/weight of each package on the printed Order Report
-    - The Production Team scans the Order Report to a shared folder for the Shipping Team
-    - The Shipping Team prepares each shipment (labels and documents)
-    - The courier pickup occurs in the afternoon - any order not ready before the pickup is delayed
-- App's Benefits: 
-  - A continuous flow of information 
-  - Smoother working pace
-  - Better communication between teams
-  - Sales Team Benefits:
-    - Improved customer service due to faster notice of order delays
-    - No need to create and physically print the order report everyday (less work, less paper, less printer issues)
-  - Production Team benefits:
-    - Access to the current Open Order information continuously
-    - More efficient batching of production tasks
-    - Less manual quoting of orders (dimensions/weights can be predicted based on previous database entries)
-  -Shipping Team Benefits:
-    - No mistakes due to misinterpretation of handwritten package dimensions
-    - Package information can be copy-pasted into QuickBooks Sales Order notes
-    - More time to prepare orders before courier pickup
-    - Less costly mistakes due to rushing (shipping requires meticulous data entry)
+A web application designed to streamline the sales-shipping process in a manufacturing setting.
+
+<a href="https://production-planner-demo.michellef.dev" target="_blank"><img src="https://img.shields.io/badge/Demo-red?style=for-the-badge"></a>
 
 
-----------
-2. Features
-- Batch file to start the application
-- In-process scheduler (Python) for continuous data retrieval from QuickBooks to Production-Planner database
-- Windows Task Scheduler for automatic daily backups
-- Instant error notification emails for critical application/backup errors
-- Server-Sent Events (SSE) for continuous updates between database and frontend
-- Database indexing and backend Pagination for quick order filtering
-- Hashing of order items for quick package dimensions/weight quotes (when available)
+## Table of Contents
+- [Technologies Used](#technologies-used)
+- [Features](#features)
+- [Architectural Decisions](#architectural-decisions)
+- [What I Learned](#what-i-learned)
+- [What I Would Do Differently](#what-i-would-do-differently)
+- [First-Time Setup](#first-time-setup)
+- [First-Time Setup - Development](#setup-development)
+- [First-Time Setup - Production](#setup-production)
+- [How To Start the App](#how-to-start-app)
+- [How To Use the App](#how-to-use-app)
+- [How To Backup the Database](#backup-database)
+- [How To Restore the Database](#restore-database)
+- [How To Clear the Database](#clear-database)
+- [How To Fetch Updates From GitHub](#fetch-updates)
+- [How to Update Docker](#how-to-update-docker)
+- [Troubleshooting](#troubleshooting)
+- [To Do](#to-do)
+- [Credits](#credits)
 
 
-----------
-3. Technologies Used
-- Django Rest Framework
+## Technologies Used<a name="technologies-used"></a>
 - Python
-- JavaScript
+- Django
 - React
-- HTML/CSS
-- JSON
 - MySQL (Production)
 - SQLite (Development)
 - Docker
 
 
-----------
-4. First-Time Setup
+## Features<a name="features"></a>
+- In-process scheduling (Python) for continuous data retrieval from QuickBooks (via QODBC) to Production-Planner database
+- Instant error notification emails for critical application/backup errors
+- Stored package data for instant new order dimension/weight estimates
+- Server-Sent Events (SSE) for continuous updates between database and frontend
+- Database indexing and backend Pagination for quick order filtering
+- Hashing of order items for quick package dimensions/weight quotes (when available)
+<div style="display: flex; justify-content: space-between;">
+  <img src="screenshots/screenshot-open-orders.png" style="width: 45%; margin-right: 10px;" alt="Discover Page Screenshot" />
+  <img src="screenshots/screenshot-all-orders.png" style="width: 45%;" alt="Product Page Screenshot" />
+</div>
+
+
+## Architectural Decisions<a name="architectural-decisions"></a>
+- **Django and Django Rest Framework for the Backend:** Given Django's robust security features and the Django Rest Framework's powerful serialization capabilities, this combination was chosen to expedite API development and ensure data integrity.
+- **React for the Frontend:** React's component-based architecture enhances the user interface's responsiveness and facilitates the development of a dynamic, single-page application.
+- **Docker for Containerization:** To simplify deployment and ensure consistency across development, testing, and production environments, Docker was chosen. It allows for easy setup and scalability of the application.
+- **MySQL and SQLite:** MySQL is used in production for its scalability and reliability. For development, SQLite is used for its simplicity and ease of configuration, speeding up the initial setup and testing phases.
+
+
+## What I Learned<a name="what-i-learned"></a>
+- **The Importance of Database Design:** Proper normalization and indexing strategies in MySQL significantly improved query performance, especially when handling complex joins and aggregations necessary for production planning.
+- **Efficient Error Handling:** Implementing centralized error handling and logging mechanisms has streamlined troubleshooting and monitoring, making the application more robust against failures.
+- **The Power of Continuous Integration/Continuous Deployment (CI/CD):** Automating the build, test, and deployment processes with Docker and GitHub Actions has reduced manual errors and sped up the release cycle.
+
+
+## What I Would Do Differently<a name="what-i-would-do-differently"></a>
+- **Start with a Comprehensive Requirement Analysis:** Initially, some user requirements were not fully understood, leading to feature adjustments late in the development process. A more thorough upfront requirement gathering could have mitigated this.
+- **Invest in Automated Testing from the Start:** While tests were added progressively, having a comprehensive test suite from the beginning would have reduced bugs in production and facilitated refactoring and feature additions.
+
+
+## First-Time Setup<a name="first-time-setup"></a>
 - Install Git: 
   - Download the Git installer for Windows: https://git-scm.com/download/win
 - Open a PowerShell Terminal (if using VSCode make sure to close + open VSCode after installing Git to apply path changes)
@@ -108,8 +94,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
     - Replace the x's in the URLs with 'localhost' or your network's IP address
       * Note: this can be found by opening a command prompt on your computer and run: 'ipconfig' and the IPv4 Address should be the address you need
     - Change the file name from 'env.txt' to '.env'
-- Install node.js:
-  - https://nodejs.org/en
+- Install node.js: https://nodejs.org/en
 - Create a virtual environment in the main folder:
   * Note: you can instead open 'scripts/installing-to-vritual-env.bat', uncomment the relative lines + run it
   - Run: cd C:\path\to\project\Production-Planner 
@@ -117,11 +102,10 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
   - Run: cd C:\path\to\project\Production-Planner
   - Run: .\venv\Scripts\activate
   - Run: pip install -r requirements.txt
- Follow instructions for 'Preparing To Run In Development' OR 'Preparing To Deploy In Production'
+ Follow instructions for 'First-Time Setup - Development' OR 'First-Time Setup - Production'
 
 
-----------
-5. Preparing To Run In Development
+## First-Time Setup - Devlopment<a name="setup-development"></a>
 - Go to the file django/Production_Planner/settings.py:
   - Change 'DEVELOPMENT_MODE' to True
     - This will switch the database to SQLite (unlike MySQL which requires Docker container to run)
@@ -146,8 +130,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
   - To access Django's admin interface - go to broswer url: http://localhost:8000/admin
 
 
-----------
-6. Preparing To Deploy In Production
+## First-Time Setup - Production<a name="setup-production"></a>
 - Go to the file django/Production_Planner/settings.py
   - Change 'DEVELOPMENT_MODE' to False
     - This will switch the database to MySQL (unlike SQLite which does not require Docker, but is less robust for production)
@@ -227,8 +210,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
 - NOTE: the start-scheduled-task.bat does not run via Windows Task Scheduler because to run QODBC via the Task Scheduler requires the (paid) QODBC Remote version
 
 
-----------
-7. How To Start/Stop The Program
+## How To Start the App<a name="how-to-start-app"></a>
   * Note: it may take several minutes for the frontend to load (approx. 6 minutes)
 - In PRODUCTION:
   - Option 1 (via batch file - scheduled updates every 2 mins, Mon-Fri 6AM-6PM):
@@ -256,8 +238,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
     - Run: npm start
 
 
-----------
-8. How To Use The Program
+## How To Use the App<a name="how-to-use-app"></a>
 - Open the browser:
   - Frontend: open the browser to http://000:000:0:000/3000/ (use IP address set in .env file or 'localhost' instead of '0:0:0:0')
   - Backend: open the browser to http://000:000:0:000/8000/ (use IP address set in .env file or 'localhost' instead of '0:0:0:0')
@@ -276,20 +257,13 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
     - To modify working hours period: go to scripts/scheduled_task_executor.py file + adjust the 'Schedule Global Variables'
 
 
-----------
-9. How To Backup The Database + Restore (for Production mode)
+## How To Backup the Database<a name="backup-database"></a>
  * Note: The backup-database.bat script will delete old backups, keeping only the 10 most recent backups
  * Note: The backup-database.bat file is scheduled to run at 6AM each week day
  * Note: the Docker container must be running to backup and/or restore
 - To backup the database:
   - In the project's root directory, double click the 'backup-database.bat' file
   - The backup will be saved in the 'db-backups' folder
-- To restore from the most recent backup:
-  - Go to the scripts/error_scripts folder
-  - Double-click the 'restore-database-from-latest-backup.bat' 
-  - A command prompt will appear with the name/date of the latest backup and ask if you are sure you want to restore
-    - Type "Y" and press enter (to confirm and restore the database)
-    - Close the prompt
 - To disable the automated backup
   - Open Windows' Task Scheduler program (on the computer running the app)
   - Highlight the Task named "Production-Planner-Backup-Database-Batch-Task"
@@ -299,8 +273,16 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
     - Go to the Triggers tab, select the trigger and select the 'Edit..' button 
 
 
-----------
-10. How To Clear The Database
+## How To Restore the Database<a name="restore-database"></a>
+- To restore to the most recent backup:
+  - Go to the scripts/error_scripts folder
+  - Double-click the 'restore-database-from-latest-backup.bat' 
+  - A command prompt will appear with the name/date of the latest backup and ask if you are sure you want to restore
+    - Type "Y" and press enter (to confirm and restore the database)
+    - Close the prompt
+
+
+## How To Clear the Database<a name="clear-database"></a>
 - Option 1: 
   * To delete entries via Django Admin Interface (works in both Production/MySQL or Development/SQLite)
   - Go to http://localhost:8000/admin
@@ -323,8 +305,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
   - Exit the container shell: exit
 
 
------------
-11. How To Fetch Updates from GitHub
+## How To Fetch Updates From GitHub<a name="fetch-updates"></a>
 - Open a Terminal and navigate to the Production-Planner directory
 - Select the main branch: git checkout main
 - Run: git pull origin main
@@ -338,8 +319,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
     - Run: docker image prune -f
 
 
------------
-12. How to Update Docker Container / Database
+## How To Update Docker<a name="how-to-update-docker"></a>
 - If changes were made to the entire app in VSCode:
   -Automated way:
     - Go to scripts/docker_scripts
@@ -365,8 +345,7 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
   - Run: docker exec -it production-planner-backend-1 python manage.py collectstatic --noinput
 
 
------------
-13. Troubleshooting
+## Troubleshooting<a name="troubleshooting"></a>
 - CORs / https issues? 
   - Clear browser history + cache
 - If a critical error email was received:
@@ -413,53 +392,50 @@ Summary: To help coordinate the sales-production-shipping process for orders (in
   - Try to rebuild/up the container: scripts/docker-scripts/docker-compose-reset-container.bat
 
 
------------
-14. To Do
--Heroku: can't refresh on frontend pages (other than index.html)
--Add page for Reports - Open Orders by Item/Customer
--Redesign navigation (left sidebar)
--Redesign 'Open Orders' + 'All Orders' (inspiration from SR)
--Add 'invoiced' field/icon
--Add more edit options on All Orders page (e.g. add note, add dimensions)
--Add option to specify who wrote the note + if it was acknowledged
--Handle error: someone inputs same item in 2 diff line items (give item dicts an id field)
--Deleted order functionality (Recycle Bin tab w/ recently deleted orders + auto delete after 1 month)
--Don't hardcode PST -> change UTC and then page to specify timezone in frontend (e.g. Django settings, python scheduler, models, views, error scripts, etc)
--Handle backorders solely with previously_invoiced_items field (current way is specific to GTC custom QB template)
--Allow users to choose which backup to restore to
--Automatic backup should occur with Python, not Windows Task Scheduler
--Make program run on it's own, instead of browser - e.g. Electron or NW.js
--- Fix how filters are saved instead of saving in chrome memory
--Create an installer package (Inno Setup or Advanced Installer)
--New 'Settings' page: 
--- Set environment variables
--- Set administrator email (for error notifications)
--- Turn on/off sync
--- Set sync hours
--- Set automatic database backup time
--- Option to create a backup
--- Option to restore from backup (+ select which backup to restore to)
--- Display error/process log
--- Page to map custom fields (backorders, etc)
--- Shipping account details
--Figure out how to push updates to separate users 
--Secure data (+ keep data local)
--Integrate shipping UPS/FedEx, and options for USMCA forms, B13, etc
--Integrate products from QB directly to software (so you can map items per box)
--Add tracking number to orders + automaticcally add dimensions/weight/tracking no./arrival, etc to orders (QODBC paid version for write capabilities)
--Make it so tracking data can easily get added to invoice emails
--Licesnse key for software licensing
--Trial period
--Website with user authentification (login) for subscription management
--Payment processing integration
--Customer support
--Legal policy
--Divide OrderCard into more components (for readability)
--Rewrite all error/confirmation handling into consistent system wide singular Modal
--Review Cors origins in settings.py
--Separate frontend/backend in Heroku app demo (easier to update)
+## To Do<a name="to-do"></a>
+- Heroku: can't refresh on frontend pages (other than index.html)
+- Redesign navigation (left sidebar)
+- Redesign 'Open Orders' + 'All Orders' (inspiration from SR)
+- Add 'invoiced' field/icon
+- Add more edit options on All Orders page (e.g. add note, add dimensions)
+- Add option to specify who wrote the note + if it was acknowledged
+- Handle error: someone inputs same item in 2 diff line items (give item dicts an id field)
+- Deleted order functionality (Recycle Bin tab w/ recently deleted orders + auto delete after 1 month)
+- Don't hardcode PST -> change UTC and then page to specify timezone in frontend (e.g. Django settings, p python scheduler, models, views, error scripts, etc)
+- Handle backorders solely with previously_invoiced_items field (current way is specific to GTC custom QB template)
+- Allow users to choose which backup to restore to
+- Automatic backup should occur with Python, not Windows Task Scheduler
+- Make program run on it's own, instead of browser - e.g. Electron or NW.js
+  - Fix how filters are saved instead of saving in chrome memory
+- Create an installer package (Inno Setup or Advanced Installer)
+- New 'Settings' page: 
+  - Set environment variables
+  - Set administrator email (for error notifications)
+  - Turn on/off sync
+  - Set sync hours
+  - Set automatic database backup time
+  - Option to create a backup
+  - Option to restore from backup (+ select which backup to restore to)
+  - Display error/process log
+  - Page to map custom fields (backorders, etc)
+  - Shipping account details
+- Figure out how to push updates to separate users 
+- Secure data (+ keep data local)
+- Integrate shipping UPS/FedEx, and options for USMCA forms, B13, etc
+- Integrate products from QB directly to software (so you can map items per box)
+- Add tracking number to orders + automaticcally add dimensions/weight/tracking no./arrival, etc to orders (QODBC paid version for write capabilities)
+- Make it so tracking data can easily get added to invoice emails
+- Licesnse key for software licensing
+- Trial period
+- Website with user authentification (login) for subscription management
+- Payment processing integration
+- Customer support
+- Legal policy
+- Divide OrderCard into more components (for readability)
+- Rewrite all error/confirmation handling into consistent system wide singular Modal
+- Review Cors origins in settings.py
+- Separate frontend/backend in Heroku app demo (easier to update)
 
 
------------
-15. Credits
+## Credits<a name="credits"></a>
 Michelle Flandin
