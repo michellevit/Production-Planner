@@ -1,18 +1,10 @@
-01/26/24 13:34 scheduled_task_executor.py - job executed01/26/24 13:35 sync-data.bat - started 
-01/26/24 13:35 sync-data.bat - logs cleaned. 
-01/26/24 13:35 sync-data.bat - complete, no errors detected. 
-01/26/24 13:35 scheduled_task_executor.py - job executed01/26/24 13:36 sync-data.bat - started 
-01/26/24 13:36 sync-data.bat - logs cleaned. 
-01/26/24 13:36 sync-data.bat - complete, no errors detected. 
-01/26/24 13:37 scheduled_task_executor.py - job executed01/26/24 13:38 sync-data.bat - started 
-01/26/24 13:38 sync-data.bat - logs cleaned. 
-01/26/24 13:38 sync-data.bat - complete, no errors detected. 
-01/26/24 13:38 scheduled_task_executor.py - job executed01/26/24 13:39 sync-data.bat - started 
-01/26/24 13:39 sync-data.bat - logs cleaned. 
-01/26/24 13:39 sync-data.bat - complete, no errors detected. 
-01/26/24 13:39 scheduled_task_executor.py - job executed01/26/24 13:41 sync-data.bat - started 
-01/26/24 !HOUR!:!MIN! stop-app.bat - executed 
-01/26/24 15:22 start-app.bat - started 
-01/26/24 15:22 scheduled_task_executor.py - lock file created01/26/24 15:22 check-for-errors.bat - started 
-01/26/24 15:22 check-for-errors.bat - virtual environment activated 
-01/26/24 !HOUR!:!MIN! stop-app.bat - executed 
+02/16/24 14:24 start-app.bat - started 
+02/16/24 14:24 scheduled_task_executor.py - lock file created02/16/24 14:24 check-for-errors.bat - started 
+02/16/24 14:24 check-for-errors.bat - virtual environment activated 
+02/16/24 14:24 check-for-errors.bat - Docker is running. 
+02/16/24 14:24 check-for-errors.bat - Docker containers are running 
+02/16/24 14:27 start-app.bat - started 
+02/16/24 14:27 scheduled_task_executor.py - lock file created02/16/24 14:27 check-for-errors.bat - started 
+02/16/24 14:27 check-for-errors.bat - virtual environment activated 
+02/16/24 14:27 check-for-errors.bat - Docker is running. 
+02/16/24 14:27 check-for-errors.bat - Docker containers are running 

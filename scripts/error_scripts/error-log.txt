@@ -1,8 +1,4 @@
-^C
-01/23/24 12:30 ERROR: sync-data.bat - initiate_last_active_command.py failed. 
-01/23/24 12:31 ERROR: scheduled_task_executor.py - issue with job execution01/23/24 11:33 ERROR: start-app.bat - scheduled_task_executor.py stopped with error. 
-^C01/24/24 12:56 ERROR: scheduled_task_executor.py - issue with job execution
-01/25/24 16:19 ERROR: Failed to start container production-planner-backend-1. 
-01/25/24 16:19 ERROR: scheduled_task_executor.py - check-for-errors.bat exited with return code error01/25/24 16:19 ERROR: start-app.bat - scheduled_task_executor.py stopped with error. 
-01/26/24 13:41 ERROR: sync-data.bat - qb_data_to_db.py failed. 
-01/26/24 13:41 ERROR: scheduled_task_executor.py - issue with job execution01/26/24 13:24 ERROR: start-app.bat - scheduled_task_executor.py stopped with error. 
+02/16/24 14:27 ERROR: check-for-errors.bat - QuickBooks is not running. Please start QuickBooks and login. 
+02/16/24 14:28 ERROR: scheduled_task_executor.py - check-for-errors.bat exited with return code error02/16/24 14:27 ERROR: start-app.bat - scheduled_task_executor.py stopped with error. 
+ERROR: backup-database.bat - Database backup could not be completed - 02/27/24 06:15 ERROR: backup-database.bat - Backup could not be completed because Docker is not running. 
+ERROR: backup-database.bat - Database backup could not be completed - 02/28/24 06:15 ERROR: backup-database.bat - Backup could not be completed because Docker is not running. 

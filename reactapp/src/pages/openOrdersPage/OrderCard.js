@@ -40,11 +40,51 @@ const OrderCard = ({
     const minimizedStatus = localStorage.getItem(`order_minimized_${order.id}`);
     return minimizedStatus ? JSON.parse(minimizedStatus) : true;
   });
-  useEffect(() => {
-    fetchOrderDetails();
-    getOrderCardBackground();
-    setRefreshOrders(false);
-  }, [order.id, shipDate, refreshOrders, isQuote, minimizeMaximizeAction]);
+
+  const getOrderCardBackground = () => {
+    const fShipDate = new Date(shipDate);
+    const fDelayDate = new Date(delayDate);
+    if (isQuote) {
+      setOrderCardBackground("quoted-order-card");
+    } else if (delayDate !== null && fShipDate > fDelayDate) {
+      setOrderCardBackground("delayed-order-card");
+    } else if (tbdStatus) {
+      setOrderCardBackground("delayed-order-card");
+    } else if (readyStatus) {
+      setOrderCardBackground("ready-order-card");
+    } else if (confirmedStatus) {
+      setOrderCardBackground("confirmed-order-card");
+    } else {
+      setOrderCardBackground("default-order-card");
+    }
+  };
+
+  function formatDate(inputDate) {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const dateParts = inputDate.split("-");
+    const year = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10) - 1;
+    const day = parseInt(dateParts[2], 10);
+    const dateObj = new Date(Date.UTC(year, month, day));
+    const formattedDate = `${
+      months[dateObj.getUTCMonth()]
+    } ${dateObj.getUTCDate()}, ${dateObj.getUTCFullYear()}`;
+    return formattedDate;
+  }
+
 
   const fetchOrderDetails = async () => {
     try {
@@ -114,47 +154,21 @@ const OrderCard = ({
     }
   };
 
-  const getOrderCardBackground = () => {
-    if (order.quote) {
-      setOrderCardBackground("quoted-order-card");
-    } else if (delayDate !== null && confirmedStatus) {
-      setOrderCardBackground("confirmed-order-card");
-    } else if (delayDate !== null || tbdStatus) {
-      setOrderCardBackground("delayed-order-card");
-    } else if (readyStatus) {
-      setOrderCardBackground("ready-order-card");
-    } else if (confirmedStatus) {
-      setOrderCardBackground("confirmed-order-card");
-    } else {
-      setOrderCardBackground("default-order-card");
-    }
-  };
 
-  function formatDate(inputDate) {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const dateParts = inputDate.split("-");
-    const year = parseInt(dateParts[0], 10);
-    const month = parseInt(dateParts[1], 10) - 1;
-    const day = parseInt(dateParts[2], 10);
-    const dateObj = new Date(Date.UTC(year, month, day));
-    const formattedDate = `${
-      months[dateObj.getUTCMonth()]
-    } ${dateObj.getUTCDate()}, ${dateObj.getUTCFullYear()}`;
-    return formattedDate;
-  }
+
+
+  useEffect(() => {
+    fetchOrderDetails();
+    setRefreshOrders(false);
+  }, [order.id, refreshOrders, minimizeMaximizeAction]);
+
+
+  useEffect(() => {
+    getOrderCardBackground();
+  }, [isQuote, delayDate, shipDate, tbdStatus, readyStatus, confirmedStatus]);
+  
+
+
 
   const readyHandler = async () => {
     setReadyStatus(true);
@@ -189,7 +203,7 @@ const OrderCard = ({
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         {
           ...order,
-          ready: true,
+          ready: false,
           confirmed: true,
           delay_date: null,
           delay_tbd: false,
@@ -257,14 +271,12 @@ const OrderCard = ({
 
   const checkTBD = async (tbdBoolean) => {
     setTBDStatus(tbdBoolean);
-    setConfirmedStatus(false);
     try {
       await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         {
           ...order,
           delay_tbd: tbdBoolean,
-          confirmed: false,
         }
       );
     } catch (error) {
@@ -275,11 +287,12 @@ const OrderCard = ({
 
   const handleTBD = async () => {
     let newStatus = !tbdStatus;
-    setConfirmedStatus(false);
     if (newStatus === false && order.ship_date === null) {
       newStatus = true;
+      setConfirmedStatus(false);
     } else if (newStatus === false && order.ship_date !== null) {
       newStatus = false;
+      setConfirmedStatus(false);
     }
     setTBDStatus(newStatus);
     setDelayDate(null);
@@ -302,12 +315,18 @@ const OrderCard = ({
   const handleConfirmed = async () => {
     let newStatus = !confirmedStatus;
     setConfirmedStatus(newStatus);
+    if (newStatus === true) {
+      setDelayDate(null);
+      setTBDStatus(false);
+    }
     try {
       await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/open-orders/${order.id}/`,
         {
           ...order,
           confirmed: newStatus,
+          delay_date: null,
+          delay_tbd: false,
         }
       );
     } catch (error) {
