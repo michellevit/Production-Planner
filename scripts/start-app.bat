@@ -76,13 +76,13 @@ echo If you close this window, the Production Planner sync with QuickBooks will 
 echo This script will run until:
 echo --1. this command prompt is closed
 echo --2. a critical error occurs
-echo --3. stop-scheduled-task.bat runs
+echo --3. stop-app.bat runs
 echo --4. this computer shuts down
 echo -------------------------------
 echo -------------------------------
 
 
-:: Directly use the Python executable from the virtual environment
+:: Execute the Python scheduler script
 python -u %scheduledTaskExecutor%
 set exitStatus=%errorlevel%
 
