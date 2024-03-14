@@ -1,4 +1,0 @@
-02/16/24 14:27 ERROR: check-for-errors.bat - QuickBooks is not running. Please start QuickBooks and login. 
-02/16/24 14:28 ERROR: scheduled_task_executor.py - check-for-errors.bat exited with return code error02/16/24 14:27 ERROR: start-app.bat - scheduled_task_executor.py stopped with error. 
-ERROR: backup-database.bat - Database backup could not be completed - 02/27/24 06:15 ERROR: backup-database.bat - Backup could not be completed because Docker is not running. 
-ERROR: backup-database.bat - Database backup could not be completed - 02/28/24 06:15 ERROR: backup-database.bat - Backup could not be completed because Docker is not running. 

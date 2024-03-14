@@ -1,10 +1,12 @@
-02/16/24 14:24 start-app.bat - started 
-02/16/24 14:24 scheduled_task_executor.py - lock file created02/16/24 14:24 check-for-errors.bat - started 
-02/16/24 14:24 check-for-errors.bat - virtual environment activated 
-02/16/24 14:24 check-for-errors.bat - Docker is running. 
-02/16/24 14:24 check-for-errors.bat - Docker containers are running 
-02/16/24 14:27 start-app.bat - started 
-02/16/24 14:27 scheduled_task_executor.py - lock file created02/16/24 14:27 check-for-errors.bat - started 
-02/16/24 14:27 check-for-errors.bat - virtual environment activated 
-02/16/24 14:27 check-for-errors.bat - Docker is running. 
-02/16/24 14:27 check-for-errors.bat - Docker containers are running 
+03/14/24 13:06 sync-data.bat - complete, no errors detected. 
+03/14/24 13:53 start-app.bat - started 
+03/14/24 13:53 scheduled_task_executor.py - lock file created03/14/24 13:53 check-for-errors.bat - started 
+03/14/24 13:53 check-for-errors.bat - virtual environment activated 
+03/14/24 13:53 check-for-errors.bat - Docker is running. 
+03/14/24 13:53 check-for-errors.bat - Docker containers are running 
+03/14/24 13:53 check-for-errors.bat - QuickBooks is running
+03/14/24 13:53 check-for-errors.bat - QODBC is connected 
+03/14/24 13:53 check-for-errors.bat - complete, no errors detected. 
+03/14/24 13:54 sync-data.bat - started 
+03/14/24 13:54 sync-data.bat - logs cleaned. 
+03/14/24 13:54 sync-data.bat - complete, no errors detected. 
