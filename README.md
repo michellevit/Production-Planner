@@ -1,16 +1,16 @@
 # Production Planner
 
 
-![Django Version](https://img.shields.io/badge/Django-4.0.3-green.svg)
-![Python Version](https://img.shields.io/badge/Python-3.10.4-blue.svg)
-![React Version](https://img.shields.io/badge/React-18.2.0-blue.svg)
-![MySQL](https://img.shields.io/badge/Database-MySQL-blue.svg)
-![Docker](https://img.shields.io/badge/Platform-Docker-blue.svg)
+![Django Version](https://img.shields.io/badge/Django-4.0.3-0c4a30.svg)
+![Python Version](https://img.shields.io/badge/Python-3.10.4-ffdb4f.svg)
+![React Version](https://img.shields.io/badge/React-18.2.0-61dafb.svg)
+![MySQL](https://img.shields.io/badge/Database-MySQL-ffa518.svg)
+![Docker](https://img.shields.io/badge/Platform-Docker-0091e2.svg)
 
 
 A web application designed to streamline the sales-shipping process in a manufacturing setting.
 
-<a href="https://production-planner-demo.michellef.dev" target="_blank"><img src="https://img.shields.io/badge/Demo-red?style=for-the-badge"></a>
+<a href="https://production-planner-demo.michellef.dev" target="_blank"><img src="https://img.shields.io/badge/Demo-6762a6?style=for-the-badge"></a>
 
 
 ## Table of Contents
