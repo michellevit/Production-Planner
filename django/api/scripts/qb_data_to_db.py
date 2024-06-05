@@ -18,7 +18,6 @@ from api.models import Order, LastUpdate
 import os
 
 
-
 def main():
     orders_updated_flag = False
     script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -84,7 +83,6 @@ def iterate_through_queried_orders(data):
                 }]
             }
     return orders_dict
-
 
 
 def check_for_new_or_modified_orders(orders_last_modified_json, orders_dict, orders_updated_flag):
@@ -207,12 +205,6 @@ def check_if_order_in_database(order_number, order_data, orders_updated_flag):
     return orders_updated_flag
     
 
-
-
-
-
-
-
 def update_orders_last_modified_json_file(orders_last_modified_json, orders_dict):
     updated_orders = []
     for order_number, order_data in orders_dict.items():
@@ -233,8 +225,6 @@ def update_last_update_timestamp():
 
 if __name__ == "__main__":
     main()
-
-
 
 
 # LOGIC OVERVIEW: 
@@ -261,7 +251,7 @@ if __name__ == "__main__":
 # ----> are there any items in the new order query with previously_invoiced_qty > 0?
 # ------> IF YES: Create new order w/ backorder# 1 
 # ------> IF NO: PASS 
-# # --ELSE IF: there are multiple orders in the db but one order is shipped=false
+# --ELSE IF: there are multiple orders in the db but one order is shipped=false
 # ----Check if the existing order total items' previously_invoiced_qty amount is less than the new order's total items' previously_invoiced_qty
 # ------YES: PASS
 # ------NO: update the ship_date + item_array if they are different (+ if different then mark confirmed=false)

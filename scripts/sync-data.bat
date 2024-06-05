@@ -69,5 +69,5 @@ echo %DATE% %TIME% sync-data.bat - logs cleaned. >> %processLog%
 
 echo %DATE% %TIME% sync-data.bat - complete, no errors detected. >> %processLog%
 
-
+pause
 exit /b

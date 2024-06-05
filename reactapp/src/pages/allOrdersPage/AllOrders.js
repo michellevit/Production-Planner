@@ -64,11 +64,15 @@ const AllOrders = () => {
   useEffect(() => {
     const eventSource = new EventSource(`${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`);
     eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data && data.message === "New update") {
-        if (data.last_updated !== lastUpdated) {
-          setLastUpdated(data.last_updated); 
-          fetchOrders();
+      if (event.data === "No LastUpdate record found") {
+        setLastUpdated(null);
+      } else {
+        const data = JSON.parse(event.data);
+        if (data && data.message === "New update") {
+          if (data.last_updated !== lastUpdated) {
+            setLastUpdated(data.last_updated);
+            fetchOrders();
+          }
         }
       }
     };

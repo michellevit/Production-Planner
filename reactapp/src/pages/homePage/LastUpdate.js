@@ -5,21 +5,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquare, faCircle } from "@fortawesome/free-solid-svg-icons";
 
 const LastUpdate = () => {
-  // States to manage last update data and icon color
   const [lastDate, setLastDate] = useState("Fetching last update...");
   const [weekDay, setWeekDay] = useState(null);
   const [isActive, setIsActive] = useState(true);
-
-  // Days of the week
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
   useEffect(() => {
     let eventSource;
-
     const fetchLastUpdate = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/last-update`);
-        if (response.data && response.data.last_updated) {
+        if (response.data && response.data.last_updated && response.data.last_updated !== "Never") {
           formatDate(response.data.last_updated);
         } else {
           setLastDate("No data available");
@@ -35,17 +31,23 @@ const LastUpdate = () => {
     fetchLastUpdate();
 
     const connectEventSource = () => {
+
       eventSource = new EventSource(`${process.env.REACT_APP_BACKEND_URL}/last-update-stream/`);
 
       eventSource.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        formatDate(data.last_updated);
-        checkLastActiveChange(data.last_active);
-        if (data.message === "No update in over 5 minutes") {
+        if (event.data === "No LastUpdate record found") {
+          setLastDate("No data available");
           setIsActive(false);
         }
+        else {
+          const data = JSON.parse(event.data);
+          formatDate(data.last_updated);
+          checkLastActiveChange(data.last_active);
+          if (data.message === "No update in over 5 minutes") {
+            setIsActive(false);
+          }
+        }
       };
-
       eventSource.onerror = (error) => {
         console.error("EventSource failed:", error);
         eventSource.close();
@@ -120,7 +122,6 @@ const LastUpdate = () => {
     }
   };
 
-  // Render the component
   return (
     <div className="last-update-container">
       <div className="last-update-message-container">

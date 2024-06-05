@@ -403,9 +403,9 @@ def last_update_stream(request):
                                 'message': 'No update in over 5 minutes',
                                 'last_active': str(new_data.last_active)
                             }
-                            yield f"data: {json.dumps(no_update_data)}\n\n"
+                            yield "data: " + json.dumps({"message": "No LastUpdate record found"}) + "\n\n"
                         else:
-                            time.sleep(120)  # Sleep for 150 seconds
+                            time.sleep(60)  # Sleep for 60 seconds
                 else:
                     yield "data: No LastUpdate record found\n\n"
                     time.sleep(120)
