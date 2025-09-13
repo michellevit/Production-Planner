@@ -10,15 +10,8 @@
 
 A web application designed to streamline the sales-shipping process in a manufacturing setting.
 
-<p>
-  <a href="https://production-planner.michellef.dev">
-    <img src="https://img.shields.io/badge/Demo-004596?style=for-the-badge" height="22">
-  </a>
-  <a href="https://www.youtube.com/watch?v=J0YNExrDqck&t=1s&ab_channel=Michelle">
-    <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge" height="22">
-  </a>
-</p>
-
+[![Demo](https://img.shields.io/badge/Demo-0b3d91?style=flat-square)](https://production-planner.michellef.dev)
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=J0YNExrDqck&t=1s&ab_channel=Michelle)
 
 ## Table of Contents
 - [Technologies Used](#technologies-used)
